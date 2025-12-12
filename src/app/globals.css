@@ -1,7 +1,11 @@
 @import 'tailwindcss';
 
 @theme {
+  /* Fonts */
   --font-montserrat: var(--font-montserrat), sans-serif;
+
+  /* Colours */
+  --color-soft-pink: #fff4f4;
 }
 
 body {
