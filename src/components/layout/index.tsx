@@ -11,6 +11,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
     <>
       <QuickLinksBar />
       <Header />
+      <hr className="text-gray-200 w-full container mx-auto" />
       <main>{children}</main>
     </>
   );
