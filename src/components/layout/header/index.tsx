@@ -1,6 +1,7 @@
 import { LogIn } from 'lucide-react';
 import { FC } from 'react';
 import Logo from '../../shared/icon';
+import LangSwitch from './lang-switch';
 import SearchBar from './search';
 import Utilities from './utilities';
 
@@ -16,6 +17,7 @@ const Header: FC = () => {
         </span>
         <span className="hidden md:inline">Sign in or sign up</span>
       </button>
+      <LangSwitch />
     </header>
   );
 };

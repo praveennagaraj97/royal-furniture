@@ -13,6 +13,7 @@
   --colour--pale-blush: #fff2f2;
 }
 
+/* Base layer is for element-level resets and typography */
 @layer base {
   body {
     @apply font-montserrat antialiased;
@@ -22,4 +23,11 @@
   a {
     @apply cursor-pointer;
   }
+}
+
+/* Utilities layer is used so Tailwind can see and preserve these dynamic
+   alignment classes that are referenced only from JS (e.g. dropdown align). */
+/* Utilities layer keeps custom utility classes that Tailwind would otherwise
+   tree-shake, especially when referenced only from JS/TS (e.g. dropdown align). */
+@layer utilities {
 }
