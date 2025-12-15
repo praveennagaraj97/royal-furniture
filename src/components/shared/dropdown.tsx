@@ -37,7 +37,7 @@ const Dropdown: FC<DropdownProps> = ({
       const rect = containerRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
       const padding = 16;
-      const panelWidth = 200; // approximate dropdown width in px
+      const panelWidth = 180; // approximate dropdown width in px
 
       let left =
         align === 'right'

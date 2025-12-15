@@ -11,6 +11,7 @@ const SearchBar: FC = () => {
         className="bg-[#F9FAFB] py-3 w-full rounded-lg placeholder:text-[#9CA3AF] pl-9 border
         hover:border-gray-400/60 focus:border-gray-400/60 focus:outline-none
         transition-colors duration-150 delay-75 border-gray-100"
+        suppressHydrationWarning
       />
     </div>
   );
