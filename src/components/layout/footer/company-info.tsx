@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
 
-import logo from '@/assets/logo.svg';
+import logo from '@/assets/logo.png';
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
