@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion';
 import { LogIn } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
+import SignupForm from '@/components/auth/signup-form';
 import Image from 'next/image';
 import LangSwitch from './lang-switch';
 import SearchBar from './search';
@@ -14,6 +15,7 @@ import logo from '@/assets/logo.svg';
 
 const Header: FC = () => {
   const t = useTranslations('common');
+  const [isSignupFormOpen, setIsSignupFormOpen] = useState(false);
 
   return (
     <header className="container mx-auto px-3 py-2.5 md:py-3">
@@ -47,6 +49,7 @@ const Header: FC = () => {
               transition={{ delay: 0.1, duration: 0.25, ease: 'easeOut' }}
               whileHover={{ y: -1 }}
               type="button"
+              onClick={() => setIsSignupFormOpen(true)}
             >
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7F1D1D] text-white">
                 <LogIn className="h-5 w-5" />
@@ -117,6 +120,7 @@ const Header: FC = () => {
           transition={{ delay: 0.15, duration: 0.25, ease: 'easeOut' }}
           whileHover={{ y: -1 }}
           type="button"
+          onClick={() => setIsSignupFormOpen(true)}
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7F1D1D] text-white">
             <LogIn className="h-5 w-5" />
@@ -133,6 +137,12 @@ const Header: FC = () => {
           <LangSwitch />
         </motion.div>
       </div>
+
+      {/* Signup Form Modal */}
+      <SignupForm
+        isOpen={isSignupFormOpen}
+        onClose={() => setIsSignupFormOpen(false)}
+      />
     </header>
   );
 };

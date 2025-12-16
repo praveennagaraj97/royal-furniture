@@ -12,7 +12,7 @@ interface ModalProps {
   blurBackdrop?: boolean;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
-  variant?: 'side' | 'center';
+  variant?: 'side' | 'center' | 'bottom';
 }
 
 const Modal: FC<ModalProps> = ({
@@ -63,6 +63,61 @@ const Modal: FC<ModalProps> = ({
     lg: 'modal-size-lg',
     xl: 'modal-size-xl',
   };
+
+  if (variant === 'bottom') {
+    return (
+      <Portal blurBackdrop={blurBackdrop}>
+        <AnimatePresence mode="wait">
+          {isOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center sm:justify-center p-0 sm:p-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={onClose}
+              >
+                {/* Modal Content */}
+                <motion.div
+                  ref={modalRef}
+                  className={`bg-white rounded-t-2xl sm:rounded-lg shadow-2xl w-full ${sizeClassMap[size]} ${className} flex flex-col overflow-hidden`}
+                  initial={
+                    isMobile
+                      ? { opacity: 0, y: '100%' }
+                      : { opacity: 0, scale: 0.95, y: 20 }
+                  }
+                  animate={
+                    isMobile
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 1, scale: 1, y: 0 }
+                  }
+                  exit={
+                    isMobile
+                      ? { opacity: 0, y: '100%' }
+                      : { opacity: 0, scale: 0.95, y: 20 }
+                  }
+                  transition={{
+                    duration: 0.3,
+                    ease: 'easeOut',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  style={
+                    isMobile
+                      ? { paddingBottom: 'env(safe-area-inset-bottom)' }
+                      : undefined
+                  }
+                >
+                  {children}
+                </motion.div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </Portal>
+    );
+  }
 
   if (variant === 'center') {
     return (
