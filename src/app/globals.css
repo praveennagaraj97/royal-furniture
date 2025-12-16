@@ -35,6 +35,22 @@
 /* Utilities layer keeps custom utility classes that Tailwind would otherwise
    tree-shake, especially when referenced only from JS/TS (e.g. dropdown align). */
 @layer utilities {
+  .modal-size-sm {
+    @apply max-w-md;
+  }
+
+  .modal-size-md {
+    @apply max-w-lg;
+  }
+
+  .modal-size-lg {
+    @apply max-w-2xl;
+  }
+
+  .modal-size-xl {
+    @apply max-w-4xl;
+  }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
