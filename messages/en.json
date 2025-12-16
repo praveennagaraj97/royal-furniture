@@ -25,5 +25,66 @@
   "metadata": {
     "title": "Royal Furniture",
     "description": "Royal Furniture - Premium furniture for your home"
+  },
+  "footer": {
+    "support": {
+      "title": "Support",
+      "callCustomerSupport": "Call Customer Support",
+      "writeToUs": "Write to us",
+      "helpCenter": "Help Center"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "x": "X",
+      "youtube": "YouTube"
+    },
+    "sections": {
+      "contactUs": "Contact Us",
+      "help": "Help",
+      "aboutUs": "About Us"
+    },
+    "links": {
+      "contact": {
+        "livingRoom": "Living Room",
+        "diningRoom": "Dining Room",
+        "bedroom": "Bedroom",
+        "officeFurniture": "Office Furniture",
+        "outdoor": "Outdoor",
+        "accessories": "Accessories",
+        "saleItems": "Sale Items"
+      },
+      "help": {
+        "contactUs": "Contact Us",
+        "trackOrder": "Track Order",
+        "shippingDelivery": "Shipping & Delivery",
+        "returnsExchanges": "Returns & Exchanges",
+        "faq": "FAQ",
+        "sizeGuide": "Size Guide",
+        "assemblyServices": "Assembly Services"
+      },
+      "about": {
+        "aboutUs": "About Us",
+        "ourStores": "Our Stores",
+        "careers": "Careers",
+        "blog": "Blog",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service"
+      }
+    },
+    "company": {
+      "description": "Your trusted destination for quality furniture and home decor. Transform your space with our curated collection of modern and classic pieces.",
+      "findOurStores": "Find Our Stores"
+    },
+    "appDownloads": {
+      "downloadOurApp": "Download our app on",
+      "getItOnGooglePlay": "Get it on Google Play",
+      "downloadOnAppStore": "Download on the App Store"
+    },
+    "bottomBar": {
+      "copyright": "© 2025 Furniture Store. All rights reserved.",
+      "unitedArabEmirates": "United Arab Emirates",
+      "eng": "ENG"
+    }
   }
 }

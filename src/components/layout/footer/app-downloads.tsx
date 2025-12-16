@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, type Variants } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -20,10 +21,12 @@ const itemVariants: Variants = {
 };
 
 const AppDownloads: FC = () => {
+  const t = useTranslations('footer.appDownloads');
+
   return (
     <motion.div className="flex flex-col gap-3" variants={itemVariants}>
-      <p className="text-gray-700 text-sm font-medium">Download our app on</p>
-      <div className="flex flex-col sm:flex-row gap-3">
+      <p className="text-gray-700 text-sm font-medium">{t('downloadOurApp')}</p>
+      <div className="flex flex-wrap gap-3">
         {/* Google Play Badge */}
         <a
           href="#"
@@ -31,7 +34,7 @@ const AppDownloads: FC = () => {
         >
           <Image
             src={googlePlayBadge}
-            alt="Get it on Google Play"
+            alt={t('getItOnGooglePlay')}
             width={162}
             height={48}
             className="h-12 w-auto"
@@ -44,7 +47,7 @@ const AppDownloads: FC = () => {
         >
           <Image
             src={appStoreBadge}
-            alt="Download on the App Store"
+            alt={t('downloadOnAppStore')}
             width={162}
             height={48}
             className="h-12 w-auto"

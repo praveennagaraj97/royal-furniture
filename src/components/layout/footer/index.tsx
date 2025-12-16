@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, type Variants } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import AppDownloads from './app-downloads';
 import BottomBar from './bottom-bar';
@@ -32,33 +33,38 @@ const sectionVariants: Variants = {
 };
 
 const Footer: FC = () => {
+  const tSections = useTranslations('footer.sections');
+  const tContactLinks = useTranslations('footer.links.contact');
+  const tHelpLinks = useTranslations('footer.links.help');
+  const tAboutLinks = useTranslations('footer.links.about');
+
   const contactLinks = [
-    'Living Room',
-    'Dining Room',
-    'Bedroom',
-    'Office Furniture',
-    'Outdoor',
-    'Accessories',
-    'Sale Items',
+    tContactLinks('livingRoom'),
+    tContactLinks('diningRoom'),
+    tContactLinks('bedroom'),
+    tContactLinks('officeFurniture'),
+    tContactLinks('outdoor'),
+    tContactLinks('accessories'),
+    tContactLinks('saleItems'),
   ];
 
   const helpLinks = [
-    'Contact Us',
-    'Track Order',
-    'Shipping & Delivery',
-    'Returns & Exchanges',
-    'FAQ',
-    'Size Guide',
-    'Assembly Services',
+    tHelpLinks('contactUs'),
+    tHelpLinks('trackOrder'),
+    tHelpLinks('shippingDelivery'),
+    tHelpLinks('returnsExchanges'),
+    tHelpLinks('faq'),
+    tHelpLinks('sizeGuide'),
+    tHelpLinks('assemblyServices'),
   ];
 
   const aboutLinks = [
-    'About Us',
-    'Our Stores',
-    'Careers',
-    'Blog',
-    'Privacy Policy',
-    'Terms of Service',
+    tAboutLinks('aboutUs'),
+    tAboutLinks('ourStores'),
+    tAboutLinks('careers'),
+    tAboutLinks('blog'),
+    tAboutLinks('privacyPolicy'),
+    tAboutLinks('termsOfService'),
   ];
 
   return (
@@ -72,7 +78,7 @@ const Footer: FC = () => {
       >
         {/* Top Section */}
         <motion.div
-          className="flex flex-col lg:flex-row items-end justify-between gap-6 pb-6 border-b border-gray-300"
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-gray-300"
           variants={sectionVariants}
         >
           <CompanyInfo />
@@ -85,9 +91,9 @@ const Footer: FC = () => {
           variants={sectionVariants}
         >
           <SupportLinks />
-          <LinkColumn title="Contact Us" links={contactLinks} />
-          <LinkColumn title="Help" links={helpLinks} />
-          <LinkColumn title="About Us" links={aboutLinks} />
+          <LinkColumn title={tSections('contactUs')} links={contactLinks} />
+          <LinkColumn title={tSections('help')} links={helpLinks} />
+          <LinkColumn title={tSections('aboutUs')} links={aboutLinks} />
         </motion.div>
 
         {/* Bottom Section */}

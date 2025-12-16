@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -20,20 +21,21 @@ const itemVariants: Variants = {
 };
 
 const CompanyInfo: FC = () => {
+  const t = useTranslations('footer.company');
+
   return (
     <motion.div className="flex flex-col gap-3" variants={itemVariants}>
       <div className="flex items-center gap-3">
         <Image src={logo} alt="Royal Furniture" />
       </div>
       <p className="text-gray-700 text-sm leading-relaxed max-w-md">
-        Your trusted destination for quality furniture and home decor. Transform
-        your space with our curated collection of modern and classic pieces.
+        {t('description')}
       </p>
       <button
         type="button"
         className="flex items-center justify-center gap-2 bg-deep-maroon text-white px-6 py-3 rounded-full font-medium hover:bg-[#6b0000] transition-colors duration-200 w-fit"
       >
-        <span>Find Our Stores</span>
+        <span>{t('findOurStores')}</span>
         <ArrowRight className="w-4 h-4" />
       </button>
     </motion.div>

@@ -25,5 +25,66 @@
   "metadata": {
     "title": "الأثاث الملكي",
     "description": "الأثاث الملكي - أثاث فاخر لمنزلك"
+  },
+  "footer": {
+    "support": {
+      "title": "الدعم",
+      "callCustomerSupport": "اتصل بدعم العملاء",
+      "writeToUs": "اكتب إلينا",
+      "helpCenter": "مركز المساعدة"
+    },
+    "social": {
+      "instagram": "إنستغرام",
+      "facebook": "فيسبوك",
+      "x": "إكس",
+      "youtube": "يوتيوب"
+    },
+    "sections": {
+      "contactUs": "اتصل بنا",
+      "help": "مساعدة",
+      "aboutUs": "من نحن"
+    },
+    "links": {
+      "contact": {
+        "livingRoom": "غرفة المعيشة",
+        "diningRoom": "غرفة الطعام",
+        "bedroom": "غرفة النوم",
+        "officeFurniture": "أثاث المكتب",
+        "outdoor": "الخارجي",
+        "accessories": "الإكسسوارات",
+        "saleItems": "العروض"
+      },
+      "help": {
+        "contactUs": "اتصل بنا",
+        "trackOrder": "تتبع الطلب",
+        "shippingDelivery": "الشحن والتوصيل",
+        "returnsExchanges": "الإرجاع والاستبدال",
+        "faq": "الأسئلة الشائعة",
+        "sizeGuide": "دليل المقاسات",
+        "assemblyServices": "خدمات التجميع"
+      },
+      "about": {
+        "aboutUs": "من نحن",
+        "ourStores": "متاجرنا",
+        "careers": "الوظائف",
+        "blog": "المدونة",
+        "privacyPolicy": "سياسة الخصوصية",
+        "termsOfService": "شروط الخدمة"
+      }
+    },
+    "company": {
+      "description": "وجهتك الموثوقة للأثاث والديكور المنزلي عالي الجودة. حوّل مساحتك مع مجموعتنا المختارة من القطع العصرية والكلاسيكية.",
+      "findOurStores": "ابحث عن متاجرنا"
+    },
+    "appDownloads": {
+      "downloadOurApp": "حمّل تطبيقنا على",
+      "getItOnGooglePlay": "احصل عليه من Google Play",
+      "downloadOnAppStore": "حمّل من App Store"
+    },
+    "bottomBar": {
+      "copyright": "© 2025 متجر الأثاث. جميع الحقوق محفوظة.",
+      "unitedArabEmirates": "الإمارات العربية المتحدة",
+      "eng": "ENG"
+    }
   }
 }

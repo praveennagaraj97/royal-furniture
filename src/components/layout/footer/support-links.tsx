@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { HelpCircle, Mail, Phone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -34,6 +35,9 @@ const containerVariants: Variants = {
 };
 
 const SupportLinks: FC = () => {
+  const t = useTranslations('footer.support');
+  const tSocial = useTranslations('footer.social');
+
   return (
     <motion.div
       className="flex flex-col gap-3"
@@ -42,7 +46,7 @@ const SupportLinks: FC = () => {
       whileInView="visible"
       viewport={{ once: true }}
     >
-      <h3 className="text-gray-900 font-bold text-base">Support</h3>
+      <h3 className="text-gray-900 font-bold text-base">{t('title')}</h3>
       <div className="flex flex-col gap-3">
         {/* Call Customer Support */}
         <motion.div className="flex items-start gap-3" variants={itemVariants}>
@@ -51,7 +55,7 @@ const SupportLinks: FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="text-gray-900 font-semibold text-sm">
-              Call Customer Support
+              {t('callCustomerSupport')}
             </span>
             <span className="text-gray-600 text-sm">2942 87687 989</span>
           </div>
@@ -64,7 +68,7 @@ const SupportLinks: FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="text-gray-900 font-semibold text-sm">
-              Write to us
+              {t('writeToUs')}
             </span>
             <span className="text-gray-600 text-sm">
               www.furniture@g.ail.com
@@ -79,7 +83,7 @@ const SupportLinks: FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="text-gray-900 font-semibold text-sm">
-              Help Center
+              {t('helpCenter')}
             </span>
             <span className="text-gray-600 text-sm">
               www.furniture@g.ail.com
@@ -101,7 +105,7 @@ const SupportLinks: FC = () => {
         >
           <Image
             src={instagramIcon}
-            alt="Instagram"
+            alt={tSocial('instagram')}
             width={32}
             height={32}
             className="w-full h-full object-contain"
@@ -115,7 +119,7 @@ const SupportLinks: FC = () => {
         >
           <Image
             src={facebookIcon}
-            alt="Facebook"
+            alt={tSocial('facebook')}
             width={32}
             height={32}
             className="w-full h-full object-contain"
@@ -129,7 +133,7 @@ const SupportLinks: FC = () => {
         >
           <Image
             src={xIcon}
-            alt="X"
+            alt={tSocial('x')}
             width={32}
             height={32}
             className="w-full h-full object-contain"
@@ -143,7 +147,7 @@ const SupportLinks: FC = () => {
         >
           <Image
             src={youtubeIcon}
-            alt="YouTube"
+            alt={tSocial('youtube')}
             width={32}
             height={32}
             className="w-full h-full object-contain"
