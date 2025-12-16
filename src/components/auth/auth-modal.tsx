@@ -2,11 +2,35 @@
 
 import verticalLogo from '@/assets/vertical-logo.svg';
 import Modal from '@/components/shared/modal';
+import { motion, type Variants } from 'framer-motion';
 import { Facebook } from 'lucide-react';
 import Image from 'next/image';
 import { useState, type FC } from 'react';
 import LoginForm from './login-form';
 import SignupForm from './signup-form';
+
+const socialContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const socialItemVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+      ease: 'easeOut',
+    },
+  },
+};
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -81,26 +105,38 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
           )}
 
           {/* Separator */}
-          <div className="flex items-center gap-4 my-6">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
+            className="flex items-center gap-4 my-6"
+          >
             <div className="flex-1 h-px bg-gray-300" />
             <span className="text-sm text-gray-600">Or continue with</span>
             <div className="flex-1 h-px bg-gray-300" />
-          </div>
+          </motion.div>
 
           {/* Social Login Icons */}
-          <div className="flex items-center justify-center gap-4">
+          <motion.div
+            variants={socialContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex items-center justify-center gap-4"
+          >
             {/* Facebook */}
-            <button
+            <motion.button
               type="button"
+              variants={socialItemVariants}
               onClick={() => handleSocialLogin('facebook')}
               className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
             >
               <Facebook className="w-5 h-5 text-[#1877F2]" />
-            </button>
+            </motion.button>
 
             {/* Google */}
-            <button
+            <motion.button
               type="button"
+              variants={socialItemVariants}
               onClick={() => handleSocialLogin('google')}
               className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
             >
@@ -127,11 +163,12 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   fill="#EA4335"
                 />
               </svg>
-            </button>
+            </motion.button>
 
             {/* Apple */}
-            <button
+            <motion.button
               type="button"
+              variants={socialItemVariants}
               onClick={() => handleSocialLogin('apple')}
               className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
             >
@@ -143,8 +180,8 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
               >
                 <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
               </svg>
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </div>
       </div>
     </Modal>
