@@ -24,15 +24,16 @@ const CategoryNav: FC<CategoryNavProps> = ({
 
   return (
     <div className="shadow-md">
-      <nav className="container mx-auto px-2 py-3">
-        <div className="flex items-center justify-center gap-3 flex-wrap">
+      <nav className="container mx-auto px-2 ">
+        {/* Mobile: horizontal scroll, Desktop: centered wrap */}
+        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar sm:justify-center sm:flex-wrap py-3">
           {categories.map((category, index) => {
             const isSelected = selectedCategory === category.id;
             return (
               <motion.button
                 key={category.id}
                 onClick={() => onCategorySelect(category.id)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
                   isSelected
                     ? 'bg-deep-maroon text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'

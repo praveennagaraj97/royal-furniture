@@ -35,4 +35,12 @@
 /* Utilities layer keeps custom utility classes that Tailwind would otherwise
    tree-shake, especially when referenced only from JS/TS (e.g. dropdown align). */
 @layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

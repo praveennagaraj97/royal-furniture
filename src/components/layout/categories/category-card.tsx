@@ -17,17 +17,17 @@ interface CategoryCardProps {
 
 const CategoryCard: FC<CategoryCardProps> = ({ subcategory }) => {
   return (
-    <div className="flex flex-col items-center gap-3 cursor-pointer group bg-white pb-2 rounded-lg">
+    <div className="flex flex-col items-center gap-3 cursor-pointer group/card bg-white pb-2 rounded-lg">
       <div className="relative w-full aspect-square rounded-lg overflow-hidden ">
         <Image
           src={subcategory.image}
           alt={subcategory.imageAlt || subcategory.name}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          className="object-cover group-hover/card:scale-105 transition-transform duration-300"
           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
         />
       </div>
-      <span className="text-sm font-medium text-gray-800 text-center group-hover:text-deep-maroon">
+      <span className="text-sm font-medium text-gray-800 text-center group-hover/card:text-deep-maroon transition-colors">
         {subcategory.name}
       </span>
     </div>

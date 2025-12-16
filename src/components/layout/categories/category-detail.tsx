@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import Swiper from '../../shared/swiper';
 import CategoryCard, { Subcategory } from './category-card';
 
 interface CategoryDetailProps {
@@ -85,18 +86,24 @@ const CategoryDetail: FC<CategoryDetailProps> = ({
 
             <div className="bg-soft-pink">
               <div className="container mx-auto px-2 py-4">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 ">
+                <Swiper
+                  className="px-0"
+                  gap={3}
+                  showNavigation
+                  hideArrowOnMobile
+                >
                   {subcategories.map((subcategory, index) => (
                     <motion.div
                       key={subcategory.id}
                       variants={itemVariants}
                       initial="hidden"
                       animate="visible"
+                      className="min-w-[45%] sm:min-w-[35%] md:min-w-[25%] lg:min-w-[200px]"
                     >
                       <CategoryCard subcategory={subcategory} index={index} />
                     </motion.div>
                   ))}
-                </div>
+                </Swiper>
               </div>
             </div>
           </div>
