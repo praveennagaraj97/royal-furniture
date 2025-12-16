@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import Swiper from '../../shared/swiper';
@@ -20,12 +20,6 @@ const containerVariants: Variants = {
       duration: 0.3,
       staggerChildren: 0.08,
       delayChildren: 0.1,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.2,
     },
   },
 };
@@ -64,52 +58,42 @@ const CategoryDetail: FC<CategoryDetailProps> = ({
   const t = useTranslations('categories');
 
   return (
-    <AnimatePresence mode="wait">
-      {selectedCategoryId && (
-        <motion.div
-          key={selectedCategoryId}
-          variants={containerVariants}
+    <motion.div
+      key={selectedCategoryId}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="overflow-hidden"
+    >
+      <div className="pt-4">
+        <motion.h2
+          variants={titleVariants}
           initial="hidden"
           animate="visible"
-          exit="exit"
-          className="overflow-hidden"
+          className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4 container mx-auto px-2"
         >
-          <div className="pt-4">
-            <motion.h2
-              variants={titleVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4 container mx-auto px-2"
-            >
-              {t(selectedCategoryKey)}
-            </motion.h2>
+          {t(selectedCategoryKey)}
+        </motion.h2>
 
-            <div className="bg-soft-pink">
-              <div className="container mx-auto px-2 py-4">
-                <Swiper
-                  className="px-0"
-                  gap={3}
-                  showNavigation
-                  hideArrowOnMobile
+        <div className="bg-soft-pink">
+          <div className="container mx-auto px-2 py-4">
+            <Swiper className="px-0" gap={3} showNavigation hideArrowOnMobile>
+              {subcategories.map((subcategory, index) => (
+                <motion.div
+                  key={subcategory.id}
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="min-w-[45%] sm:min-w-[35%] md:min-w-[25%] lg:min-w-[200px]"
                 >
-                  {subcategories.map((subcategory, index) => (
-                    <motion.div
-                      key={subcategory.id}
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="visible"
-                      className="min-w-[45%] sm:min-w-[35%] md:min-w-[25%] lg:min-w-[200px]"
-                    >
-                      <CategoryCard subcategory={subcategory} index={index} />
-                    </motion.div>
-                  ))}
-                </Swiper>
-              </div>
-            </div>
+                  <CategoryCard subcategory={subcategory} index={index} />
+                </motion.div>
+              ))}
+            </Swiper>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

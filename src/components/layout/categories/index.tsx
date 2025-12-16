@@ -1,5 +1,6 @@
 'use client';
 
+import { AnimatePresence, motion } from 'framer-motion';
 import { FC, useState } from 'react';
 import { Subcategory } from './category-card';
 import CategoryDetail from './category-detail';
@@ -28,20 +29,39 @@ const Categories: FC<CategoriesProps> = ({ categories, categoriesData }) => {
       ? categoriesData[selectedCategory]
       : [];
 
+  const shouldShowDetail =
+    selectedCategoryObj &&
+    selectedCategory !== 'all' &&
+    subcategories.length > 0;
+
   return (
-    <section className="w-full ">
+    <section className="w-full">
       <CategoryNav
         categories={categories}
         selectedCategory={selectedCategory}
         onCategorySelect={setSelectedCategory}
       />
-      {selectedCategoryObj && selectedCategory !== 'all' && (
-        <CategoryDetail
-          selectedCategoryId={selectedCategory}
-          selectedCategoryKey={selectedCategoryObj.key}
-          subcategories={subcategories}
-        />
-      )}
+      <AnimatePresence mode="wait">
+        {shouldShowDetail && (
+          <motion.div
+            key={selectedCategory}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{
+              height: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
+              opacity: { duration: 0.3, ease: 'easeOut' },
+            }}
+            className="overflow-hidden"
+          >
+            <CategoryDetail
+              selectedCategoryId={selectedCategory}
+              selectedCategoryKey={selectedCategoryObj.key}
+              subcategories={subcategories}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
