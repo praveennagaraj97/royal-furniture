@@ -1,7 +1,11 @@
 'use client';
 
 import { motion, type Variants } from 'framer-motion';
+import Image from 'next/image';
 import { FC } from 'react';
+
+import appStoreBadge from '@/assets/app-store-badge.svg';
+import googlePlayBadge from '@/assets/google-play-badge.svg';
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -20,26 +24,32 @@ const AppDownloads: FC = () => {
     <motion.div className="flex flex-col gap-3" variants={itemVariants}>
       <p className="text-gray-700 text-sm font-medium">Download our app on</p>
       <div className="flex flex-col sm:flex-row gap-3">
-        {/* Google Play Placeholder */}
-        <button
-          type="button"
-          className="flex items-center gap-2 bg-black text-white px-4 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200"
+        {/* Google Play Badge */}
+        <a
+          href="#"
+          className="inline-block hover:opacity-80 transition-opacity duration-200"
         >
-          <div className="w-6 h-6 bg-white/20 rounded flex items-center justify-center">
-            <span className="text-xs">GP</span>
-          </div>
-          <span className="text-sm">GET IT ON Google Play</span>
-        </button>
-        {/* App Store Placeholder */}
-        <button
-          type="button"
-          className="flex items-center gap-2 bg-black text-white px-4 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200"
+          <Image
+            src={googlePlayBadge}
+            alt="Get it on Google Play"
+            width={162}
+            height={48}
+            className="h-12 w-auto"
+          />
+        </a>
+        {/* App Store Badge */}
+        <a
+          href="#"
+          className="inline-block hover:opacity-80 transition-opacity duration-200"
         >
-          <div className="w-6 h-6 bg-white/20 rounded flex items-center justify-center">
-            <span className="text-xs">AS</span>
-          </div>
-          <span className="text-sm">Download on the App Store</span>
-        </button>
+          <Image
+            src={appStoreBadge}
+            alt="Download on the App Store"
+            width={162}
+            height={48}
+            className="h-12 w-auto"
+          />
+        </a>
       </div>
     </motion.div>
   );

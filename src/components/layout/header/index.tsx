@@ -10,7 +10,7 @@ import LangSwitch from './lang-switch';
 import SearchBar from './search';
 import Utilities from './utilities';
 
-import logo from '@/assets/logo.png';
+import logo from '@/assets/logo.svg';
 
 const Header: FC = () => {
   const t = useTranslations('common');

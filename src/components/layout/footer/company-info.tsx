@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { FC } from 'react';
 
-import logo from '@/assets/logo.png';
+import logo from '@/assets/logo.svg';
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
