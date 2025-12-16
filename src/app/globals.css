@@ -52,7 +52,7 @@
   }
 
   .form-input-base {
-    @apply w-full bg-gray-100 px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200;
+    @apply w-full text-sm bg-gray-100 px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200;
   }
 
   .form-input-label {

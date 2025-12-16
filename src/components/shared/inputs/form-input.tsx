@@ -143,7 +143,7 @@ export const FormInput: FC<FormInputProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, delay: 0.1 }}
-              className="text-sm text-red-500 mt-1"
+              className="text-xs text-red-500 mt-1"
             >
               {displayError}
             </motion.p>

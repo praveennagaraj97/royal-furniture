@@ -5,7 +5,7 @@ import { LogIn } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 
-import SignupForm from '@/components/auth/signup-form';
+import { AuthModal } from '@/components/auth';
 import Image from 'next/image';
 import LangSwitch from './lang-switch';
 import SearchBar from './search';
@@ -138,8 +138,8 @@ const Header: FC = () => {
         </motion.div>
       </div>
 
-      {/* Signup Form Modal */}
-      <SignupForm
+      {/* Auth Modal */}
+      <AuthModal
         isOpen={isSignupFormOpen}
         onClose={() => setIsSignupFormOpen(false)}
       />
