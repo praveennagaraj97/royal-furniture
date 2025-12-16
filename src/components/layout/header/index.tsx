@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { LogIn } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import Logo from '../../shared/icon';
 import LangSwitch from './lang-switch';
@@ -9,8 +10,10 @@ import SearchBar from './search';
 import Utilities from './utilities';
 
 const Header: FC = () => {
+  const t = useTranslations('common');
+
   return (
-    <header className="container mx-auto py-3 flex items-center space-x-6">
+    <header className="container mx-auto py-3 flex items-center space-x-6 rtl:space-x-reverse">
       <motion.div
         initial={{ opacity: 0, y: -4 }}
         animate={{ opacity: 1, y: 0 }}
@@ -47,7 +50,7 @@ const Header: FC = () => {
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7F1D1D] text-white">
           <LogIn className="h-4 w-4" />
         </span>
-        <span className="hidden md:inline">Sign in or sign up</span>
+        <span className="hidden md:inline">{t('signInOrSignUp')}</span>
       </motion.button>
 
       <motion.div

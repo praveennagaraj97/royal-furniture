@@ -23,6 +23,11 @@
   a {
     @apply cursor-pointer;
   }
+
+  /* RTL support for Arabic */
+  [dir='rtl'] {
+    font-family: var(--font-montserrat), 'Segoe UI', Tahoma, Arial, sans-serif;
+  }
 }
 
 /* Utilities layer is used so Tailwind can see and preserve these dynamic

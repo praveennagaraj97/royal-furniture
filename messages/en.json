@@ -1,0 +1,21 @@
+{
+  "common": {
+    "signInOrSignUp": "Sign in or sign up",
+    "english": "English",
+    "arabic": "العربية",
+    "location": "Location",
+    "searchPlaceholder": "What you are looking for?"
+  },
+  "quickLinks": {
+    "freeShipping": "Free shipping",
+    "clickAndCollect": "Click & Collect",
+    "trackOrder": "Track Order",
+    "storeLocator": "Store Locator",
+    "help": "Help",
+    "sellWithUs": "Sell With Us"
+  },
+  "metadata": {
+    "title": "Royal Furniture",
+    "description": "Royal Furniture - Premium furniture for your home"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "common": {
+    "signInOrSignUp": "تسجيل الدخول أو التسجيل",
+    "english": "English",
+    "arabic": "العربية",
+    "location": "الموقع",
+    "searchPlaceholder": "ماذا تبحث عنه؟"
+  },
+  "quickLinks": {
+    "freeShipping": "شحن مجاني",
+    "clickAndCollect": "انقر واحصل",
+    "trackOrder": "تتبع الطلب",
+    "storeLocator": "موقع المتجر",
+    "help": "مساعدة",
+    "sellWithUs": "بيع معنا"
+  },
+  "metadata": {
+    "title": "الأثاث الملكي",
+    "description": "الأثاث الملكي - أثاث فاخر لمنزلك"
+  }
+}
