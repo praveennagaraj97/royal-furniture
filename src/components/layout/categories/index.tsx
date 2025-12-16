@@ -15,9 +15,7 @@ interface CategoriesProps {
 }
 
 const Categories: FC<CategoriesProps> = ({ categories, categoriesData }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    categories.find((cat) => cat.id === 'sofa')?.id || categories[0]?.id || ''
-  );
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const selectedCategoryObj = categories.find(
     (cat) => cat.id === selectedCategory
