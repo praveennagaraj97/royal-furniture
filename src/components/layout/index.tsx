@@ -16,7 +16,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
       <Header />
       <hr className="text-gray-200 w-full container mx-auto px-2" />
       <Categories categories={categories} categoriesData={categoriesData} />
-      <main>{children}</main>
+      <main className="mt-4">{children}</main>
     </>
   );
 };

@@ -8,7 +8,7 @@ import heroImage from '@/assets/hero.png';
 
 const Hero: FC = () => {
   return (
-    <div className="container mx-auto px-2 py-4">
+    <div className="container mx-auto px-2">
       <motion.div
         className="relative w-full rounded-lg overflow-hidden"
         initial={{ opacity: 0, scale: 1.05 }}
