@@ -32,7 +32,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
               <motion.button
                 key={category.id}
                 onClick={() => onCategorySelect(category.id)}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-colors ${
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
                   isSelected
                     ? 'bg-deep-maroon text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
