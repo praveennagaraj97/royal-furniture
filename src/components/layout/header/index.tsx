@@ -5,7 +5,7 @@ import { LogIn } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 
-import { AuthModal } from '@/components/auth';
+import AuthModal from '@/components/auth/auth-modal';
 import Image from 'next/image';
 import LangSwitch from './lang-switch';
 import SearchBar from './search';

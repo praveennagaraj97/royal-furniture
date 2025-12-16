@@ -119,7 +119,7 @@ const Modal: FC<ModalProps> = ({
                 {/* Modal Content */}
                 <motion.div
                   ref={modalRef}
-                  className={`bg-white rounded-t-2xl sm:rounded-lg shadow-2xl w-full ${sizeClassMap[size]} ${className} flex flex-col overflow-hidden`}
+                  className={`bg-white rounded-t-2xl sm:rounded-lg shadow-2xl w-full ${sizeClassMap[size]} ${className} flex flex-col overflow-hidden max-h-[95vh]`}
                   initial={
                     isMobile
                       ? { opacity: 0, y: '100%' }
