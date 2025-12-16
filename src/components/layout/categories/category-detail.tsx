@@ -78,13 +78,13 @@ const CategoryDetail: FC<CategoryDetailProps> = ({
               variants={titleVariants}
               initial="hidden"
               animate="visible"
-              className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4 container mx-auto"
+              className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4 container mx-auto px-2"
             >
               {t(selectedCategoryKey)}
             </motion.h2>
 
             <div className="bg-soft-pink">
-              <div className="container mx-auto py-4 ">
+              <div className="container mx-auto px-2 py-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 ">
                   {subcategories.map((subcategory, index) => (
                     <motion.div

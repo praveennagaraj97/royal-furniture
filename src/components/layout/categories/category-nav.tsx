@@ -24,7 +24,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
 
   return (
     <div className="shadow-md">
-      <nav className="container mx-auto py-3">
+      <nav className="container mx-auto px-2 py-3">
         <div className="flex items-center justify-center gap-3 flex-wrap">
           {categories.map((category, index) => {
             const isSelected = selectedCategory === category.id;
