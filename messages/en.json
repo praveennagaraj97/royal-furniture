@@ -14,6 +14,14 @@
     "help": "Help",
     "sellWithUs": "Sell With Us"
   },
+  "categories": {
+    "all": "All",
+    "sofa": "Sofa",
+    "livingRoom": "Living Room",
+    "diningRoom": "Dining Room",
+    "bedroom": "Bedroom",
+    "office": "Office"
+  },
   "metadata": {
     "title": "Royal Furniture",
     "description": "Royal Furniture - Premium furniture for your home"
