@@ -24,7 +24,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
 
   return (
     <div className="shadow-md">
-      <nav className="container mx-auto px-2 ">
+      <nav className="container mx-auto px-3 ">
         {/* Mobile: horizontal scroll, Desktop: centered wrap */}
         <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar sm:justify-center sm:flex-wrap py-3">
           {categories.map((category, index) => {

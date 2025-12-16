@@ -70,13 +70,13 @@ const CategoryDetail: FC<CategoryDetailProps> = ({
           variants={titleVariants}
           initial="hidden"
           animate="visible"
-          className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4 container mx-auto px-2"
+          className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4 container mx-auto px-3"
         >
           {t(selectedCategoryKey)}
         </motion.h2>
 
         <div className="bg-soft-pink">
-          <div className="container mx-auto px-2 py-4">
+          <div className="container mx-auto px-3 py-4">
             <Swiper className="px-0" gap={3} showNavigation hideArrowOnMobile>
               {subcategories.map((subcategory, index) => (
                 <motion.div

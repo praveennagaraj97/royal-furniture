@@ -8,7 +8,7 @@ import promotionalBanner from '@/assets/promotional_banner.png';
 
 const PromotionalBanner: FC = () => {
   return (
-    <div className="container mx-auto px-2">
+    <div className="container mx-auto px-3">
       <motion.div
         className="relative w-full rounded-lg overflow-hidden"
         initial={{ opacity: 0, scale: 1.05, y: 30 }}

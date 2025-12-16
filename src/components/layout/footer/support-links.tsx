@@ -2,7 +2,13 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { HelpCircle, Mail, Phone } from 'lucide-react';
+import Image from 'next/image';
 import { FC } from 'react';
+
+import facebookIcon from '@/assets/social/facebook.png';
+import instagramIcon from '@/assets/social/insta.png';
+import xIcon from '@/assets/social/twitter.png';
+import youtubeIcon from '@/assets/social/youtube.png';
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, x: -10 },
@@ -40,7 +46,7 @@ const SupportLinks: FC = () => {
       <div className="flex flex-col gap-3">
         {/* Call Customer Support */}
         <motion.div className="flex items-start gap-3" variants={itemVariants}>
-          <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 shrink-0">
+          <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
             <Phone className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
@@ -53,7 +59,7 @@ const SupportLinks: FC = () => {
 
         {/* Write to us */}
         <motion.div className="flex items-start gap-3" variants={itemVariants}>
-          <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 shrink-0">
+          <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
             <Mail className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
@@ -68,7 +74,7 @@ const SupportLinks: FC = () => {
 
         {/* Help Center */}
         <motion.div className="flex items-start gap-3" variants={itemVariants}>
-          <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 shrink-0">
+          <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
             <HelpCircle className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
@@ -82,39 +88,67 @@ const SupportLinks: FC = () => {
         </motion.div>
       </div>
 
-      {/* Social Media Icons Placeholders */}
+      {/* Social Media Icons */}
       <motion.div
         className="flex items-center gap-3 pt-2"
         variants={containerVariants}
       >
         {/* Instagram */}
-        <motion.div
-          className="w-10 h-10 rounded-full bg-linear-to-br from-purple-600 via-pink-600 to-orange-500 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+        <motion.a
+          href="#"
+          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           variants={itemVariants}
         >
-          <span className="text-white text-xs font-bold">IG</span>
-        </motion.div>
+          <Image
+            src={instagramIcon}
+            alt="Instagram"
+            width={32}
+            height={32}
+            className="w-full h-full object-contain"
+          />
+        </motion.a>
         {/* Facebook */}
-        <motion.div
-          className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+        <motion.a
+          href="#"
+          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           variants={itemVariants}
         >
-          <span className="text-white text-xs font-bold">f</span>
-        </motion.div>
-        {/* Twitter */}
-        <motion.div
-          className="w-10 h-10 rounded-full bg-sky-400 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+          <Image
+            src={facebookIcon}
+            alt="Facebook"
+            width={32}
+            height={32}
+            className="w-full h-full object-contain"
+          />
+        </motion.a>
+        {/* X */}
+        <motion.a
+          href="#"
+          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           variants={itemVariants}
         >
-          <span className="text-white text-xs font-bold">X</span>
-        </motion.div>
+          <Image
+            src={xIcon}
+            alt="X"
+            width={32}
+            height={32}
+            className="w-full h-full object-contain"
+          />
+        </motion.a>
         {/* YouTube */}
-        <motion.div
-          className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+        <motion.a
+          href="#"
+          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           variants={itemVariants}
         >
-          <span className="text-white text-xs font-bold">YT</span>
-        </motion.div>
+          <Image
+            src={youtubeIcon}
+            alt="YouTube"
+            width={32}
+            height={32}
+            className="w-full h-full object-contain"
+          />
+        </motion.a>
       </motion.div>
     </motion.div>
   );

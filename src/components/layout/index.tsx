@@ -15,7 +15,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
     <>
       <QuickLinksBar />
       <Header />
-      <hr className="text-gray-200 w-full container mx-auto px-2" />
+      <hr className="text-gray-200 w-full container mx-auto px-3" />
       <Categories categories={categories} categoriesData={categoriesData} />
       <main className="mt-4">{children}</main>
       <Footer />

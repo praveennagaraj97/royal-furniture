@@ -16,7 +16,7 @@ const Header: FC = () => {
   const t = useTranslations('common');
 
   return (
-    <header className="container mx-auto px-2 py-2.5 md:py-3">
+    <header className="container mx-auto px-3 py-2.5 md:py-3">
       {/* Mobile/Tablet: Two-row layout */}
       <div className="flex flex-col gap-2 lg:hidden">
         {/* Top row: logo + utilities / actions */}

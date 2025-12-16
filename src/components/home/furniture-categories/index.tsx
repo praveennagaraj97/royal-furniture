@@ -63,7 +63,7 @@ const furnitureCategories = [
 const FurnitureCategories: FC = () => {
   return (
     <motion.section
-      className="container mx-auto px-2"
+      className="container mx-auto px-3"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
