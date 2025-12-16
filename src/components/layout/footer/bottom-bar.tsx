@@ -1,8 +1,9 @@
 'use client';
 
+import { usePathname, useRouter } from '@/i18n/routing';
 import { motion, type Variants } from 'framer-motion';
 import { ChevronDown, Globe } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
 
 const itemVariants: Variants = {
@@ -19,6 +20,14 @@ const itemVariants: Variants = {
 
 const BottomBar: FC = () => {
   const t = useTranslations('footer.bottomBar');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLanguageChange = (newLocale: string) => {
+    router.replace(pathname, { locale: newLocale as 'en' | 'ar' });
+  };
 
   return (
     <motion.div
@@ -37,14 +46,21 @@ const BottomBar: FC = () => {
           <ChevronDown className="w-4 h-4" />
         </button>
         {/* Language Selector */}
-        <button
-          type="button"
-          className="flex items-center gap-2 text-gray-700 text-sm hover:text-deep-maroon transition-colors duration-200"
-        >
-          <Globe className="w-4 h-4" />
-          <span>{t('eng')}</span>
-          <ChevronDown className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-2">
+          <Globe className="w-4 h-4 text-gray-700" />
+          <div className="relative">
+            <select
+              value={locale}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+              className="text-gray-700 text-sm bg-transparent border-none outline-none cursor-pointer hover:text-deep-maroon transition-colors duration-200 appearance-none pr-6 pl-2 py-1"
+              aria-label="Select language"
+            >
+              <option value="en">{tCommon('english')}</option>
+              <option value="ar">{tCommon('arabic')}</option>
+            </select>
+            <ChevronDown className="w-4 h-4 text-gray-700 pointer-events-none absolute right-0 top-1/2 -translate-y-1/2" />
+          </div>
+        </div>
       </div>
     </motion.div>
   );
