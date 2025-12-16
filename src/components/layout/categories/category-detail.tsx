@@ -12,34 +12,19 @@ interface CategoryDetailProps {
 }
 
 const containerVariants: Variants = {
-  hidden: { height: 0, opacity: 0 },
+  hidden: { opacity: 0 },
   visible: {
-    height: 'auto',
     opacity: 1,
     transition: {
+      duration: 0.3,
       staggerChildren: 0.08,
       delayChildren: 0.1,
-      height: {
-        duration: 0.4,
-        ease: 'easeInOut' as const,
-      },
-      opacity: {
-        duration: 0.3,
-        delay: 0.1,
-      },
     },
   },
   exit: {
-    height: 0,
     opacity: 0,
     transition: {
-      height: {
-        duration: 0.3,
-        ease: 'easeInOut' as const,
-      },
-      opacity: {
-        duration: 0.2,
-      },
+      duration: 0.2,
     },
   },
 };
@@ -86,7 +71,7 @@ const CategoryDetail: FC<CategoryDetailProps> = ({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="overflow-hidden "
+          className="overflow-hidden"
         >
           <div className="pt-4">
             <motion.h2
