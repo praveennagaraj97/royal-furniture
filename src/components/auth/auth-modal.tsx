@@ -98,11 +98,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
         {/* Form Content */}
         <div className="flex-1 px-6 pt-6 pb-6">
-          {activeTab === 'signup' ? (
-            <SignupForm onSocialLogin={handleSocialLogin} />
-          ) : (
-            <LoginForm onSocialLogin={handleSocialLogin} />
-          )}
+          {activeTab === 'signup' ? <SignupForm /> : <LoginForm />}
 
           {/* Separator */}
           <motion.div

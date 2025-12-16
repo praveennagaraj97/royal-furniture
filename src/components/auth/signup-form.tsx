@@ -28,11 +28,7 @@ const itemVariants: Variants = {
   },
 };
 
-interface SignupFormProps {
-  onSocialLogin?: (provider: 'facebook' | 'google' | 'apple') => void;
-}
-
-const SignupForm: FC<SignupFormProps> = ({ onSocialLogin }) => {
+const SignupForm: FC = () => {
   const [signupData, setSignupData] = useState({
     firstName: '',
     lastName: '',
@@ -126,14 +122,6 @@ const SignupForm: FC<SignupFormProps> = ({ onSocialLogin }) => {
 
     // Handle successful signup
     console.log('Signup data:', signupData);
-  };
-
-  const handleSocialLogin = (provider: 'facebook' | 'google' | 'apple') => {
-    if (onSocialLogin) {
-      onSocialLogin(provider);
-    } else {
-      console.log(`Social login with ${provider}`);
-    }
   };
 
   return (
