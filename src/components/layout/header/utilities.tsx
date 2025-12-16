@@ -8,8 +8,8 @@ const Utilities: FC = () => {
   const t = useTranslations('common');
 
   return (
-    <div className="flex items-center gap-5 text-sm text-gray-700">
-      <button className="flex items-center gap-2 rounded-full text-gray-600 hover:text-[#7F1D1D] transition-colors">
+    <div className="flex items-center gap-3 sm:gap-4 md:gap-5 text-sm text-gray-700">
+      <button className="flex items-center gap-1.5 sm:gap-2 rounded-full text-gray-600 hover:text-[#7F1D1D] transition-colors">
         <MapPin className="h-5 w-5" />
         <span className="hidden sm:inline">{t('location')}</span>
       </button>

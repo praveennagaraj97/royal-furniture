@@ -1,8 +1,8 @@
 'use client';
 
+import { usePathname, useRouter } from '@/i18n/routing';
 import { Globe } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { usePathname, useRouter } from '@/i18n/routing';
 import { FC } from 'react';
 import Dropdown from '../../shared/dropdown';
 
@@ -20,7 +20,7 @@ const LangSwitch: FC = () => {
     <Dropdown
       align={locale === 'ar' ? 'left' : 'right'}
       trigger={
-        <div className="flex items-center gap-2 rounded-full px-3 py-1.5 text-sm text-gray-600 hover:text-[#7F1D1D] hover:bg-gray-100 transition-colors">
+        <div className="flex items-center gap-1.5 sm:gap-2 rounded-full px-2 sm:px-3 py-1.5 text-sm text-gray-600 bg-gray-50 hover:text-[#7F1D1D] hover:bg-gray-100 transition-colors">
           <Globe className="h-5 w-5" />
           <span className="hidden sm:inline">{locale.toUpperCase()}</span>
         </div>
