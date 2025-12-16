@@ -1,7 +1,6 @@
 'use client';
 
 import Portal from '@/components/shared/portal';
-import { useClickOutside } from '@/hooks/use-click-outside';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState, type FC, type ReactNode } from 'react';
 
@@ -25,7 +24,9 @@ const Modal: FC<ModalProps> = ({
   variant = 'side',
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const mouseDownPosition = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -36,15 +37,47 @@ const Modal: FC<ModalProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useClickOutside({
-    ref: modalRef,
-    handler: () => {
-      if (isOpen) {
+  const handleBackdropMouseDown = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      mouseDownPosition.current = { x: e.clientX, y: e.clientY };
+    }
+  };
+
+  const handleBackdropMouseUp = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && mouseDownPosition.current) {
+      const deltaX = Math.abs(e.clientX - mouseDownPosition.current.x);
+      const deltaY = Math.abs(e.clientY - mouseDownPosition.current.y);
+      const threshold = 5; // pixels
+
+      // Only close if it's a click (not a drag)
+      if (deltaX < threshold && deltaY < threshold) {
         onClose();
       }
-    },
-    enabled: isOpen,
-  });
+      mouseDownPosition.current = null;
+    }
+  };
+
+  const handleBackdropTouchStart = (e: React.TouchEvent) => {
+    if (e.target === e.currentTarget) {
+      const touch = e.touches[0];
+      mouseDownPosition.current = { x: touch.clientX, y: touch.clientY };
+    }
+  };
+
+  const handleBackdropTouchEnd = (e: React.TouchEvent) => {
+    if (e.target === e.currentTarget && mouseDownPosition.current) {
+      const touch = e.changedTouches[0];
+      const deltaX = Math.abs(touch.clientX - mouseDownPosition.current.x);
+      const deltaY = Math.abs(touch.clientY - mouseDownPosition.current.y);
+      const threshold = 5; // pixels
+
+      // Only close if it's a tap (not a drag)
+      if (deltaX < threshold && deltaY < threshold) {
+        onClose();
+      }
+      mouseDownPosition.current = null;
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -72,12 +105,16 @@ const Modal: FC<ModalProps> = ({
             <>
               {/* Backdrop */}
               <motion.div
+                ref={backdropRef}
                 className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center sm:justify-center p-0 sm:p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                onClick={onClose}
+                onMouseDown={handleBackdropMouseDown}
+                onMouseUp={handleBackdropMouseUp}
+                onTouchStart={handleBackdropTouchStart}
+                onTouchEnd={handleBackdropTouchEnd}
               >
                 {/* Modal Content */}
                 <motion.div
@@ -127,12 +164,16 @@ const Modal: FC<ModalProps> = ({
             <>
               {/* Backdrop */}
               <motion.div
+                ref={backdropRef}
                 className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                onClick={onClose}
+                onMouseDown={handleBackdropMouseDown}
+                onMouseUp={handleBackdropMouseUp}
+                onTouchStart={handleBackdropTouchStart}
+                onTouchEnd={handleBackdropTouchEnd}
               >
                 {/* Modal Content */}
                 <motion.div
@@ -164,12 +205,16 @@ const Modal: FC<ModalProps> = ({
           <>
             {/* Backdrop */}
             <motion.div
+              ref={backdropRef}
               className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-start sm:justify-end p-0 sm:p-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              onClick={onClose}
+              onMouseDown={handleBackdropMouseDown}
+              onMouseUp={handleBackdropMouseUp}
+              onTouchStart={handleBackdropTouchStart}
+              onTouchEnd={handleBackdropTouchEnd}
             >
               {/* Modal Content */}
               <motion.div
