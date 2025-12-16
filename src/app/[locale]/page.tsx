@@ -11,8 +11,6 @@ export default function Home() {
       <PromotionalBanner />
       <FurnitureCategories />
       <PromotionalBanner />
-
-      <div className="h-96"></div>
     </div>
   );
 }
