@@ -13,7 +13,7 @@ const Header: FC = () => {
   const t = useTranslations('common');
 
   return (
-    <header className="container mx-auto py-3 flex items-center space-x-6 rtl:space-x-reverse">
+    <header className="container mx-auto py-3 px-2 flex items-center space-x-6 rtl:space-x-reverse">
       <motion.div
         initial={{ opacity: 0, y: -4 }}
         animate={{ opacity: 1, y: 0 }}

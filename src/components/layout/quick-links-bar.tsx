@@ -23,7 +23,7 @@ const QuickLinksBar: FC = () => {
 
   return (
     <div className="bg-soft-pink text-indigo-slate">
-      <div className="container mx-auto px-3 py-2.5 sm:px-4 md:px-6 md:py-2">
+      <div className="container mx-auto px-2 py-2.5 md:py-2">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:gap-x-6">
           {/* Primary Links */}
           <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
