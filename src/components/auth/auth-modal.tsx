@@ -55,7 +55,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
       size="md"
       className="max-w-md w-full"
     >
-      <div className="flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-y-auto pb-safe sm:pb-6">
+      <div className="flex flex-col max-h-[80vh] sm:max-h-[90vh] overflow-y-auto pb-safe sm:pb-6">
         {/* Logo */}
         <div className="flex justify-center pt-6 px-6">
           <Image
