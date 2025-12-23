@@ -2,7 +2,7 @@
 
 import Portal from '@/components/shared/portal';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { ChevronRight, Menu, X } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import AccountManagement from './account-management';
 import FeedbackInfoSection from './feedback-info-section';
@@ -30,14 +30,24 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
   return (
     <div className="container mx-auto px-3 py-4">
       {/* Mobile Toggle Button */}
-      <button
+      <motion.button
         type="button"
         onClick={() => setIsSidebarOpen(true)}
-        className="lg:hidden mb-4 inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-sm shadow-sm hover:bg-gray-50 hover:text-deep-maroon transition-colors"
+        className="lg:hidden mb-6 w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-sm shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200 group"
+        initial={{ opacity: 0, y: -10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-50px' }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        whileHover={{ scale: 1.01 }}
       >
-        <Menu className="h-4 w-4" />
-        <span>Menu</span>
-      </button>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-deep-maroon/10 rounded-sm group-hover:bg-deep-maroon/20 transition-colors">
+            <Menu className="h-5 w-5 text-deep-maroon" />
+          </div>
+          <span className="text-base font-semibold text-gray-900">Menu</span>
+        </div>
+        <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
+      </motion.button>
 
       <motion.div
         className="grid grid-cols-1 lg:grid-cols-3 gap-6"
