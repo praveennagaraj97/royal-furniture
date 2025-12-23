@@ -1,7 +1,10 @@
 import { API_ROUTES } from '@/constants/api-routes';
 import type {
+  EmailLoginPayload,
   LoginWithPasswordPayload,
   RegisterPayload,
+  ResendOTPPayload,
+  VerifyOTPLoginPayload,
   VerifyOTPPayload,
 } from '@/types/payload';
 import type {
@@ -60,6 +63,44 @@ export class AuthService extends BaseAPIService {
         {
           phone_number: phoneNumber,
         }
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async emailLogin(payload: EmailLoginPayload): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.EMAIL_LOGIN,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async verifyOTPLogin(
+    payload: VerifyOTPLoginPayload
+  ): Promise<VerifyOTPResponse> {
+    try {
+      const response = await this.http.post<VerifyOTPResponse>(
+        API_ROUTES.AUTH.VERIFY_OTP_LOGIN,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async resendOTP(payload: ResendOTPPayload): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.RESEND_OTP,
+        payload
       );
       return response.data;
     } catch (error) {

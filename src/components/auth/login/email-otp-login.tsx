@@ -1,9 +1,19 @@
 'use client';
 
 import { FormInput } from '@/components/shared/inputs/form-input';
+import { VerifyCodeInput } from '@/components/shared/inputs/verify-code-input';
+import { useToast } from '@/contexts/toast-context';
+import { useCountdown } from '@/hooks';
+import { authService } from '@/services/api/auth-service';
+import type { ParsedAPIError } from '@/types/error';
+import type { VerifyOTPResponse } from '@/types/response';
 import { loginFormValidators } from '@/validators';
-import { motion, type Variants } from 'framer-motion';
+import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import {
+  useCallback,
+  useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type FC,
@@ -12,6 +22,8 @@ import {
 
 interface EmailOtpLoginProps {
   onModeChange?: (mode: 'email-password') => void;
+  onFormStateChange?: (hasValues: boolean) => void;
+  onLoginSuccess?: () => void;
 }
 
 const containerVariants: Variants = {
@@ -37,69 +49,245 @@ const itemVariants: Variants = {
   },
 };
 
-const EmailOtpLogin: FC<EmailOtpLoginProps> = ({ onModeChange }) => {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    emailOtp: '',
-  });
+const otpInputVariants: Variants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+      ease: 'easeOut',
+    },
+  },
+};
+
+const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
+  onModeChange,
+  onFormStateChange,
+  onLoginSuccess,
+}) => {
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [errors, setErrors] = useState<{
     email?: string;
-    emailOtp?: string;
+    otp?: string;
   }>({});
   const [touched, setTouched] = useState<{
     email?: boolean;
-    emailOtp?: boolean;
+    otp?: boolean;
   }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { showError, showSuccess } = useToast();
+  const prevEmailRef = useRef<string>('');
 
-  const handleFieldChange =
-    (field: 'email' | 'emailOtp') =>
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setLoginData((prev) => ({ ...prev, [field]: value }));
+  const {
+    secondsLeft,
+    isExpired,
+    reset: resetCountdown,
+  } = useCountdown({
+    initialSeconds: 59,
+    autoStart: false,
+  });
 
-      // Clear error when user starts typing
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
+  // Notify parent when form state changes
+  useEffect(() => {
+    if (onFormStateChange) {
+      const hasValues = email.trim().length > 0 || otp.trim().length > 0;
+      onFormStateChange(hasValues);
+    }
+  }, [email, otp, onFormStateChange]);
+
+  // Reset OTP state when email changes
+  useEffect(() => {
+    if (
+      isOtpSent &&
+      prevEmailRef.current !== '' &&
+      prevEmailRef.current !== email
+    ) {
+      // Email actually changed, reset OTP state
+      setIsOtpSent(false);
+      setOtp('');
+      setErrors((prev) => ({ ...prev, otp: undefined }));
+      resetCountdown();
+    }
+    prevEmailRef.current = email;
+  }, [email, isOtpSent, resetCountdown]);
+
+  const parseJwtExp = useCallback((token: string): number | undefined => {
+    try {
+      const [, payload] = token.split('.');
+      const decoded = JSON.parse(
+        atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
+      );
+      return typeof decoded.exp === 'number' ? decoded.exp : undefined;
+    } catch {
+      return undefined;
+    }
+  }, []);
+
+  const setTokenCookie = useCallback(
+    (name: string, token: string) => {
+      const exp = parseJwtExp(token);
+      const expires = exp ? new Date(exp * 1000).toUTCString() : undefined;
+      const parts = [`${name}=${token}`, 'path=/', 'SameSite=Lax'];
+      if (expires) {
+        parts.push(`expires=${expires}`);
       }
+      document.cookie = parts.join('; ');
+    },
+    [parseJwtExp]
+  );
 
-      // Mark as touched if form was submitted
-      if (isSubmitted) {
-        setTouched((prev) => ({ ...prev, [field]: true }));
-      }
-    };
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
 
-  const handleBlur = (field: 'email' | 'emailOtp') => () => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-  };
-
-  const validateForm = () => {
-    const newErrors: { email?: string; emailOtp?: string } = {};
-    const emailError = loginFormValidators.email(loginData.email);
-
-    if (emailError) newErrors.email = emailError;
-    if (!loginData.emailOtp.trim()) {
-      newErrors.emailOtp = 'OTP is required';
+    // Clear error when user starts typing
+    if (errors.email) {
+      setErrors((prev) => ({ ...prev, email: undefined }));
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // Mark as touched if form was submitted
+    if (isSubmitted) {
+      setTouched((prev) => ({ ...prev, email: true }));
+    }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleEmailBlur = () => {
+    setTouched((prev) => ({ ...prev, email: true }));
+  };
+
+  const handleOtpChange = (value: string) => {
+    setOtp(value);
+    if (errors.otp) {
+      setErrors((prev) => ({ ...prev, otp: undefined }));
+    }
+  };
+
+  const validateEmail = (): boolean => {
+    const emailError = loginFormValidators.email(email);
+    if (emailError) {
+      setErrors((prev) => ({ ...prev, email: emailError }));
+      return false;
+    }
+    return true;
+  };
+
+  const validateOtp = (): boolean => {
+    if (!otp.trim() || otp.length !== 5) {
+      setErrors((prev) => ({ ...prev, otp: 'OTP is required' }));
+      return false;
+    }
+    return true;
+  };
+
+  const handleSendOtp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
+    setTouched((prev) => ({ ...prev, email: true }));
 
-    // Mark all fields as touched on submit
-    setTouched({ email: true, emailOtp: true });
-
-    // Validate before submitting
-    if (!validateForm()) {
+    if (!validateEmail()) {
       return;
     }
 
-    // Handle successful login
-    console.log('Email OTP Login data:', loginData);
+    setIsSendingOtp(true);
+
+    try {
+      await authService.emailLogin({ email });
+      setIsOtpSent(true);
+      resetCountdown();
+      showSuccess('OTP has been sent to your email.');
+    } catch (error) {
+      const parsedError = error as ParsedAPIError;
+      const errorMessage =
+        parsedError.generalError ||
+        parsedError.fieldErrors.email ||
+        'Failed to send OTP. Please try again.';
+      setErrors((prev) => ({ ...prev, email: errorMessage }));
+      showError(errorMessage);
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otp.length !== 5) {
+      setErrors((prev) => ({ ...prev, otp: 'Please enter a valid OTP' }));
+      return;
+    }
+
+    setIsVerifying(true);
+    setErrors((prev) => ({ ...prev, otp: undefined }));
+
+    try {
+      const response: VerifyOTPResponse = await authService.verifyOTPLogin({
+        email,
+        otp,
+      });
+
+      const refreshToken = response.data.tokens.refresh;
+      const accessToken = response.data.tokens.access;
+
+      if (refreshToken) {
+        setTokenCookie('refresh_token', refreshToken);
+      }
+
+      if (accessToken) {
+        setTokenCookie('access_token', accessToken);
+      }
+
+      showSuccess(
+        response.message || 'Login successful! You are now logged in.'
+      );
+      onFormStateChange?.(false);
+      onLoginSuccess?.();
+    } catch (error) {
+      const parsedError = error as ParsedAPIError;
+      const errorMessage =
+        parsedError.generalError ||
+        parsedError.fieldErrors.otp ||
+        'Failed to verify OTP. Please try again.';
+      setErrors((prev) => ({ ...prev, otp: errorMessage }));
+      showError(errorMessage);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (!isExpired || isResending) {
+      return;
+    }
+
+    setIsResending(true);
+    setErrors((prev) => ({ ...prev, otp: undefined }));
+
+    try {
+      await authService.resendOTP({ email });
+      showSuccess('A new verification code has been sent to your email.');
+      resetCountdown();
+      setOtp('');
+    } catch (error) {
+      const parsedError = error as ParsedAPIError;
+      const errorMessage =
+        parsedError.generalError ||
+        parsedError.fieldErrors.email ||
+        'Failed to resend OTP. Please try again.';
+      showError(errorMessage);
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  const handleOtpComplete = (value: string) => {
+    if (value.length === 5) {
+      handleVerifyOtp();
+    }
   };
 
   return (
@@ -109,46 +297,98 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({ onModeChange }) => {
       animate="visible"
       className="flex flex-col gap-4"
     >
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSendOtp} className="flex flex-col gap-4">
         <motion.div variants={itemVariants}>
           <FormInput
             id="emailOtpEmail"
             type="email"
             placeholder="Email ID"
-            value={loginData.email}
-            onChange={handleFieldChange('email')}
-            onBlur={handleBlur('email')}
+            value={email}
+            onChange={handleEmailChange}
+            onBlur={handleEmailBlur}
             validator={loginFormValidators.email}
             error={errors.email}
             showError={!!touched.email || isSubmitted}
             containerClassName="w-full"
             className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+            disabled={isOtpSent}
           />
         </motion.div>
 
-        <motion.div variants={itemVariants}>
-          <FormInput
-            id="emailOtp"
-            type="text"
-            inputMode="numeric"
-            placeholder="Enter OTP"
-            value={loginData.emailOtp}
-            onChange={handleFieldChange('emailOtp')}
-            onBlur={handleBlur('emailOtp')}
-            error={errors.emailOtp}
-            showError={!!touched.emailOtp || isSubmitted}
-            containerClassName="w-full"
-            className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
-          />
-        </motion.div>
+        <AnimatePresence>
+          {isOtpSent && (
+            <motion.div
+              variants={otpInputVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="flex flex-col gap-4"
+            >
+              <motion.div variants={itemVariants}>
+                <VerifyCodeInput
+                  maxLength={5}
+                  inputType="number"
+                  value={otp}
+                  onChange={handleOtpChange}
+                  onComplete={handleOtpComplete}
+                  error={errors.otp}
+                  showError={!!errors.otp}
+                  disabled={isVerifying}
+                  containerClassName="w-full"
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={!isExpired || isResending}
+                  className="text-sm text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
+                >
+                  {isResending
+                    ? 'Resending...'
+                    : isExpired
+                    ? 'Resend code'
+                    : `Resend code in ${secondsLeft}s`}
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div variants={itemVariants}>
-          <button
-            type="submit"
-            className="w-full bg-deep-maroon text-white py-3 rounded-lg font-semibold text-base hover:bg-[#6b0000] transition-colors duration-200"
-          >
-            Verify OTP
-          </button>
+          {!isOtpSent ? (
+            <button
+              type="submit"
+              disabled={isSendingOtp}
+              className="w-full bg-deep-maroon text-white py-3 rounded-lg font-semibold text-base hover:bg-[#6b0000] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {isSendingOtp ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Sending OTP...</span>
+                </>
+              ) : (
+                <span>Send OTP</span>
+              )}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleVerifyOtp}
+              disabled={otp.length !== 5 || isVerifying}
+              className="w-full bg-deep-maroon text-white py-3 rounded-lg font-semibold text-base hover:bg-[#6b0000] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {isVerifying ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Verifying...</span>
+                </>
+              ) : (
+                <span>Verify OTP</span>
+              )}
+            </button>
+          )}
         </motion.div>
       </form>
 

@@ -21,3 +21,16 @@ export interface VerifyOTPPayload {
   phone_number: string;
   code: string;
 }
+
+export interface EmailLoginPayload {
+  email: string;
+}
+
+export interface VerifyOTPLoginPayload {
+  email: string;
+  otp: string;
+}
+
+export interface ResendOTPPayload {
+  email: string;
+}

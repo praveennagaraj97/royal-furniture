@@ -34,7 +34,11 @@ const LoginForm: FC<LoginFormProps> = ({ onFormStateChange, onClose }) => {
       )}
 
       {loginMode === 'email-otp' && (
-        <EmailOtpLogin onModeChange={handleModeChange} />
+        <EmailOtpLogin
+          onModeChange={handleModeChange}
+          onFormStateChange={onFormStateChange}
+          onLoginSuccess={onClose}
+        />
       )}
     </div>
   );
