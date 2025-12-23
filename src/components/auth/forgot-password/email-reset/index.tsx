@@ -2,9 +2,11 @@
 
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
+import { authService } from '@/services/api/auth-service';
+import type { ParsedAPIError } from '@/types/error';
 import { loginFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import {
   useEffect,
   useState,
@@ -12,6 +14,7 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import EmailResetSuccess from './email-reset-success';
 
 interface EmailResetProps {
   onModeChange?: (mode: 'phone-reset') => void;
@@ -45,7 +48,6 @@ const itemVariants: Variants = {
 const EmailReset: FC<EmailResetProps> = ({
   onModeChange,
   onFormStateChange,
-  onSuccess,
 }) => {
   const [email, setEmail] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -57,7 +59,7 @@ const EmailReset: FC<EmailResetProps> = ({
   }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { showError, showSuccess } = useToast();
+  const { showError } = useToast();
 
   // Notify parent when form state changes
   useEffect(() => {
@@ -108,20 +110,25 @@ const EmailReset: FC<EmailResetProps> = ({
     setIsLoading(true);
 
     try {
-      // TODO: Wire API call here
-      // await authService.forgotPasswordEmail({ email });
-      
-      // Simulate API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
+      await authService.forgotPasswordEmail({ email });
+
       setIsEmailSent(true);
-      showSuccess('Password reset link has been sent to your email.');
       onFormStateChange?.(false);
     } catch (error) {
-      // TODO: Handle API errors properly
-      const errorMessage = 'Failed to send reset link. Please try again.';
-      setErrors((prev) => ({ ...prev, email: errorMessage }));
-      showError(errorMessage);
+      const parsedError = error as ParsedAPIError;
+
+      if (parsedError.generalError) {
+        showError(parsedError.generalError);
+      }
+
+      const fieldErrors = { ...errors };
+      if (parsedError.fieldErrors.email) {
+        fieldErrors.email = parsedError.fieldErrors.email;
+      } else if (parsedError.generalError) {
+        fieldErrors.email = parsedError.generalError;
+      }
+
+      setErrors(fieldErrors);
     } finally {
       setIsLoading(false);
     }
@@ -148,7 +155,8 @@ const EmailReset: FC<EmailResetProps> = ({
             variants={itemVariants}
             className="text-sm text-gray-600 mb-2"
           >
-            Enter your registered email address and we'll send you a link to reset your password.
+            Enter your registered email address and we&apos;ll send you a link
+            to reset your password.
           </motion.p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -200,43 +208,10 @@ const EmailReset: FC<EmailResetProps> = ({
           )}
         </>
       ) : (
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-col items-center gap-4 py-6"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', duration: 0.5 }}
-          >
-            <CheckCircle2 className="w-16 h-16 text-green-500" />
-          </motion.div>
-
-          <motion.h2
-            variants={itemVariants}
-            className="text-lg font-semibold text-gray-900 text-center"
-          >
-            Check your email
-          </motion.h2>
-
-          <motion.p
-            variants={itemVariants}
-            className="text-sm text-gray-600 text-center max-w-sm"
-          >
-            We've sent a password reset link to <strong>{email}</strong>. Please check your email and follow the instructions to reset your password.
-          </motion.p>
-
-          <motion.p
-            variants={itemVariants}
-            className="text-xs text-gray-500 text-center max-w-sm"
-          >
-            Didn't receive the email? Check your spam folder or try again.
-          </motion.p>
-        </motion.div>
+        <EmailResetSuccess email={email} />
       )}
     </motion.div>
   );
 };
 
 export default EmailReset;
-

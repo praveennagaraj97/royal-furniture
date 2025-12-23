@@ -8,5 +8,6 @@ export const API_ROUTES = {
     PHONE_LOGIN: '/users/login/phone-login/',
     VERIFY_OTP_LOGIN: '/users/login/verify-otp-login/',
     RESEND_OTP: '/users/login/resend-otp/',
+    FORGOT_PASSWORD_EMAIL: '/users/forgot-password/send-reset-link/',
   },
 } as const;

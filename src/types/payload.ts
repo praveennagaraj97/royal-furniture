@@ -40,3 +40,7 @@ export interface ResendOTPPayload {
   email?: string;
   phone_number?: string;
 }
+
+export interface ForgotPasswordEmailPayload {
+  email: string;
+}

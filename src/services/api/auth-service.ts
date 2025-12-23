@@ -1,6 +1,7 @@
 import { API_ROUTES } from '@/constants/api-routes';
 import type {
   EmailLoginPayload,
+  ForgotPasswordEmailPayload,
   LoginWithPasswordPayload,
   PhoneLoginPayload,
   RegisterPayload,
@@ -119,6 +120,20 @@ export class AuthService extends BaseAPIService {
     try {
       const response = await this.http.post<BaseAPIResponse<unknown>>(
         API_ROUTES.AUTH.RESEND_OTP,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async forgotPasswordEmail(
+    payload: ForgotPasswordEmailPayload
+  ): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.FORGOT_PASSWORD_EMAIL,
         payload
       );
       return response.data;
