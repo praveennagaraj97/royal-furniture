@@ -29,3 +29,12 @@ export interface VerifyOTPResponseData {
 }
 
 export type VerifyOTPResponse = BaseAPIResponse<VerifyOTPResponseData>;
+
+export interface LoginWithPasswordResponseData {
+  user_id: string;
+  email: string;
+  tokens: VerifyOTPTokenSet;
+}
+
+export type LoginWithPasswordResponse =
+  BaseAPIResponse<LoginWithPasswordResponseData>;

@@ -128,7 +128,10 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 onClose={handleConfirmClose}
               />
             ) : (
-              <LoginForm />
+              <LoginForm
+                onFormStateChange={setHasFormValues}
+                onClose={handleConfirmClose}
+              />
             )}
 
             {/* Separator */}

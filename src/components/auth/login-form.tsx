@@ -1,13 +1,18 @@
 'use client';
 
-import { useState, type FC } from 'react';
+import { type FC, useState } from 'react';
 import EmailOtpLogin from './login/email-otp-login';
 import EmailPasswordLogin from './login/email-password-login';
 import PhoneOtpLogin from './login/phone-otp-login';
 
 type LoginMode = 'email-password' | 'phone-otp' | 'email-otp';
 
-const LoginForm: FC = () => {
+interface LoginFormProps {
+  onFormStateChange?: (hasValues: boolean) => void;
+  onClose?: () => void;
+}
+
+const LoginForm: FC<LoginFormProps> = ({ onFormStateChange, onClose }) => {
   const [loginMode, setLoginMode] = useState<LoginMode>('email-password');
 
   const handleModeChange = (mode: LoginMode) => {
@@ -17,7 +22,11 @@ const LoginForm: FC = () => {
   return (
     <div className="flex flex-col gap-4">
       {loginMode === 'email-password' && (
-        <EmailPasswordLogin onModeChange={handleModeChange} />
+        <EmailPasswordLogin
+          onModeChange={handleModeChange}
+          onFormStateChange={onFormStateChange}
+          onLoginSuccess={onClose}
+        />
       )}
 
       {loginMode === 'phone-otp' && (

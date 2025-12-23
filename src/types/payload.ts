@@ -12,6 +12,11 @@ export interface RegisterPayload {
   onboard_complete: boolean;
 }
 
+export interface LoginWithPasswordPayload {
+  email: string;
+  password: string;
+}
+
 export interface VerifyOTPPayload {
   phone_number: string;
   code: string;

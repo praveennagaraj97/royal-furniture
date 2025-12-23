@@ -1,7 +1,12 @@
 import { API_ROUTES } from '@/constants/api-routes';
-import type { RegisterPayload, VerifyOTPPayload } from '@/types/payload';
+import type {
+  LoginWithPasswordPayload,
+  RegisterPayload,
+  VerifyOTPPayload,
+} from '@/types/payload';
 import type {
   BaseAPIResponse,
+  LoginWithPasswordResponse,
   RegisterResponse,
   VerifyOTPResponse,
 } from '@/types/response';
@@ -12,6 +17,20 @@ export class AuthService extends BaseAPIService {
     try {
       const response = await this.http.post<RegisterResponse>(
         API_ROUTES.AUTH.REGISTER,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async loginWithPassword(
+    payload: LoginWithPasswordPayload
+  ): Promise<LoginWithPasswordResponse> {
+    try {
+      const response = await this.http.post<LoginWithPasswordResponse>(
+        API_ROUTES.AUTH.LOGIN_WITH_PASSWORD,
         payload
       );
       return response.data;

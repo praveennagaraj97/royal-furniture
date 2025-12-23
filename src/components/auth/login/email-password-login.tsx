@@ -1,9 +1,14 @@
 'use client';
 
 import { FormInput } from '@/components/shared/inputs/form-input';
+import { useToast } from '@/contexts/toast-context';
+import { authService } from '@/services/api/auth-service';
+import type { ParsedAPIError } from '@/types/error';
 import { loginFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import {
+  useEffect,
   useState,
   type ChangeEvent,
   type FC,
@@ -12,6 +17,8 @@ import {
 
 interface EmailPasswordLoginProps {
   onModeChange?: (mode: 'phone-otp' | 'email-otp') => void;
+  onFormStateChange?: (hasValues: boolean) => void;
+  onLoginSuccess?: () => void;
 }
 
 const containerVariants: Variants = {
@@ -37,7 +44,11 @@ const itemVariants: Variants = {
   },
 };
 
-const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({ onModeChange }) => {
+const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
+  onModeChange,
+  onFormStateChange,
+  onLoginSuccess,
+}) => {
   const [loginData, setLoginData] = useState({
     email: '',
     password: '',
@@ -51,10 +62,33 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({ onModeChange }) => {
     password?: boolean;
   }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { showError, showSuccess } = useToast();
+
+  const parseJwtExp = (token: string): number | undefined => {
+    try {
+      const [, payload] = token.split('.');
+      const decoded = JSON.parse(
+        atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
+      );
+      return typeof decoded.exp === 'number' ? decoded.exp : undefined;
+    } catch {
+      return undefined;
+    }
+  };
+
+  const setTokenCookie = (name: string, token: string) => {
+    const exp = parseJwtExp(token);
+    const expires = exp ? new Date(exp * 1000).toUTCString() : undefined;
+    const parts = [`${name}=${token}`, 'path=/', 'SameSite=Lax'];
+    if (expires) {
+      parts.push(`expires=${expires}`);
+    }
+    document.cookie = parts.join('; ');
+  };
 
   const handleFieldChange =
-    (field: 'email' | 'password') =>
-    (e: ChangeEvent<HTMLInputElement>) => {
+    (field: 'email' | 'password') => (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setLoginData((prev) => ({ ...prev, [field]: value }));
 
@@ -85,7 +119,14 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({ onModeChange }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (!onFormStateChange) return;
+    const hasValues =
+      loginData.email.trim().length > 0 || loginData.password.trim().length > 0;
+    onFormStateChange(hasValues);
+  }, [loginData.email, loginData.password, onFormStateChange]);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
 
@@ -97,8 +138,47 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({ onModeChange }) => {
       return;
     }
 
-    // Handle successful login
-    console.log('Email/Password Login data:', loginData);
+    setIsLoading(true);
+
+    try {
+      const response = await authService.loginWithPassword({
+        email: loginData.email,
+        password: loginData.password,
+      });
+
+      const refreshToken = response.data.tokens.refresh;
+      const accessToken = response.data.tokens.access;
+
+      if (refreshToken) {
+        setTokenCookie('refresh_token', refreshToken);
+      }
+
+      if (accessToken) {
+        setTokenCookie('access_token', accessToken);
+      }
+
+      showSuccess('Logged in successfully.');
+      onFormStateChange?.(false);
+      onLoginSuccess?.();
+    } catch (error) {
+      const parsedError = error as ParsedAPIError;
+
+      if (parsedError.generalError) {
+        showError(parsedError.generalError);
+      }
+
+      const fieldErrors = { ...errors };
+      if (parsedError.fieldErrors.email) {
+        fieldErrors.email = parsedError.fieldErrors.email;
+      }
+      if (parsedError.fieldErrors.password) {
+        fieldErrors.password = parsedError.fieldErrors.password;
+      }
+
+      setErrors(fieldErrors);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -152,16 +232,24 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({ onModeChange }) => {
         <motion.div variants={itemVariants}>
           <button
             type="submit"
-            className="w-full bg-deep-maroon text-white py-3 rounded-lg font-semibold text-base hover:bg-[#6b0000] transition-colors duration-200"
+            disabled={isLoading}
+            className="w-full bg-deep-maroon text-white py-3 rounded-lg font-semibold text-base hover:bg-[#6b0000] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Login
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Logging in...</span>
+              </>
+            ) : (
+              <span>Login</span>
+            )}
           </button>
         </motion.div>
 
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className="flex justify-center">
           <button
             type="button"
-            className="text-sm text-indigo-600 hover:text-indigo-700 transition-colors duration-200 w-full text-left"
+            className="text-sm text-indigo-slate hover:text-indigo-800 font-semibold transition-colors duration-200"
           >
             Forgot Password?
           </button>

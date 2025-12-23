@@ -63,7 +63,27 @@ export class BaseAPIService {
     let generalError: string | undefined;
 
     if (response && typeof response === 'object') {
+      // Handle API base response shape:
+      // { version, detail, message, data, meta }
+      // Use `message` as a general error when present and not a success.
+      if (
+        typeof (response as { message?: unknown }).message === 'string' &&
+        (response as { detail?: unknown }).detail !== 'success'
+      ) {
+        generalError = (response as { message: string }).message;
+      }
+
       Object.entries(response).forEach(([field, messages]) => {
+        // Skip known non-field keys from the structured API response
+        if (
+          field === 'message' ||
+          field === 'detail' ||
+          field === 'data' ||
+          field === 'meta'
+        ) {
+          return;
+        }
+
         if (field === 'error') {
           // Handle general error field
           if (Array.isArray(messages) && messages.length > 0) {
