@@ -1,6 +1,6 @@
 'use client';
 
-import { VerifyPhone } from '@/components/auth/verify-phone';
+import { VerifyPhone } from '@/components/auth/signup/verify-phone';
 import { CountryPicker } from '@/components/shared/inputs/country-picker';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
