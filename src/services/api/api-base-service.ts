@@ -1,10 +1,6 @@
-import { type APIErrorResponse, type ParsedAPIError } from '@/types/error';
+import { type ParsedAPIError } from '@/types/error';
 import { getAuthToken } from '@/utils';
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 export class BaseAPIService {
   protected http: AxiosInstance;
@@ -60,7 +56,8 @@ export class BaseAPIService {
     return formData;
   }
 
-  protected parseError(error: AxiosError<APIErrorResponse>): ParsedAPIError {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected parseError(error: any): ParsedAPIError {
     const response = error.response?.data;
     const fieldErrors: Record<string, string> = {};
     let generalError: string | undefined;
