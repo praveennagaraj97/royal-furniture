@@ -45,3 +45,8 @@ export interface ForgotPasswordVerifyOTPResponseData {
 
 export type ForgotPasswordVerifyOTPResponse =
   BaseAPIResponse<ForgotPasswordVerifyOTPResponseData>;
+
+export interface RefreshTokenResponse {
+  access: string;
+  refresh: string;
+}

@@ -14,5 +14,6 @@ export const API_ROUTES = {
     FORGOT_PASSWORD_RESEND_OTP: '/users/forgot-password/resend-otp/',
     FORGOT_PASSWORD_RESET_PASSWORD_SMS:
       '/users/forgot-password/reset-password-sms/',
+    REFRESH_TOKEN: '/users/token/refresh/',
   },
 } as const;

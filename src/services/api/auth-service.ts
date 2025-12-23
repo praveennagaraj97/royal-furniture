@@ -17,6 +17,7 @@ import type {
   BaseAPIResponse,
   ForgotPasswordVerifyOTPResponse,
   LoginWithPasswordResponse,
+  RefreshTokenResponse,
   RegisterResponse,
   VerifyOTPResponse,
 } from '@/types/response';
@@ -196,6 +197,19 @@ export class AuthService extends BaseAPIService {
       const response = await this.http.post<BaseAPIResponse<unknown>>(
         API_ROUTES.AUTH.FORGOT_PASSWORD_RESET_PASSWORD_SMS,
         payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
+    try {
+      // Note: This endpoint doesn't follow the standard BaseAPIResponse format
+      const response = await this.http.post<RefreshTokenResponse>(
+        API_ROUTES.AUTH.REFRESH_TOKEN,
+        { refresh: refreshToken }
       );
       return response.data;
     } catch (error) {
