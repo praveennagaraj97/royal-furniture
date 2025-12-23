@@ -12,13 +12,9 @@ export const routing = defineRouting({
   // This means: / for English, /ar for Arabic
   localePrefix: 'as-needed',
 
-  // The `pathnames` object holds pairs of internal and
-  // external pathnames. Based on the locale, the
-  // external pathnames are rewritten to the shared,
-  // internal representation.
-  pathnames: {
-    '/': '/',
-  },
+  // Note: pathnames is only needed if you want different paths per locale
+  // (e.g., /en/about vs /ar/من-نحن). If all locales use the same paths,
+  // you can omit it and use dynamic routes freely.
 });
 
 // Lightweight wrappers around Next.js' navigation APIs
