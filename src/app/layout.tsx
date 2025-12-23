@@ -1,6 +1,3 @@
-import { AuthProvider } from '@/contexts/auth-context';
-import { ToastProvider } from '@/contexts/toast-context';
-import { UserProvider } from '@/contexts/user-context';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
@@ -16,11 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <ToastProvider>
-      <AuthProvider>
-        <UserProvider>{children}</UserProvider>
-      </AuthProvider>
-    </ToastProvider>
-  );
+  return children;
 }

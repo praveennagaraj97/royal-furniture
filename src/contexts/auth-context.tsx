@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname, useRouter } from '@/i18n/routing';
 import { authService } from '@/services/api/auth-service';
 import {
   clearAuthTokens,
@@ -13,7 +14,6 @@ import {
   getTokenExpiry,
   isTokenExpired,
 } from '@/utils/jwt';
-import { usePathname, useRouter } from 'next/navigation';
 import {
   type FC,
   type ReactNode,
@@ -154,7 +154,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     clearAuthTokens();
     setIsAuthenticated(false);
     clearRefreshTimer();
-    router.push('/auth/login');
+    router.push('/');
   }, [router, clearRefreshTimer]);
 
   useEffect(() => {

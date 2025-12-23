@@ -41,7 +41,7 @@ export const AuthActionButton: FC<AuthActionButtonProps> = ({ onClick }) => {
 
   if (isAuthenticated && user && userInitials) {
     return (
-      <Link href="/user/profile">
+      <Link href="/user">
         <motion.button
           className="flex shrink-0 items-center gap-2 rounded-full p-1.5 pe-3 text-sm font-medium text-gray-600 bg-gray-50 hover:text-[#7F1D1D] hover:bg-gray-100 transition-colors"
           initial={{ opacity: 0, y: -4 }}

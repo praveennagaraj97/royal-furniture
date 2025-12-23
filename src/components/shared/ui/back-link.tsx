@@ -19,7 +19,7 @@ export const BackLink: FC<BackLinkProps> = ({ onClick, href }) => {
     if (onClick) {
       onClick();
     } else if (href) {
-      router.push(href as '/');
+      router.push(href);
     } else {
       router.back();
     }

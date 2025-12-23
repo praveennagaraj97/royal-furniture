@@ -1,4 +1,7 @@
 import AppLayout from '@/components/layout';
+import { AuthProvider } from '@/contexts/auth-context';
+import { ToastProvider } from '@/contexts/toast-context';
+import { UserProvider } from '@/contexts/user-context';
 import { routing } from '@/i18n/routing';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
@@ -64,7 +67,13 @@ export default async function LocaleLayout({
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body className={`${montserrat.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
-          <AppLayout>{children}</AppLayout>
+          <ToastProvider>
+            <AuthProvider>
+              <UserProvider>
+                <AppLayout>{children}</AppLayout>
+              </UserProvider>
+            </AuthProvider>
+          </ToastProvider>
         </NextIntlClientProvider>
       </body>
     </html>
