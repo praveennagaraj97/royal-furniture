@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
 
+import { Link } from '@/i18n/routing';
 import logo from '@/assets/logo.png';
 
 const itemVariants: Variants = {
@@ -26,7 +27,9 @@ const CompanyInfo: FC = () => {
   return (
     <motion.div className="flex flex-col gap-3" variants={itemVariants}>
       <div className="flex items-center gap-3">
-        <Image src={logo} alt="Royal Furniture" />
+        <Link href="/">
+          <Image src={logo} alt="Royal Furniture" />
+        </Link>
       </div>
       <p className="text-gray-700 text-sm leading-relaxed max-w-md">
         {t('description')}

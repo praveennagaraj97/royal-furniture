@@ -5,6 +5,7 @@ import { Menu } from 'lucide-react';
 import { FC, useState } from 'react';
 
 import AuthModal from '@/components/auth/auth-modal';
+import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { AuthActionButton } from './auth-action-button';
 import LangSwitch from './lang-switch';
@@ -30,13 +31,15 @@ const Header: FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0, duration: 0.25, ease: 'easeOut' }}
           >
-            <Image
-              src={logo}
-              alt="..."
-              priority
-              quality={100}
-              className="h-auto"
-            />
+            <Link href="/">
+              <Image
+                src={logo}
+                alt="..."
+                priority
+                quality={100}
+                className="h-auto"
+              />
+            </Link>
           </motion.div>
 
           <motion.button
@@ -76,13 +79,15 @@ const Header: FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0, duration: 0.25, ease: 'easeOut' }}
         >
-          <Image
-            src={logo}
-            alt="..."
-            priority
-            quality={100}
-            className="h-auto w-32 object-contain"
-          />
+          <Link href="/">
+            <Image
+              src={logo}
+              alt="..."
+              priority
+              quality={100}
+              className="h-auto w-32 object-contain"
+            />
+          </Link>
         </motion.div>
 
         <motion.div
