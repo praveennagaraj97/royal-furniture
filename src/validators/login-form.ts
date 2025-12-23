@@ -1,6 +1,16 @@
-import { validateEmail, validateRequired } from './common';
+import { useTranslations } from 'next-intl';
+import { createValidateEmail, createValidateRequired } from './common';
 
-export const loginFormValidators = {
-  email: validateEmail,
-  password: (value: string) => validateRequired(value, 'Password'),
+type TranslationFunction = ReturnType<
+  typeof useTranslations<'auth.validation'>
+>;
+
+export const createLoginFormValidators = (t: TranslationFunction) => {
+  const validateEmail = createValidateEmail(t);
+  const validateRequired = createValidateRequired(t);
+
+  return {
+    email: validateEmail,
+    password: (value: string) => validateRequired(value, t('passwordRequired')),
+  };
 };

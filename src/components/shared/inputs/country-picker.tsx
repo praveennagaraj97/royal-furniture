@@ -24,6 +24,7 @@ import {
 } from 'country-flag-icons/react/3x2';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Search } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { type ComponentType, type FC, useRef, useState } from 'react';
 
 export interface Country {
@@ -94,6 +95,8 @@ export const CountryPicker: FC<CountryPickerProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations('auth.forms');
+  const tCountries = useTranslations('countries');
 
   useClickOutside({
     ref: dropdownRef,
@@ -111,11 +114,14 @@ export const CountryPicker: FC<CountryPickerProps> = ({
     COUNTRIES.find((country) => country.dialCode === defaultCountry) ||
     COUNTRIES[0];
 
-  const filteredCountries = COUNTRIES.filter(
-    (country) =>
+  const filteredCountries = COUNTRIES.filter((country) => {
+    const translatedName = tCountries(country.code);
+    return (
+      translatedName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       country.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       country.dialCode.includes(searchQuery)
-  );
+    );
+  });
 
   const handleSelect = (country: Country) => {
     onChange(country.dialCode);
@@ -147,18 +153,18 @@ export const CountryPicker: FC<CountryPickerProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50 overflow-hidden"
+            className="absolute top-full start-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50 overflow-hidden"
           >
             {/* Search Input */}
             <div className="p-3 border-b border-gray-200">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   type="text"
-                  placeholder="Search country..."
+                  placeholder={t('searchCountry')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="form-input-base w-full pl-9! pr-3 border-deep-maroon focus:ring-deep-maroon focus:border-deep-maroon"
+                  className="form-input-base w-full ps-9! pe-3 border-deep-maroon focus:ring-deep-maroon focus:border-deep-maroon"
                   autoFocus
                 />
               </div>
@@ -172,7 +178,7 @@ export const CountryPicker: FC<CountryPickerProps> = ({
                     key={country.code}
                     type="button"
                     onClick={() => handleSelect(country)}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors text-left ${
+                    className={`w-full flex flex-row items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors ${
                       selectedCountry.code === country.code
                         ? 'bg-burgundy/5'
                         : ''
@@ -190,22 +196,24 @@ export const CountryPicker: FC<CountryPickerProps> = ({
                         );
                       })()}
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 text-start">
                       <p className="text-sm font-medium text-gray-900">
-                        {country.name}
+                        {tCountries(country.code)}
                       </p>
                       <p className="text-xs text-gray-500">
                         {country.dialCode}
                       </p>
                     </div>
                     {selectedCountry.code === country.code && (
-                      <span className="text-deep-maroon text-sm">✓</span>
+                      <span className="text-deep-maroon text-sm shrink-0">
+                        ✓
+                      </span>
                     )}
                   </motion.button>
                 ))
               ) : (
                 <div className="px-4 py-8 text-center text-sm text-gray-500">
-                  No countries found
+                  {t('noCountriesFound')}
                 </div>
               )}
             </div>

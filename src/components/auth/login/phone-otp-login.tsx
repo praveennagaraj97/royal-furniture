@@ -9,11 +9,13 @@ import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
-import { signupFormValidators } from '@/validators';
+import { createSignupFormValidators } from '@/validators';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ChangeEvent,
@@ -87,6 +89,13 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
   const { showError, showSuccess } = useToast();
   const prevPhoneRef = useRef<string>('');
   const prevCountryCodeRef = useRef<string>('+971');
+  const t = useTranslations('auth');
+  const tValidation = useTranslations('auth.validation');
+  
+  const signupFormValidators = useMemo(
+    () => createSignupFormValidators(tValidation),
+    [tValidation]
+  );
 
   const {
     secondsLeft,
@@ -183,13 +192,13 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
       await authService.phoneLogin({ phone_number: formattedPhone });
       setIsOtpSent(true);
       resetCountdown();
-      showSuccess('OTP has been sent to your phone.');
+      showSuccess(t('toast.otpSentToPhone'));
     } catch (error) {
       const parsedError = error as ParsedAPIError;
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.phone_number ||
-        'Failed to send OTP. Please try again.';
+        t('toast.failedToSendOtp');
       setErrors((prev) => ({ ...prev, phone: errorMessage }));
       showError(errorMessage);
     } finally {
@@ -199,7 +208,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
 
   const handleVerifyOtp = async () => {
     if (otp.length !== 5) {
-      setErrors((prev) => ({ ...prev, otp: 'Please enter a valid OTP' }));
+      setErrors((prev) => ({ ...prev, otp: tValidation('otpInvalid') }));
       return;
     }
 
@@ -238,7 +247,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
         );
       }
 
-      showSuccess('Login successful! You are now logged in.');
+      showSuccess(t('toast.loginSuccessful'));
       onFormStateChange?.(false);
       onLoginSuccess?.();
     } catch (error) {
@@ -246,7 +255,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.otp ||
-        'Failed to verify OTP. Please try again.';
+        t('toast.failedToVerifyOtp');
       setErrors((prev) => ({ ...prev, otp: errorMessage }));
       showError(errorMessage);
     } finally {
@@ -265,7 +274,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
     try {
       const formattedPhone = formatPhoneNumber();
       await authService.resendOTP({ phone_number: formattedPhone });
-      showSuccess('A new verification code has been sent to your phone.');
+      showSuccess(t('toast.newOtpSentToPhone'));
       resetCountdown();
       setOtp('');
     } catch (error) {
@@ -273,7 +282,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.phone_number ||
-        'Failed to resend OTP. Please try again.';
+        t('toast.failedToResendOtp');
       showError(errorMessage);
     } finally {
       setIsResending(false);
@@ -309,7 +318,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
                   id="phone"
                   type="tel"
                   inputMode="numeric"
-                  placeholder="Phone Number"
+                  placeholder={t('forms.mobileNumber')}
                   value={phoneNumber}
                   onChange={handlePhoneChange}
                   onBlur={handlePhoneBlur}
@@ -358,10 +367,10 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
                   className="text-sm text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
                 >
                   {isResending
-                    ? 'Resending...'
+                    ? t('forms.resending')
                     : isExpired
-                    ? 'Resend code'
-                    : `Resend code in ${secondsLeft}s`}
+                    ? t('forms.resendCode')
+                    : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
                 </button>
               </motion.div>
             </motion.div>
@@ -378,10 +387,10 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
               {isSendingOtp ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Sending OTP...</span>
+                  <span>{t('forms.sendingOtp')}</span>
                 </>
               ) : (
-                <span>Send OTP</span>
+                <span>{t('forms.sendOtp')}</span>
               )}
             </button>
           ) : (
@@ -394,10 +403,10 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
               {isVerifying ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Verifying...</span>
+                  <span>{t('forms.verifying')}</span>
                 </>
               ) : (
-                <span>Verify OTP</span>
+                <span>{t('forms.verifyOtp')}</span>
               )}
             </button>
           )}
@@ -412,7 +421,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
             onClick={() => onModeChange('email-password')}
             className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
-            Back to Email/Password Login
+            {t('forms.backToEmailPasswordLogin')}
           </button>
         </motion.div>
       )}

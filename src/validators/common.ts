@@ -1,56 +1,67 @@
 import { isValidPhoneNumber } from 'libphonenumber-js';
+import { useTranslations } from 'next-intl';
 
-export const validateEmail = (value: string): string | undefined => {
-  if (!value.trim()) {
-    return 'Email is required';
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-    return 'Please enter a valid email address';
-  }
-  return undefined;
+type TranslationFunction = ReturnType<
+  typeof useTranslations<'auth.validation'>
+>;
+
+export const createValidateEmail = (t: TranslationFunction) => {
+  return (value: string): string | undefined => {
+    if (!value.trim()) {
+      return t('emailRequired');
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return t('emailInvalid');
+    }
+    return undefined;
+  };
 };
 
-export const validatePassword = (value: string): string | undefined => {
-  if (!value) {
-    return 'Password is required';
-  }
-  if (value.length < 8) {
-    return 'Password must be at least 8 characters long';
-  }
-  return undefined;
+export const createValidatePassword = (t: TranslationFunction) => {
+  return (value: string): string | undefined => {
+    if (!value) {
+      return t('passwordRequired');
+    }
+    if (value.length < 8) {
+      return t('passwordMinLength');
+    }
+    return undefined;
+  };
 };
 
-export const validateRequired = (
-  value: string,
-  fieldName: string
-): string | undefined => {
-  if (!value.trim()) {
-    return `${fieldName} is required`;
-  }
-  return undefined;
+export const createValidateRequired = (t: TranslationFunction) => {
+  return (value: string, fieldName: string): string | undefined => {
+    if (!value.trim()) {
+      // fieldName is already a translated string (e.g., t('firstNameRequired'))
+      return fieldName;
+    }
+    return undefined;
+  };
 };
 
-export const validatePhoneNumber = (
-  phoneNumber: string,
-  countryCode: string,
-  fieldName: string = 'Mobile number'
-): string | undefined => {
-  if (!phoneNumber.trim()) {
-    return `${fieldName} is required`;
-  }
-
-  // Combine country code with phone number
-  const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
-
-  try {
-    // Use isValidPhoneNumber which is the recommended approach
-    // It handles international numbers correctly when provided with country code
-    if (isValidPhoneNumber(fullPhoneNumber)) {
-      return undefined;
+export const createValidatePhoneNumber = (t: TranslationFunction) => {
+  return (
+    phoneNumber: string,
+    countryCode: string,
+    fieldName: string = 'Mobile number'
+  ): string | undefined => {
+    if (!phoneNumber.trim()) {
+      return t('mobileNumberRequired');
     }
 
-    return `Please enter a valid ${fieldName.toLowerCase()}`;
-  } catch {
-    return `Please enter a valid ${fieldName.toLowerCase()}`;
-  }
+    // Combine country code with phone number
+    const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
+
+    try {
+      // Use isValidPhoneNumber which is the recommended approach
+      // It handles international numbers correctly when provided with country code
+      if (isValidPhoneNumber(fullPhoneNumber)) {
+        return undefined;
+      }
+
+      return t('mobileNumberInvalid');
+    } catch {
+      return t('mobileNumberInvalid');
+    }
+  };
 };

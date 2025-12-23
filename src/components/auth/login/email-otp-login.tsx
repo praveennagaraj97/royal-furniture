@@ -8,11 +8,13 @@ import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
-import { loginFormValidators } from '@/validators';
+import { createLoginFormValidators } from '@/validators';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ChangeEvent,
@@ -84,6 +86,13 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { showError, showSuccess } = useToast();
   const prevEmailRef = useRef<string>('');
+  const t = useTranslations('auth');
+  const tValidation = useTranslations('auth.validation');
+  
+  const loginFormValidators = useMemo(
+    () => createLoginFormValidators(tValidation),
+    [tValidation]
+  );
 
   const {
     secondsLeft,
@@ -168,13 +177,13 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
       await authService.emailLogin({ email });
       setIsOtpSent(true);
       resetCountdown();
-      showSuccess('OTP has been sent to your email.');
+      showSuccess(t('toast.otpSentToEmail'));
     } catch (error) {
       const parsedError = error as ParsedAPIError;
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.email ||
-        'Failed to send OTP. Please try again.';
+        t('toast.failedToSendOtp');
       setErrors((prev) => ({ ...prev, email: errorMessage }));
       showError(errorMessage);
     } finally {
@@ -184,7 +193,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
 
   const handleVerifyOtp = async () => {
     if (otp.length !== 5) {
-      setErrors((prev) => ({ ...prev, otp: 'Please enter a valid OTP' }));
+      setErrors((prev) => ({ ...prev, otp: tValidation('otpInvalid') }));
       return;
     }
 
@@ -222,7 +231,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
         );
       }
 
-      showSuccess('Login successful! You are now logged in.');
+      showSuccess(t('toast.loginSuccessful'));
       onFormStateChange?.(false);
       onLoginSuccess?.();
     } catch (error) {
@@ -230,7 +239,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.otp ||
-        'Failed to verify OTP. Please try again.';
+        t('toast.failedToVerifyOtp');
       setErrors((prev) => ({ ...prev, otp: errorMessage }));
       showError(errorMessage);
     } finally {
@@ -248,7 +257,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
 
     try {
       await authService.resendOTP({ email });
-      showSuccess('A new verification code has been sent to your email.');
+      showSuccess(t('toast.newOtpSentToEmail'));
       resetCountdown();
       setOtp('');
     } catch (error) {
@@ -256,7 +265,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.email ||
-        'Failed to resend OTP. Please try again.';
+        t('toast.failedToResendOtp');
       showError(errorMessage);
     } finally {
       setIsResending(false);
@@ -281,7 +290,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
           <FormInput
             id="emailOtpEmail"
             type="email"
-            placeholder="Email ID"
+            placeholder={t('forms.email')}
             value={email}
             onChange={handleEmailChange}
             onBlur={handleEmailBlur}
@@ -325,10 +334,10 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
                   className="text-sm text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
                 >
                   {isResending
-                    ? 'Resending...'
+                    ? t('forms.resending')
                     : isExpired
-                    ? 'Resend code'
-                    : `Resend code in ${secondsLeft}s`}
+                    ? t('forms.resendCode')
+                    : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
                 </button>
               </motion.div>
             </motion.div>
@@ -345,10 +354,10 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
               {isSendingOtp ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Sending OTP...</span>
+                  <span>{t('forms.sendingOtp')}</span>
                 </>
               ) : (
-                <span>Send OTP</span>
+                <span>{t('forms.sendOtp')}</span>
               )}
             </button>
           ) : (
@@ -361,10 +370,10 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
               {isVerifying ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Verifying...</span>
+                  <span>{t('forms.verifying')}</span>
                 </>
               ) : (
-                <span>Verify OTP</span>
+                <span>{t('forms.verifyOtp')}</span>
               )}
             </button>
           )}
@@ -379,7 +388,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
             onClick={() => onModeChange('email-password')}
             className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
-            Back to Email/Password Login
+            {t('forms.backToEmailPasswordLogin')}
           </button>
         </motion.div>
       )}

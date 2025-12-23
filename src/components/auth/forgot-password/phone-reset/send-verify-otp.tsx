@@ -7,11 +7,13 @@ import { useToast } from '@/contexts/toast-context';
 import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
-import { signupFormValidators } from '@/validators';
+import { createSignupFormValidators } from '@/validators';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ChangeEvent,
@@ -87,6 +89,13 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
   const { showError, showSuccess } = useToast();
   const prevPhoneRef = useRef<string>('');
   const prevCountryCodeRef = useRef<string>('+971');
+  const t = useTranslations('auth');
+  const tValidation = useTranslations('auth.validation');
+  
+  const signupFormValidators = useMemo(
+    () => createSignupFormValidators(tValidation),
+    [tValidation]
+  );
 
   const {
     secondsLeft,
@@ -184,7 +193,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
 
       setIsOtpSent(true);
       resetCountdown();
-      showSuccess('OTP has been sent to your phone.');
+      showSuccess(t('toast.otpSentToPhone'));
     } catch (error) {
       const parsedError = error as ParsedAPIError;
 
@@ -207,7 +216,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
 
   const handleVerifyOtp = async () => {
     if (otp.length !== 5) {
-      setErrors((prev) => ({ ...prev, otp: 'Please enter a valid OTP' }));
+      setErrors((prev) => ({ ...prev, otp: tValidation('otpInvalid') }));
       return;
     }
 
@@ -222,9 +231,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
       });
 
       const resetToken = response.data.reset_token;
-      showSuccess(
-        'OTP verified successfully. You can now reset your password.'
-      );
+      showSuccess(t('toast.otpVerifiedSuccess'));
       onOtpVerified(phoneNumber, countryCode, resetToken);
     } catch (error) {
       const parsedError = error as ParsedAPIError;
@@ -260,13 +267,13 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
         phone_number: formattedPhone,
       });
 
-      showSuccess('A new verification code has been sent to your phone.');
+      showSuccess(t('toast.newOtpSentToPhone'));
       resetCountdown();
       setOtp('');
     } catch (error) {
       const parsedError = error as ParsedAPIError;
       const errorMessage =
-        parsedError.generalError || 'Failed to resend OTP. Please try again.';
+        parsedError.generalError || t('toast.failedToResendOtp');
       showError(errorMessage);
     } finally {
       setIsResending(false);
@@ -287,8 +294,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
       className="flex flex-col gap-4"
     >
       <motion.p variants={itemVariants} className="text-sm text-gray-600 mb-2">
-        Enter your registered phone number and we&apos;ll send you an OTP to
-        reset your password.
+        {t('forms.enterRegisteredPhone')}
       </motion.p>
 
       <form onSubmit={handleSendOtp} className="flex flex-col gap-4">
@@ -307,7 +313,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
                   id="resetPhone"
                   type="tel"
                   inputMode="numeric"
-                  placeholder="Phone Number"
+                  placeholder={t('forms.mobileNumber')}
                   value={phoneNumber}
                   onChange={handlePhoneChange}
                   onBlur={handlePhoneBlur}
@@ -356,10 +362,10 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
                   className="text-sm text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
                 >
                   {isResending
-                    ? 'Resending...'
+                    ? t('forms.resending')
                     : isExpired
-                    ? 'Resend code'
-                    : `Resend code in ${secondsLeft}s`}
+                    ? t('forms.resendCode')
+                    : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
                 </button>
               </motion.div>
             </motion.div>
@@ -376,10 +382,10 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
               {isSendingOtp ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Sending OTP...</span>
+                  <span>{t('forms.sendingOtp')}</span>
                 </>
               ) : (
-                <span>Send OTP</span>
+                <span>{t('forms.sendOtp')}</span>
               )}
             </button>
           ) : (
@@ -392,10 +398,10 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
               {isVerifying ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Verifying...</span>
+                  <span>{t('forms.verifying')}</span>
                 </>
               ) : (
-                <span>Verify OTP</span>
+                <span>{t('forms.verifyOtp')}</span>
               )}
             </button>
           )}

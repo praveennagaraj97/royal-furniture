@@ -67,7 +67,7 @@ export const FormInput: FC<FormInputProps> = ({
     borderClasses = 'form-input-border-valid';
   }
 
-  const paddingClasses = rightElement || isPasswordType ? 'pr-12' : '';
+  const paddingClasses = rightElement || isPasswordType ? 'pe-12' : '';
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Handle numeric-only input
@@ -115,7 +115,7 @@ export const FormInput: FC<FormInputProps> = ({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+            className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
           >
             {showPassword ? (
               <EyeOff className="w-5 h-5" />
@@ -125,7 +125,7 @@ export const FormInput: FC<FormInputProps> = ({
           </button>
         )}
         {rightElement && !isPasswordType && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <div className="absolute end-3 top-1/2 -translate-y-1/2">
             {rightElement}
           </div>
         )}

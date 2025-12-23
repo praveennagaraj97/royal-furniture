@@ -9,6 +9,7 @@ import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState, type FC } from 'react';
 
 interface VerifyPhoneProps {
@@ -35,6 +36,7 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
   const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const { showError, showSuccess } = useToast();
+  const t = useTranslations('auth');
 
   const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
 
@@ -87,16 +89,14 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
         );
       }
 
-      showSuccess(
-        'You are all set! Phone number verified and you are now logged in.'
-      );
+      showSuccess(t('toast.phoneVerified'));
       onVerified?.();
     } catch (error) {
       const parsedError = error as ParsedAPIError;
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.code ||
-        'Failed to verify OTP. Please try again.';
+        t('toast.failedToVerifyOtp');
       setError(errorMessage);
       showError(errorMessage);
     } finally {
@@ -137,14 +137,14 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
 
     try {
       await authService.resendVerifyPhone(fullPhoneNumber);
-      showSuccess('A new verification code has been sent to your phone.');
+      showSuccess(t('toast.newOtpSentToPhone'));
       resetCountdown();
     } catch (error) {
       const parsedError = error as ParsedAPIError;
       const errorMessage =
         parsedError.generalError ||
         parsedError.fieldErrors.phone_number ||
-        'Failed to resend verification code. Please try again.';
+        t('toast.failedToResendVerificationCode');
       setError(errorMessage);
       showError(errorMessage);
     } finally {
@@ -164,10 +164,10 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
       <div className="p-6">
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Verify Phone Number
+            {t('forms.verifyPhoneNumber')}
           </h3>
           <p className="text-sm text-gray-600">
-            Enter the code sent to {fullPhoneNumber}
+            {t('forms.enterCodeSentTo')} {fullPhoneNumber}
           </p>
         </div>
 
@@ -191,10 +191,10 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
               className="text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
             >
               {isResending
-                ? 'Resending...'
+                ? t('forms.resending')
                 : isExpired
-                ? 'Resend code'
-                : `Resend code in ${secondsLeft}s`}
+                ? t('forms.resendCode')
+                : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
             </button>
           </div>
 
@@ -207,10 +207,10 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Verifying...</span>
+                <span>{t('forms.verifying')}</span>
               </>
             ) : (
-              <span>Verify</span>
+              <span>{t('forms.verify')}</span>
             )}
           </button>
         </div>

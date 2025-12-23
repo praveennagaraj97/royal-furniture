@@ -5,11 +5,13 @@ import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
-import { loginFormValidators } from '@/validators';
+import { createLoginFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useEffect,
+  useMemo,
   useState,
   type ChangeEvent,
   type FC,
@@ -67,6 +69,13 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showError, showSuccess } = useToast();
+  const t = useTranslations('auth');
+  const tValidation = useTranslations('auth.validation');
+  
+  const loginFormValidators = useMemo(
+    () => createLoginFormValidators(tValidation),
+    [tValidation]
+  );
 
   const handleFieldChange =
     (field: 'email' | 'password') => (e: ChangeEvent<HTMLInputElement>) => {
@@ -152,7 +161,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
         );
       }
 
-      showSuccess('Logged in successfully.');
+      showSuccess(t('toast.loginSuccess'));
       onFormStateChange?.(false);
       onLoginSuccess?.();
     } catch (error) {
@@ -188,7 +197,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
         variants={itemVariants}
         className="text-lg font-semibold text-gray-900 mb-2"
       >
-        Login with your registered email
+        {t('forms.loginWithRegisteredEmail')}
       </motion.h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -196,7 +205,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           <FormInput
             id="loginEmail"
             type="email"
-            placeholder="Email iD"
+            placeholder={t('forms.email')}
             value={loginData.email}
             onChange={handleFieldChange('email')}
             onBlur={handleBlur('email')}
@@ -212,7 +221,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           <FormInput
             id="loginPassword"
             type="password"
-            placeholder="Password"
+            placeholder={t('forms.password')}
             value={loginData.password}
             onChange={handleFieldChange('password')}
             onBlur={handleBlur('password')}
@@ -233,10 +242,10 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Logging in...</span>
+                <span>{t('forms.loggingIn')}</span>
               </>
             ) : (
-              <span>Login</span>
+              <span>{t('forms.login')}</span>
             )}
           </button>
         </motion.div>
@@ -247,7 +256,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             onClick={onForgotPassword}
             className="text-sm text-indigo-slate hover:text-indigo-800 font-semibold transition-colors duration-200"
           >
-            Forgot Password?
+            {t('forms.forgotPassword')}
           </button>
         </motion.div>
       </form>
@@ -260,7 +269,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             onClick={() => onModeChange('phone-otp')}
             className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
-            Login with phone number OTP
+            {t('forms.loginWithPhoneOtp')}
           </button>
 
           <button
@@ -268,7 +277,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             onClick={() => onModeChange('email-otp')}
             className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
-            Login with email OTP
+            {t('forms.loginWithEmailOtp')}
           </button>
         </motion.div>
       )}

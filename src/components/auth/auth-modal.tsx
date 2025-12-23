@@ -8,6 +8,7 @@ import GoogleIcon from '@/components/shared/svgs/google-icon';
 import { motion, type Variants } from 'framer-motion';
 import { Facebook } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useState, type FC } from 'react';
 import ForgotPasswordForm from './forgot-password-form';
 import LoginForm from './login-form';
@@ -47,6 +48,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<TabType>('signup');
   const [hasFormValues, setHasFormValues] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const t = useTranslations('auth');
 
   const handleSocialLogin = (provider: 'facebook' | 'google' | 'apple') => {
     console.log(`Social login with ${provider}`);
@@ -106,7 +108,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  SIGN UP
+                  {t('forms.signUp').toUpperCase()}
                 </button>
                 <button
                   type="button"
@@ -117,7 +119,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  LOGIN
+                  {t('forms.login').toUpperCase()}
                 </button>
               </div>
             </div>
@@ -154,7 +156,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   className="flex items-center gap-4 my-6"
                 >
                   <div className="flex-1 h-px bg-gray-300" />
-                  <span className="text-sm text-gray-600">Or continue with</span>
+                  <span className="text-sm text-gray-600">{t('forms.orContinueWith')}</span>
                   <div className="flex-1 h-px bg-gray-300" />
                 </motion.div>
 
@@ -205,10 +207,10 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleConfirmClose}
-        title="Discard changes?"
-        message="You have unsaved changes. Are you sure you want to close? All your entered information will be lost."
-        confirmText="Yes, Close"
-        cancelText="Continue Editing"
+        title={t('modal.discardChanges')}
+        message={t('modal.unsavedChanges')}
+        confirmText={t('modal.yesClose')}
+        cancelText={t('modal.continueEditing')}
         variant="warning"
       />
     </>

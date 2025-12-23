@@ -6,11 +6,13 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
-import { signupFormValidators } from '@/validators';
+import { createSignupFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useEffect,
+  useMemo,
   useReducer,
   useState,
   type ChangeEvent,
@@ -56,6 +58,13 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
   const [state, dispatch] = useReducer(signupReducer, initialState);
   const { showError } = useToast();
   const [showVerifyPhone, setShowVerifyPhone] = useState(false);
+  const t = useTranslations('auth');
+  const tValidation = useTranslations('auth.validation');
+  
+  const signupFormValidators = useMemo(
+    () => createSignupFormValidators(tValidation),
+    [tValidation]
+  );
 
   // Notify parent when form state changes
   useEffect(() => {
@@ -182,7 +191,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
       } catch {
         // User rejected or location unavailable - don't proceed with registration
         dispatch({ type: 'SET_IS_LOADING', value: false });
-        showError('Location access is required to complete registration');
+        showError(t('toast.locationRequired'));
         return;
       }
 
@@ -239,7 +248,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           <FormInput
             id="firstName"
             type="text"
-            placeholder="First name"
+            placeholder={t('forms.firstName')}
             value={state.formData.firstName}
             onChange={handleFieldChange('firstName')}
             onBlur={handleBlur('firstName')}
@@ -254,7 +263,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           <FormInput
             id="lastName"
             type="text"
-            placeholder="Last name"
+            placeholder={t('forms.lastName')}
             value={state.formData.lastName}
             onChange={handleFieldChange('lastName')}
             onBlur={handleBlur('lastName')}
@@ -269,7 +278,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           <FormInput
             id="email"
             type="email"
-            placeholder="Email ID"
+            placeholder={t('forms.email')}
             value={state.formData.email}
             onChange={handleFieldChange('email')}
             onBlur={handleBlur('email')}
@@ -297,7 +306,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
                   id="mobileNumber"
                   type="tel"
                   inputMode="numeric"
-                  placeholder="Mobile Number"
+                  placeholder={t('forms.mobileNumber')}
                   value={state.formData.mobileNumber}
                   onChange={handleFieldChange('mobileNumber')}
                   onBlur={handleBlur('mobileNumber')}
@@ -317,7 +326,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           <FormInput
             id="password"
             type="password"
-            placeholder="Password"
+            placeholder={t('forms.password')}
             value={state.formData.password}
             onChange={handleFieldChange('password')}
             onBlur={handleBlur('password')}
@@ -332,7 +341,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           <FormInput
             id="confirmPassword"
             type="password"
-            placeholder="Re-enter Password"
+            placeholder={t('forms.reEnterPassword')}
             value={state.formData.confirmPassword}
             onChange={handleFieldChange('confirmPassword')}
             onBlur={handleBlur('confirmPassword')}
@@ -358,7 +367,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             flex space-x-2 justify-center items-center"
           >
             {state.isLoading && <Loader2 className="animate-spin text-lg" />}
-            <span>{state.isLoading ? 'Signing Up...' : 'Sign Up'}</span>
+            <span>{state.isLoading ? t('forms.signingUp') : t('forms.signUp')}</span>
           </button>
         </motion.div>
       </form>

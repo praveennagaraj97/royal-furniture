@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { type FC, useState } from 'react';
 import EmailReset from './forgot-password/email-reset';
 import PhoneReset from './forgot-password/phone-reset';
@@ -18,6 +19,7 @@ const ForgotPasswordForm: FC<ForgotPasswordFormProps> = ({
   onBackToLogin,
 }) => {
   const [resetMode, setResetMode] = useState<ForgotPasswordMode>('email-reset');
+  const t = useTranslations('auth');
 
   const handleModeChange = (mode: ForgotPasswordMode) => {
     setResetMode(mode);
@@ -56,7 +58,7 @@ const ForgotPasswordForm: FC<ForgotPasswordFormProps> = ({
             onClick={onBackToLogin}
             className="w-full text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
           >
-            Back to Login
+            {t('forms.backToLogin')}
           </button>
         </div>
       )}

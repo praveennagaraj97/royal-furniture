@@ -4,11 +4,13 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
-import { loginFormValidators } from '@/validators';
+import { createLoginFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useEffect,
+  useMemo,
   useState,
   type ChangeEvent,
   type FC,
@@ -60,6 +62,13 @@ const EmailReset: FC<EmailResetProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showError } = useToast();
+  const t = useTranslations('auth');
+  const tValidation = useTranslations('auth.validation');
+  
+  const loginFormValidators = useMemo(
+    () => createLoginFormValidators(tValidation),
+    [tValidation]
+  );
 
   // Notify parent when form state changes
   useEffect(() => {
@@ -148,15 +157,14 @@ const EmailReset: FC<EmailResetProps> = ({
             variants={itemVariants}
             className="text-lg font-semibold text-gray-900 mb-2"
           >
-            Reset password using email
+            {t('forms.resetPasswordUsingEmail')}
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
             className="text-sm text-gray-600 mb-2"
           >
-            Enter your registered email address and we&apos;ll send you a link
-            to reset your password.
+            {t('forms.enterRegisteredEmail')}
           </motion.p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -164,7 +172,7 @@ const EmailReset: FC<EmailResetProps> = ({
               <FormInput
                 id="resetEmail"
                 type="email"
-                placeholder="Email ID"
+                placeholder={t('forms.email')}
                 value={email}
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
@@ -185,10 +193,10 @@ const EmailReset: FC<EmailResetProps> = ({
                 {isLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Sending reset link...</span>
+                    <span>{t('forms.sendingResetLink')}</span>
                   </>
                 ) : (
-                  <span>Send Reset Link</span>
+                  <span>{t('forms.sendResetLink')}</span>
                 )}
               </button>
             </motion.div>
@@ -202,7 +210,7 @@ const EmailReset: FC<EmailResetProps> = ({
                 onClick={() => onModeChange('phone-reset')}
                 className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
               >
-                Reset password using phone number
+                {t('forms.resetPasswordUsingPhone')}
               </button>
             </motion.div>
           )}

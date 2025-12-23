@@ -4,12 +4,13 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
-import { signupFormValidators } from '@/validators';
-import { validatePassword } from '@/validators/common';
+import { createSignupFormValidators, createValidatePassword } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   useEffect,
+  useMemo,
   useState,
   type ChangeEvent,
   type FC,
@@ -63,6 +64,17 @@ const NewPassword: FC<NewPasswordProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const { showError, showSuccess } = useToast();
+  const t = useTranslations('auth');
+  const tValidation = useTranslations('auth.validation');
+  
+  const signupFormValidators = useMemo(
+    () => createSignupFormValidators(tValidation),
+    [tValidation]
+  );
+  const validatePassword = useMemo(
+    () => createValidatePassword(tValidation),
+    [tValidation]
+  );
 
   // Notify parent when form state changes
   useEffect(() => {
@@ -157,9 +169,7 @@ const NewPassword: FC<NewPasswordProps> = ({
         confirm_password: confirmPassword,
       });
 
-      showSuccess(
-        'Password reset successfully! You can now login with your new password.'
-      );
+      showSuccess(t('toast.passwordResetSuccess'));
       onFormStateChange?.(false);
       onPasswordReset();
     } catch (error) {
@@ -198,7 +208,7 @@ const NewPassword: FC<NewPasswordProps> = ({
       className="flex flex-col gap-4"
     >
       <motion.p variants={itemVariants} className="text-sm text-gray-600 mb-2">
-        Please enter your new password below.
+        {t('forms.enterNewPassword')}
       </motion.p>
 
       <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
@@ -206,7 +216,7 @@ const NewPassword: FC<NewPasswordProps> = ({
           <FormInput
             id="newPassword"
             type="password"
-            placeholder="New Password"
+            placeholder={t('forms.newPassword')}
             value={password}
             onChange={handlePasswordChange}
             onBlur={handlePasswordBlur('password')}
@@ -222,7 +232,7 @@ const NewPassword: FC<NewPasswordProps> = ({
           <FormInput
             id="confirmNewPassword"
             type="password"
-            placeholder="Confirm New Password"
+            placeholder={t('forms.confirmNewPassword')}
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
             onBlur={handlePasswordBlur('confirmPassword')}
@@ -245,10 +255,10 @@ const NewPassword: FC<NewPasswordProps> = ({
             {isResetting ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Resetting password...</span>
+                <span>{t('forms.resettingPassword')}</span>
               </>
             ) : (
-              <span>Reset Password</span>
+              <span>{t('forms.resetPassword')}</span>
             )}
           </button>
         </motion.div>
