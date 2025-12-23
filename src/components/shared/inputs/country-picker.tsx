@@ -24,7 +24,7 @@ import {
 } from 'country-flag-icons/react/3x2';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Search } from 'lucide-react';
-import React, { type FC, useRef, useState } from 'react';
+import { type ComponentType, type FC, useRef, useState } from 'react';
 
 export interface Country {
   code: string;
@@ -53,7 +53,7 @@ const FLAG_COMPONENTS = {
   SD,
   PS,
   IN,
-} as Record<string, React.ComponentType<Record<string, unknown>>>;
+} as Record<string, ComponentType<Record<string, unknown>>>;
 
 // Arab countries list with UAE as default, India at the end
 const COUNTRIES: Country[] = [

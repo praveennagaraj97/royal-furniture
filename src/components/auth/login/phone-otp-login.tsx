@@ -2,7 +2,12 @@
 
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { motion, type Variants } from 'framer-motion';
-import { useState, type FC, type FormEvent } from 'react';
+import {
+  useState,
+  type ChangeEvent,
+  type FC,
+  type FormEvent,
+} from 'react';
 
 interface PhoneOtpLoginProps {
   onModeChange?: (mode: 'email-password') => void;
@@ -48,7 +53,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({ onModeChange }) => {
 
   const handleFieldChange =
     (field: 'phone' | 'phoneOtp') =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setLoginData((prev) => ({ ...prev, [field]: value }));
 

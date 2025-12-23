@@ -2,7 +2,15 @@
 
 import Portal from '@/components/shared/portal';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useRef, useState, type FC, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FC,
+  type MouseEvent,
+  type ReactNode,
+  type TouchEvent,
+} from 'react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,6 +20,8 @@ interface ModalProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   variant?: 'side' | 'center' | 'bottom';
+  preventClose?: boolean;
+  onCloseAttempt?: () => void;
 }
 
 const Modal: FC<ModalProps> = ({
@@ -22,10 +32,13 @@ const Modal: FC<ModalProps> = ({
   size = 'md',
   className = '',
   variant = 'side',
+  preventClose = false,
+  onCloseAttempt,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [shouldShake, setShouldShake] = useState(false);
   const mouseDownPosition = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -37,13 +50,13 @@ const Modal: FC<ModalProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const handleBackdropMouseDown = (e: React.MouseEvent) => {
+  const handleBackdropMouseDown = (e: MouseEvent) => {
     if (e.target === e.currentTarget) {
       mouseDownPosition.current = { x: e.clientX, y: e.clientY };
     }
   };
 
-  const handleBackdropMouseUp = (e: React.MouseEvent) => {
+  const handleBackdropMouseUp = (e: MouseEvent) => {
     if (e.target === e.currentTarget && mouseDownPosition.current) {
       const deltaX = Math.abs(e.clientX - mouseDownPosition.current.x);
       const deltaY = Math.abs(e.clientY - mouseDownPosition.current.y);
@@ -51,20 +64,40 @@ const Modal: FC<ModalProps> = ({
 
       // Only close if it's a click (not a drag)
       if (deltaX < threshold && deltaY < threshold) {
-        onClose();
+        if (preventClose) {
+          // Trigger shake animation
+          setShouldShake(true);
+          setTimeout(() => setShouldShake(false), 500);
+          if (onCloseAttempt) {
+            onCloseAttempt();
+          }
+        } else {
+          onClose();
+        }
       }
       mouseDownPosition.current = null;
     }
   };
 
-  const handleBackdropTouchStart = (e: React.TouchEvent) => {
+  const handleBackdropClick = (e: MouseEvent) => {
+    if (preventClose && e.target === e.currentTarget) {
+      // Trigger shake animation
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+      if (onCloseAttempt) {
+        onCloseAttempt();
+      }
+    }
+  };
+
+  const handleBackdropTouchStart = (e: TouchEvent) => {
     if (e.target === e.currentTarget) {
       const touch = e.touches[0];
       mouseDownPosition.current = { x: touch.clientX, y: touch.clientY };
     }
   };
 
-  const handleBackdropTouchEnd = (e: React.TouchEvent) => {
+  const handleBackdropTouchEnd = (e: TouchEvent) => {
     if (e.target === e.currentTarget && mouseDownPosition.current) {
       const touch = e.changedTouches[0];
       const deltaX = Math.abs(touch.clientX - mouseDownPosition.current.x);
@@ -73,7 +106,16 @@ const Modal: FC<ModalProps> = ({
 
       // Only close if it's a tap (not a drag)
       if (deltaX < threshold && deltaY < threshold) {
-        onClose();
+        if (preventClose) {
+          // Trigger shake animation
+          setShouldShake(true);
+          setTimeout(() => setShouldShake(false), 500);
+          if (onCloseAttempt) {
+            onCloseAttempt();
+          }
+        } else {
+          onClose();
+        }
       }
       mouseDownPosition.current = null;
     }
@@ -89,6 +131,31 @@ const Modal: FC<ModalProps> = ({
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        if (preventClose) {
+          // Trigger shake animation
+          setShouldShake(true);
+          setTimeout(() => setShouldShake(false), 500);
+          if (onCloseAttempt) {
+            onCloseAttempt();
+          }
+        } else {
+          onClose();
+        }
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, preventClose, onCloseAttempt, onClose]);
 
   const sizeClassMap = {
     sm: 'modal-size-sm',
@@ -115,11 +182,16 @@ const Modal: FC<ModalProps> = ({
                 onMouseUp={handleBackdropMouseUp}
                 onTouchStart={handleBackdropTouchStart}
                 onTouchEnd={handleBackdropTouchEnd}
+                onClick={preventClose ? handleBackdropClick : undefined}
               >
                 {/* Modal Content */}
                 <motion.div
                   ref={modalRef}
-                  className={`bg-white rounded-t-2xl sm:rounded-lg shadow-2xl w-full ${sizeClassMap[size]} ${className} flex flex-col overflow-hidden max-h-[95vh]`}
+                  className={`bg-white shadow-2xl ${isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`} ${className} flex flex-col overflow-hidden ${
+                    isMobile
+                      ? 'rounded-t-2xl max-h-[95vh]'
+                      : 'sm:rounded-lg rounded-t-2xl max-h-[95vh]'
+                  } ${shouldShake ? 'modal-shake' : ''}`}
                   initial={
                     isMobile
                       ? { opacity: 0, y: '100%' }
@@ -165,7 +237,7 @@ const Modal: FC<ModalProps> = ({
               {/* Backdrop */}
               <motion.div
                 ref={backdropRef}
-                className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+                className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center sm:justify-center p-0 sm:p-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -174,19 +246,41 @@ const Modal: FC<ModalProps> = ({
                 onMouseUp={handleBackdropMouseUp}
                 onTouchStart={handleBackdropTouchStart}
                 onTouchEnd={handleBackdropTouchEnd}
+                onClick={preventClose ? handleBackdropClick : undefined}
               >
                 {/* Modal Content */}
                 <motion.div
                   ref={modalRef}
-                  className={`bg-white rounded-lg shadow-2xl w-full ${sizeClassMap[size]} ${className} flex flex-col overflow-hidden`}
-                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  className={`bg-white shadow-2xl ${isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`} ${className} flex flex-col overflow-hidden ${
+                    isMobile
+                      ? 'rounded-t-2xl max-h-[95vh]'
+                      : 'rounded-lg max-h-[95vh]'
+                  } ${shouldShake ? 'modal-shake' : ''}`}
+                  initial={
+                    isMobile
+                      ? { opacity: 0, y: '100%' }
+                      : { opacity: 0, scale: 0.95, y: 20 }
+                  }
+                  animate={
+                    isMobile
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 1, scale: 1, y: 0 }
+                  }
+                  exit={
+                    isMobile
+                      ? { opacity: 0, y: '100%' }
+                      : { opacity: 0, scale: 0.95, y: 20 }
+                  }
                   transition={{
-                    duration: 0.2,
+                    duration: 0.3,
                     ease: 'easeOut',
                   }}
                   onClick={(e) => e.stopPropagation()}
+                  style={
+                    isMobile
+                      ? { paddingBottom: 'env(safe-area-inset-bottom)' }
+                      : undefined
+                  }
                 >
                   {children}
                 </motion.div>
@@ -203,23 +297,28 @@ const Modal: FC<ModalProps> = ({
       <AnimatePresence mode="wait">
         {isOpen && (
           <>
-            {/* Backdrop */}
-            <motion.div
-              ref={backdropRef}
-              className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-start sm:justify-end p-0 sm:p-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onMouseDown={handleBackdropMouseDown}
-              onMouseUp={handleBackdropMouseUp}
-              onTouchStart={handleBackdropTouchStart}
-              onTouchEnd={handleBackdropTouchEnd}
-            >
+              {/* Backdrop */}
+              <motion.div
+                ref={backdropRef}
+                className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-start sm:justify-end p-0 sm:p-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onMouseDown={handleBackdropMouseDown}
+                onMouseUp={handleBackdropMouseUp}
+                onTouchStart={handleBackdropTouchStart}
+                onTouchEnd={handleBackdropTouchEnd}
+                onClick={preventClose ? handleBackdropClick : undefined}
+              >
               {/* Modal Content */}
               <motion.div
                 ref={modalRef}
-                className={`bg-white rounded-t-2xl sm:rounded-l-2xl sm:rounded-t-2xl shadow-2xl w-full sm:w-auto sm:min-w-[400px] sm:max-w-[500px] ${sizeClassMap[size]} ${className} fixed sm:fixed bottom-0 sm:bottom-0 left-0 sm:left-auto right-0 sm:right-0 sm:top-0 sm:h-screen max-h-[95vh] sm:max-h-none flex flex-col overflow-hidden`}
+                className={`bg-white shadow-2xl ${isMobile ? 'w-full' : 'sm:w-auto sm:min-w-[400px] sm:max-w-[500px]'} ${sizeClassMap[size]} ${className} fixed sm:fixed bottom-0 sm:bottom-0 left-0 sm:left-auto right-0 sm:right-0 sm:top-0 ${
+                  isMobile
+                    ? 'rounded-t-2xl max-h-[95vh]'
+                    : 'sm:h-screen max-h-[95vh] sm:max-h-none rounded-t-2xl sm:rounded-l-2xl sm:rounded-t-2xl'
+                } flex flex-col overflow-hidden ${shouldShake ? 'modal-shake' : ''}`}
                 initial={
                   isMobile
                     ? { opacity: 0, y: '100%' }
@@ -236,6 +335,11 @@ const Modal: FC<ModalProps> = ({
                   ease: 'easeOut',
                 }}
                 onClick={(e) => e.stopPropagation()}
+                style={
+                  isMobile
+                    ? { paddingBottom: 'env(safe-area-inset-bottom)' }
+                    : undefined
+                }
               >
                 {children}
               </motion.div>

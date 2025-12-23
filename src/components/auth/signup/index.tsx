@@ -8,7 +8,13 @@ import type { ParsedAPIError } from '@/types/error';
 import { signupFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
-import { useReducer, type FC, type FormEvent } from 'react';
+import {
+  useEffect,
+  useReducer,
+  type ChangeEvent,
+  type FC,
+  type FormEvent,
+} from 'react';
 import {
   initialState,
   signupReducer,
@@ -39,13 +45,38 @@ const itemVariants: Variants = {
   },
 };
 
-const SignupForm: FC = () => {
+interface SignupFormProps {
+  onFormStateChange?: (hasValues: boolean) => void;
+}
+
+const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
   const [state, dispatch] = useReducer(signupReducer, initialState);
   const { showError } = useToast();
 
+  // Notify parent when form state changes
+  useEffect(() => {
+    if (onFormStateChange) {
+      const hasValues =
+        state.formData.firstName.trim() !== '' ||
+        state.formData.lastName.trim() !== '' ||
+        state.formData.email.trim() !== '' ||
+        state.formData.mobileNumber.trim() !== '' ||
+        state.formData.password.trim() !== '' ||
+        state.formData.confirmPassword.trim() !== '';
+      onFormStateChange(hasValues);
+    }
+  }, [
+    state.formData.firstName,
+    state.formData.lastName,
+    state.formData.email,
+    state.formData.mobileNumber,
+    state.formData.password,
+    state.formData.confirmPassword,
+    onFormStateChange,
+  ]);
+
   const handleFieldChange =
-    (field: keyof SignupFormData) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (field: keyof SignupFormData) => (e: ChangeEvent<HTMLInputElement>) => {
       dispatch({ type: 'SET_FIELD_VALUE', field, value: e.target.value });
     };
 

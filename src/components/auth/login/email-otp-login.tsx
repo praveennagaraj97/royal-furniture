@@ -3,7 +3,12 @@
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { loginFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
-import { useState, type FC, type FormEvent } from 'react';
+import {
+  useState,
+  type ChangeEvent,
+  type FC,
+  type FormEvent,
+} from 'react';
 
 interface EmailOtpLoginProps {
   onModeChange?: (mode: 'email-password') => void;
@@ -49,7 +54,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({ onModeChange }) => {
 
   const handleFieldChange =
     (field: 'email' | 'emailOtp') =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setLoginData((prev) => ({ ...prev, [field]: value }));
 

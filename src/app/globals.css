@@ -83,4 +83,58 @@
   .pb-safe {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  .confirmation-modal-icon-warning {
+    @apply text-yellow-500;
+  }
+
+  .confirmation-modal-icon-bg-warning {
+    @apply bg-yellow-50;
+  }
+
+  .confirmation-modal-button-warning {
+    @apply bg-yellow-500 hover:bg-yellow-600;
+  }
+
+  .confirmation-modal-icon-danger {
+    @apply text-red-500;
+  }
+
+  .confirmation-modal-icon-bg-danger {
+    @apply bg-red-50;
+  }
+
+  .confirmation-modal-button-danger {
+    @apply bg-red-500 hover:bg-red-600;
+  }
+
+  .confirmation-modal-icon-info {
+    @apply text-blue-500;
+  }
+
+  .confirmation-modal-icon-bg-info {
+    @apply bg-blue-50;
+  }
+
+  .confirmation-modal-button-info {
+    @apply bg-blue-500 hover:bg-blue-600;
+  }
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25%,
+    75% {
+      transform: translateX(-4px);
+    }
+    50% {
+      transform: translateX(4px);
+    }
+  }
+
+  .modal-shake {
+    animation: shake 0.4s ease-in-out;
+  }
 }

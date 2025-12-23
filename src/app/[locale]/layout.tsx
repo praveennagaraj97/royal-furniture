@@ -9,6 +9,7 @@ import {
 } from 'next-intl/server';
 import { Montserrat } from 'next/font/google';
 import { notFound } from 'next/navigation';
+import type { ReactNode } from 'react';
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -42,7 +43,7 @@ export default async function LocaleLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;

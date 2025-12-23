@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import {
+  type ChangeEvent,
   type FC,
   type InputHTMLAttributes,
   type ReactNode,
@@ -68,7 +69,7 @@ export const FormInput: FC<FormInputProps> = ({
 
   const paddingClasses = rightElement || isPasswordType ? 'pr-12' : '';
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Handle numeric-only input
     if (type === 'number' || inputProps.inputMode === 'numeric') {
       const value = e.target.value;
