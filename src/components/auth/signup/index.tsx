@@ -62,7 +62,8 @@ const SignupForm: FC = () => {
     );
     const emailError = signupFormValidators.email(state.formData.email);
     const mobileNumberError = signupFormValidators.mobileNumber(
-      state.formData.mobileNumber
+      state.formData.mobileNumber,
+      state.countryCode
     );
     const passwordError = signupFormValidators.password(
       state.formData.password
@@ -110,14 +111,11 @@ const SignupForm: FC = () => {
     dispatch({ type: 'SET_IS_LOADING', value: true });
 
     try {
-      // Combine country code with phone number
-      const fullPhoneNumber = `${state.countryCode}${state.formData.mobileNumber}`;
-
       const response = await authService.register({
         first_name: state.formData.firstName,
         last_name: state.formData.lastName,
         email: state.formData.email,
-        phone_number: fullPhoneNumber,
+        phone_number: `${state.countryCode} ${state.formData.mobileNumber}`,
         password: state.formData.password,
         confirm_password: state.formData.confirmPassword,
         allow_notification: true,

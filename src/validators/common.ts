@@ -1,3 +1,5 @@
+import { isValidPhoneNumber } from 'libphonenumber-js';
+
 export const validateEmail = (value: string): string | undefined => {
   if (!value.trim()) {
     return 'Email is required';
@@ -26,4 +28,28 @@ export const validateRequired = (
     return `${fieldName} is required`;
   }
   return undefined;
+};
+
+export const validatePhoneNumber = (
+  phoneNumber: string,
+  countryCode: string,
+  fieldName: string = 'Mobile number'
+): string | undefined => {
+  if (!phoneNumber.trim()) {
+    return `${fieldName} is required`;
+  }
+
+  // Combine country code with phone number
+  const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+
+  try {
+    // Validate the phone number using libphonenumber-js
+    if (!isValidPhoneNumber(fullPhoneNumber)) {
+      return `Please enter a valid ${fieldName.toLowerCase()}`;
+    }
+
+    return undefined;
+  } catch {
+    return `Please enter a valid ${fieldName.toLowerCase()}`;
+  }
 };

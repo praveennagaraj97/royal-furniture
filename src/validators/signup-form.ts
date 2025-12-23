@@ -1,18 +1,16 @@
-import { validateEmail, validatePassword, validateRequired } from './common';
+import {
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateRequired,
+} from './common';
 
 export const signupFormValidators = {
   firstName: (value: string) => validateRequired(value, 'First name'),
   lastName: (value: string) => validateRequired(value, 'Last name'),
   email: validateEmail,
-  mobileNumber: (value: string) => {
-    if (!value.trim()) {
-      return 'Mobile number is required';
-    }
-    if (!/^[0-9+\-\s()]+$/.test(value)) {
-      return 'Please enter a valid mobile number';
-    }
-    return undefined;
-  },
+  mobileNumber: (value: string, countryCode?: string) =>
+    validatePhoneNumber(value, countryCode || '+971', 'Mobile number'),
   password: validatePassword,
   confirmPassword: (value: string, password?: string) => {
     if (!value) {
