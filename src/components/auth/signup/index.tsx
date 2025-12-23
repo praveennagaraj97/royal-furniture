@@ -49,9 +49,10 @@ const itemVariants: Variants = {
 
 interface SignupFormProps {
   onFormStateChange?: (hasValues: boolean) => void;
+  onClose?: () => void;
 }
 
-const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
+const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
   const [state, dispatch] = useReducer(signupReducer, initialState);
   const { showError } = useToast();
   const [showVerifyPhone, setShowVerifyPhone] = useState(false);
@@ -185,24 +186,19 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
         return;
       }
 
-      // Combine country code with phone number (no space)
-      const fullPhoneNumber = `${state.countryCode}${state.formData.mobileNumber}`;
-
-      const response = await authService.register({
+      await authService.register({
         first_name: state.formData.firstName,
         last_name: state.formData.lastName,
         email: state.formData.email,
-        phone_number: fullPhoneNumber,
+        phone_number: `${state.countryCode} ${state.formData.mobileNumber}`,
         password: state.formData.password,
         confirm_password: state.formData.confirmPassword,
         allow_notification: false,
+        country_id: '1',
         latitude,
         longitude,
         onboard_complete: false,
       });
-
-      // Handle successful registration
-      console.log('Registration successful:', response);
 
       // Show verify phone modal after successful registration
       setShowVerifyPhone(true);
@@ -375,12 +371,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
         onVerified={() => {
           setShowVerifyPhone(false);
           dispatch({ type: 'SET_IS_LOADING', value: false });
-          // TODO: Handle success (e.g., show success message, redirect to next step)
-        }}
-        onClose={() => {
-          if (!state.isLoading) {
-            setShowVerifyPhone(false);
-          }
+          onClose?.();
         }}
       />
     </motion.div>

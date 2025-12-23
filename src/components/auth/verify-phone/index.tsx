@@ -5,6 +5,7 @@ import Modal from '@/components/shared/modal';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
+import type { VerifyOTPResponse } from '@/types/response';
 import { Loader2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, type FC } from 'react';
 
@@ -34,6 +35,31 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
 
   const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
 
+  const parseJwtExp = useCallback((token: string): number | undefined => {
+    try {
+      const [, payload] = token.split('.');
+      const decoded = JSON.parse(
+        atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
+      );
+      return typeof decoded.exp === 'number' ? decoded.exp : undefined;
+    } catch {
+      return undefined;
+    }
+  }, []);
+
+  const setTokenCookie = useCallback(
+    (name: string, token: string) => {
+      const exp = parseJwtExp(token);
+      const expires = exp ? new Date(exp * 1000).toUTCString() : undefined;
+      const parts = [`${name}=${token}`, 'path=/', 'SameSite=Lax'];
+      if (expires) {
+        parts.push(`expires=${expires}`);
+      }
+      document.cookie = parts.join('; ');
+    },
+    [parseJwtExp]
+  );
+
   const handleVerify = useCallback(
     async (code: string) => {
       // Wait for complete code
@@ -45,12 +71,25 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
       setError(undefined);
 
       try {
-        const response = await authService.verifyOTP({
+        const response: VerifyOTPResponse = await authService.verifyOTP({
           phone_number: fullPhoneNumber,
           code: code,
         });
 
-        showSuccess(response.message || 'Phone number verified successfully!');
+        const refreshToken = response.data.tokens.refresh;
+        const accessToken = response.data.tokens.access;
+
+        if (refreshToken) {
+          setTokenCookie('refresh_token', refreshToken);
+        }
+
+        if (accessToken) {
+          setTokenCookie('access_token', accessToken);
+        }
+
+        showSuccess(
+          'You are all set! Phone number verified and you are now logged in.'
+        );
         onVerified?.();
       } catch (error) {
         const parsedError = error as ParsedAPIError;
@@ -64,7 +103,14 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
         setIsLoading(false);
       }
     },
-    [codeLength, fullPhoneNumber, onVerified, showSuccess, showError]
+    [
+      codeLength,
+      fullPhoneNumber,
+      onVerified,
+      setTokenCookie,
+      showSuccess,
+      showError,
+    ]
   );
 
   const autoSubmitTimeoutRef = useRef<NodeJS.Timeout | null>(null);

@@ -15,9 +15,17 @@ export interface RegisterResponseData {
 
 export type RegisterResponse = BaseAPIResponse<RegisterResponseData>;
 
+export interface VerifyOTPTokenSet {
+  refresh: string;
+  access: string;
+}
+
 export interface VerifyOTPResponseData {
+  user_id: string;
+  email: string;
   phone_number: string;
-  verified: boolean;
+  status: string;
+  tokens: VerifyOTPTokenSet;
 }
 
 export type VerifyOTPResponse = BaseAPIResponse<VerifyOTPResponseData>;

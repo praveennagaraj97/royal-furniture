@@ -6,7 +6,7 @@ export interface RegisterPayload {
   password: string;
   confirm_password: string;
   allow_notification: boolean;
-  country_id?: string;
+  country_id: string;
   latitude: string;
   longitude: string;
   onboard_complete: boolean;
