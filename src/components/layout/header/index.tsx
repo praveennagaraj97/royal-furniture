@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Menu } from 'lucide-react';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 
 import AuthModal from '@/components/auth/auth-modal';
 import { Link } from '@/i18n/routing';
@@ -29,24 +29,9 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
         ref={ref}
         className={`${
           isSticky
-            ? 'fixed top-0 left-0 right-0 z-50 bg-white shadow-md'
+            ? 'fixed top-0 left-0 right-0 z-50 bg-white rounded-b-2xl shadow-2xl'
             : 'relative'
         } transition-shadow duration-300 ease-out`}
-        initial={false}
-        animate={{
-          y: isSticky ? 0 : 0,
-        }}
-        transition={{
-          duration: 0.3,
-          ease: [0.4, 0, 0.2, 1],
-        }}
-        variants={{
-          hidden: { y: -100 },
-          visible: { y: 0 },
-        }}
-        key={isSticky ? 'sticky' : 'normal'}
-        initial={isSticky ? 'hidden' : 'visible'}
-        animate={isSticky ? 'visible' : 'visible'}
       >
         <div className="container mx-auto px-3 py-2.5 md:py-3">
           {/* Mobile/Tablet: Two-row layout */}
