@@ -2,6 +2,8 @@
 
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
+import { authService } from '@/services/api/auth-service';
+import type { ParsedAPIError } from '@/types/error';
 import { signupFormValidators } from '@/validators';
 import { validatePassword } from '@/validators/common';
 import { motion, type Variants } from 'framer-motion';
@@ -15,9 +17,7 @@ import {
 } from 'react';
 
 interface NewPasswordProps {
-  phoneNumber: string;
-  countryCode: string;
-  otp: string;
+  resetToken: string;
   onFormStateChange?: (hasValues: boolean) => void;
   onPasswordReset: () => void;
 }
@@ -46,9 +46,7 @@ const itemVariants: Variants = {
 };
 
 const NewPassword: FC<NewPasswordProps> = ({
-  phoneNumber,
-  countryCode,
-  otp,
+  resetToken,
   onFormStateChange,
   onPasswordReset,
 }) => {
@@ -141,11 +139,6 @@ const NewPassword: FC<NewPasswordProps> = ({
     return true;
   };
 
-  const formatPhoneNumber = (): string => {
-    const cleanPhone = phoneNumber.replace(/\s+/g, '');
-    return `${countryCode} ${cleanPhone}`;
-  };
-
   const handleResetPassword = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
@@ -158,16 +151,11 @@ const NewPassword: FC<NewPasswordProps> = ({
     setIsResetting(true);
 
     try {
-      // TODO: Wire API call here
-      // const formattedPhone = formatPhoneNumber();
-      // await authService.resetPassword({
-      //   phone_number: formattedPhone,
-      //   otp,
-      //   new_password: password,
-      // });
-
-      // Simulate API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await authService.forgotPasswordResetPasswordSMS({
+        reset_token: resetToken,
+        new_password: password,
+        confirm_password: confirmPassword,
+      });
 
       showSuccess(
         'Password reset successfully! You can now login with your new password.'
@@ -175,9 +163,28 @@ const NewPassword: FC<NewPasswordProps> = ({
       onFormStateChange?.(false);
       onPasswordReset();
     } catch (error) {
-      // TODO: Handle API errors properly
-      const errorMessage = 'Failed to reset password. Please try again.';
-      showError(errorMessage);
+      const parsedError = error as ParsedAPIError;
+
+      if (parsedError.generalError) {
+        showError(parsedError.generalError);
+      }
+
+      const fieldErrors = { ...errors };
+      if (parsedError.fieldErrors.new_password) {
+        fieldErrors.password = parsedError.fieldErrors.new_password;
+      } else if (parsedError.fieldErrors.password) {
+        fieldErrors.password = parsedError.fieldErrors.password;
+      } else if (parsedError.generalError) {
+        fieldErrors.password = parsedError.generalError;
+      }
+
+      if (parsedError.fieldErrors.confirm_password) {
+        fieldErrors.confirmPassword = parsedError.fieldErrors.confirm_password;
+      } else if (parsedError.fieldErrors.confirmPassword) {
+        fieldErrors.confirmPassword = parsedError.fieldErrors.confirmPassword;
+      }
+
+      setErrors(fieldErrors);
     } finally {
       setIsResetting(false);
     }

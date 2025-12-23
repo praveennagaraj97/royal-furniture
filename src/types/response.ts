@@ -38,3 +38,10 @@ export interface LoginWithPasswordResponseData {
 
 export type LoginWithPasswordResponse =
   BaseAPIResponse<LoginWithPasswordResponseData>;
+
+export interface ForgotPasswordVerifyOTPResponseData {
+  reset_token: string;
+}
+
+export type ForgotPasswordVerifyOTPResponse =
+  BaseAPIResponse<ForgotPasswordVerifyOTPResponseData>;

@@ -44,3 +44,22 @@ export interface ResendOTPPayload {
 export interface ForgotPasswordEmailPayload {
   email: string;
 }
+
+export interface ForgotPasswordSendOTPPayload {
+  phone: string;
+}
+
+export interface ForgotPasswordVerifyOTPPayload {
+  phone: string;
+  otp: string;
+}
+
+export interface ForgotPasswordResendOTPPayload {
+  phone_number: string;
+}
+
+export interface ForgotPasswordResetPasswordSMSPayload {
+  reset_token: string;
+  new_password: string;
+  confirm_password: string;
+}

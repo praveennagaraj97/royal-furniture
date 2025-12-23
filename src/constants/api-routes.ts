@@ -9,5 +9,10 @@ export const API_ROUTES = {
     VERIFY_OTP_LOGIN: '/users/login/verify-otp-login/',
     RESEND_OTP: '/users/login/resend-otp/',
     FORGOT_PASSWORD_EMAIL: '/users/forgot-password/send-reset-link/',
+    FORGOT_PASSWORD_SEND_OTP: '/users/forgot-password/send-otp/',
+    FORGOT_PASSWORD_VERIFY_OTP: '/users/forgot-password/verify-otp/',
+    FORGOT_PASSWORD_RESEND_OTP: '/users/forgot-password/resend-otp/',
+    FORGOT_PASSWORD_RESET_PASSWORD_SMS:
+      '/users/forgot-password/reset-password-sms/',
   },
 } as const;

@@ -2,6 +2,10 @@ import { API_ROUTES } from '@/constants/api-routes';
 import type {
   EmailLoginPayload,
   ForgotPasswordEmailPayload,
+  ForgotPasswordResendOTPPayload,
+  ForgotPasswordResetPasswordSMSPayload,
+  ForgotPasswordSendOTPPayload,
+  ForgotPasswordVerifyOTPPayload,
   LoginWithPasswordPayload,
   PhoneLoginPayload,
   RegisterPayload,
@@ -11,6 +15,7 @@ import type {
 } from '@/types/payload';
 import type {
   BaseAPIResponse,
+  ForgotPasswordVerifyOTPResponse,
   LoginWithPasswordResponse,
   RegisterResponse,
   VerifyOTPResponse,
@@ -134,6 +139,62 @@ export class AuthService extends BaseAPIService {
     try {
       const response = await this.http.post<BaseAPIResponse<unknown>>(
         API_ROUTES.AUTH.FORGOT_PASSWORD_EMAIL,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async forgotPasswordSendOTP(
+    payload: ForgotPasswordSendOTPPayload
+  ): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.FORGOT_PASSWORD_SEND_OTP,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async forgotPasswordVerifyOTP(
+    payload: ForgotPasswordVerifyOTPPayload
+  ): Promise<ForgotPasswordVerifyOTPResponse> {
+    try {
+      const response = await this.http.post<ForgotPasswordVerifyOTPResponse>(
+        API_ROUTES.AUTH.FORGOT_PASSWORD_VERIFY_OTP,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async forgotPasswordResendOTP(
+    payload: ForgotPasswordResendOTPPayload
+  ): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.FORGOT_PASSWORD_RESEND_OTP,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async forgotPasswordResetPasswordSMS(
+    payload: ForgotPasswordResetPasswordSMSPayload
+  ): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.FORGOT_PASSWORD_RESET_PASSWORD_SMS,
         payload
       );
       return response.data;

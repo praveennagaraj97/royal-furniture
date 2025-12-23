@@ -38,22 +38,17 @@ const itemVariants: Variants = {
 const PhoneReset: FC<PhoneResetProps> = ({
   onModeChange,
   onFormStateChange,
-  onSuccess,
   onBackToLogin,
 }) => {
   const [isOtpVerified, setIsOtpVerified] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [countryCode, setCountryCode] = useState('');
-  const [otp, setOtp] = useState('');
+  const [resetToken, setResetToken] = useState('');
 
   const handleOtpVerified = (
-    verifiedPhoneNumber: string,
-    verifiedCountryCode: string,
-    verifiedOtp: string
+    _verifiedPhoneNumber: string,
+    _verifiedCountryCode: string,
+    verifiedResetToken: string
   ) => {
-    setPhoneNumber(verifiedPhoneNumber);
-    setCountryCode(verifiedCountryCode);
-    setOtp(verifiedOtp);
+    setResetToken(verifiedResetToken);
     setIsOtpVerified(true);
   };
 
@@ -84,9 +79,7 @@ const PhoneReset: FC<PhoneResetProps> = ({
         />
       ) : (
         <NewPassword
-          phoneNumber={phoneNumber}
-          countryCode={countryCode}
-          otp={otp}
+          resetToken={resetToken}
           onFormStateChange={onFormStateChange}
           onPasswordReset={handlePasswordReset}
         />
@@ -109,4 +102,3 @@ const PhoneReset: FC<PhoneResetProps> = ({
 };
 
 export default PhoneReset;
-

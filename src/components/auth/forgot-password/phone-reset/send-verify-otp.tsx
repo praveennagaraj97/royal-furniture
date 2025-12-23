@@ -5,6 +5,8 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { VerifyCodeInput } from '@/components/shared/inputs/verify-code-input';
 import { useToast } from '@/contexts/toast-context';
 import { useCountdown } from '@/hooks';
+import { authService } from '@/services/api/auth-service';
+import type { ParsedAPIError } from '@/types/error';
 import { signupFormValidators } from '@/validators';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
@@ -21,7 +23,7 @@ interface SendVerifyOtpProps {
   onOtpVerified: (
     phoneNumber: string,
     countryCode: string,
-    otp: string
+    resetToken: string
   ) => void;
   onFormStateChange?: (hasValues: boolean) => void;
 }
@@ -177,21 +179,27 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
     setIsSendingOtp(true);
 
     try {
-      // TODO: Wire API call here
-      // const formattedPhone = formatPhoneNumber();
-      // await authService.forgotPasswordPhone({ phone_number: formattedPhone });
-
-      // Simulate API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const formattedPhone = formatPhoneNumber();
+      await authService.forgotPasswordSendOTP({ phone: formattedPhone });
 
       setIsOtpSent(true);
       resetCountdown();
       showSuccess('OTP has been sent to your phone.');
     } catch (error) {
-      // TODO: Handle API errors properly
-      const errorMessage = 'Failed to send OTP. Please try again.';
-      setErrors((prev) => ({ ...prev, phone: errorMessage }));
-      showError(errorMessage);
+      const parsedError = error as ParsedAPIError;
+
+      if (parsedError.generalError) {
+        showError(parsedError.generalError);
+      }
+
+      const fieldErrors = { ...errors };
+      if (parsedError.fieldErrors.phone) {
+        fieldErrors.phone = parsedError.fieldErrors.phone;
+      } else if (parsedError.generalError) {
+        fieldErrors.phone = parsedError.generalError;
+      }
+
+      setErrors(fieldErrors);
     } finally {
       setIsSendingOtp(false);
     }
@@ -207,25 +215,32 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
     setErrors((prev) => ({ ...prev, otp: undefined }));
 
     try {
-      // TODO: Wire API call here
-      // const formattedPhone = formatPhoneNumber();
-      // await authService.verifyForgotPasswordOTP({
-      //   phone_number: formattedPhone,
-      //   otp,
-      // });
+      const formattedPhone = formatPhoneNumber();
+      const response = await authService.forgotPasswordVerifyOTP({
+        phone: formattedPhone,
+        otp,
+      });
 
-      // Simulate API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
+      const resetToken = response.data.reset_token;
       showSuccess(
         'OTP verified successfully. You can now reset your password.'
       );
-      onOtpVerified(phoneNumber, countryCode, otp);
+      onOtpVerified(phoneNumber, countryCode, resetToken);
     } catch (error) {
-      // TODO: Handle API errors properly
-      const errorMessage = 'Failed to verify OTP. Please try again.';
-      setErrors((prev) => ({ ...prev, otp: errorMessage }));
-      showError(errorMessage);
+      const parsedError = error as ParsedAPIError;
+
+      if (parsedError.generalError) {
+        showError(parsedError.generalError);
+      }
+
+      const fieldErrors = { ...errors };
+      if (parsedError.fieldErrors.otp) {
+        fieldErrors.otp = parsedError.fieldErrors.otp;
+      } else if (parsedError.generalError) {
+        fieldErrors.otp = parsedError.generalError;
+      }
+
+      setErrors(fieldErrors);
     } finally {
       setIsVerifying(false);
     }
@@ -240,19 +255,18 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
     setErrors((prev) => ({ ...prev, otp: undefined }));
 
     try {
-      // TODO: Wire API call here
-      // const formattedPhone = formatPhoneNumber();
-      // await authService.resendForgotPasswordOTP({ phone_number: formattedPhone });
-
-      // Simulate API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const formattedPhone = formatPhoneNumber();
+      await authService.forgotPasswordResendOTP({
+        phone_number: formattedPhone,
+      });
 
       showSuccess('A new verification code has been sent to your phone.');
       resetCountdown();
       setOtp('');
     } catch (error) {
-      // TODO: Handle API errors properly
-      const errorMessage = 'Failed to resend OTP. Please try again.';
+      const parsedError = error as ParsedAPIError;
+      const errorMessage =
+        parsedError.generalError || 'Failed to resend OTP. Please try again.';
       showError(errorMessage);
     } finally {
       setIsResending(false);
