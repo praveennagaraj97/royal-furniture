@@ -7,6 +7,7 @@ import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { signupFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import { useReducer, type FC, type FormEvent } from 'react';
 import {
   initialState,
@@ -98,6 +99,25 @@ const SignupForm: FC = () => {
     return fieldMap[apiField] || null;
   };
 
+  const requestLocation = (): Promise<GeolocationPosition> => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation is not supported by your browser'));
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => resolve(position),
+        (error) => reject(error),
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        }
+      );
+    });
+  };
+
   const handleSignupSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch({ type: 'SET_IS_SUBMITTED', value: true });
@@ -111,17 +131,39 @@ const SignupForm: FC = () => {
     dispatch({ type: 'SET_IS_LOADING', value: true });
 
     try {
+      // Request user location
+      let latitude = '';
+      let longitude = '';
+
+      try {
+        const position = await requestLocation();
+        latitude = position.coords.latitude.toString();
+        longitude = position.coords.longitude.toString();
+        dispatch({
+          type: 'SET_LOCATION',
+          latitude,
+          longitude,
+        });
+      } catch {
+        // User rejected or location unavailable - don't proceed with registration
+        dispatch({ type: 'SET_IS_LOADING', value: false });
+        showError('Location access is required to complete registration');
+        return;
+      }
+
+      // Combine country code with phone number (no space)
+      const fullPhoneNumber = `${state.countryCode}${state.formData.mobileNumber}`;
+
       const response = await authService.register({
         first_name: state.formData.firstName,
         last_name: state.formData.lastName,
         email: state.formData.email,
-        phone_number: `${state.countryCode} ${state.formData.mobileNumber}`,
+        phone_number: fullPhoneNumber,
         password: state.formData.password,
         confirm_password: state.formData.confirmPassword,
-        allow_notification: true,
-        country_id: '1', // Default country ID, can be enhanced later
-        latitude: '0', // Default latitude, can be enhanced with geolocation
-        longitude: '0', // Default longitude, can be enhanced with geolocation
+        allow_notification: false,
+        latitude,
+        longitude,
         onboard_complete: false,
       });
 
@@ -277,9 +319,12 @@ const SignupForm: FC = () => {
           <button
             type="submit"
             disabled={state.isLoading}
-            className="w-full bg-deep-maroon text-white py-3 rounded-lg font-semibold text-base hover:bg-[#6b0000] transition-colors duration-200 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-deep-maroon text-white py-3 rounded-lg font-semibold text-base hover:bg-[#6b0000] 
+            transition-colors duration-200 mt-2 disabled:opacity-50 disabled:cursor-not-allowed
+            flex space-x-2 justify-center items-center"
           >
-            {state.isLoading ? 'Signing Up...' : 'Sign Up'}
+            {state.isLoading && <Loader2 className="animate-spin text-lg" />}
+            <span>{state.isLoading ? 'Signing Up...' : 'Sign Up'}</span>
           </button>
         </motion.div>
       </form>

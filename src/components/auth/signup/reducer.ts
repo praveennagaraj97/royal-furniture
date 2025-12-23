@@ -28,6 +28,8 @@ export interface SignupFormTouched {
 export interface SignupState {
   formData: SignupFormData;
   countryCode: string;
+  latitude: string | null;
+  longitude: string | null;
   errors: SignupFormErrors;
   touched: SignupFormTouched;
   isSubmitted: boolean;
@@ -37,6 +39,8 @@ export interface SignupState {
 export type SignupAction =
   | { type: 'SET_FIELD_VALUE'; field: keyof SignupFormData; value: string }
   | { type: 'SET_COUNTRY_CODE'; value: string }
+  | { type: 'SET_LOCATION'; latitude: string; longitude: string }
+  | { type: 'CLEAR_LOCATION' }
   | { type: 'SET_FIELD_ERROR'; field: keyof SignupFormErrors; error?: string }
   | { type: 'CLEAR_FIELD_ERROR'; field: keyof SignupFormErrors }
   | { type: 'SET_TOUCHED'; field: keyof SignupFormTouched }
@@ -56,6 +60,8 @@ export const initialState: SignupState = {
     confirmPassword: '',
   },
   countryCode: '+971', // UAE as default
+  latitude: null,
+  longitude: null,
   errors: {},
   touched: {},
   isSubmitted: false,
@@ -89,6 +95,20 @@ export const signupReducer = (
       return {
         ...state,
         countryCode: action.value,
+      };
+
+    case 'SET_LOCATION':
+      return {
+        ...state,
+        latitude: action.latitude,
+        longitude: action.longitude,
+      };
+
+    case 'CLEAR_LOCATION':
+      return {
+        ...state,
+        latitude: null,
+        longitude: null,
       };
 
     case 'SET_FIELD_ERROR':
