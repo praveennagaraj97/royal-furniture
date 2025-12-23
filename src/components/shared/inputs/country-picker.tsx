@@ -1,38 +1,81 @@
 'use client';
 
 import { useClickOutside } from '@/hooks/use-click-outside';
+import {
+  AE,
+  BH,
+  DZ,
+  EG,
+  IN,
+  IQ,
+  JO,
+  KW,
+  LB,
+  LY,
+  MA,
+  OM,
+  PS,
+  QA,
+  SA,
+  SD,
+  SY,
+  TN,
+  YE,
+} from 'country-flag-icons/react/3x2';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Search } from 'lucide-react';
-import { type FC, useRef, useState } from 'react';
+import React, { type FC, useRef, useState } from 'react';
 
 export interface Country {
   code: string;
   name: string;
   dialCode: string;
-  flag: string;
 }
+
+// Flag component mapping
+const FLAG_COMPONENTS = {
+  AE,
+  SA,
+  KW,
+  QA,
+  BH,
+  OM,
+  JO,
+  LB,
+  IQ,
+  SY,
+  YE,
+  EG,
+  MA,
+  DZ,
+  TN,
+  LY,
+  SD,
+  PS,
+  IN,
+} as Record<string, React.ComponentType<Record<string, unknown>>>;
 
 // Arab countries list with UAE as default, India at the end
 const COUNTRIES: Country[] = [
-  { code: 'AE', name: 'United Arab Emirates', dialCode: '+971', flag: '🇦🇪' },
-  { code: 'SA', name: 'Saudi Arabia', dialCode: '+966', flag: '🇸🇦' },
-  { code: 'KW', name: 'Kuwait', dialCode: '+965', flag: '🇰🇼' },
-  { code: 'QA', name: 'Qatar', dialCode: '+974', flag: '🇶🇦' },
-  { code: 'BH', name: 'Bahrain', dialCode: '+973', flag: '🇧🇭' },
-  { code: 'OM', name: 'Oman', dialCode: '+968', flag: '🇴🇲' },
-  { code: 'JO', name: 'Jordan', dialCode: '+962', flag: '🇯🇴' },
-  { code: 'LB', name: 'Lebanon', dialCode: '+961', flag: '🇱🇧' },
-  { code: 'IQ', name: 'Iraq', dialCode: '+964', flag: '🇮🇶' },
-  { code: 'SY', name: 'Syria', dialCode: '+963', flag: '🇸🇾' },
-  { code: 'YE', name: 'Yemen', dialCode: '+967', flag: '🇾🇪' },
-  { code: 'EG', name: 'Egypt', dialCode: '+20', flag: '🇪🇬' },
-  { code: 'MA', name: 'Morocco', dialCode: '+212', flag: '🇲🇦' },
-  { code: 'DZ', name: 'Algeria', dialCode: '+213', flag: '🇩🇿' },
-  { code: 'TN', name: 'Tunisia', dialCode: '+216', flag: '🇹🇳' },
-  { code: 'LY', name: 'Libya', dialCode: '+218', flag: '🇱🇾' },
-  { code: 'SD', name: 'Sudan', dialCode: '+249', flag: '🇸🇩' },
-  { code: 'PS', name: 'Palestine', dialCode: '+970', flag: '🇵🇸' },
-  { code: 'IN', name: 'India', dialCode: '+91', flag: '🇮🇳' },
+  { code: 'AE', name: 'United Arab Emirates', dialCode: '+971' },
+  { code: 'SA', name: 'Saudi Arabia', dialCode: '+966' },
+  { code: 'KW', name: 'Kuwait', dialCode: '+965' },
+  { code: 'QA', name: 'Qatar', dialCode: '+974' },
+  { code: 'BH', name: 'Bahrain', dialCode: '+973' },
+  { code: 'OM', name: 'Oman', dialCode: '+968' },
+  { code: 'JO', name: 'Jordan', dialCode: '+962' },
+  { code: 'LB', name: 'Lebanon', dialCode: '+961' },
+  { code: 'IQ', name: 'Iraq', dialCode: '+964' },
+  { code: 'SY', name: 'Syria', dialCode: '+963' },
+  { code: 'YE', name: 'Yemen', dialCode: '+967' },
+  { code: 'EG', name: 'Egypt', dialCode: '+20' },
+  { code: 'MA', name: 'Morocco', dialCode: '+212' },
+  { code: 'DZ', name: 'Algeria', dialCode: '+213' },
+  { code: 'TN', name: 'Tunisia', dialCode: '+216' },
+  { code: 'LY', name: 'Libya', dialCode: '+218' },
+  { code: 'SD', name: 'Sudan', dialCode: '+249' },
+  { code: 'PS', name: 'Palestine', dialCode: '+970' },
+  { code: 'IN', name: 'India', dialCode: '+91' },
 ];
 
 interface CountryPickerProps {
@@ -138,7 +181,15 @@ export const CountryPicker: FC<CountryPickerProps> = ({
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.15, delay: index * 0.02 }}
                   >
-                    <span className="text-2xl">{country.flag}</span>
+                    <div className="shrink-0 w-6 h-4">
+                      {(() => {
+                        const FlagComponent = FLAG_COMPONENTS[country.code];
+                        if (!FlagComponent) return null;
+                        return (
+                          <FlagComponent className="w-full h-full object-cover rounded" />
+                        );
+                      })()}
+                    </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">
                         {country.name}
