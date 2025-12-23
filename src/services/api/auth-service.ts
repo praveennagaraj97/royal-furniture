@@ -1,6 +1,10 @@
 import { API_ROUTES } from '@/constants/api-routes';
 import type { RegisterPayload, VerifyOTPPayload } from '@/types/payload';
-import type { RegisterResponse, VerifyOTPResponse } from '@/types/response';
+import type {
+  BaseAPIResponse,
+  RegisterResponse,
+  VerifyOTPResponse,
+} from '@/types/response';
 import { BaseAPIService } from './api-base-service';
 
 export class AuthService extends BaseAPIService {
@@ -21,6 +25,22 @@ export class AuthService extends BaseAPIService {
       const response = await this.http.post<VerifyOTPResponse>(
         API_ROUTES.AUTH.VERIFY_OTP,
         payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async resendVerifyPhone(
+    phoneNumber: string
+  ): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.RESEND_VERIFY_PHONE,
+        {
+          phone_number: phoneNumber,
+        }
       );
       return response.data;
     } catch (error) {

@@ -3,11 +3,12 @@
 import { VerifyCodeInput } from '@/components/shared/inputs/verify-code-input';
 import Modal from '@/components/shared/modal';
 import { useToast } from '@/contexts/toast-context';
+import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
 import { Loader2 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState, type FC } from 'react';
+import { useCallback, useEffect, useState, type FC } from 'react';
 
 interface VerifyPhoneProps {
   isOpen: boolean;
@@ -30,10 +31,20 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
 }) => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const { showError, showSuccess } = useToast();
 
   const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
+
+  const {
+    secondsLeft,
+    isExpired,
+    reset: resetCountdown,
+  } = useCountdown({
+    initialSeconds: 59,
+    autoStart: true,
+  });
 
   const parseJwtExp = useCallback((token: string): number | undefined => {
     try {
@@ -113,33 +124,16 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
     ]
   );
 
-  const autoSubmitTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
   const handleOtpChange = (value: string) => {
     setOtp(value);
     setError(undefined);
-
-    // Clear any existing timeout
-    if (autoSubmitTimeoutRef.current) {
-      clearTimeout(autoSubmitTimeoutRef.current);
-    }
   };
 
-  // Auto-submit when OTP is complete
   useEffect(() => {
-    if (otp.length === codeLength && !isLoading) {
-      // Small delay to allow user to see the complete code before auto-submitting
-      autoSubmitTimeoutRef.current = setTimeout(() => {
-        handleVerify(otp);
-      }, 500);
-
-      return () => {
-        if (autoSubmitTimeoutRef.current) {
-          clearTimeout(autoSubmitTimeoutRef.current);
-        }
-      };
+    if (isOpen) {
+      resetCountdown();
     }
-  }, [otp, codeLength, isLoading, handleVerify]);
+  }, [isOpen, resetCountdown]);
 
   const handleClose = () => {
     if (!preventClose && onClose) {
@@ -150,6 +144,31 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
   const handleConfirm = () => {
     if (otp.length === codeLength) {
       handleVerify(otp);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!isExpired || isResending) {
+      return;
+    }
+
+    setIsResending(true);
+    setError(undefined);
+
+    try {
+      await authService.resendVerifyPhone(fullPhoneNumber);
+      showSuccess('A new verification code has been sent to your phone.');
+      resetCountdown();
+    } catch (error) {
+      const parsedError = error as ParsedAPIError;
+      const errorMessage =
+        parsedError.generalError ||
+        parsedError.fieldErrors.phone_number ||
+        'Failed to resend verification code. Please try again.';
+      setError(errorMessage);
+      showError(errorMessage);
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -184,12 +203,20 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
             containerClassName="w-full"
           />
 
-          {isLoading && (
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Verifying...</span>
-            </div>
-          )}
+          <div className="flex justify-end gap-2 text-sm text-gray-600">
+            <button
+              type="button"
+              onClick={handleResend}
+              disabled={!isExpired || isResending}
+              className="text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
+            >
+              {isResending
+                ? 'Resending...'
+                : isExpired
+                ? 'Resend code'
+                : `Resend code in ${secondsLeft}s`}
+            </button>
+          </div>
 
           <button
             type="button"
