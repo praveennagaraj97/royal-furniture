@@ -9,7 +9,7 @@ import { Facebook } from 'lucide-react';
 import Image from 'next/image';
 import { useState, type FC } from 'react';
 import LoginForm from './login-form';
-import SignupForm from './signup-form';
+import SignupForm from './signup';
 
 const socialContainerVariants: Variants = {
   hidden: { opacity: 0 },

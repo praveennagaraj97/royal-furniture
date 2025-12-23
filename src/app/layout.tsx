@@ -1,3 +1,4 @@
+import { ToastProvider } from '@/contexts/toast-context';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -16,5 +17,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <ToastProvider>{children}</ToastProvider>;
 }

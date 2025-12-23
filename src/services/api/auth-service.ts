@@ -16,3 +16,5 @@ export class AuthService extends BaseAPIService {
     }
   }
 }
+
+export const authService = new AuthService();
