@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { LogIn, Menu } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { Menu } from 'lucide-react';
 import { FC, useState } from 'react';
 
 import AuthModal from '@/components/auth/auth-modal';
 import Image from 'next/image';
+import { AuthActionButton } from './auth-action-button';
 import LangSwitch from './lang-switch';
 import MobileMenu from './mobile-menu';
 import SearchBar from './search';
@@ -15,7 +15,6 @@ import Utilities from './utilities';
 import logo from '@/assets/logo.png';
 
 const Header: FC = () => {
-  const t = useTranslations('common');
   const [isSignupFormOpen, setIsSignupFormOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -104,20 +103,7 @@ const Header: FC = () => {
           <Utilities />
         </motion.div>
 
-        <motion.button
-          className="flex shrink-0 items-center gap-2 rounded-full p-1.5 pr-3 text-sm font-medium text-gray-600 bg-gray-50 hover:text-[#7F1D1D] hover:bg-gray-100 transition-colors"
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.25, ease: 'easeOut' }}
-          whileHover={{ y: -1 }}
-          type="button"
-          onClick={() => setIsSignupFormOpen(true)}
-        >
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7F1D1D] text-white">
-            <LogIn className="h-5 w-5" />
-          </span>
-          <span>{t('signInOrSignUp')}</span>
-        </motion.button>
+        <AuthActionButton onClick={() => setIsSignupFormOpen(true)} />
 
         <motion.div
           className="shrink-0"

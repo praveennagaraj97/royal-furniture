@@ -1,10 +1,13 @@
 'use client';
 
+import { HeaderAuthSkeleton } from '@/components/skeletons/header-auth-skeleton';
+import { useAuth } from '@/contexts/auth-context';
+import { useUser } from '@/contexts/user-context';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, LogIn, MapPin, ShoppingCart, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import logo from '@/assets/logo.png';
 
@@ -23,6 +26,30 @@ interface MenuItem {
 
 const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
   const t = useTranslations('common');
+  const { isAuthenticated } = useAuth();
+  const { user, isLoading } = useUser();
+
+  const userInitials = useMemo(() => {
+    if (!user?.display_name) return null;
+
+    const nameParts = user.display_name.trim().split(/\s+/);
+    if (nameParts.length === 0) return null;
+
+    if (nameParts.length === 1) {
+      // Single name - take first 2 characters
+      return nameParts[0].substring(0, 2).toUpperCase();
+    }
+
+    // Multiple names - take first character of first and last name
+    const firstInitial = nameParts[0][0]?.toUpperCase() || '';
+    const lastInitial = nameParts[nameParts.length - 1][0]?.toUpperCase() || '';
+    return `${firstInitial}${lastInitial}`;
+  }, [user]);
+
+  const getDisplayName = (name: string): string => {
+    const maxLength = 20;
+    return name.length > maxLength ? `${name.substring(0, maxLength)}...` : name;
+  };
 
   const menuItems: MenuItem[] = [
     {
@@ -37,7 +64,31 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
       icon: <ShoppingCart className="h-5 w-5" />,
       label: t('cart'),
     },
-    {
+  ];
+
+  // Add auth menu item based on state
+  if (isLoading) {
+    menuItems.push({
+      icon: <div className="h-5 w-5 rounded-full bg-gray-200 animate-pulse" />,
+      label: '',
+      highlight: true,
+    });
+  } else if (isAuthenticated && user && userInitials) {
+    menuItems.push({
+      icon: (
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[#7F1D1D] font-semibold text-xs">
+          {userInitials}
+        </span>
+      ),
+      label: getDisplayName(user.display_name),
+      onClick: () => {
+        onSignIn();
+        onClose();
+      },
+      highlight: true,
+    });
+  } else {
+    menuItems.push({
       icon: <LogIn className="h-5 w-5 text-white" />,
       label: t('signInOrSignUp'),
       onClick: () => {
@@ -45,8 +96,8 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
         onClose();
       },
       highlight: true,
-    },
-  ];
+    });
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
