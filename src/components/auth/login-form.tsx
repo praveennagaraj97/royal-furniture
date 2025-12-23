@@ -10,9 +10,14 @@ type LoginMode = 'email-password' | 'phone-otp' | 'email-otp';
 interface LoginFormProps {
   onFormStateChange?: (hasValues: boolean) => void;
   onClose?: () => void;
+  onForgotPassword?: () => void;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ onFormStateChange, onClose }) => {
+const LoginForm: FC<LoginFormProps> = ({
+  onFormStateChange,
+  onClose,
+  onForgotPassword,
+}) => {
   const [loginMode, setLoginMode] = useState<LoginMode>('email-password');
 
   const handleModeChange = (mode: LoginMode) => {
@@ -26,6 +31,7 @@ const LoginForm: FC<LoginFormProps> = ({ onFormStateChange, onClose }) => {
           onModeChange={handleModeChange}
           onFormStateChange={onFormStateChange}
           onLoginSuccess={onClose}
+          onForgotPassword={onForgotPassword}
         />
       )}
 

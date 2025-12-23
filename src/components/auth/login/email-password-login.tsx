@@ -20,6 +20,7 @@ interface EmailPasswordLoginProps {
   onModeChange?: (mode: 'phone-otp' | 'email-otp') => void;
   onFormStateChange?: (hasValues: boolean) => void;
   onLoginSuccess?: () => void;
+  onForgotPassword?: () => void;
 }
 
 const containerVariants: Variants = {
@@ -49,6 +50,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
   onModeChange,
   onFormStateChange,
   onLoginSuccess,
+  onForgotPassword,
 }) => {
   const [loginData, setLoginData] = useState({
     email: '',
@@ -242,6 +244,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
         <motion.div variants={itemVariants} className="flex justify-center">
           <button
             type="button"
+            onClick={onForgotPassword}
             className="text-sm text-indigo-slate hover:text-indigo-800 font-semibold transition-colors duration-200"
           >
             Forgot Password?

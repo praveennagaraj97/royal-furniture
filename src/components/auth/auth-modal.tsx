@@ -9,6 +9,7 @@ import { motion, type Variants } from 'framer-motion';
 import { Facebook } from 'lucide-react';
 import Image from 'next/image';
 import { useState, type FC } from 'react';
+import ForgotPasswordForm from './forgot-password-form';
 import LoginForm from './login-form';
 import SignupForm from './signup';
 
@@ -40,7 +41,7 @@ interface AuthModalProps {
   onClose: () => void;
 }
 
-type TabType = 'signup' | 'login';
+type TabType = 'signup' | 'login' | 'forgot-password';
 
 const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<TabType>('signup');
@@ -93,36 +94,44 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* Tabs */}
-          <div className="px-6 pt-6">
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              <button
-                type="button"
-                onClick={() => setActiveTab('signup')}
-                className={`flex-1 py-2.5 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${
-                  activeTab === 'signup'
-                    ? 'bg-soft-pink text-gray-900'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                SIGN UP
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('login')}
-                className={`flex-1 py-2.5 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${
-                  activeTab === 'login'
-                    ? 'bg-soft-pink text-gray-900'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                LOGIN
-              </button>
+          {activeTab !== 'forgot-password' && (
+            <div className="px-6 pt-6">
+              <div className="flex bg-gray-100 rounded-lg p-1">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('signup')}
+                  className={`flex-1 py-2.5 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    activeTab === 'signup'
+                      ? 'bg-soft-pink text-gray-900'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  SIGN UP
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('login')}
+                  className={`flex-1 py-2.5 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    activeTab === 'login'
+                      ? 'bg-soft-pink text-gray-900'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  LOGIN
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Form Content */}
           <div className="flex-1 px-6 pt-6 pb-6">
-            {activeTab === 'signup' ? (
+            {activeTab === 'forgot-password' ? (
+              <ForgotPasswordForm
+                onFormStateChange={setHasFormValues}
+                onClose={handleConfirmClose}
+                onBackToLogin={() => setActiveTab('login')}
+              />
+            ) : activeTab === 'signup' ? (
               <SignupForm
                 onFormStateChange={setHasFormValues}
                 onClose={handleConfirmClose}
@@ -131,58 +140,63 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
               <LoginForm
                 onFormStateChange={setHasFormValues}
                 onClose={handleConfirmClose}
+                onForgotPassword={() => setActiveTab('forgot-password')}
               />
             )}
 
-            {/* Separator */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.5 }}
-              className="flex items-center gap-4 my-6"
-            >
-              <div className="flex-1 h-px bg-gray-300" />
-              <span className="text-sm text-gray-600">Or continue with</span>
-              <div className="flex-1 h-px bg-gray-300" />
-            </motion.div>
+            {/* Separator - Only show for signup and login */}
+            {activeTab !== 'forgot-password' && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.5 }}
+                  className="flex items-center gap-4 my-6"
+                >
+                  <div className="flex-1 h-px bg-gray-300" />
+                  <span className="text-sm text-gray-600">Or continue with</span>
+                  <div className="flex-1 h-px bg-gray-300" />
+                </motion.div>
 
-            {/* Social Login Icons */}
-            <motion.div
-              variants={socialContainerVariants}
-              initial="hidden"
-              animate="visible"
-              className="flex items-center justify-center gap-4"
-            >
-              {/* Facebook */}
-              <motion.button
-                type="button"
-                variants={socialItemVariants}
-                onClick={() => handleSocialLogin('facebook')}
-                className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
-              >
-                <Facebook className="w-5 h-5 text-[#1877F2]" />
-              </motion.button>
+                {/* Social Login Icons */}
+                <motion.div
+                  variants={socialContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex items-center justify-center gap-4"
+                >
+                  {/* Facebook */}
+                  <motion.button
+                    type="button"
+                    variants={socialItemVariants}
+                    onClick={() => handleSocialLogin('facebook')}
+                    className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
+                  >
+                    <Facebook className="w-5 h-5 text-[#1877F2]" />
+                  </motion.button>
 
-              {/* Google */}
-              <motion.button
-                type="button"
-                variants={socialItemVariants}
-                onClick={() => handleSocialLogin('google')}
-                className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
-              >
-                <GoogleIcon className="w-5 h-5" />
-              </motion.button>
+                  {/* Google */}
+                  <motion.button
+                    type="button"
+                    variants={socialItemVariants}
+                    onClick={() => handleSocialLogin('google')}
+                    className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
+                  >
+                    <GoogleIcon className="w-5 h-5" />
+                  </motion.button>
 
-              {/* Apple */}
-              <motion.button
-                type="button"
-                variants={socialItemVariants}
-                onClick={() => handleSocialLogin('apple')}
-                className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
-              >
-                <AppleIcon className="w-5 h-5" />
-              </motion.button>
-            </motion.div>
+                  {/* Apple */}
+                  <motion.button
+                    type="button"
+                    variants={socialItemVariants}
+                    onClick={() => handleSocialLogin('apple')}
+                    className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
+                  >
+                    <AppleIcon className="w-5 h-5" />
+                  </motion.button>
+                </motion.div>
+              </>
+            )}
           </div>
         </div>
       </Modal>
