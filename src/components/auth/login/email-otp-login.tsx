@@ -7,11 +7,11 @@ import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
+import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { loginFormValidators } from '@/validators';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import {
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -118,31 +118,6 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
     prevEmailRef.current = email;
   }, [email, isOtpSent, resetCountdown]);
 
-  const parseJwtExp = useCallback((token: string): number | undefined => {
-    try {
-      const [, payload] = token.split('.');
-      const decoded = JSON.parse(
-        atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
-      );
-      return typeof decoded.exp === 'number' ? decoded.exp : undefined;
-    } catch {
-      return undefined;
-    }
-  }, []);
-
-  const setTokenCookie = useCallback(
-    (name: string, token: string) => {
-      const exp = parseJwtExp(token);
-      const expires = exp ? new Date(exp * 1000).toUTCString() : undefined;
-      const parts = [`${name}=${token}`, 'path=/', 'SameSite=Lax'];
-      if (expires) {
-        parts.push(`expires=${expires}`);
-      }
-      document.cookie = parts.join('; ');
-    },
-    [parseJwtExp]
-  );
-
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
@@ -173,14 +148,6 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
     const emailError = loginFormValidators.email(email);
     if (emailError) {
       setErrors((prev) => ({ ...prev, email: emailError }));
-      return false;
-    }
-    return true;
-  };
-
-  const validateOtp = (): boolean => {
-    if (!otp.trim() || otp.length !== 5) {
-      setErrors((prev) => ({ ...prev, otp: 'OTP is required' }));
       return false;
     }
     return true;
@@ -234,11 +201,25 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
       const accessToken = response.data.tokens.access;
 
       if (refreshToken) {
-        setTokenCookie('refresh_token', refreshToken);
+        const refreshExpiry = getTokenExpiry(refreshToken);
+        setRefreshToken(
+          refreshToken,
+          {
+            expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
+          },
+          false
+        );
       }
 
       if (accessToken) {
-        setTokenCookie('access_token', accessToken);
+        const accessExpiry = getTokenExpiry(accessToken);
+        setAuthToken(
+          accessToken,
+          {
+            expires: accessExpiry ? new Date(accessExpiry) : undefined,
+          },
+          false
+        );
       }
 
       showSuccess(

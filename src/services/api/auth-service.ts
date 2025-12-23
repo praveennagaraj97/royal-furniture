@@ -2,6 +2,7 @@ import { API_ROUTES } from '@/constants/api-routes';
 import type {
   EmailLoginPayload,
   LoginWithPasswordPayload,
+  PhoneLoginPayload,
   RegisterPayload,
   ResendOTPPayload,
   VerifyOTPLoginPayload,
@@ -70,10 +71,26 @@ export class AuthService extends BaseAPIService {
     }
   }
 
-  async emailLogin(payload: EmailLoginPayload): Promise<BaseAPIResponse<unknown>> {
+  async emailLogin(
+    payload: EmailLoginPayload
+  ): Promise<BaseAPIResponse<unknown>> {
     try {
       const response = await this.http.post<BaseAPIResponse<unknown>>(
         API_ROUTES.AUTH.EMAIL_LOGIN,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async phoneLogin(
+    payload: PhoneLoginPayload
+  ): Promise<BaseAPIResponse<unknown>> {
+    try {
+      const response = await this.http.post<BaseAPIResponse<unknown>>(
+        API_ROUTES.AUTH.PHONE_LOGIN,
         payload
       );
       return response.data;
@@ -96,7 +113,9 @@ export class AuthService extends BaseAPIService {
     }
   }
 
-  async resendOTP(payload: ResendOTPPayload): Promise<BaseAPIResponse<unknown>> {
+  async resendOTP(
+    payload: ResendOTPPayload
+  ): Promise<BaseAPIResponse<unknown>> {
     try {
       const response = await this.http.post<BaseAPIResponse<unknown>>(
         API_ROUTES.AUTH.RESEND_OTP,

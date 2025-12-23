@@ -7,8 +7,9 @@ import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
+import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { Loader2 } from 'lucide-react';
-import { useCallback, useEffect, useState, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 
 interface VerifyPhoneProps {
   isOpen: boolean;
@@ -46,83 +47,62 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
     autoStart: true,
   });
 
-  const parseJwtExp = useCallback((token: string): number | undefined => {
-    try {
-      const [, payload] = token.split('.');
-      const decoded = JSON.parse(
-        atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
-      );
-      return typeof decoded.exp === 'number' ? decoded.exp : undefined;
-    } catch {
-      return undefined;
+  const handleVerify = async (code: string) => {
+    // Wait for complete code
+    if (code.length !== codeLength) {
+      return;
     }
-  }, []);
 
-  const setTokenCookie = useCallback(
-    (name: string, token: string) => {
-      const exp = parseJwtExp(token);
-      const expires = exp ? new Date(exp * 1000).toUTCString() : undefined;
-      const parts = [`${name}=${token}`, 'path=/', 'SameSite=Lax'];
-      if (expires) {
-        parts.push(`expires=${expires}`);
-      }
-      document.cookie = parts.join('; ');
-    },
-    [parseJwtExp]
-  );
+    setIsLoading(true);
+    setError(undefined);
 
-  const handleVerify = useCallback(
-    async (code: string) => {
-      // Wait for complete code
-      if (code.length !== codeLength) {
-        return;
-      }
+    try {
+      const response: VerifyOTPResponse = await authService.verifyOTP({
+        phone_number: fullPhoneNumber,
+        code: code,
+      });
 
-      setIsLoading(true);
-      setError(undefined);
+      const refreshToken = response.data.tokens.refresh;
+      const accessToken = response.data.tokens.access;
 
-      try {
-        const response: VerifyOTPResponse = await authService.verifyOTP({
-          phone_number: fullPhoneNumber,
-          code: code,
-        });
-
-        const refreshToken = response.data.tokens.refresh;
-        const accessToken = response.data.tokens.access;
-
-        if (refreshToken) {
-          setTokenCookie('refresh_token', refreshToken);
-        }
-
-        if (accessToken) {
-          setTokenCookie('access_token', accessToken);
-        }
-
-        showSuccess(
-          'You are all set! Phone number verified and you are now logged in.'
+      if (refreshToken) {
+        const refreshExpiry = getTokenExpiry(refreshToken);
+        setRefreshToken(
+          refreshToken,
+          {
+            expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
+          },
+          false
         );
-        onVerified?.();
-      } catch (error) {
-        const parsedError = error as ParsedAPIError;
-        const errorMessage =
-          parsedError.generalError ||
-          parsedError.fieldErrors.code ||
-          'Failed to verify OTP. Please try again.';
-        setError(errorMessage);
-        showError(errorMessage);
-      } finally {
-        setIsLoading(false);
       }
-    },
-    [
-      codeLength,
-      fullPhoneNumber,
-      onVerified,
-      setTokenCookie,
-      showSuccess,
-      showError,
-    ]
-  );
+
+      if (accessToken) {
+        const accessExpiry = getTokenExpiry(accessToken);
+        setAuthToken(
+          accessToken,
+          {
+            expires: accessExpiry ? new Date(accessExpiry) : undefined,
+          },
+          false
+        );
+      }
+
+      showSuccess(
+        'You are all set! Phone number verified and you are now logged in.'
+      );
+      onVerified?.();
+    } catch (error) {
+      const parsedError = error as ParsedAPIError;
+      const errorMessage =
+        parsedError.generalError ||
+        parsedError.fieldErrors.code ||
+        'Failed to verify OTP. Please try again.';
+      setError(errorMessage);
+      showError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOtpChange = (value: string) => {
     setOtp(value);

@@ -4,6 +4,7 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
+import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { loginFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
@@ -64,28 +65,6 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showError, showSuccess } = useToast();
-
-  const parseJwtExp = (token: string): number | undefined => {
-    try {
-      const [, payload] = token.split('.');
-      const decoded = JSON.parse(
-        atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
-      );
-      return typeof decoded.exp === 'number' ? decoded.exp : undefined;
-    } catch {
-      return undefined;
-    }
-  };
-
-  const setTokenCookie = (name: string, token: string) => {
-    const exp = parseJwtExp(token);
-    const expires = exp ? new Date(exp * 1000).toUTCString() : undefined;
-    const parts = [`${name}=${token}`, 'path=/', 'SameSite=Lax'];
-    if (expires) {
-      parts.push(`expires=${expires}`);
-    }
-    document.cookie = parts.join('; ');
-  };
 
   const handleFieldChange =
     (field: 'email' | 'password') => (e: ChangeEvent<HTMLInputElement>) => {
@@ -150,11 +129,25 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
       const accessToken = response.data.tokens.access;
 
       if (refreshToken) {
-        setTokenCookie('refresh_token', refreshToken);
+        const refreshExpiry = getTokenExpiry(refreshToken);
+        setRefreshToken(
+          refreshToken,
+          {
+            expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
+          },
+          false
+        );
       }
 
       if (accessToken) {
-        setTokenCookie('access_token', accessToken);
+        const accessExpiry = getTokenExpiry(accessToken);
+        setAuthToken(
+          accessToken,
+          {
+            expires: accessExpiry ? new Date(accessExpiry) : undefined,
+          },
+          false
+        );
       }
 
       showSuccess('Logged in successfully.');

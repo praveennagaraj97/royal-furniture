@@ -26,11 +26,17 @@ export interface EmailLoginPayload {
   email: string;
 }
 
+export interface PhoneLoginPayload {
+  phone_number: string;
+}
+
 export interface VerifyOTPLoginPayload {
-  email: string;
+  email?: string;
+  phone_number?: string;
   otp: string;
 }
 
 export interface ResendOTPPayload {
-  email: string;
+  email?: string;
+  phone_number?: string;
 }
