@@ -190,5 +190,38 @@
     "SD": "Sudan",
     "PS": "Palestine",
     "IN": "India"
+  },
+  "user": {
+    "greeting": "Hi, {name}",
+    "edit": "Edit",
+    "settings": {
+      "title": "Settings",
+      "savedForLater": "Saved for later",
+      "notificationsSettings": "Notifications settings",
+      "selectLanguage": "Select Language"
+    },
+    "feedback": {
+      "title": "Feedback & Information",
+      "returnPolicy": "Return Policy",
+      "privacyPolicy": "Privacy and Policy",
+      "termsConditions": "Terms & Conditions",
+      "contactUs": "Contact Us",
+      "faqs": "FAQs",
+      "aboutUs": "About Us"
+    },
+    "account": {
+      "deleteAccount": "Delete Account",
+      "logout": "Logout"
+    },
+    "exclusiveOffers": {
+      "title": "Get exclusive offers now!",
+      "cta": "View Offers"
+    },
+    "quickLinks": {
+      "myOrders": "My Orders",
+      "myProfile": "My Profile",
+      "wishlist": "Wishlist",
+      "savedAddresses": "Saved Addresses"
+    }
   }
 }

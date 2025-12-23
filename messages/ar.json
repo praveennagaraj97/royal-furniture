@@ -190,5 +190,38 @@
     "SD": "السودان",
     "PS": "فلسطين",
     "IN": "الهند"
+  },
+  "user": {
+    "greeting": "مرحباً، {name}",
+    "edit": "تعديل",
+    "settings": {
+      "title": "الإعدادات",
+      "savedForLater": "المحفوظ لاحقاً",
+      "notificationsSettings": "إعدادات الإشعارات",
+      "selectLanguage": "اختر اللغة"
+    },
+    "feedback": {
+      "title": "التعليقات والمعلومات",
+      "returnPolicy": "سياسة الإرجاع",
+      "privacyPolicy": "سياسة الخصوصية",
+      "termsConditions": "الشروط والأحكام",
+      "contactUs": "اتصل بنا",
+      "faqs": "الأسئلة الشائعة",
+      "aboutUs": "من نحن"
+    },
+    "account": {
+      "deleteAccount": "حذف الحساب",
+      "logout": "تسجيل الخروج"
+    },
+    "exclusiveOffers": {
+      "title": "احصل على عروض حصرية الآن!",
+      "cta": "عرض العروض"
+    },
+    "quickLinks": {
+      "myOrders": "طلباتي",
+      "myProfile": "ملفي الشخصي",
+      "wishlist": "قائمة الأمنيات",
+      "savedAddresses": "العناوين المحفوظة"
+    }
   }
 }

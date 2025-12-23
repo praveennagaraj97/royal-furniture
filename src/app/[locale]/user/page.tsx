@@ -1,12 +1,5 @@
-import { BackLink } from '@/components/shared/ui/back-link';
+import UserPageContent from '@/components/user/quick-links';
 
-export default function ProfilePage() {
-  return (
-    <>
-      <BackLink />
-      <div className="container mx-auto px-3">
-        <p>User page</p>
-      </div>
-    </>
-  );
+export default function UserPage() {
+  return <UserPageContent />;
 }
