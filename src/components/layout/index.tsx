@@ -1,3 +1,6 @@
+'use client';
+
+import { useStickyHeader } from '@/hooks/use-sticky-header';
 import { categories } from '@/temp/data/categories';
 import { categoriesData } from '@/temp/data/categories-data';
 import { FC, ReactNode } from 'react';
@@ -11,12 +14,22 @@ interface AppLayoutProps {
 }
 
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {
+  const { isSticky, headerHeight, headerRef, categoryRef } = useStickyHeader();
+
   return (
     <>
       <QuickLinksBar />
-      <Header />
+      <Header ref={headerRef} isSticky={isSticky} />
+      {/* Spacer to prevent layout shift when header becomes sticky */}
+      {isSticky && headerHeight > 0 && (
+        <div style={{ height: `${headerHeight}px` }} aria-hidden="true" />
+      )}
       <hr className="text-gray-200 w-full container mx-auto px-3" />
-      <Categories categories={categories} categoriesData={categoriesData} />
+      <Categories
+        ref={categoryRef}
+        categories={categories}
+        categoriesData={categoriesData}
+      />
       <main className="mt-4">{children}</main>
       <Footer />
     </>
