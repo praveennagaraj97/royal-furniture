@@ -6,7 +6,8 @@
     "location": "الموقع",
     "wishlist": "قائمة الأمنيات",
     "cart": "السلة",
-    "searchPlaceholder": "ماذا تبحث عنه؟"
+    "searchPlaceholder": "ماذا تبحث عنه؟",
+    "back": "رجوع"
   },
   "quickLinks": {
     "freeShipping": "شحن مجاني",
