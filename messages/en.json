@@ -222,6 +222,16 @@
       "myProfile": "My Profile",
       "wishlist": "Wishlist",
       "savedAddresses": "Saved Addresses"
+    },
+    "profile": {
+      "title": "My Profile",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone number",
+      "change": "Change",
+      "update": "Update",
+      "updating": "Updating..."
     }
   }
 }

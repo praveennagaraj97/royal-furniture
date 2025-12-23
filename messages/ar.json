@@ -222,6 +222,16 @@
       "myProfile": "ملفي الشخصي",
       "wishlist": "قائمة الأمنيات",
       "savedAddresses": "العناوين المحفوظة"
+    },
+    "profile": {
+      "title": "ملفي الشخصي",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+      "change": "تغيير",
+      "update": "تحديث",
+      "updating": "جاري التحديث..."
     }
   }
 }
