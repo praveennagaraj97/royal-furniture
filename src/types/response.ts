@@ -14,3 +14,10 @@ export interface RegisterResponseData {
 }
 
 export type RegisterResponse = BaseAPIResponse<RegisterResponseData>;
+
+export interface VerifyOTPResponseData {
+  phone_number: string;
+  verified: boolean;
+}
+
+export type VerifyOTPResponse = BaseAPIResponse<VerifyOTPResponseData>;

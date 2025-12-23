@@ -40,15 +40,16 @@ export const validatePhoneNumber = (
   }
 
   // Combine country code with phone number
-  const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+  const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
 
   try {
-    // Validate the phone number using libphonenumber-js
-    if (!isValidPhoneNumber(fullPhoneNumber)) {
-      return `Please enter a valid ${fieldName.toLowerCase()}`;
+    // Use isValidPhoneNumber which is the recommended approach
+    // It handles international numbers correctly when provided with country code
+    if (isValidPhoneNumber(fullPhoneNumber)) {
+      return undefined;
     }
 
-    return undefined;
+    return `Please enter a valid ${fieldName.toLowerCase()}`;
   } catch {
     return `Please enter a valid ${fieldName.toLowerCase()}`;
   }

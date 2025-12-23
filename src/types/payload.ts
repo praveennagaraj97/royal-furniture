@@ -11,3 +11,8 @@ export interface RegisterPayload {
   longitude: string;
   onboard_complete: boolean;
 }
+
+export interface VerifyOTPPayload {
+  phone_number: string;
+  code: string;
+}

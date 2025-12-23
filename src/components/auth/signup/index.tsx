@@ -1,5 +1,6 @@
 'use client';
 
+import { VerifyPhone } from '@/components/auth/verify-phone';
 import { CountryPicker } from '@/components/shared/inputs/country-picker';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
@@ -11,6 +12,7 @@ import { Loader2 } from 'lucide-react';
 import {
   useEffect,
   useReducer,
+  useState,
   type ChangeEvent,
   type FC,
   type FormEvent,
@@ -52,6 +54,7 @@ interface SignupFormProps {
 const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
   const [state, dispatch] = useReducer(signupReducer, initialState);
   const { showError } = useToast();
+  const [showVerifyPhone, setShowVerifyPhone] = useState(false);
 
   // Notify parent when form state changes
   useEffect(() => {
@@ -200,7 +203,9 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
 
       // Handle successful registration
       console.log('Registration successful:', response);
-      // TODO: Handle success (e.g., show success message, redirect to OTP verification)
+
+      // Show verify phone modal after successful registration
+      setShowVerifyPhone(true);
     } catch (error) {
       const parsedError = error as ParsedAPIError;
 
@@ -300,7 +305,9 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
                   value={state.formData.mobileNumber}
                   onChange={handleFieldChange('mobileNumber')}
                   onBlur={handleBlur('mobileNumber')}
-                  validator={signupFormValidators.mobileNumber}
+                  validator={(value) =>
+                    signupFormValidators.mobileNumber(value, state.countryCode)
+                  }
                   error={state.errors.mobileNumber}
                   showError={!!state.touched.mobileNumber || state.isSubmitted}
                   containerClassName="w-full"
@@ -359,6 +366,23 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange }) => {
           </button>
         </motion.div>
       </form>
+
+      <VerifyPhone
+        isOpen={showVerifyPhone}
+        phoneNumber={state.formData.mobileNumber}
+        countryCode={state.countryCode}
+        preventClose={state.isLoading}
+        onVerified={() => {
+          setShowVerifyPhone(false);
+          dispatch({ type: 'SET_IS_LOADING', value: false });
+          // TODO: Handle success (e.g., show success message, redirect to next step)
+        }}
+        onClose={() => {
+          if (!state.isLoading) {
+            setShowVerifyPhone(false);
+          }
+        }}
+      />
     </motion.div>
   );
 };
