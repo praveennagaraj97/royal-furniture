@@ -58,7 +58,7 @@ const QuickLinksGrid: FC = () => {
 
   return (
     <motion.div
-      className="grid grid-cols-2 gap-4"
+      className="grid sm:grid-cols-2 gap-4"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
