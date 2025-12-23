@@ -222,9 +222,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
         );
       }
 
-      showSuccess(
-        response.message || 'Login successful! You are now logged in.'
-      );
+      showSuccess('Login successful! You are now logged in.');
       onFormStateChange?.(false);
       onLoginSuccess?.();
     } catch (error) {

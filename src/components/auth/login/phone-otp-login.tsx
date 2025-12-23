@@ -150,9 +150,9 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
   };
 
   const formatPhoneNumber = (): string => {
-    // Remove any spaces and combine country code with phone number
+    // Remove any spaces from phone number and combine with country code (with space)
     const cleanPhone = phoneNumber.replace(/\s+/g, '');
-    return `${countryCode}${cleanPhone}`;
+    return `${countryCode} ${cleanPhone}`;
   };
 
   const validatePhone = (): boolean => {
@@ -238,9 +238,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
         );
       }
 
-      showSuccess(
-        response.message || 'Login successful! You are now logged in.'
-      );
+      showSuccess('Login successful! You are now logged in.');
       onFormStateChange?.(false);
       onLoginSuccess?.();
     } catch (error) {
