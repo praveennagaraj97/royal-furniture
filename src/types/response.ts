@@ -50,3 +50,16 @@ export interface RefreshTokenResponse {
   access: string;
   refresh: string;
 }
+
+export interface User {
+  id: number;
+  uid: string;
+  email: string;
+  phone_number: string;
+  display_name: string;
+  allow_notification: boolean;
+  status: string;
+  profile_image_url: string | null;
+}
+
+export type UserProfileResponse = BaseAPIResponse<User>;

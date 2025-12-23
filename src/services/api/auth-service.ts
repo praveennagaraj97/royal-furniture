@@ -19,6 +19,8 @@ import type {
   LoginWithPasswordResponse,
   RefreshTokenResponse,
   RegisterResponse,
+  User,
+  UserProfileResponse,
   VerifyOTPResponse,
 } from '@/types/response';
 import { BaseAPIService } from './api-base-service';
@@ -212,6 +214,17 @@ export class AuthService extends BaseAPIService {
         { refresh: refreshToken }
       );
       return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async getProfile(): Promise<User> {
+    try {
+      const response = await this.http.get<UserProfileResponse>(
+        API_ROUTES.AUTH.USER_VIEW
+      );
+      return response.data.data;
     } catch (error) {
       throw this.parseError(error);
     }

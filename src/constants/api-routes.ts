@@ -15,5 +15,6 @@ export const API_ROUTES = {
     FORGOT_PASSWORD_RESET_PASSWORD_SMS:
       '/users/forgot-password/reset-password-sms/',
     REFRESH_TOKEN: '/users/token/refresh/',
+    USER_VIEW: '/users/user-view/',
   },
 } as const;
