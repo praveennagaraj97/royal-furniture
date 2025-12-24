@@ -53,7 +53,7 @@ export interface ForgotPasswordEmailPayload {
 }
 
 export interface ForgotPasswordSendOTPPayload {
-  phone: string;
+  phone_number: string;
 }
 
 export interface ForgotPasswordVerifyOTPPayload {

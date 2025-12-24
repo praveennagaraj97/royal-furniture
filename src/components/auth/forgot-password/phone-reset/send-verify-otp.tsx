@@ -91,7 +91,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
   const prevCountryCodeRef = useRef<string>('+971');
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
-  
+
   const signupFormValidators = useMemo(
     () => createSignupFormValidators(tValidation),
     [tValidation]
@@ -189,7 +189,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
 
     try {
       const formattedPhone = formatPhoneNumber();
-      await authService.forgotPasswordSendOTP({ phone: formattedPhone });
+      await authService.forgotPasswordSendOTP({ phone_number: formattedPhone });
 
       setIsOtpSent(true);
       resetCountdown();

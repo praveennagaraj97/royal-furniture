@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/auth-context';
 import { useUser } from '@/contexts/user-context';
 import { useUserInitials } from '@/hooks/use-user-initials';
+import { useRouter } from '@/i18n/routing';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, LogIn, MapPin, ShoppingCart, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -29,6 +30,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
   const { isAuthenticated } = useAuth();
   const { user, isLoading } = useUser();
   const userInitials = useUserInitials(user);
+  const router = useRouter();
 
   const getDisplayName = (name: string): string => {
     const maxLength = 20;
@@ -68,7 +70,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
       ),
       label: getDisplayName(user.display_name),
       onClick: () => {
-        onSignIn();
+        router.push('/user');
         onClose();
       },
       highlight: true,
