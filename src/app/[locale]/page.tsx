@@ -1,4 +1,5 @@
 import FurnitureCategories from '@/components/home/furniture-categories';
+import FurnitureShowcase from '@/components/home/furniture-showcase';
 import Hero from '@/components/home/hero';
 import MegaPriceDropBanner from '@/components/home/mega-price-drop-banner';
 import PromotionalBanner from '@/components/home/promotional-banner';
@@ -19,6 +20,7 @@ export default function Home() {
       />
       <MegaPriceDropBanner />
       <SofaAndSeating />
+      <FurnitureShowcase />
       <PromotionalBanner />
       <FurnitureCategories />
       <PromotionalBanner />
