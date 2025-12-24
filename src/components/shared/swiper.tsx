@@ -113,7 +113,7 @@ const Swiper: FC<SwiperProps> = ({
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className={`flex overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-2 pb-6 touch-pan-x overscroll-x-contain `}
+        className={`flex overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x overscroll-x-contain `}
         style={{
           gap: `${gap * 0.25}rem`,
           WebkitOverflowScrolling: 'touch',

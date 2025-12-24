@@ -34,7 +34,7 @@ const OfferCard: FC<OfferCardProps> = ({
   return (
     <motion.div
       variants={cardVariants}
-      className="relative w-full aspect-video rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer transition-shadow duration-300 min-w-72"
+      className="relative w-full aspect-video rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer transition-shadow duration-300 min-w-80"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
