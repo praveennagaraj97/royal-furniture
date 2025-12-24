@@ -67,7 +67,16 @@ export const FormInput: FC<FormInputProps> = ({
     borderClasses = 'form-input-border-valid';
   }
 
-  const paddingClasses = rightElement || isPasswordType ? 'pe-12' : '';
+  const isNumericType =
+    type === 'number' ||
+    type === 'tel' ||
+    inputProps.inputMode === 'numeric';
+  const paddingClasses =
+    rightElement || isPasswordType
+      ? isNumericType && rightElement
+        ? 'pr-12'
+        : 'pe-12'
+      : '';
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Handle numeric-only input
@@ -125,7 +134,11 @@ export const FormInput: FC<FormInputProps> = ({
           </button>
         )}
         {rightElement && !isPasswordType && (
-          <div className="absolute end-3 top-1/2 -translate-y-1/2">
+          <div
+            className={`absolute top-1/2 -translate-y-1/2 ${
+              isNumericType ? 'right-3' : 'end-3'
+            }`}
+          >
             {rightElement}
           </div>
         )}
