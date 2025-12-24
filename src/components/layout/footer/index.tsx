@@ -78,7 +78,7 @@ const Footer: FC = () => {
       >
         {/* Top Section */}
         <motion.div
-          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-gray-300"
+          className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-gray-300"
           variants={sectionVariants}
         >
           <CompanyInfo />
