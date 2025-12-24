@@ -77,9 +77,8 @@ const ProfilePage: FC = () => {
       };
     }
 
-    const nameParts = user.display_name?.split(' ') || [];
-    const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
+    const firstName = user.first_name || '';
+    const lastName = user.last_name || '';
     const { countryCode, number } = parsePhoneNumber(user.phone_number || '');
 
     return {
@@ -176,7 +175,7 @@ const ProfilePage: FC = () => {
 
     try {
       const fullPhoneNumber = `${formData.countryCode} ${formData.phoneNumber}`;
-      
+
       await authService.updateProfile({
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -191,7 +190,8 @@ const ProfilePage: FC = () => {
     } catch (error) {
       const parsedError = error as ParsedAPIError;
       const errorMessage =
-        parsedError.generalError || 'Failed to update profile. Please try again.';
+        parsedError.generalError ||
+        'Failed to update profile. Please try again.';
       showError(errorMessage);
     } finally {
       setIsLoading(false);

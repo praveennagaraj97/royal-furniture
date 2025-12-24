@@ -5,13 +5,22 @@ import { Link } from '@/i18n/routing';
 import { motion } from 'framer-motion';
 import { SquarePen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 const UserProfileHeader: FC = () => {
   const { user } = useUser();
   const t = useTranslations('user');
 
-  const displayName = user?.display_name || 'User';
+  const displayName = useMemo(() => {
+    if (!user) return 'User';
+    const firstName = user.first_name?.trim() || '';
+    const lastName = user.last_name?.trim() || '';
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (firstName) return firstName;
+    if (lastName) return lastName;
+    return user.email || 'User';
+  }, [user]);
+
   const email = user?.email || '';
 
   return (

@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, LogIn, MapPin, ShoppingCart, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 import logo from '@/assets/logo.png';
 
@@ -32,7 +32,17 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
   const userInitials = useUserInitials(user);
   const router = useRouter();
 
-  const getDisplayName = (name: string): string => {
+  const displayName = useMemo(() => {
+    if (!user) return 'User';
+    const firstName = user.first_name?.trim() || '';
+    const lastName = user.last_name?.trim() || '';
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (firstName) return firstName;
+    if (lastName) return lastName;
+    return user.email || 'User';
+  }, [user]);
+
+  const getTruncatedDisplayName = (name: string): string => {
     const maxLength = 20;
     return name.length > maxLength
       ? `${name.substring(0, maxLength)}...`
@@ -61,14 +71,14 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
       label: '',
       highlight: true,
     });
-  } else if (isAuthenticated && user && userInitials) {
+  } else if (isAuthenticated && user) {
     menuItems.push({
       icon: (
         <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[#7F1D1D] font-semibold text-xs">
-          {userInitials}
+          {userInitials || 'U'}
         </span>
       ),
-      label: getDisplayName(user.display_name),
+      label: getTruncatedDisplayName(displayName),
       onClick: () => {
         router.push('/user');
         onClose();

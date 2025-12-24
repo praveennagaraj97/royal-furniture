@@ -8,7 +8,7 @@ import { Link } from '@/i18n/routing';
 import { motion } from 'framer-motion';
 import { LogIn } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { type FC } from 'react';
+import { useMemo, type FC } from 'react';
 
 interface AuthActionButtonProps {
   onClick: () => void;
@@ -20,11 +20,21 @@ export const AuthActionButton: FC<AuthActionButtonProps> = ({ onClick }) => {
   const t = useTranslations('common');
   const userInitials = useUserInitials(user);
 
+  const displayName = useMemo(() => {
+    if (!user) return 'User';
+    const firstName = user.first_name?.trim() || '';
+    const lastName = user.last_name?.trim() || '';
+    if (firstName && lastName) return `${firstName} ${lastName}`;
+    if (firstName) return firstName;
+    if (lastName) return lastName;
+    return user.email || 'User';
+  }, [user]);
+
   if (isLoading) {
     return <HeaderAuthSkeleton />;
   }
 
-  if (isAuthenticated && user && userInitials) {
+  if (isAuthenticated && user) {
     return (
       <Link href="/user">
         <motion.button
@@ -36,9 +46,9 @@ export const AuthActionButton: FC<AuthActionButtonProps> = ({ onClick }) => {
           type="button"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7F1D1D] text-white font-semibold text-xs">
-            {userInitials}
+            {userInitials || 'U'}
           </span>
-          <span className="truncate max-w-[120px]">{user.display_name}</span>
+          <span className="truncate max-w-[120px]">{displayName}</span>
         </motion.button>
       </Link>
     );

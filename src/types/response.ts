@@ -58,7 +58,8 @@ export interface User {
   uid: string;
   email: string;
   phone_number: string;
-  display_name: string;
+  first_name: string;
+  last_name: string;
   allow_notification: boolean;
   status: string;
   profile_image_url: string | null;
