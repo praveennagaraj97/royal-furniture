@@ -41,13 +41,21 @@ const ProductListing: FC<ProductListingProps> = ({
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <div className="text-2xl text-indigo-slate">{title}</div>
+        <div className="flex items-end gap-3 flex-wrap">
+          {typeof title === 'string' ? (
+            <span className="lg:text-2xl md:text-xl text-lg text-indigo-slate">
+              {title}
+            </span>
+          ) : (
+            title
+          )}
+        </div>
         <Link
           href={seeAllHref}
-          className="text-indigo-slate text-sm font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
+          className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
         >
           <span>See All</span>
-          <ChevronRight size={16} />
+          <ChevronRight className="sm:w-4 sm:h-4 w-2 h-2" />
         </Link>
       </div>
 
