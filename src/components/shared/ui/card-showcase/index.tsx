@@ -3,7 +3,7 @@
 import Swiper from '@/components/shared/swiper';
 import { motion, type Variants } from 'framer-motion';
 import { FC } from 'react';
-import CardShowcaseCard from './card-showcase-card';
+import CardShowcaseCard from './card';
 
 export interface CardItem {
   id: string;
@@ -61,4 +61,3 @@ const CardShowcase: FC<CardShowcaseProps> = ({
 };
 
 export default CardShowcase;
-
