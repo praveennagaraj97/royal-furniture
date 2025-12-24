@@ -1,22 +1,10 @@
 'use client';
 
-import Swiper from '@/components/shared/swiper';
-import { motion, type Variants } from 'framer-motion';
+import CardShowcase from '@/components/shared/ui/card-showcase';
+import type { CardItem } from '@/components/shared/ui/card-showcase';
 import { FC } from 'react';
-import FurnitureCard from './furniture-card';
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const furnitureItems = [
+const furnitureItems: CardItem[] = [
   {
     id: 'kids-bed',
     image:
@@ -40,27 +28,8 @@ const furnitureItems = [
   },
 ];
 
-const FurnitureShowcase: FC = () => {
-  return (
-    <motion.section
-      className="container mx-auto px-3 overflow-hidden md:overflow-visible pb-4"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
-    >
-      <Swiper gap={4} showNavigation hideArrowOnMobile>
-        {furnitureItems.map((item) => (
-          <FurnitureCard
-            key={item.id}
-            image={item.image}
-            imageAlt={item.imageAlt}
-            label={item.label}
-          />
-        ))}
-      </Swiper>
-    </motion.section>
-  );
+const HomeFurnitureShowcase: FC = () => {
+  return <CardShowcase items={furnitureItems} />;
 };
 
-export default FurnitureShowcase;
+export default HomeFurnitureShowcase;

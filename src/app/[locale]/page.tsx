@@ -1,4 +1,3 @@
-import FurnitureCategories from '@/components/home/furniture-categories';
 import FurnitureShowcase from '@/components/home/furniture-showcase';
 import Hero from '@/components/home/hero';
 import HouseHolds from '@/components/home/households';
@@ -42,8 +41,9 @@ export default function Home() {
       <FurnitureShowcase />
 
       <HouseHolds />
+      <PromotionalBanner />
+      <FurnitureShowcase />
 
-      <FurnitureCategories />
       <PromotionalBanner />
     </div>
   );
