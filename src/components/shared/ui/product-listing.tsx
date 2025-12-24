@@ -33,7 +33,7 @@ const ProductListing: FC<ProductListingProps> = ({
 }) => {
   return (
     <motion.section
-      className="container mx-auto px-3 overflow-hidden md:overflow-visible pb-4"
+      className="container mx-auto px-3 overflow-hidden md:overflow-visible py-4"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
