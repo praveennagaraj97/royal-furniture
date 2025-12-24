@@ -42,7 +42,7 @@ const cardVariants: Variants = {
 const HouseholdShowcase: FC<HouseholdShowcaseProps> = ({ items }) => {
   return (
     <motion.div
-      className={`container mx-auto px-3 overflow-hidden md:overflow-visible pb-4`}
+      className={`container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible pb-4`}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

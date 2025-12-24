@@ -44,6 +44,11 @@ export default function Home() {
       <HouseHolds />
       <PromotionalBanner />
       <FurnitureShowcase />
+      <ProductListing
+        title="New Arrivals"
+        seeAllHref="/products"
+        products={productsData}
+      />
 
       <PromotionalBanner />
       <LatestBlogs />

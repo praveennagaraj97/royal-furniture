@@ -39,7 +39,7 @@ const householdItems: HouseholdItem[] = [
 const HouseHolds: FC = () => {
   return (
     <>
-      <div className="container mx-auto px-3 flex flex-col gap-3 pb-4">
+      <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 flex flex-col gap-3 pb-4">
         <SectionTitleTag title="Households" className="text-xl font-semibold" />
       </div>
       <HouseholdShowcase items={householdItems} />

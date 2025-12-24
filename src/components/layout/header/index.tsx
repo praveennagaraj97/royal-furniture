@@ -33,7 +33,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
             : 'relative'
         } transition-shadow duration-300 ease-out`}
       >
-        <div className="container mx-auto px-3 py-2.5 md:py-3">
+        <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2.5 md:py-3">
           {/* Mobile/Tablet: Two-row layout */}
           <div className="flex flex-col gap-2 lg:hidden">
             {/* Top row: logo + hamburger */}

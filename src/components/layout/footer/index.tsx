@@ -70,7 +70,7 @@ const Footer: FC = () => {
   return (
     <footer className="bg-soft-pink w-full mt-6">
       <motion.div
-        className="container mx-auto px-3 py-6 md:py-8"
+        className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6 md:py-8"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"

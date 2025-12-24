@@ -8,7 +8,7 @@ import megaPriceDropBanner from '@/assets/banner-2.png';
 
 const MegaPriceDropBanner: FC = () => {
   return (
-    <div className="container mx-auto px-3">
+    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
       <motion.div
         className="relative w-full rounded-lg overflow-hidden"
         initial={{ opacity: 0, scale: 1.05, y: 30 }}

@@ -27,7 +27,7 @@ export const BackLink: FC<BackLinkProps> = ({ onClick, href }) => {
 
   return (
     <motion.div
-      className="container mx-auto px-3 py-2"
+      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2"
       initial={{ opacity: 0, y: -10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
