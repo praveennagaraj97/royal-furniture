@@ -1,5 +1,6 @@
 'use client';
 
+import { Link } from '@/i18n/routing';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
@@ -12,13 +13,11 @@ export interface Category {
 interface CategoryNavProps {
   categories: Category[];
   selectedCategory: string;
-  onCategorySelect: (categoryId: string) => void;
 }
 
 const CategoryNav: FC<CategoryNavProps> = ({
   categories,
   selectedCategory,
-  onCategorySelect,
 }) => {
   const t = useTranslations('categories');
 
@@ -29,15 +28,11 @@ const CategoryNav: FC<CategoryNavProps> = ({
         <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar sm:justify-center sm:flex-wrap py-3">
           {categories.map((category, index) => {
             const isSelected = selectedCategory === category.id;
+            const href = category.id === 'all' ? '/' : `/${category.id}`;
+
             return (
-              <motion.button
+              <motion.div
                 key={category.id}
-                onClick={() => onCategorySelect(category.id)}
-                className={`shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
-                  isSelected
-                    ? 'bg-deep-maroon text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -48,8 +43,17 @@ const CategoryNav: FC<CategoryNavProps> = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {t(category.key)}
-              </motion.button>
+                <Link
+                  href={href}
+                  className={`shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors block ${
+                    isSelected
+                      ? 'bg-deep-maroon text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {t(category.key)}
+                </Link>
+              </motion.div>
             );
           })}
         </div>
