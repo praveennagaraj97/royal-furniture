@@ -108,12 +108,12 @@ const Swiper: FC<SwiperProps> = ({
   }, [checkScrollPosition]);
 
   return (
-    <div className={`relative group w-full overflow-visible ${className}`}>
+    <div className={`relative group w-full overflow-visible ${className} `}>
       {/* Scrollable Container */}
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className={`flex overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x overscroll-x-contain `}
+        className={`flex overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x overscroll-x-contain `}
         style={{
           gap: `${gap * 0.25}rem`,
           WebkitOverflowScrolling: 'touch',

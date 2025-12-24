@@ -54,7 +54,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
 
         {/* Discount Badge */}
         {product.discount > 0 && (
-          <div className="absolute top-3 left-3 bg-[#800020] text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
+          <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
             {product.discount}% OFF
           </div>
         )}
