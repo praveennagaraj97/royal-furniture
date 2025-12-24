@@ -236,7 +236,8 @@
       "phoneNumber": "Phone number",
       "change": "Change",
       "update": "Update",
-      "updating": "Updating..."
+      "updating": "Updating...",
+      "updateSuccess": "Profile updated successfully"
     }
   }
 }

@@ -17,6 +17,13 @@ export interface LoginWithPasswordPayload {
   password: string;
 }
 
+export interface UpdateProfilePayload {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+}
+
 export interface VerifyOTPPayload {
   phone_number: string;
   code: string;

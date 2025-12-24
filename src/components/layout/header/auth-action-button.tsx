@@ -3,11 +3,12 @@
 import { HeaderAuthSkeleton } from '@/components/skeletons/header-auth-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useUser } from '@/contexts/user-context';
+import { useUserInitials } from '@/hooks/use-user-initials';
 import { Link } from '@/i18n/routing';
 import { motion } from 'framer-motion';
 import { LogIn } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { type FC, useMemo } from 'react';
+import { type FC } from 'react';
 
 interface AuthActionButtonProps {
   onClick: () => void;
@@ -17,23 +18,7 @@ export const AuthActionButton: FC<AuthActionButtonProps> = ({ onClick }) => {
   const { isAuthenticated } = useAuth();
   const { user, isLoading } = useUser();
   const t = useTranslations('common');
-
-  const userInitials = useMemo(() => {
-    if (!user?.display_name) return null;
-
-    const nameParts = user.display_name.trim().split(/\s+/);
-    if (nameParts.length === 0) return null;
-
-    if (nameParts.length === 1) {
-      // Single name - take first 2 characters
-      return nameParts[0].substring(0, 2).toUpperCase();
-    }
-
-    // Multiple names - take first character of first and last name
-    const firstInitial = nameParts[0][0]?.toUpperCase() || '';
-    const lastInitial = nameParts[nameParts.length - 1][0]?.toUpperCase() || '';
-    return `${firstInitial}${lastInitial}`;
-  }, [user]);
+  const userInitials = useUserInitials(user);
 
   if (isLoading) {
     return <HeaderAuthSkeleton />;

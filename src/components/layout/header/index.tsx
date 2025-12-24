@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Menu } from 'lucide-react';
+import { PanelTopOpen } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 import AuthModal from '@/components/auth/auth-modal';
@@ -63,7 +63,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 type="button"
                 onClick={() => setIsMobileMenuOpen(true)}
               >
-                <Menu className="h-6 w-6 text-gray-600" />
+                <PanelTopOpen className="h-6 w-6 text-gray-600" />
               </motion.button>
             </div>
 

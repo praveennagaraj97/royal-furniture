@@ -10,6 +10,7 @@ import type {
   PhoneLoginPayload,
   RegisterPayload,
   ResendOTPPayload,
+  UpdateProfilePayload,
   VerifyOTPLoginPayload,
   VerifyOTPPayload,
 } from '@/types/payload';
@@ -224,6 +225,18 @@ export class AuthService extends BaseAPIService {
         API_ROUTES.AUTH.USER_VIEW
       );
       return response.data.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async updateProfile(payload: UpdateProfilePayload): Promise<UserProfileResponse> {
+    try {
+      const response = await this.http.patch<UserProfileResponse>(
+        API_ROUTES.AUTH.USER_UPDATE,
+        payload
+      );
+      return response.data;
     } catch (error) {
       throw this.parseError(error);
     }

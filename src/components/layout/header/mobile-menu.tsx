@@ -1,13 +1,13 @@
 'use client';
 
-import { HeaderAuthSkeleton } from '@/components/skeletons/header-auth-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useUser } from '@/contexts/user-context';
+import { useUserInitials } from '@/hooks/use-user-initials';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, LogIn, MapPin, ShoppingCart, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode } from 'react';
 
 import logo from '@/assets/logo.png';
 
@@ -28,27 +28,13 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
   const t = useTranslations('common');
   const { isAuthenticated } = useAuth();
   const { user, isLoading } = useUser();
-
-  const userInitials = useMemo(() => {
-    if (!user?.display_name) return null;
-
-    const nameParts = user.display_name.trim().split(/\s+/);
-    if (nameParts.length === 0) return null;
-
-    if (nameParts.length === 1) {
-      // Single name - take first 2 characters
-      return nameParts[0].substring(0, 2).toUpperCase();
-    }
-
-    // Multiple names - take first character of first and last name
-    const firstInitial = nameParts[0][0]?.toUpperCase() || '';
-    const lastInitial = nameParts[nameParts.length - 1][0]?.toUpperCase() || '';
-    return `${firstInitial}${lastInitial}`;
-  }, [user]);
+  const userInitials = useUserInitials(user);
 
   const getDisplayName = (name: string): string => {
     const maxLength = 20;
-    return name.length > maxLength ? `${name.substring(0, maxLength)}...` : name;
+    return name.length > maxLength
+      ? `${name.substring(0, maxLength)}...`
+      : name;
   };
 
   const menuItems: MenuItem[] = [
@@ -142,7 +128,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
             initial={{ y: '-100%' }}
             animate={{ y: 0 }}
             exit={{ y: '-100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           >
             <div className="container mx-auto px-4 py-4">
               {/* Header: Logo + Close button */}

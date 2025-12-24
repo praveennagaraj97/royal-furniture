@@ -2,7 +2,10 @@
 
 import { CountryPicker } from '@/components/shared/inputs/country-picker';
 import { FormInput } from '@/components/shared/inputs/form-input';
+import { useToast } from '@/contexts/toast-context';
 import { useUser } from '@/contexts/user-context';
+import { authService } from '@/services/api/auth-service';
+import type { ParsedAPIError } from '@/types/error';
 import { createSignupFormValidators } from '@/validators';
 import { motion, type Variants } from 'framer-motion';
 import { Loader2, Pencil } from 'lucide-react';
@@ -56,7 +59,8 @@ const parsePhoneNumber = (phoneNumber: string) => {
 };
 
 const ProfilePage: FC = () => {
-  const { user } = useUser();
+  const { user, refreshUser } = useUser();
+  const { showSuccess, showError } = useToast();
   const t = useTranslations('user.profile');
   const tValidation = useTranslations('auth.validation');
   const [isLoading, setIsLoading] = useState(false);
@@ -169,12 +173,29 @@ const ProfilePage: FC = () => {
     }
 
     setIsLoading(true);
-    // TODO: Implement API call to update profile
-    // await authService.updateProfile({ ... });
-    setTimeout(() => {
+
+    try {
+      const fullPhoneNumber = `${formData.countryCode} ${formData.phoneNumber}`;
+      
+      await authService.updateProfile({
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone_number: fullPhoneNumber,
+      });
+
+      // Refresh user data to get updated profile
+      await refreshUser();
+
+      showSuccess(t('updateSuccess'));
+    } catch (error) {
+      const parsedError = error as ParsedAPIError;
+      const errorMessage =
+        parsedError.generalError || 'Failed to update profile. Please try again.';
+      showError(errorMessage);
+    } finally {
       setIsLoading(false);
-      // Show success message
-    }, 1000);
+    }
   };
 
   return (
