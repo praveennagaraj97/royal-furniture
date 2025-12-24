@@ -3,6 +3,7 @@
 import SectionTitleTag from '@/components/shared/ui/section-title-tag';
 import { FC } from 'react';
 import type { HouseholdItem } from './household-showcase';
+import HouseholdShowcase from './household-showcase';
 
 const householdItems: HouseholdItem[] = [
   {
@@ -37,10 +38,12 @@ const householdItems: HouseholdItem[] = [
 
 const HouseHolds: FC = () => {
   return (
-    <div className="container mx-auto px-3 flex flex-col gap-3 pb-4">
-      <SectionTitleTag title="Households" className="text-xl font-semibold" />
-      {/* <HouseholdShowcase items={householdItems} /> */}
-    </div>
+    <>
+      <div className="container mx-auto px-3 flex flex-col gap-3 pb-4">
+        <SectionTitleTag title="Households" className="text-xl font-semibold" />
+      </div>
+      <HouseholdShowcase items={householdItems} />
+    </>
   );
 };
 

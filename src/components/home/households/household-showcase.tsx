@@ -42,7 +42,7 @@ const cardVariants: Variants = {
 const HouseholdShowcase: FC<HouseholdShowcaseProps> = ({ items }) => {
   return (
     <motion.div
-      className="overflow-hidden"
+      className={`container mx-auto px-3 overflow-hidden md:overflow-visible pb-4`}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -68,9 +68,7 @@ const HouseholdCard: FC<{ item: HouseholdItem }> = ({ item }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Card Image Container */}
-      <div
-        className="relative w-full aspect-3/4 rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300"
-      >
+      <div className="relative w-full aspect-3/4 rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300">
         <Image
           src={item.image}
           alt={item.imageAlt}
@@ -94,4 +92,3 @@ const HouseholdCard: FC<{ item: HouseholdItem }> = ({ item }) => {
 };
 
 export default HouseholdShowcase;
-

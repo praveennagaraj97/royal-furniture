@@ -9,7 +9,7 @@ import image from '@/assets/exclusive-offer.png';
 
 const SofaAndSeating: FC = () => {
   return (
-    <div>
+    <div className="max-w-dvw overflow-x-hidden">
       <div className="container mx-auto px-3 mb-4">
         <SectionTitleTag
           title="Sofas & seating"
