@@ -2,13 +2,13 @@
 
 import { motion, type Variants } from 'framer-motion';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 export interface OfferCardProps {
   image: string;
   imageAlt: string;
-  discount: string;
-  category: string;
+  title: string;
+  description: string;
 }
 
 const cardVariants: Variants = {
@@ -26,27 +26,39 @@ const cardVariants: Variants = {
 const OfferCard: FC<OfferCardProps> = ({
   image,
   imageAlt,
-  discount,
-  category,
+  title,
+  description,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <motion.div
       variants={cardVariants}
-      className="relative w-full aspect-4/5 rounded-xl overflow-hidden bg-white shadow-sm cursor-pointer group"
+      className="relative w-full aspect-video rounded-xl overflow-hidden 
+      shadow-md hover:shadow-lg cursor-pointer transition-shadow duration-300 min-w-72"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <Image
-        src={image}
-        alt={imageAlt}
-        fill
-        className="object-cover group-hover:scale-105 transition-transform duration-300"
-        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-      />
-      {/* Dark overlay at bottom */}
-      <div className="absolute inset-x-0 bottom-0 h-[40%] bg-linear-to-t from-black/70 via-black/60 to-transparent" />
-      {/* Text content */}
-      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-center pb-6 px-4 text-white">
-        <p className="text-lg font-medium mb-1">{discount}</p>
-        <p className="text-lg font-medium">{category}</p>
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <Image
+          src={image}
+          alt={imageAlt}
+          fill
+          className="object-cover transition-transform duration-300"
+          sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, 380px"
+          style={{
+            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+          }}
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-linear-to-r from-white/50 via-white/30 to-transparent" />
+      </div>
+
+      {/* Text content overlaid on image */}
+      <div className="relative h-full flex flex-col justify-center px-3 sm:px-4 md:px-6 py-4 z-10">
+        <h3 className="text-xl sm:text-2xl font-medium  mb-2">{title}</h3>
+        <p className="text-base leading-relaxed">{description}</p>
       </div>
     </motion.div>
   );

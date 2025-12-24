@@ -1,8 +1,8 @@
-import CategoryDetail from '@/components/layout/categories/category-detail';
 import FurnitureCategories from '@/components/category/furniture-categories';
 import Hero from '@/components/category/hero';
 import PromotionalBanner from '@/components/category/promotional-banner';
 import PromotionalOffers from '@/components/category/promotional-offers';
+import SubCategories from '@/components/category/subcategories';
 import { categories } from '@/temp/data/categories';
 import { categoriesData } from '@/temp/data/categories-data';
 import { notFound } from 'next/navigation';
@@ -27,7 +27,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <div className="grid gap-4">
-      <CategoryDetail
+      <SubCategories
         selectedCategoryId={category}
         selectedCategoryKey={categoryObj.key}
         subcategories={subcategories}
@@ -40,4 +40,3 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     </div>
   );
 }
-

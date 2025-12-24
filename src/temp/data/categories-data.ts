@@ -1,4 +1,4 @@
-import { Subcategory } from '@/components/layout/categories/category-card';
+import { Subcategory } from '@/components/category/subcategories/card';
 
 export interface CategoriesData {
   [key: string]: Subcategory[];

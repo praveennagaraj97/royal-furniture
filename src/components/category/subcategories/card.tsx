@@ -10,12 +10,12 @@ export interface Subcategory {
   imageAlt?: string;
 }
 
-interface CategoryCardProps {
+interface SubCategoryCardProps {
   subcategory: Subcategory;
   index: number;
 }
 
-const CategoryCard: FC<CategoryCardProps> = ({ subcategory }) => {
+const SubCategoryCard: FC<SubCategoryCardProps> = ({ subcategory }) => {
   return (
     <div className="flex flex-col items-center gap-3 cursor-pointer group/card bg-white pb-2 rounded-lg">
       <div className="relative w-full aspect-square rounded-lg overflow-hidden ">
@@ -34,4 +34,4 @@ const CategoryCard: FC<CategoryCardProps> = ({ subcategory }) => {
   );
 };
 
-export default CategoryCard;
+export default SubCategoryCard;

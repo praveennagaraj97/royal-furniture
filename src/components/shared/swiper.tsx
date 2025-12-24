@@ -108,10 +108,23 @@ const Swiper: FC<SwiperProps> = ({
   }, [checkScrollPosition]);
 
   return (
-    <div className={`relative group ${className}`}>
-      {/* Navigation Buttons */}
+    <div className={`relative group w-full overflow-visible ${className}`}>
+      {/* Scrollable Container */}
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className={`flex overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-2 pb-6 touch-pan-x overscroll-x-contain `}
+        style={{
+          gap: `${gap * 0.25}rem`,
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
+        {children}
+      </div>
+
+      {/* Navigation Buttons Wrapper */}
       {showNavigation && (
-        <>
+        <div className="absolute inset-0 pointer-events-none overflow-visible">
           {/* Previous Button */}
           {canScrollLeft && (
             <motion.button
@@ -119,7 +132,7 @@ const Swiper: FC<SwiperProps> = ({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               onClick={() => scrollTo('left')}
-              className={`absolute -left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-105 opacity-0 group-hover:opacity-100 cursor-pointer ${
+              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-30 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-105 opacity-0 group-hover:opacity-100 cursor-pointer pointer-events-auto ${
                 hideArrowOnMobile ? 'hidden md:block' : ''
               }`}
               disabled={isScrolling}
@@ -136,7 +149,7 @@ const Swiper: FC<SwiperProps> = ({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 10 }}
               onClick={() => scrollTo('right')}
-              className={`absolute -right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-105 opacity-0 group-hover:opacity-100 cursor-pointer ${
+              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-30 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-105 opacity-0 group-hover:opacity-100 cursor-pointer pointer-events-auto ${
                 hideArrowOnMobile ? 'hidden md:block' : ''
               }`}
               disabled={isScrolling}
@@ -145,20 +158,8 @@ const Swiper: FC<SwiperProps> = ({
               <ChevronRight className="w-5 h-5 text-gray-700" />
             </motion.button>
           )}
-        </>
+        </div>
       )}
-
-      {/* Scrollable Container */}
-      <div
-        ref={containerRef}
-        onScroll={handleScroll}
-        className="flex overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-2 pb-6 px-4"
-        style={{
-          gap: `${gap * 0.25}rem`,
-        }}
-      >
-        {children}
-      </div>
     </div>
   );
 };

@@ -45,7 +45,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
               >
                 <Link
                   href={href}
-                  className={`shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors block ${
+                  className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors block ${
                     isSelected
                       ? 'bg-deep-maroon text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'

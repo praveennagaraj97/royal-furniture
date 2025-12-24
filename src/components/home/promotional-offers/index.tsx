@@ -1,5 +1,6 @@
 'use client';
 
+import Swiper from '@/components/shared/swiper';
 import { motion, type Variants } from 'framer-motion';
 import { FC } from 'react';
 import OfferCard from './offer-card';
@@ -17,59 +18,51 @@ const containerVariants: Variants = {
 
 const offers = [
   {
-    id: 'corner-sofas',
+    id: 'discount-offer',
     image:
-      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=500&fit=crop',
-    imageAlt: 'Corner Sofas',
-    discount: 'Up to 40% Off',
-    category: 'Corner Sofas',
+      'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=400&fit=crop',
+    imageAlt: 'Bar stool with discounts',
+    title: 'Up to 50% Off',
+    description: 'Find products with discounts up to 50%',
   },
   {
-    id: 'dining-tables',
+    id: 'buy-one-get-one',
     image:
-      'https://images.unsplash.com/photo-1532372320572-cda25653a26d?w=400&h=500&fit=crop',
-    imageAlt: 'Dining Tables',
-    discount: 'Up to 40% Off',
-    category: 'Dining Tables',
+      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop',
+    imageAlt: 'Two-seater sofa',
+    title: 'Buy 1 Get 1',
+    description: 'Grab exclusive sensitive offers.',
   },
   {
-    id: 'bedroom-sets',
+    id: 'desk-offer',
     image:
-      'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=500&fit=crop',
-    imageAlt: 'Bedroom Sets',
-    discount: 'Up to 40% Off',
-    category: 'Bedroom Sets',
-  },
-  {
-    id: 'office-furniture',
-    image:
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=500&fit=crop',
-    imageAlt: 'Office Furniture',
-    discount: 'Up to 40% Off',
-    category: 'Office Furniture',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop',
+    imageAlt: 'Wooden desk',
+    title: 'Desk',
+    description: 'Grab exclusive sensitive offers.',
   },
 ];
 
 const PromotionalOffers: FC = () => {
   return (
     <motion.section
-      className="container mx-auto px-3"
+      className="container mx-auto px-3 overflow-hidden md:overflow-visible"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
     >
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <Swiper gap={4} showNavigation hideArrowOnMobile>
         {offers.map((offer) => (
           <OfferCard
             key={offer.id}
             image={offer.image}
             imageAlt={offer.imageAlt}
-            discount={offer.discount}
-            category={offer.category}
+            title={offer.title}
+            description={offer.description}
           />
         ))}
-      </div>
+      </Swiper>
     </motion.section>
   );
 };

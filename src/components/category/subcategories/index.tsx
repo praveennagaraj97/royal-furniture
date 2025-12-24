@@ -4,9 +4,9 @@ import { motion, type Variants } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import Swiper from '../../shared/swiper';
-import CategoryCard, { Subcategory } from './category-card';
+import SubCategoryCard, { Subcategory } from './card';
 
-interface CategoryDetailProps {
+interface SubCategoriesProps {
   selectedCategoryId: string;
   selectedCategoryKey: string;
   subcategories: Subcategory[];
@@ -50,7 +50,7 @@ const titleVariants = {
   },
 };
 
-const CategoryDetail: FC<CategoryDetailProps> = ({
+const SubCategories: FC<SubCategoriesProps> = ({
   selectedCategoryId,
   selectedCategoryKey,
   subcategories,
@@ -86,7 +86,7 @@ const CategoryDetail: FC<CategoryDetailProps> = ({
                   animate="visible"
                   className="min-w-[45%] sm:min-w-[35%] md:min-w-[25%] lg:min-w-[200px]"
                 >
-                  <CategoryCard subcategory={subcategory} index={index} />
+                  <SubCategoryCard subcategory={subcategory} index={index} />
                 </motion.div>
               ))}
             </Swiper>
@@ -97,4 +97,4 @@ const CategoryDetail: FC<CategoryDetailProps> = ({
   );
 };
 
-export default CategoryDetail;
+export default SubCategories;
