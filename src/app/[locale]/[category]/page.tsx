@@ -26,7 +26,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const subcategories = categoriesData[category] || [];
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-6">
       <SubCategories
         selectedCategoryId={category}
         selectedCategoryKey={categoryObj.key}
