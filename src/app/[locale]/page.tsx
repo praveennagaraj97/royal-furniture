@@ -1,8 +1,9 @@
 import FurnitureCategories from '@/components/home/furniture-categories';
 import Hero from '@/components/home/hero';
-import ProductListing from '@/components/home/product-listing';
+import MegaPriceDropBanner from '@/components/home/mega-price-drop-banner';
 import PromotionalBanner from '@/components/home/promotional-banner';
 import PromotionalOffers from '@/components/home/promotional-offers';
+import ProductListing from '@/components/shared/ui/product-listing';
 import { productsData } from '@/temp/data/products-data';
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
         seeAllHref="/products"
         products={productsData}
       />
+      <MegaPriceDropBanner />
       <PromotionalBanner />
       <FurnitureCategories />
       <PromotionalBanner />

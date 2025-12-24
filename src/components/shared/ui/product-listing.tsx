@@ -2,11 +2,11 @@
 
 import Swiper from '@/components/shared/swiper';
 import { motion, type Variants } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { FC, ReactNode } from 'react';
 
 import { Product } from '@/temp/data/products-data';
-import { ChevronRight } from 'lucide-react';
 import ProductCard from './product-card';
 
 export interface ProductListingProps {
