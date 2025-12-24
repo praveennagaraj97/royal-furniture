@@ -3,6 +3,7 @@ import Hero from '@/components/home/hero';
 import MegaPriceDropBanner from '@/components/home/mega-price-drop-banner';
 import PromotionalBanner from '@/components/home/promotional-banner';
 import PromotionalOffers from '@/components/home/promotional-offers';
+import SofaAndSeating from '@/components/home/sofa-and-seating';
 import ProductListing from '@/components/shared/ui/product-listing';
 import { productsData } from '@/temp/data/products-data';
 
@@ -17,6 +18,7 @@ export default function Home() {
         products={productsData}
       />
       <MegaPriceDropBanner />
+      <SofaAndSeating />
       <PromotionalBanner />
       <FurnitureCategories />
       <PromotionalBanner />
