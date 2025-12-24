@@ -3,6 +3,7 @@
 import { CountryPicker } from '@/components/shared/inputs/country-picker';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { VerifyCodeInput } from '@/components/shared/inputs/verify-code-input';
+import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
 import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
@@ -87,6 +88,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
   }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { showError, showSuccess } = useToast();
+  const { checkAuthStatus } = useAuth();
   const prevPhoneRef = useRef<string>('');
   const prevCountryCodeRef = useRef<string>('+971');
   const t = useTranslations('auth');
@@ -246,6 +248,9 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
           false
         );
       }
+
+      // Trigger auth status check to enable session
+      checkAuthStatus();
 
       showSuccess(t('toast.loginSuccessful'));
       onFormStateChange?.(false);

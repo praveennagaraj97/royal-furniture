@@ -31,6 +31,7 @@ interface AuthContextType {
   isLoading: boolean;
   refreshToken: () => Promise<void>;
   logout: () => void;
+  checkAuthStatus: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -95,11 +96,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
       const response = await authService.refreshToken(refreshTokenValue);
 
-      if (response.access && response.refresh) {
+      if (response.data.access && response.data.refresh) {
         // Derive refresh token expiry from JWT and set as persistent cookie
-        const refreshExpiry = getTokenExpiry(response.refresh);
+        const refreshExpiry = getTokenExpiry(response.data.refresh);
         setRefreshToken(
-          response.refresh,
+          response.data.refresh,
           {
             expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
           },
@@ -107,9 +108,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         );
 
         // Derive access token expiry from JWT and set as persistent cookie
-        const accessExpiry = getTokenExpiry(response.access);
+        const accessExpiry = getTokenExpiry(response.data.access);
         setAuthToken(
-          response.access,
+          response.data.access,
           {
             expires: accessExpiry ? new Date(accessExpiry) : undefined,
           },
@@ -191,6 +192,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         isLoading,
         refreshToken,
         logout,
+        checkAuthStatus,
       }}
     >
       {children}

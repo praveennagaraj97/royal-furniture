@@ -211,7 +211,12 @@
     },
     "account": {
       "deleteAccount": "Delete Account",
-      "logout": "Logout"
+      "logout": "Logout",
+      "logoutConfirmTitle": "Logout?",
+      "logoutConfirmMessage": "Are you sure you want to logout? You will need to sign in again to access your account.",
+      "logoutConfirmButton": "Logout",
+      "logoutCancelButton": "Cancel",
+      "logoutSuccess": "Logged out successfully."
     },
     "exclusiveOffers": {
       "title": "Get exclusive offers now!",

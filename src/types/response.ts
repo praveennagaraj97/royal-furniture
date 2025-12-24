@@ -46,10 +46,12 @@ export interface ForgotPasswordVerifyOTPResponseData {
 export type ForgotPasswordVerifyOTPResponse =
   BaseAPIResponse<ForgotPasswordVerifyOTPResponseData>;
 
-export interface RefreshTokenResponse {
+export interface RefreshTokenResponseData {
   access: string;
   refresh: string;
 }
+
+export type RefreshTokenResponse = BaseAPIResponse<RefreshTokenResponseData>;
 
 export interface User {
   id: number;

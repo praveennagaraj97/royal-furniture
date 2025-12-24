@@ -208,7 +208,6 @@ export class AuthService extends BaseAPIService {
 
   async refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
     try {
-      // Note: This endpoint doesn't follow the standard BaseAPIResponse format
       const response = await this.http.post<RefreshTokenResponse>(
         API_ROUTES.AUTH.REFRESH_TOKEN,
         { refresh: refreshToken }

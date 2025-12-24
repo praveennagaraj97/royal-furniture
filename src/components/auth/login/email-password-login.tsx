@@ -1,6 +1,7 @@
 'use client';
 
 import { FormInput } from '@/components/shared/inputs/form-input';
+import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
@@ -69,6 +70,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showError, showSuccess } = useToast();
+  const { checkAuthStatus } = useAuth();
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
   
@@ -160,6 +162,9 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           false
         );
       }
+
+      // Trigger auth status check to enable session
+      checkAuthStatus();
 
       showSuccess(t('toast.loginSuccess'));
       onFormStateChange?.(false);

@@ -2,6 +2,7 @@
 
 import { VerifyCodeInput } from '@/components/shared/inputs/verify-code-input';
 import Modal from '@/components/shared/modal';
+import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
 import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
@@ -36,6 +37,7 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
   const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const { showError, showSuccess } = useToast();
+  const { checkAuthStatus } = useAuth();
   const t = useTranslations('auth');
 
   const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
@@ -88,6 +90,9 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
           false
         );
       }
+
+      // Trigger auth status check to enable session
+      checkAuthStatus();
 
       showSuccess(t('toast.phoneVerified'));
       onVerified?.();

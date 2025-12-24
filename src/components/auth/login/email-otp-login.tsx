@@ -2,6 +2,7 @@
 
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { VerifyCodeInput } from '@/components/shared/inputs/verify-code-input';
+import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
 import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
@@ -85,6 +86,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
   }>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { showError, showSuccess } = useToast();
+  const { checkAuthStatus } = useAuth();
   const prevEmailRef = useRef<string>('');
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
@@ -230,6 +232,9 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
           false
         );
       }
+
+      // Trigger auth status check to enable session
+      checkAuthStatus();
 
       showSuccess(t('toast.loginSuccessful'));
       onFormStateChange?.(false);
