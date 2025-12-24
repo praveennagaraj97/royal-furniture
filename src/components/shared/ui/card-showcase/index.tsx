@@ -15,8 +15,6 @@ export interface CardItem {
 export interface CardShowcaseProps {
   items: CardItem[];
   className?: string;
-  cardAspectRatio?: string;
-  cardMinWidth?: string;
 }
 
 const containerVariants: Variants = {
@@ -30,12 +28,7 @@ const containerVariants: Variants = {
   },
 };
 
-const CardShowcase: FC<CardShowcaseProps> = ({
-  items,
-  className = '',
-  cardAspectRatio = 'aspect-3/5',
-  cardMinWidth = 'min-w-[280px] sm:min-w-[320px] md:min-w-[360px]',
-}) => {
+const CardShowcase: FC<CardShowcaseProps> = ({ items, className = '' }) => {
   return (
     <motion.section
       className={`container mx-auto px-3 overflow-hidden md:overflow-visible pb-4 ${className}`}
@@ -51,8 +44,6 @@ const CardShowcase: FC<CardShowcaseProps> = ({
             image={item.image}
             imageAlt={item.imageAlt}
             label={item.label}
-            aspectRatio={cardAspectRatio}
-            minWidth={cardMinWidth}
           />
         ))}
       </Swiper>

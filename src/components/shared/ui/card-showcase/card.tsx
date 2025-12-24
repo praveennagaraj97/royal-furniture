@@ -8,8 +8,6 @@ export interface CardShowcaseCardProps {
   image: string;
   imageAlt: string;
   label: string;
-  aspectRatio?: string;
-  minWidth?: string;
 }
 
 const cardVariants: Variants = {
@@ -28,22 +26,18 @@ const CardShowcaseCard: FC<CardShowcaseCardProps> = ({
   image,
   imageAlt,
   label,
-  aspectRatio = 'aspect-3/5',
-  minWidth = 'min-w-[280px] sm:min-w-[320px] md:min-w-[360px]',
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
       variants={cardVariants}
-      className={`flex flex-col w-full ${minWidth}`}
+      className="flex flex-col w-full min-w-[280px] sm:min-w-[320px] md:min-w-[360px]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Card Image Container */}
-      <div
-        className={`relative w-full ${aspectRatio} rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300`}
-      >
+      <div className="relative w-full aspect-3/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300">
         <Image
           src={image}
           alt={imageAlt}
@@ -65,4 +59,3 @@ const CardShowcaseCard: FC<CardShowcaseCardProps> = ({
 };
 
 export default CardShowcaseCard;
-

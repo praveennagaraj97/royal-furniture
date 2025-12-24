@@ -1,11 +1,10 @@
 'use client';
 
-import type { CardItem } from '@/components/shared/ui/card-showcase';
-import CardShowcase from '@/components/shared/ui/card-showcase';
 import SectionTitleTag from '@/components/shared/ui/section-title-tag';
 import { FC } from 'react';
+import type { HouseholdItem } from './household-showcase';
 
-const householdItems: CardItem[] = [
+const householdItems: HouseholdItem[] = [
   {
     id: 'dining-tables',
     image:
@@ -38,15 +37,9 @@ const householdItems: CardItem[] = [
 
 const HouseHolds: FC = () => {
   return (
-    <div className="mb-4 flex flex-col gap-3">
-      <div className="container mx-auto px-3">
-        <SectionTitleTag title="Households" className="text-xl font-semibold" />
-      </div>
-      <CardShowcase
-        items={householdItems}
-        cardAspectRatio="aspect-[3/4]"
-        cardMinWidth="min-w-[200px] sm:min-w-[220px] md:min-w-[240px] lg:min-w-[260px]"
-      />
+    <div className="container mx-auto px-3 flex flex-col gap-3 pb-4">
+      <SectionTitleTag title="Households" className="text-xl font-semibold" />
+      {/* <HouseholdShowcase items={householdItems} /> */}
     </div>
   );
 };
