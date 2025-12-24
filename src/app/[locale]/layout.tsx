@@ -1,4 +1,5 @@
 import AppLayout from '@/components/layout';
+import { VercelToolbarComponent } from '@/components/vercel-toolbar';
 import { AuthProvider } from '@/contexts/auth-context';
 import { ToastProvider } from '@/contexts/toast-context';
 import { UserProvider } from '@/contexts/user-context';
@@ -70,6 +71,7 @@ export default async function LocaleLayout({
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
     >
       <body className={`${montserrat.variable} antialiased`}>
+        <VercelToolbarComponent />
         <NextIntlClientProvider messages={messages}>
           <ToastProvider>
             <AuthProvider>
