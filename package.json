@@ -15,7 +15,7 @@
     "framer-motion": "^12.23.26",
     "libphonenumber-js": "^1.12.33",
     "lucide-react": "^0.561.0",
-    "next": "16.0.8",
+    "next": "16.0.10",
     "next-intl": "^4.6.0",
     "react": "19.2.1",
     "react-dom": "19.2.1",
