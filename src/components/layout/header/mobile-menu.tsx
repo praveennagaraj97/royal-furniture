@@ -150,7 +150,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
                   alt="Logo"
                   priority
                   quality={100}
-                  className="h-auto"
+                  className="h-8 w-auto object-contain"
                 />
                 <button
                   type="button"

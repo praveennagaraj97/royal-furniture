@@ -28,7 +28,12 @@ const CompanyInfo: FC = () => {
     <motion.div className="flex flex-col gap-3" variants={itemVariants}>
       <div className="flex items-center gap-3">
         <Link href="/">
-          <Image src={logo} alt="Royal Furniture" />
+          <Image
+            src={logo}
+            alt="Royal Furniture"
+            className="h-8 w-auto sm:h-10 md:h-12 object-contain"
+            priority
+          />
         </Link>
       </div>
       <p className="text-gray-700 text-sm leading-relaxed max-w-md">

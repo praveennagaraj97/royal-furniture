@@ -64,7 +64,11 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <html
+      style={{ overflowX: 'hidden' }}
+      lang={locale}
+      dir={locale === 'ar' ? 'rtl' : 'ltr'}
+    >
       <body className={`${montserrat.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <ToastProvider>

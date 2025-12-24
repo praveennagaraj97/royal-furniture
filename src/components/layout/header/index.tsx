@@ -50,7 +50,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                     alt="..."
                     priority
                     quality={100}
-                    className="h-auto"
+                    className="h-8 w-auto sm:h-10 object-contain"
                   />
                 </Link>
               </motion.div>
