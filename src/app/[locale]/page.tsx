@@ -1,6 +1,7 @@
 import FurnitureShowcase from '@/components/home/furniture-showcase';
 import Hero from '@/components/home/hero';
 import HouseHolds from '@/components/home/households';
+import LatestBlogs from '@/components/home/latest-blogs';
 import MegaPriceDropBanner from '@/components/home/mega-price-drop-banner';
 import PromotionalBanner from '@/components/home/promotional-banner';
 import PromotionalOffers from '@/components/home/promotional-offers';
@@ -45,6 +46,7 @@ export default function Home() {
       <FurnitureShowcase />
 
       <PromotionalBanner />
+      <LatestBlogs />
     </div>
   );
 }
