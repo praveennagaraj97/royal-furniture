@@ -27,6 +27,8 @@ const Swiper: FC<SwiperProps> = ({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const isHorizontalScrollRef = useRef<boolean | null>(null);
 
   const checkScrollPosition = useCallback(() => {
     if (!containerRef.current) return;
@@ -62,6 +64,59 @@ const Swiper: FC<SwiperProps> = ({
 
     checkScrollPosition();
   }, [isScrolling, checkScrollPosition]);
+
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      isHorizontalScrollRef.current = null;
+    },
+    []
+  );
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!touchStartRef.current || !containerRef.current) return;
+
+    const touch = e.touches[0];
+    const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+    const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+
+    // Determine scroll direction on first significant movement (threshold: 10px)
+    if (
+      isHorizontalScrollRef.current === null &&
+      (deltaX > 10 || deltaY > 10)
+    ) {
+      isHorizontalScrollRef.current = deltaX > deltaY;
+    }
+
+    // If it's a vertical scroll, don't interfere - let it propagate to parent
+    if (isHorizontalScrollRef.current === false) {
+      return;
+    }
+
+    // If it's a horizontal scroll, check if swiper can scroll in that direction
+    if (isHorizontalScrollRef.current === true) {
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      const canScrollLeft = scrollLeft > 0;
+      const canScrollRight = scrollLeft < scrollWidth - clientWidth - 1;
+      const scrollingLeft = touch.clientX < touchStartRef.current.x;
+      const scrollingRight = touch.clientX > touchStartRef.current.x;
+
+      // Only prevent default if swiper can actually scroll in that direction
+      if (
+        (scrollingLeft && canScrollLeft) ||
+        (scrollingRight && canScrollRight)
+      ) {
+        // Allow horizontal scrolling within swiper
+        return;
+      }
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    touchStartRef.current = null;
+    isHorizontalScrollRef.current = null;
+  }, []);
 
   // Auto-scroll functionality
   useEffect(() => {
@@ -113,10 +168,14 @@ const Swiper: FC<SwiperProps> = ({
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className={`flex overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden touch-pan-x overscroll-x-contain `}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className={`flex overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden overscroll-x-contain `}
         style={{
           gap: `${gap * 0.25}rem`,
           WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-x pan-y',
         }}
       >
         {children}
