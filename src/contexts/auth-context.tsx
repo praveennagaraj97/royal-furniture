@@ -45,6 +45,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
   const refreshTokenRef = useRef<(() => Promise<void>) | null>(null);
+  const logoutRef = useRef<(() => void) | null>(null);
+  const isInitialLoadRef = useRef(true);
   const pathname = usePathname();
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -85,71 +87,62 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }, refreshTime);
   }, [clearRefreshTimer]);
 
-  const refreshToken = useCallback(async () => {
-    try {
-      const refreshTokenValue = getRefreshToken();
-      if (!refreshTokenValue) {
+  const refreshToken = useCallback(
+    async (shouldLogoutOnFailure = false) => {
+      try {
+        const refreshTokenValue = getRefreshToken();
+        if (!refreshTokenValue) {
+          setIsAuthenticated(false);
+          clearAuthTokens();
+          if (shouldLogoutOnFailure && logoutRef.current) {
+            logoutRef.current();
+          }
+          return;
+        }
+
+        const response = await authService.refreshToken(refreshTokenValue);
+
+        if (response.data.access && response.data.refresh) {
+          // Derive refresh token expiry from JWT and set as persistent cookie
+          const refreshExpiry = getTokenExpiry(response.data.refresh);
+          setRefreshToken(
+            response.data.refresh,
+            {
+              expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
+            },
+            false
+          );
+
+          // Derive access token expiry from JWT and set as persistent cookie
+          const accessExpiry = getTokenExpiry(response.data.access);
+          setAuthToken(
+            response.data.access,
+            {
+              expires: accessExpiry ? new Date(accessExpiry) : undefined,
+            },
+            false
+          );
+
+          setIsAuthenticated(true);
+          scheduleTokenRefresh();
+        } else {
+          setIsAuthenticated(false);
+          clearAuthTokens();
+          if (shouldLogoutOnFailure && logoutRef.current) {
+            logoutRef.current();
+          }
+        }
+      } catch (error) {
+        console.error('Token refresh failed:', error);
         setIsAuthenticated(false);
         clearAuthTokens();
-        return;
+        if (shouldLogoutOnFailure && logoutRef.current) {
+          logoutRef.current();
+        }
       }
-
-      const response = await authService.refreshToken(refreshTokenValue);
-
-      if (response.data.access && response.data.refresh) {
-        // Derive refresh token expiry from JWT and set as persistent cookie
-        const refreshExpiry = getTokenExpiry(response.data.refresh);
-        setRefreshToken(
-          response.data.refresh,
-          {
-            expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
-          },
-          false
-        );
-
-        // Derive access token expiry from JWT and set as persistent cookie
-        const accessExpiry = getTokenExpiry(response.data.access);
-        setAuthToken(
-          response.data.access,
-          {
-            expires: accessExpiry ? new Date(accessExpiry) : undefined,
-          },
-          false
-        );
-
-        setIsAuthenticated(true);
-        scheduleTokenRefresh();
-      } else {
-        setIsAuthenticated(false);
-        clearAuthTokens();
-      }
-    } catch (error) {
-      console.error('Token refresh failed:', error);
-      setIsAuthenticated(false);
-      clearAuthTokens();
-    }
-  }, [scheduleTokenRefresh]);
-
-  useEffect(() => {
-    refreshTokenRef.current = refreshToken;
-  }, [refreshToken]);
-
-  const checkAuthStatus = useCallback(() => {
-    startTransition(() => {
-      const authToken = getAuthToken();
-      const refreshTokenValue = getRefreshToken();
-
-      if (authToken && !isTokenExpired(authToken)) {
-        setIsAuthenticated(true);
-        scheduleTokenRefresh();
-      } else if (refreshTokenValue) {
-        refreshToken();
-      } else {
-        setIsAuthenticated(false);
-      }
-      setIsLoading(false);
-    });
-  }, [refreshToken, scheduleTokenRefresh, startTransition]);
+    },
+    [scheduleTokenRefresh]
+  );
 
   const logout = useCallback(() => {
     clearAuthTokens();
@@ -157,6 +150,44 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     clearRefreshTimer();
     router.push('/');
   }, [router, clearRefreshTimer]);
+
+  useEffect(() => {
+    refreshTokenRef.current = refreshToken;
+    logoutRef.current = logout;
+  }, [refreshToken, logout]);
+
+  const checkAuthStatus = useCallback(() => {
+    startTransition(() => {
+      const authToken = getAuthToken();
+      const refreshTokenValue = getRefreshToken();
+      const isInitialLoad = isInitialLoadRef.current;
+
+      // On initial load (hard reload), always refresh if refresh token exists
+      if (isInitialLoad && refreshTokenValue) {
+        isInitialLoadRef.current = false;
+        // Refresh token and logout on failure for initial load
+        refreshToken(true).finally(() => {
+          setIsLoading(false);
+        });
+        return;
+      }
+
+      // For subsequent checks
+      if (authToken && !isTokenExpired(authToken)) {
+        setIsAuthenticated(true);
+        scheduleTokenRefresh();
+        setIsLoading(false);
+      } else if (refreshTokenValue) {
+        // Background refresh - don't logout on failure, just clear tokens
+        refreshToken(false).finally(() => {
+          setIsLoading(false);
+        });
+      } else {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+      }
+    });
+  }, [refreshToken, scheduleTokenRefresh, startTransition]);
 
   useEffect(() => {
     checkAuthStatus();
@@ -173,11 +204,17 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       }
     };
 
+    const handleTokenInvalid = () => {
+      logout();
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('token-invalid', handleTokenInvalid);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('token-invalid', handleTokenInvalid);
     };
-  }, [checkAuthStatus]);
+  }, [checkAuthStatus, logout]);
 
   useEffect(() => {
     return () => {

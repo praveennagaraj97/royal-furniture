@@ -1,6 +1,34 @@
 import { type ParsedAPIError } from '@/types/error';
 import { getAuthToken } from '@/utils';
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from 'axios';
+
+const isTokenInvalidError = (error: AxiosError): boolean => {
+  // Check for 401 status
+  if (error.response?.status === 401) {
+    return true;
+  }
+
+  // Check for token_not_valid in the error message
+  const responseData = error.response?.data;
+  if (responseData && typeof responseData === 'object') {
+    const message = (responseData as { message?: string }).message;
+    if (typeof message === 'string' && message.includes('token_not_valid')) {
+      return true;
+    }
+
+    // Check for token_not_valid in detail field
+    const detail = (responseData as { detail?: string }).detail;
+    if (typeof detail === 'string' && detail.includes('token_not_valid')) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 export class BaseAPIService {
   protected http: AxiosInstance;
@@ -23,6 +51,20 @@ export class BaseAPIService {
         return config;
       },
       (error) => {
+        return Promise.reject(error);
+      }
+    );
+
+    // Add response interceptor to handle token invalidation
+    this.http.interceptors.response.use(
+      (response) => response,
+      (error: AxiosError) => {
+        if (isTokenInvalidError(error)) {
+          // Dispatch custom event to trigger logout
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('token-invalid'));
+          }
+        }
         return Promise.reject(error);
       }
     );
