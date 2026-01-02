@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { PanelTopOpen } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Heart, Menu, ShoppingCart, X } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 import AuthModal from '@/components/auth/auth-modal';
@@ -33,17 +33,50 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
             : 'relative'
         } transition-shadow duration-300 ease-out`}
       >
-        <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2.5 md:py-3">
+        <div className="relative container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2.5 md:py-3">
           {/* Mobile/Tablet: Two-row layout */}
           <div className="flex flex-col gap-2 lg:hidden">
-            {/* Top row: logo + hamburger */}
-            <div className="flex items-center justify-between gap-2 sm:gap-3">
+            {/* Top row: hamburger + logo (left) + heart/cart (right) */}
+            <div
+              className="relative flex items-center justify-between gap-2 sm:gap-3"
+              data-hamburger-row
+            >
               <motion.div
-                className="shrink-0"
+                className="flex items-center space-x-2"
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0, duration: 0.25, ease: 'easeOut' }}
               >
+                <motion.button
+                  className="shrink-0 p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                  <AnimatePresence mode="wait">
+                    {isMobileMenuOpen ? (
+                      <motion.div
+                        key="close"
+                        initial={{ rotate: -90, opacity: 0 }}
+                        animate={{ rotate: 0, opacity: 1 }}
+                        exit={{ rotate: 90, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <X className="h-6 w-6 text-gray-600" />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="menu"
+                        initial={{ rotate: 90, opacity: 0 }}
+                        animate={{ rotate: 0, opacity: 1 }}
+                        exit={{ rotate: -90, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <Menu className="h-6 w-6 text-gray-600" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+
                 <Link href="/">
                   <Image
                     src={logo}
@@ -55,16 +88,26 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 </Link>
               </motion.div>
 
-              <motion.button
-                className="shrink-0 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              <motion.div
+                className="shrink-0 flex items-center gap-2 sm:gap-3"
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05, duration: 0.25, ease: 'easeOut' }}
-                type="button"
-                onClick={() => setIsMobileMenuOpen(true)}
+                transition={{ delay: 0.1, duration: 0.25, ease: 'easeOut' }}
               >
-                <PanelTopOpen className="h-6 w-6 text-gray-600" />
-              </motion.button>
+                <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
+                  <Heart className="h-6 w-6" />
+                </button>
+                <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
+                  <ShoppingCart className="h-6 w-6" />
+                </button>
+              </motion.div>
+
+              {/* Mobile Menu - positioned below this row */}
+              <MobileMenu
+                isOpen={isMobileMenuOpen}
+                onClose={() => setIsMobileMenuOpen(false)}
+                onSignIn={() => setIsSignupFormOpen(true)}
+              />
             </div>
 
             {/* Second row: full-width search bar */}
@@ -76,13 +119,6 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
               <SearchBar />
             </motion.div>
           </div>
-
-          {/* Mobile Menu */}
-          <MobileMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-            onSignIn={() => setIsSignupFormOpen(true)}
-          />
 
           {/* Desktop: Single-row layout (original design) */}
           <div className="hidden lg:flex items-center gap-4 md:gap-6">
