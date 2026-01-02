@@ -76,7 +76,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
           {/* Menu Panel - Full width and height, slides from left to right (or right to left for RTL) */}
           <motion.div
             ref={menuRef}
-            className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-50 lg:hidden shadow-lg flex flex-col"
+            className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-50 lg:hidden shadow-lg flex flex-col overflow-hidden"
             style={{
               paddingBottom: 'env(safe-area-inset-bottom)',
             }}
@@ -90,7 +90,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
             <MobileMenuHeader onClose={onClose} />
 
             {/* Content Area - Scrollable */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+            <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
               {/* Sign Up / Sign In Buttons */}
               <AuthSection
                 onSignIn={onSignIn}

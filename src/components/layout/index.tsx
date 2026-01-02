@@ -19,7 +19,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   return (
     <>
       <div className="hidden lg:block">
-        <QuickLinksBar />
+      <QuickLinksBar />
       </div>
       <Header ref={headerRef} isSticky={isSticky} />
       {/* Spacer to prevent layout shift when header becomes sticky */}
