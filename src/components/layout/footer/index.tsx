@@ -7,6 +7,7 @@ import AppDownloads from './app-downloads';
 import BottomBar from './bottom-bar';
 import CompanyInfo from './company-info';
 import LinkColumn from './link-column';
+import MobileFooterLinks, { type FooterCategory } from './mobile-footer-links';
 import SupportLinks from './support-links';
 
 const containerVariants: Variants = {
@@ -67,6 +68,24 @@ const Footer: FC = () => {
     tAboutLinks('termsOfService'),
   ];
 
+  const footerCategories: FooterCategory[] = [
+    {
+      id: 'contact',
+      title: tSections('contactUs'),
+      links: contactLinks,
+    },
+    {
+      id: 'help',
+      title: tSections('help'),
+      links: helpLinks,
+    },
+    {
+      id: 'about',
+      title: tSections('aboutUs'),
+      links: aboutLinks,
+    },
+  ];
+
   return (
     <footer className="bg-soft-pink w-full mt-6">
       <motion.div
@@ -87,13 +106,21 @@ const Footer: FC = () => {
 
         {/* Middle Section - Links */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-6 border-b border-gray-300"
+          className="lg:py-6 py-2 border-b border-gray-300"
           variants={sectionVariants}
         >
-          <SupportLinks />
-          <LinkColumn title={tSections('contactUs')} links={contactLinks} />
-          <LinkColumn title={tSections('help')} links={helpLinks} />
-          <LinkColumn title={tSections('aboutUs')} links={aboutLinks} />
+          {/* Mobile View - Accordion */}
+          <div className="lg:hidden">
+            <MobileFooterLinks categories={footerCategories} />
+          </div>
+
+          {/* Desktop View - Grid */}
+          <div className="hidden lg:grid lg:grid-cols-4 gap-6">
+            <SupportLinks />
+            <LinkColumn title={tSections('contactUs')} links={contactLinks} />
+            <LinkColumn title={tSections('help')} links={helpLinks} />
+            <LinkColumn title={tSections('aboutUs')} links={aboutLinks} />
+          </div>
         </motion.div>
 
         {/* Bottom Section */}
