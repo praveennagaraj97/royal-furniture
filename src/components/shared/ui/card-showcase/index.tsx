@@ -31,7 +31,7 @@ const containerVariants: Variants = {
 const CardShowcase: FC<CardShowcaseProps> = ({ items, className = '' }) => {
   return (
     <motion.section
-      className={`container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible pb-4 ${className}`}
+      className={`container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible ${className}`}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
