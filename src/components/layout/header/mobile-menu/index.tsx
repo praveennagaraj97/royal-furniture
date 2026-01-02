@@ -77,6 +77,9 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
           <motion.div
             ref={menuRef}
             className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-50 lg:hidden shadow-lg flex flex-col"
+            style={{
+              paddingBottom: 'env(safe-area-inset-bottom)',
+            }}
             initial={{ x: menuInitialX }}
             animate={{ x: 0 }}
             exit={{ x: menuExitX }}
@@ -87,7 +90,7 @@ const MobileMenu: FC<MobileMenuProps> = ({ isOpen, onClose, onSignIn }) => {
             <MobileMenuHeader onClose={onClose} />
 
             {/* Content Area - Scrollable */}
-            <div className="flex-1 overflow-y-auto px-4 py-4">
+            <div className="flex-1 overflow-y-auto px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
               {/* Sign Up / Sign In Buttons */}
               <AuthSection
                 onSignIn={onSignIn}
