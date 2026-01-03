@@ -1,7 +1,7 @@
 'use client';
 
+import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
-import { motion, type Variants } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { FC, ReactNode } from 'react';
@@ -15,29 +15,16 @@ export interface ProductListingProps {
   products: Product[];
 }
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
 const ProductListing: FC<ProductListingProps> = ({
   title,
   seeAllHref,
   products,
 }) => {
   return (
-    <motion.section
+    <StaggerContainer
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
@@ -65,7 +52,7 @@ const ProductListing: FC<ProductListingProps> = ({
           <ProductCard key={product.id} product={product} />
         ))}
       </Swiper>
-    </motion.section>
+    </StaggerContainer>
   );
 };
 

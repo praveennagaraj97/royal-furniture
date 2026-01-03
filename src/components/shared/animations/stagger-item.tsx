@@ -32,6 +32,10 @@ export interface StaggerItemProps {
   rtlAware?: boolean;
   /** Custom variants override */
   variants?: Variants;
+  /** Mouse enter handler */
+  onMouseEnter?: () => void;
+  /** Mouse leave handler */
+  onMouseLeave?: () => void;
 }
 
 const createVariants = (
@@ -124,6 +128,8 @@ export const StaggerItem: FC<StaggerItemProps> = ({
   exit = false,
   rtlAware = false,
   variants,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   // Detect RTL from document or parent
   const isRTL =
@@ -150,6 +156,8 @@ export const StaggerItem: FC<StaggerItemProps> = ({
     <motion.div
       className={className}
       variants={itemVariants}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       {...(exit && { exit: 'exit' })}
     >
       {children}

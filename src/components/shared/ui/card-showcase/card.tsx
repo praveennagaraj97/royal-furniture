@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerItem } from '@/components/shared/animations';
 import Image from 'next/image';
 import { FC, useState } from 'react';
 
@@ -10,18 +10,6 @@ export interface CardShowcaseCardProps {
   label: string;
 }
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
 const CardShowcaseCard: FC<CardShowcaseCardProps> = ({
   image,
   imageAlt,
@@ -30,8 +18,10 @@ const CardShowcaseCard: FC<CardShowcaseCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <motion.div
-      variants={cardVariants}
+    <StaggerItem
+      type="slideUp"
+      distance={30}
+      duration={0.6}
       className="flex flex-col w-full min-w-[280px] sm:min-w-[320px] md:min-w-[360px]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -54,7 +44,7 @@ const CardShowcaseCard: FC<CardShowcaseCardProps> = ({
       <div className="mt-3 text-center">
         <h3 className="text-black text-lg sm:text-xl font-semibold">{label}</h3>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

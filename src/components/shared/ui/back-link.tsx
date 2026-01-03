@@ -1,7 +1,7 @@
 'use client';
 
+import { ViewOnce } from '@/components/shared/animations';
 import { useRouter } from '@/i18n/routing';
-import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
@@ -26,12 +26,12 @@ export const BackLink: FC<BackLinkProps> = ({ onClick, href }) => {
   };
 
   return (
-    <motion.div
+    <ViewOnce
+      type="slideDown"
+      distance={10}
+      duration={0.4}
+      margin="-50px"
       className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2"
-      initial={{ opacity: 0, y: -10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       <button
         type="button"
@@ -41,6 +41,6 @@ export const BackLink: FC<BackLinkProps> = ({ onClick, href }) => {
         <ArrowLeft className="h-5 w-5 text-deep-maroon transition-transform duration-200 group-hover:-translate-x-1" />
         <span className="font-medium">{t('back')}</span>
       </button>
-    </motion.div>
+    </ViewOnce>
   );
 };

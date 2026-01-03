@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerItem } from '@/components/shared/animations';
 import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import { FC, useState } from 'react';
@@ -10,18 +10,6 @@ import { Product } from '@/temp/data/products-data';
 export interface ProductCardProps {
   product: Product;
 }
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -33,8 +21,10 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <motion.div
-      variants={cardVariants}
+    <StaggerItem
+      type="slideUp"
+      distance={30}
+      duration={0.6}
       className="relative w-full min-w-[280px] sm:min-w-[300px] cursor-pointer group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -90,7 +80,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
         {/* Product Name */}
         <p className="text-indigo-slate text-base">{product.name}</p>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

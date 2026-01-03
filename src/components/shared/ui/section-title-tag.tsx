@@ -1,8 +1,8 @@
 'use client';
 
+import { ViewOnce } from '@/components/shared/animations';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import SectionTitleBackground from '../svgs/section-title-background';
 
 export interface SectionTitleTagProps {
@@ -25,12 +25,12 @@ const SectionTitleTag: FC<SectionTitleTagProps> = ({
   }, [title, className]);
 
   return (
-    <motion.div
+    <ViewOnce
+      type="slideUp"
+      distance={20}
+      duration={0.6}
+      margin="-100px"
       className="relative"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       {dimensions.width > 0 && dimensions.height > 0 && (
         <SectionTitleBackground
@@ -47,7 +47,7 @@ const SectionTitleTag: FC<SectionTitleTagProps> = ({
       >
         {title}
       </p>
-    </motion.div>
+    </ViewOnce>
   );
 };
 
