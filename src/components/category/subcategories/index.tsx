@@ -1,6 +1,10 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import {
+  StaggerContainer,
+  StaggerItem,
+  ViewOnce,
+} from '@/components/shared/animations';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import Swiper from '../../shared/swiper';
@@ -12,44 +16,6 @@ interface SubCategoriesProps {
   subcategories: Subcategory[];
 }
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.3,
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      type: 'spring' as const,
-      stiffness: 100,
-      damping: 15,
-    },
-  },
-};
-
-const titleVariants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.3,
-      delay: 0.15,
-    },
-  },
-};
-
 const SubCategories: FC<SubCategoriesProps> = ({
   selectedCategoryId,
   selectedCategoryKey,
@@ -58,42 +24,48 @@ const SubCategories: FC<SubCategoriesProps> = ({
   const t = useTranslations('categories');
 
   return (
-    <motion.div
+    <StaggerContainer
       key={selectedCategoryId}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+      mode="animate"
+      staggerChildren={0.08}
+      delayChildren={0.1}
+      duration={0.3}
       className="overflow-hidden"
     >
       <div className="pt-4">
-        <motion.h2
-          variants={titleVariants}
-          initial="hidden"
-          animate="visible"
-          className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4 container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3"
-        >
-          {t(selectedCategoryKey)}
-        </motion.h2>
+        <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
+          <ViewOnce
+            type="slideDown"
+            distance={10}
+            duration={0.3}
+            delay={0.15}
+            className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4"
+          >
+            <h2>{t(selectedCategoryKey)}</h2>
+          </ViewOnce>
+        </div>
 
         <div className="bg-soft-pink">
           <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-4">
             <Swiper className="px-0" gap={3} showNavigation hideArrowOnMobile>
               {subcategories.map((subcategory, index) => (
-                <motion.div
+                <StaggerItem
                   key={subcategory.id}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
+                  type="slideScale"
+                  direction="up"
+                  distance={20}
+                  initialScale={0.9}
+                  duration={0.6}
                   className="min-w-[45%] sm:min-w-[35%] md:min-w-[25%] lg:min-w-[200px]"
                 >
                   <SubCategoryCard subcategory={subcategory} index={index} />
-                </motion.div>
+                </StaggerItem>
               ))}
             </Swiper>
           </div>
         </div>
       </div>
-    </motion.div>
+    </StaggerContainer>
   );
 };
 

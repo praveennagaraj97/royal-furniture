@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerItem } from '@/components/shared/animations';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -11,18 +11,6 @@ export interface OfferCardProps {
   category: string;
 }
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
 const OfferCard: FC<OfferCardProps> = ({
   image,
   imageAlt,
@@ -30,8 +18,10 @@ const OfferCard: FC<OfferCardProps> = ({
   category,
 }) => {
   return (
-    <motion.div
-      variants={cardVariants}
+    <StaggerItem
+      type="slideUp"
+      distance={30}
+      duration={0.6}
       className="relative w-full aspect-4/5 rounded-xl overflow-hidden bg-white shadow-sm cursor-pointer group"
     >
       <Image
@@ -48,7 +38,7 @@ const OfferCard: FC<OfferCardProps> = ({
         <p className="text-lg font-medium mb-1">{discount}</p>
         <p className="text-lg font-medium">{category}</p>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

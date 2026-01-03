@@ -1,19 +1,8 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerContainer } from '@/components/shared/animations';
 import { FC } from 'react';
 import OfferCard from './offer-card';
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
-  },
-};
 
 const offers = [
   {
@@ -52,12 +41,10 @@ const offers = [
 
 const PromotionalOffers: FC = () => {
   return (
-    <motion.section
+    <StaggerContainer
+      staggerChildren={0.15}
+      delayChildren={0.1}
       className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {offers.map((offer) => (
@@ -70,7 +57,7 @@ const PromotionalOffers: FC = () => {
           />
         ))}
       </div>
-    </motion.section>
+    </StaggerContainer>
   );
 };
 
