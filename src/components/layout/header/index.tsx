@@ -1,5 +1,6 @@
 'use client';
 
+import { SlideIn } from '@/components/shared/animations';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, Menu, ShoppingCart, X } from 'lucide-react';
 import { forwardRef, useState } from 'react';
@@ -41,11 +42,13 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
               className="relative flex items-center justify-between gap-2 sm:gap-3"
               data-hamburger-row
             >
-              <motion.div
+              <SlideIn
+                direction="down"
+                distance={4}
+                duration={0.25}
+                delay={0}
+                triggerOnView={false}
                 className="flex items-center space-x-2"
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0, duration: 0.25, ease: 'easeOut' }}
               >
                 <motion.button
                   className="shrink-0 p-2 rounded-full hover:bg-gray-100 transition-colors relative"
@@ -86,13 +89,15 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                     className="h-8 w-auto sm:h-10 object-contain"
                   />
                 </Link>
-              </motion.div>
+              </SlideIn>
 
-              <motion.div
+              <SlideIn
+                direction="down"
+                distance={4}
+                duration={0.25}
+                delay={0.1}
+                triggerOnView={false}
                 className="shrink-0 flex items-center gap-2 sm:gap-3"
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.25, ease: 'easeOut' }}
               >
                 <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
                   <Heart className="h-6 w-6" />
@@ -100,7 +105,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
                   <ShoppingCart className="h-6 w-6" />
                 </button>
-              </motion.div>
+              </SlideIn>
 
               {/* Mobile Menu - positioned below this row */}
               <MobileMenu
@@ -111,22 +116,26 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
             </div>
 
             {/* Second row: full-width search bar */}
-            <motion.div
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.25, ease: 'easeOut' }}
+            <SlideIn
+              direction="down"
+              distance={4}
+              duration={0.25}
+              delay={0.1}
+              triggerOnView={false}
             >
               <SearchBar />
-            </motion.div>
+            </SlideIn>
           </div>
 
           {/* Desktop: Single-row layout (original design) */}
           <div className="hidden lg:flex items-center gap-4 md:gap-6">
-            <motion.div
+            <SlideIn
+              direction="down"
+              distance={4}
+              duration={0.25}
+              delay={0}
+              triggerOnView={false}
               className="shrink-0"
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0, duration: 0.25, ease: 'easeOut' }}
             >
               <Link href="/">
                 <Image
@@ -137,36 +146,42 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                   className="h-auto w-32 object-contain"
                 />
               </Link>
-            </motion.div>
+            </SlideIn>
 
-            <motion.div
+            <SlideIn
+              direction="down"
+              distance={4}
+              duration={0.25}
+              delay={0.05}
+              triggerOnView={false}
               className="flex-1 min-w-0"
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05, duration: 0.25, ease: 'easeOut' }}
             >
               <SearchBar />
-            </motion.div>
+            </SlideIn>
 
-            <motion.div
+            <SlideIn
+              direction="down"
+              distance={4}
+              duration={0.25}
+              delay={0.1}
+              triggerOnView={false}
               className="shrink-0"
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.25, ease: 'easeOut' }}
             >
               <Utilities />
-            </motion.div>
+            </SlideIn>
 
             <AuthActionButton onClick={() => setIsSignupFormOpen(true)} />
 
-            <motion.div
+            <SlideIn
+              direction="down"
+              distance={4}
+              duration={0.25}
+              delay={0.2}
+              triggerOnView={false}
               className="shrink-0"
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.25, ease: 'easeOut' }}
             >
               <LangSwitch />
-            </motion.div>
+            </SlideIn>
           </div>
 
           {/* Auth Modal */}
