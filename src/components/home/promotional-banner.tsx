@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { ViewOnce } from '@/components/shared/animations';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -9,12 +9,13 @@ import promotionalBanner from '@/assets/promotional_banner.png';
 const PromotionalBanner: FC = () => {
   return (
     <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
-      <motion.div
+      <ViewOnce
+        type="scaleUp"
+        distance={30}
+        initialScale={1.05}
+        duration={0.8}
+        margin="-100px"
         className="relative w-full rounded-lg overflow-hidden"
-        initial={{ opacity: 0, scale: 1.05, y: 30 }}
-        whileInView={{ opacity: 1, scale: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
       >
         <Image
           src={promotionalBanner}
@@ -24,7 +25,7 @@ const PromotionalBanner: FC = () => {
           className="w-full h-auto object-cover"
           quality={90}
         />
-      </motion.div>
+      </ViewOnce>
     </div>
   );
 };

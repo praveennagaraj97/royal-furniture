@@ -1,7 +1,7 @@
 'use client';
 
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
-import { motion, type Variants } from 'framer-motion';
 import Image from 'next/image';
 import { FC, useState } from 'react';
 
@@ -16,44 +16,19 @@ interface HouseholdShowcaseProps {
   items: HouseholdItem[];
 }
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
 const HouseholdShowcase: FC<HouseholdShowcaseProps> = ({ items }) => {
   return (
-    <motion.div
-      className={`container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible`}
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
+    <StaggerContainer
+      staggerChildren={0.15}
+      delayChildren={0.1}
+      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible"
     >
       <Swiper gap={4} showNavigation hideArrowOnMobile>
         {items.map((item) => (
           <HouseholdCard key={item.id} item={item} />
         ))}
       </Swiper>
-    </motion.div>
+    </StaggerContainer>
   );
 };
 
@@ -61,8 +36,10 @@ const HouseholdCard: FC<{ item: HouseholdItem }> = ({ item }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <motion.div
-      variants={cardVariants}
+    <StaggerItem
+      type="slideUp"
+      distance={30}
+      duration={0.6}
       className="flex flex-col w-full min-w-[200px] sm:min-w-[220px] md:min-w-[240px] lg:min-w-[260px]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -87,7 +64,7 @@ const HouseholdCard: FC<{ item: HouseholdItem }> = ({ item }) => {
           {item.label}
         </h3>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerItem } from '@/components/shared/animations';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -10,22 +10,12 @@ export interface FurnitureCardProps {
   name: string;
 }
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
 const FurnitureCard: FC<FurnitureCardProps> = ({ image, imageAlt, name }) => {
   return (
-    <motion.div
-      variants={cardVariants}
+    <StaggerItem
+      type="slideUp"
+      distance={30}
+      duration={0.6}
       className="relative w-full cursor-pointer group"
     >
       <div className="relative w-full aspect-video">
@@ -40,7 +30,7 @@ const FurnitureCard: FC<FurnitureCardProps> = ({ image, imageAlt, name }) => {
       <div className="text-center pt-1.5">
         <p>{name}</p>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerItem } from '@/components/shared/animations';
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,24 +12,14 @@ export interface BlogCardProps {
   blog: Blog;
 }
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
 const BlogCard: FC<BlogCardProps> = ({ blog }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <motion.div
-      variants={cardVariants}
+    <StaggerItem
+      type="slideUp"
+      distance={30}
+      duration={0.6}
       className="flex flex-col w-full min-w-[280px] sm:min-w-[300px] md:min-w-[320px]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -69,7 +59,7 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
           <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
         </Link>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

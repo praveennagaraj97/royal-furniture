@@ -1,7 +1,7 @@
 'use client';
 
+import { ViewOnce } from '@/components/shared/animations';
 import SectionTitleTag from '@/components/shared/ui/section-title-tag';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -16,12 +16,13 @@ const SofaAndSeating: FC = () => {
           className="text-xl font-semibold"
         />
       </div>
-      <motion.div
+      <ViewOnce
+        type="scaleUp"
+        distance={30}
+        initialScale={1.05}
+        duration={0.8}
+        margin="-100px"
         className="relative w-full rounded-lg overflow-hidden"
-        initial={{ opacity: 0, scale: 1.05, y: 30 }}
-        whileInView={{ opacity: 1, scale: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
       >
         <Image
           src={image}
@@ -32,7 +33,7 @@ const SofaAndSeating: FC = () => {
           quality={90}
           placeholder="blur"
         />
-      </motion.div>
+      </ViewOnce>
     </div>
   );
 };
