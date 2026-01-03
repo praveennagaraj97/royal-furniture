@@ -1,34 +1,13 @@
 'use client';
 
+import {
+  StaggerContainer,
+  StaggerItem,
+} from '@/components/shared/animations';
 import { Link } from '@/i18n/routing';
-import { motion, type Variants } from 'framer-motion';
 import { Heart, MapPin, Package, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.9, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
 
 const QuickLinksGrid: FC = () => {
   const t = useTranslations('user.quickLinks');
@@ -57,17 +36,22 @@ const QuickLinksGrid: FC = () => {
   ];
 
   return (
-    <motion.div
+    <StaggerContainer
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="grid sm:grid-cols-2 gap-4"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
     >
       {quickLinks.map((link) => {
         const Icon = link.icon;
         return (
-          <motion.div key={link.key} variants={itemVariants}>
+          <StaggerItem
+            key={link.key}
+            type="slideScale"
+            direction="up"
+            distance={20}
+            initialScale={0.9}
+            duration={0.4}
+          >
             <Link
               href={link.href}
               className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-sm shadow-sm hover:bg-gray-50 hover:shadow-md hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 ease-out group"
@@ -77,10 +61,10 @@ const QuickLinksGrid: FC = () => {
                 {t(link.key)}
               </span>
             </Link>
-          </motion.div>
+          </StaggerItem>
         );
       })}
-    </motion.div>
+    </StaggerContainer>
   );
 };
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { CountryPicker } from '@/components/shared/inputs/country-picker';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
@@ -7,7 +8,6 @@ import { useUser } from '@/contexts/user-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createSignupFormValidators } from '@/validators';
-import { motion, type Variants } from 'framer-motion';
 import { Loader2, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
@@ -20,29 +20,6 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
 
 // Parse phone number to extract country code and number
 const parsePhoneNumber = (phoneNumber: string) => {
@@ -199,25 +176,25 @@ const ProfilePage: FC = () => {
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
+    <StaggerContainer
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="space-y-6"
     >
-      <motion.h1
-        variants={itemVariants}
+      <StaggerItem
+        type="slideUp"
+        distance={20}
+        duration={0.4}
         className="text-2xl font-semibold text-gray-900 mb-6"
       >
-        {t('title')}
-      </motion.h1>
+        <h1>{t('title')}</h1>
+      </StaggerItem>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Column */}
           <div className="space-y-6">
-            <motion.div variants={itemVariants}>
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
               <FormInput
                 id="firstName"
                 type="text"
@@ -230,9 +207,9 @@ const ProfilePage: FC = () => {
                 showError={!!touched.firstName || isSubmitted}
                 containerClassName="w-full"
               />
-            </motion.div>
+            </StaggerItem>
 
-            <motion.div variants={itemVariants}>
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
               <div className="w-full">
                 <label className="form-input-label mb-2 block">
                   {t('phoneNumber')}
@@ -278,12 +255,12 @@ const ProfilePage: FC = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </StaggerItem>
           </div>
 
           {/* Right Column */}
           <div className="space-y-6">
-            <motion.div variants={itemVariants}>
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
               <FormInput
                 id="lastName"
                 type="text"
@@ -296,9 +273,9 @@ const ProfilePage: FC = () => {
                 showError={!!touched.lastName || isSubmitted}
                 containerClassName="w-full"
               />
-            </motion.div>
+            </StaggerItem>
 
-            <motion.div variants={itemVariants}>
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
               <FormInput
                 id="email"
                 type="email"
@@ -311,11 +288,11 @@ const ProfilePage: FC = () => {
                 showError={!!touched.email || isSubmitted}
                 containerClassName="w-full"
               />
-            </motion.div>
+            </StaggerItem>
           </div>
         </div>
 
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <button
             type="submit"
             disabled={isLoading}
@@ -324,9 +301,9 @@ const ProfilePage: FC = () => {
             {isLoading && <Loader2 className="animate-spin h-5 w-5" />}
             <span>{isLoading ? t('updating') : t('update')}</span>
           </button>
-        </motion.div>
+        </StaggerItem>
       </form>
-    </motion.div>
+    </StaggerContainer>
   );
 };
 

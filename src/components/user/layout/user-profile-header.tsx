@@ -1,8 +1,8 @@
 'use client';
 
+import { ViewOnce } from '@/components/shared/animations';
 import { useUser } from '@/contexts/user-context';
 import { Link } from '@/i18n/routing';
-import { motion } from 'framer-motion';
 import { SquarePen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
@@ -24,12 +24,12 @@ const UserProfileHeader: FC = () => {
   const email = user?.email || '';
 
   return (
-    <motion.div
+    <ViewOnce
+      type="slideUp"
+      distance={20}
+      duration={0.6}
+      margin="-100px"
       className="bg-deep-maroon rounded-sm p-4 mb-4"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
@@ -46,7 +46,7 @@ const UserProfileHeader: FC = () => {
           <span className="text-sm font-medium">{t('edit')}</span>
         </Link>
       </div>
-    </motion.div>
+    </ViewOnce>
   );
 };
 
