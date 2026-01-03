@@ -1,5 +1,9 @@
 'use client';
 
+import {
+  StaggerContainer,
+  StaggerItem,
+} from '@/components/shared/animations';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
@@ -7,7 +11,6 @@ import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { createLoginFormValidators } from '@/validators';
-import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
@@ -25,29 +28,6 @@ interface EmailPasswordLoginProps {
   onLoginSuccess?: () => void;
   onForgotPassword?: () => void;
 }
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
 
 const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
   onModeChange,
@@ -191,22 +171,21 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <StaggerContainer
+      mode="animate"
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="flex flex-col gap-4"
     >
       {/* Title */}
-      <motion.h2
-        variants={itemVariants}
-        className="text-lg font-semibold text-gray-900 mb-2"
-      >
-        {t('forms.loginWithRegisteredEmail')}
-      </motion.h2>
+      <StaggerItem type="slideUp" distance={20} duration={0.4}>
+        <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          {t('forms.loginWithRegisteredEmail')}
+        </h2>
+      </StaggerItem>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <FormInput
             id="loginEmail"
             type="email"
@@ -220,9 +199,9 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             containerClassName="w-full"
             className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
           />
-        </motion.div>
+        </StaggerItem>
 
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <FormInput
             id="loginPassword"
             type="password"
@@ -236,9 +215,9 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             containerClassName="w-full"
             className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
           />
-        </motion.div>
+        </StaggerItem>
 
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <button
             type="submit"
             disabled={isLoading}
@@ -253,9 +232,9 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
               <span>{t('forms.login')}</span>
             )}
           </button>
-        </motion.div>
+        </StaggerItem>
 
-        <motion.div variants={itemVariants} className="flex justify-center">
+        <StaggerItem type="slideUp" distance={20} duration={0.4} className="flex justify-center">
           <button
             type="button"
             onClick={onForgotPassword}
@@ -263,12 +242,12 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           >
             {t('forms.forgotPassword')}
           </button>
-        </motion.div>
+        </StaggerItem>
       </form>
 
       {/* OTP Login Buttons */}
       {onModeChange && (
-        <motion.div variants={itemVariants} className="flex flex-col gap-3">
+        <StaggerItem type="slideUp" distance={20} duration={0.4} className="flex flex-col gap-3">
           <button
             type="button"
             onClick={() => onModeChange('phone-otp')}
@@ -284,9 +263,9 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           >
             {t('forms.loginWithEmailOtp')}
           </button>
-        </motion.div>
+        </StaggerItem>
       )}
-    </motion.div>
+    </StaggerContainer>
   );
 };
 

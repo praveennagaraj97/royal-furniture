@@ -1,5 +1,10 @@
 'use client';
 
+import {
+  AnimatePresenceWrapper,
+  StaggerContainer,
+  StaggerItem,
+} from '@/components/shared/animations';
 import { CountryPicker } from '@/components/shared/inputs/country-picker';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { VerifyCodeInput } from '@/components/shared/inputs/verify-code-input';
@@ -8,7 +13,6 @@ import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createSignupFormValidators } from '@/validators';
-import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
@@ -29,42 +33,6 @@ interface SendVerifyOtpProps {
   ) => void;
   onFormStateChange?: (hasValues: boolean) => void;
 }
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
-
-const otpInputVariants: Variants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.3,
-      ease: 'easeOut',
-    },
-  },
-};
 
 const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
   onOtpVerified,
@@ -287,18 +255,20 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <StaggerContainer
+      mode="animate"
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="flex flex-col gap-4"
     >
-      <motion.p variants={itemVariants} className="text-sm text-gray-600 mb-2">
-        {t('forms.enterRegisteredPhone')}
-      </motion.p>
+      <StaggerItem type="slideUp" distance={20} duration={0.4}>
+        <p className="text-sm text-gray-600 mb-2">
+          {t('forms.enterRegisteredPhone')}
+        </p>
+      </StaggerItem>
 
       <form onSubmit={handleSendOtp} className="flex flex-col gap-4">
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <div className="w-full">
             <div className="flex items-start gap-2">
               <div className="shrink-0">
@@ -329,50 +299,52 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
               </div>
             </div>
           </div>
-        </motion.div>
+        </StaggerItem>
 
-        <AnimatePresence>
-          {isOtpSent && (
-            <motion.div
-              variants={otpInputVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              className="flex flex-col gap-4"
+        <AnimatePresenceWrapper
+          show={isOtpSent}
+          exitAnimation={{ opacity: 0, y: 20, scale: 0.95 }}
+          enterAnimation={{ opacity: 1, y: 0, scale: 1 }}
+          duration={0.3}
+        >
+          <div className="flex flex-col gap-4">
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
+              <VerifyCodeInput
+                maxLength={5}
+                inputType="number"
+                value={otp}
+                onChange={handleOtpChange}
+                onComplete={handleOtpComplete}
+                error={errors.otp}
+                showError={!!errors.otp}
+                disabled={isVerifying}
+                containerClassName="w-full"
+              />
+            </StaggerItem>
+
+            <StaggerItem
+              type="slideUp"
+              distance={20}
+              duration={0.4}
+              className="flex justify-end"
             >
-              <motion.div variants={itemVariants}>
-                <VerifyCodeInput
-                  maxLength={5}
-                  inputType="number"
-                  value={otp}
-                  onChange={handleOtpChange}
-                  onComplete={handleOtpComplete}
-                  error={errors.otp}
-                  showError={!!errors.otp}
-                  disabled={isVerifying}
-                  containerClassName="w-full"
-                />
-              </motion.div>
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                disabled={!isExpired || isResending}
+                className="text-sm text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
+              >
+                {isResending
+                  ? t('forms.resending')
+                  : isExpired
+                  ? t('forms.resendCode')
+                  : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
+              </button>
+            </StaggerItem>
+          </div>
+        </AnimatePresenceWrapper>
 
-              <motion.div variants={itemVariants} className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleResendOtp}
-                  disabled={!isExpired || isResending}
-                  className="text-sm text-deep-maroon font-medium hover:underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed"
-                >
-                  {isResending
-                    ? t('forms.resending')
-                    : isExpired
-                    ? t('forms.resendCode')
-                    : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
-                </button>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           {!isOtpSent ? (
             <button
               type="submit"
@@ -405,9 +377,9 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
               )}
             </button>
           )}
-        </motion.div>
+        </StaggerItem>
       </form>
-    </motion.div>
+    </StaggerContainer>
   );
 };
 

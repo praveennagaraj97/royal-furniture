@@ -1,41 +1,22 @@
 'use client';
 
 import verticalLogo from '@/assets/vertical-logo.svg';
+import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+} from '@/components/shared/animations';
 import { ConfirmationModal } from '@/components/shared/confirmation-modal';
 import Modal from '@/components/shared/modal';
 import AppleIcon from '@/components/shared/svgs/apple-icon';
 import GoogleIcon from '@/components/shared/svgs/google-icon';
-import { motion, type Variants } from 'framer-motion';
 import { Facebook } from 'lucide-react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { useState, type FC } from 'react';
 import ForgotPasswordForm from './forgot-password-form';
 import LoginForm from './login-form';
 import SignupForm from './signup';
-
-const socialContainerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const socialItemVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.3,
-      ease: 'easeOut',
-    },
-  },
-};
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -149,54 +130,59 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
             {/* Separator - Only show for signup and login */}
             {activeTab !== 'forgot-password' && (
               <>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.5 }}
+                <FadeIn
+                  duration={0.3}
+                  delay={0.5}
+                  triggerOnView={false}
                   className="flex items-center gap-4 my-6"
                 >
                   <div className="flex-1 h-px bg-gray-300" />
-                  <span className="text-sm text-gray-600">{t('forms.orContinueWith')}</span>
+                  <span className="text-sm text-gray-600">
+                    {t('forms.orContinueWith')}
+                  </span>
                   <div className="flex-1 h-px bg-gray-300" />
-                </motion.div>
+                </FadeIn>
 
                 {/* Social Login Icons */}
-                <motion.div
-                  variants={socialContainerVariants}
-                  initial="hidden"
-                  animate="visible"
+                <StaggerContainer
+                  mode="animate"
+                  staggerChildren={0.1}
+                  delayChildren={0.1}
                   className="flex items-center justify-center gap-4"
                 >
                   {/* Facebook */}
-                  <motion.button
-                    type="button"
-                    variants={socialItemVariants}
-                    onClick={() => handleSocialLogin('facebook')}
-                    className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
-                  >
-                    <Facebook className="w-5 h-5 text-[#1877F2]" />
-                  </motion.button>
+                  <StaggerItem type="scale" initialScale={0.8} duration={0.3}>
+                    <button
+                      type="button"
+                      onClick={() => handleSocialLogin('facebook')}
+                      className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
+                    >
+                      <Facebook className="w-5 h-5 text-[#1877F2]" />
+                    </button>
+                  </StaggerItem>
 
                   {/* Google */}
-                  <motion.button
-                    type="button"
-                    variants={socialItemVariants}
-                    onClick={() => handleSocialLogin('google')}
-                    className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
-                  >
-                    <GoogleIcon className="w-5 h-5" />
-                  </motion.button>
+                  <StaggerItem type="scale" initialScale={0.8} duration={0.3}>
+                    <button
+                      type="button"
+                      onClick={() => handleSocialLogin('google')}
+                      className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
+                    >
+                      <GoogleIcon className="w-5 h-5" />
+                    </button>
+                  </StaggerItem>
 
                   {/* Apple */}
-                  <motion.button
-                    type="button"
-                    variants={socialItemVariants}
-                    onClick={() => handleSocialLogin('apple')}
-                    className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
-                  >
-                    <AppleIcon className="w-5 h-5" />
-                  </motion.button>
-                </motion.div>
+                  <StaggerItem type="scale" initialScale={0.8} duration={0.3}>
+                    <button
+                      type="button"
+                      onClick={() => handleSocialLogin('apple')}
+                      className="w-12 h-12 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:scale-110 transition-transform duration-200"
+                    >
+                      <AppleIcon className="w-5 h-5" />
+                    </button>
+                  </StaggerItem>
+                </StaggerContainer>
               </>
             )}
           </div>

@@ -1,13 +1,13 @@
 'use client';
 
 import { VerifyPhone } from '@/components/auth/signup/verify-phone';
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { CountryPicker } from '@/components/shared/inputs/country-picker';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createSignupFormValidators } from '@/validators';
-import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
@@ -26,29 +26,6 @@ import {
   type SignupFormErrors,
 } from './reducer';
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
-
 interface SignupFormProps {
   onFormStateChange?: (hasValues: boolean) => void;
   onClose?: () => void;
@@ -60,7 +37,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
   const [showVerifyPhone, setShowVerifyPhone] = useState(false);
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
-  
+
   const signupFormValidators = useMemo(
     () => createSignupFormValidators(tValidation),
     [tValidation]
@@ -237,14 +214,14 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <StaggerContainer
+      mode="animate"
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="flex flex-col gap-4"
     >
       <form onSubmit={handleSignupSubmit} className="flex flex-col gap-4">
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <FormInput
             id="firstName"
             type="text"
@@ -258,8 +235,8 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             containerClassName="w-full"
             className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
           />
-        </motion.div>
-        <motion.div variants={itemVariants}>
+        </StaggerItem>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <FormInput
             id="lastName"
             type="text"
@@ -273,8 +250,8 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             containerClassName="w-full"
             className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
           />
-        </motion.div>
-        <motion.div variants={itemVariants}>
+        </StaggerItem>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <FormInput
             id="email"
             type="email"
@@ -288,8 +265,8 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             containerClassName="w-full"
             className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
           />
-        </motion.div>
-        <motion.div variants={itemVariants}>
+        </StaggerItem>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <div className="w-full">
             <div className="flex items-start gap-2">
               <div className="shrink-0">
@@ -321,8 +298,8 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
               </div>
             </div>
           </div>
-        </motion.div>
-        <motion.div variants={itemVariants}>
+        </StaggerItem>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <FormInput
             id="password"
             type="password"
@@ -336,8 +313,8 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             containerClassName="w-full"
             className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
           />
-        </motion.div>
-        <motion.div variants={itemVariants}>
+        </StaggerItem>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <FormInput
             id="confirmPassword"
             type="password"
@@ -356,9 +333,9 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             containerClassName="w-full"
             className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
           />
-        </motion.div>
+        </StaggerItem>
 
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <button
             type="submit"
             disabled={state.isLoading}
@@ -367,9 +344,11 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             flex space-x-2 justify-center items-center"
           >
             {state.isLoading && <Loader2 className="animate-spin text-lg" />}
-            <span>{state.isLoading ? t('forms.signingUp') : t('forms.signUp')}</span>
+            <span>
+              {state.isLoading ? t('forms.signingUp') : t('forms.signUp')}
+            </span>
           </button>
-        </motion.div>
+        </StaggerItem>
       </form>
 
       <VerifyPhone
@@ -383,7 +362,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           onClose?.();
         }}
       />
-    </motion.div>
+    </StaggerContainer>
   );
 };
 

@@ -1,11 +1,11 @@
 'use client';
 
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createLoginFormValidators } from '@/validators';
-import { motion, type Variants } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
@@ -24,29 +24,6 @@ interface EmailResetProps {
   onSuccess?: () => void;
 }
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
-
 const EmailReset: FC<EmailResetProps> = ({
   onModeChange,
   onFormStateChange,
@@ -64,7 +41,7 @@ const EmailReset: FC<EmailResetProps> = ({
   const { showError } = useToast();
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
-  
+
   const loginFormValidators = useMemo(
     () => createLoginFormValidators(tValidation),
     [tValidation]
@@ -144,31 +121,29 @@ const EmailReset: FC<EmailResetProps> = ({
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <StaggerContainer
+      mode="animate"
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="flex flex-col gap-4"
     >
       {!isEmailSent ? (
         <>
           {/* Title */}
-          <motion.h2
-            variants={itemVariants}
-            className="text-lg font-semibold text-gray-900 mb-2"
-          >
-            {t('forms.resetPasswordUsingEmail')}
-          </motion.h2>
+          <StaggerItem type="slideUp" distance={20} duration={0.4}>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              {t('forms.resetPasswordUsingEmail')}
+            </h2>
+          </StaggerItem>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-sm text-gray-600 mb-2"
-          >
-            {t('forms.enterRegisteredEmail')}
-          </motion.p>
+          <StaggerItem type="slideUp" distance={20} duration={0.4}>
+            <p className="text-sm text-gray-600 mb-2">
+              {t('forms.enterRegisteredEmail')}
+            </p>
+          </StaggerItem>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <motion.div variants={itemVariants}>
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
               <FormInput
                 id="resetEmail"
                 type="email"
@@ -182,9 +157,9 @@ const EmailReset: FC<EmailResetProps> = ({
                 containerClassName="w-full"
                 className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
               />
-            </motion.div>
+            </StaggerItem>
 
-            <motion.div variants={itemVariants}>
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
               <button
                 type="submit"
                 disabled={isLoading}
@@ -199,12 +174,12 @@ const EmailReset: FC<EmailResetProps> = ({
                   <span>{t('forms.sendResetLink')}</span>
                 )}
               </button>
-            </motion.div>
+            </StaggerItem>
           </form>
 
           {/* Switch to Phone Reset */}
           {onModeChange && (
-            <motion.div variants={itemVariants}>
+            <StaggerItem type="slideUp" distance={20} duration={0.4}>
               <button
                 type="button"
                 onClick={() => onModeChange('phone-reset')}
@@ -212,13 +187,13 @@ const EmailReset: FC<EmailResetProps> = ({
               >
                 {t('forms.resetPasswordUsingPhone')}
               </button>
-            </motion.div>
+            </StaggerItem>
           )}
         </>
       ) : (
         <EmailResetSuccess email={email} />
       )}
-    </motion.div>
+    </StaggerContainer>
   );
 };
 

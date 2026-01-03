@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useState, type FC } from 'react';
 import NewPassword from './new-password';
 import SendVerifyOtp from './send-verify-otp';
@@ -11,29 +11,6 @@ interface PhoneResetProps {
   onSuccess?: () => void;
   onBackToLogin?: () => void;
 }
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
 
 const PhoneReset: FC<PhoneResetProps> = ({
   onModeChange,
@@ -58,19 +35,18 @@ const PhoneReset: FC<PhoneResetProps> = ({
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <StaggerContainer
+      mode="animate"
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="flex flex-col gap-4"
     >
       {/* Title */}
-      <motion.h2
-        variants={itemVariants}
-        className="text-lg font-semibold text-gray-900 mb-2"
-      >
-        Reset password using phone
-      </motion.h2>
+      <StaggerItem type="slideUp" distance={20} duration={0.4}>
+        <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          Reset password using phone
+        </h2>
+      </StaggerItem>
 
       {!isOtpVerified ? (
         <SendVerifyOtp
@@ -87,7 +63,7 @@ const PhoneReset: FC<PhoneResetProps> = ({
 
       {/* Switch to Email Reset - Only show when not verified */}
       {!isOtpVerified && onModeChange && (
-        <motion.div variants={itemVariants}>
+        <StaggerItem type="slideUp" distance={20} duration={0.4}>
           <button
             type="button"
             onClick={() => onModeChange('email-reset')}
@@ -95,9 +71,9 @@ const PhoneReset: FC<PhoneResetProps> = ({
           >
             Reset password using email
           </button>
-        </motion.div>
+        </StaggerItem>
       )}
-    </motion.div>
+    </StaggerContainer>
   );
 };
 
