@@ -1,36 +1,13 @@
 'use client';
 
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { ConfirmationModal } from '@/components/shared/confirmation-modal';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
 import { Link } from '@/i18n/routing';
-import { motion, type Variants } from 'framer-motion';
 import { ChevronRight, LogOut, UserMinus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-};
 
 const AccountManagement: FC = () => {
   const { logout } = useAuth();
@@ -64,12 +41,10 @@ const AccountManagement: FC = () => {
 
   return (
     <>
-      <motion.div
+      <StaggerContainer
         className="mb-6"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-100px' }}
+        staggerChildren={0.1}
+        delayChildren={0.1}
       >
         <div className="bg-white border border-gray-200 rounded-sm shadow-sm p-2">
           <div className="space-y-1">
@@ -88,7 +63,13 @@ const AccountManagement: FC = () => {
               );
 
               return (
-                <motion.div key={item.key} variants={itemVariants}>
+                <StaggerItem
+                  key={item.key}
+                  type="slide"
+                  direction="left"
+                  distance={20}
+                  duration={0.4}
+                >
                   {item.onClick ? (
                     <button
                       type="button"
@@ -102,12 +83,12 @@ const AccountManagement: FC = () => {
                       {content}
                     </Link>
                   )}
-                </motion.div>
+                </StaggerItem>
               );
             })}
           </div>
         </div>
-      </motion.div>
+      </StaggerContainer>
 
       <ConfirmationModal
         isOpen={isLogoutModalOpen}
