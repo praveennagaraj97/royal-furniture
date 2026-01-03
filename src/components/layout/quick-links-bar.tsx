@@ -1,5 +1,6 @@
 'use client';
 
+import { StaggerContainer } from '@/components/shared/animations';
 import { motion } from 'framer-motion';
 import { Route, Store, Truck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -26,18 +27,17 @@ const QuickLinksBar: FC = () => {
       <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2.5 md:py-2">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:gap-x-6">
           {/* Primary Links */}
-          <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
-            {primaryLinks.map(({ labelKey, icon: Icon }, index) => (
+          <StaggerContainer
+            mode="animate"
+            staggerChildren={0.05}
+            delayChildren={0}
+            duration={0.25}
+            className="flex items-center gap-3 sm:gap-4 md:gap-6"
+          >
+            {primaryLinks.map(({ labelKey, icon: Icon }) => (
               <motion.div
                 key={labelKey}
                 className="flex items-center gap-1.5 text-xs font-semibold sm:gap-2 lg:text-sm"
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: index * 0.05,
-                  duration: 0.25,
-                  ease: 'easeOut',
-                }}
                 whileHover={{ y: -1 }}
                 title={t(labelKey)}
               >
@@ -50,28 +50,27 @@ const QuickLinksBar: FC = () => {
                 </span>
               </motion.div>
             ))}
-          </div>
+          </StaggerContainer>
 
           {/* Secondary Links */}
-          <div className="flex items-center gap-3 text-xs font-semibold sm:gap-4 md:gap-6">
-            {secondaryLinkKeys.map((labelKey, index) => (
+          <StaggerContainer
+            mode="animate"
+            staggerChildren={0.05}
+            delayChildren={0.15}
+            duration={0.25}
+            className="flex items-center gap-3 text-xs font-semibold sm:gap-4 md:gap-6"
+          >
+            {secondaryLinkKeys.map((labelKey) => (
               <motion.a
                 key={labelKey}
                 href="#"
                 className="whitespace-nowrap transition-colors hover:text-indigo-700"
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: 0.15 + index * 0.05,
-                  duration: 0.25,
-                  ease: 'easeOut',
-                }}
                 whileHover={{ y: -1 }}
               >
                 {t(labelKey)}
               </motion.a>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </div>
     </div>

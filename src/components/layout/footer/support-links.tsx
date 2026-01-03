@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { HelpCircle, Mail, Phone } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -11,45 +11,26 @@ import instagramIcon from '@/assets/social/insta.png';
 import xIcon from '@/assets/social/twitter.png';
 import youtubeIcon from '@/assets/social/youtube.png';
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.3,
-      ease: 'easeOut',
-    },
-  },
-};
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
 const SupportLinks: FC = () => {
   const t = useTranslations('footer.support');
   const tSocial = useTranslations('footer.social');
 
   return (
-    <motion.div
+    <StaggerContainer
+      staggerChildren={0.1}
+      delayChildren={0.1}
       className="flex flex-col gap-3"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
     >
       <h3 className="text-gray-900 font-bold text-base">{t('title')}</h3>
       <div className="flex flex-col gap-3">
         {/* Call Customer Support */}
-        <motion.div className="flex items-start gap-3" variants={itemVariants}>
+        <StaggerItem
+          type="slide"
+          direction="left"
+          distance={10}
+          duration={0.3}
+          className="flex items-start gap-3"
+        >
           <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
             <Phone className="w-5 h-5 text-gray-700" />
           </div>
@@ -59,10 +40,16 @@ const SupportLinks: FC = () => {
             </span>
             <span className="text-gray-600 text-sm">2942 87687 989</span>
           </div>
-        </motion.div>
+        </StaggerItem>
 
         {/* Write to us */}
-        <motion.div className="flex items-start gap-3" variants={itemVariants}>
+        <StaggerItem
+          type="slide"
+          direction="left"
+          distance={10}
+          duration={0.3}
+          className="flex items-start gap-3"
+        >
           <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
             <Mail className="w-5 h-5 text-gray-700" />
           </div>
@@ -74,10 +61,16 @@ const SupportLinks: FC = () => {
               www.furniture@g.ail.com
             </span>
           </div>
-        </motion.div>
+        </StaggerItem>
 
         {/* Help Center */}
-        <motion.div className="flex items-start gap-3" variants={itemVariants}>
+        <StaggerItem
+          type="slide"
+          direction="left"
+          distance={10}
+          duration={0.3}
+          className="flex items-start gap-3"
+        >
           <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
             <HelpCircle className="w-5 h-5 text-gray-700" />
           </div>
@@ -89,72 +82,77 @@ const SupportLinks: FC = () => {
               www.furniture@g.ail.com
             </span>
           </div>
-        </motion.div>
+        </StaggerItem>
       </div>
 
       {/* Social Media Icons */}
-      <motion.div
+      <StaggerContainer
+        staggerChildren={0.1}
+        delayChildren={0.1}
         className="flex items-center gap-3 pt-2"
-        variants={containerVariants}
       >
         {/* Instagram */}
-        <motion.a
-          href="#"
-          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-          variants={itemVariants}
-        >
-          <Image
-            src={instagramIcon}
-            alt={tSocial('instagram')}
-            width={32}
-            height={32}
-            className="w-full h-full object-contain"
-          />
-        </motion.a>
+        <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
+          <a
+            href="#"
+            className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+          >
+            <Image
+              src={instagramIcon}
+              alt={tSocial('instagram')}
+              width={32}
+              height={32}
+              className="w-full h-full object-contain"
+            />
+          </a>
+        </StaggerItem>
         {/* Facebook */}
-        <motion.a
-          href="#"
-          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-          variants={itemVariants}
-        >
-          <Image
-            src={facebookIcon}
-            alt={tSocial('facebook')}
-            width={32}
-            height={32}
-            className="w-full h-full object-contain"
-          />
-        </motion.a>
+        <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
+          <a
+            href="#"
+            className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+          >
+            <Image
+              src={facebookIcon}
+              alt={tSocial('facebook')}
+              width={32}
+              height={32}
+              className="w-full h-full object-contain"
+            />
+          </a>
+        </StaggerItem>
         {/* X */}
-        <motion.a
-          href="#"
-          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-          variants={itemVariants}
-        >
-          <Image
-            src={xIcon}
-            alt={tSocial('x')}
-            width={32}
-            height={32}
-            className="w-full h-full object-contain"
-          />
-        </motion.a>
+        <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
+          <a
+            href="#"
+            className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+          >
+            <Image
+              src={xIcon}
+              alt={tSocial('x')}
+              width={32}
+              height={32}
+              className="w-full h-full object-contain"
+            />
+          </a>
+        </StaggerItem>
         {/* YouTube */}
-        <motion.a
-          href="#"
-          className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
-          variants={itemVariants}
-        >
-          <Image
-            src={youtubeIcon}
-            alt={tSocial('youtube')}
-            width={32}
-            height={32}
-            className="w-full h-full object-contain"
-          />
-        </motion.a>
-      </motion.div>
-    </motion.div>
+        <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
+          <a
+            href="#"
+            className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
+          >
+            <Image
+              src={youtubeIcon}
+              alt={tSocial('youtube')}
+              width={32}
+              height={32}
+              className="w-full h-full object-contain"
+            />
+          </a>
+        </StaggerItem>
+      </StaggerContainer>
+    </StaggerContainer>
   );
 };
 

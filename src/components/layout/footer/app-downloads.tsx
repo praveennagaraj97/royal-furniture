@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerItem } from '@/components/shared/animations';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
@@ -8,23 +8,16 @@ import { FC } from 'react';
 import appStoreBadge from '@/assets/app-store-badge.svg';
 import googlePlayBadge from '@/assets/google-play-badge.svg';
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut',
-    },
-  },
-};
-
 const AppDownloads: FC = () => {
   const t = useTranslations('footer.appDownloads');
 
   return (
-    <motion.div className="flex flex-col gap-3" variants={itemVariants}>
+    <StaggerItem
+      type="slideUp"
+      distance={20}
+      duration={0.5}
+      className="flex flex-col gap-3"
+    >
       <p className="text-gray-700 text-sm font-medium">{t('downloadOurApp')}</p>
       <div className="flex flex-wrap gap-3">
         {/* Google Play Badge */}
@@ -54,7 +47,7 @@ const AppDownloads: FC = () => {
           />
         </a>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

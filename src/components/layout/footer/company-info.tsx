@@ -1,31 +1,24 @@
 'use client';
 
-import { motion, type Variants } from 'framer-motion';
+import { StaggerItem } from '@/components/shared/animations';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
 
-import { Link } from '@/i18n/routing';
 import logo from '@/assets/logo.png';
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut',
-    },
-  },
-};
+import { Link } from '@/i18n/routing';
 
 const CompanyInfo: FC = () => {
   const t = useTranslations('footer.company');
 
   return (
-    <motion.div className="flex flex-col gap-3" variants={itemVariants}>
+    <StaggerItem
+      type="slideUp"
+      distance={20}
+      duration={0.5}
+      className="flex flex-col gap-3"
+    >
       <div className="flex items-center gap-3">
         <Link href="/">
           <Image
@@ -46,7 +39,7 @@ const CompanyInfo: FC = () => {
         <span>{t('findOurStores')}</span>
         <ArrowRight className="w-4 h-4" />
       </button>
-    </motion.div>
+    </StaggerItem>
   );
 };
 

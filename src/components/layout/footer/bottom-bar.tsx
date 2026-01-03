@@ -1,22 +1,10 @@
 'use client';
 
+import { StaggerItem } from '@/components/shared/animations';
 import { usePathname, useRouter } from '@/i18n/routing';
-import { motion, type Variants } from 'framer-motion';
 import { ChevronDown, Globe } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut',
-    },
-  },
-};
 
 const BottomBar: FC = () => {
   const t = useTranslations('footer.bottomBar');
@@ -30,9 +18,11 @@ const BottomBar: FC = () => {
   };
 
   return (
-    <motion.div
+    <StaggerItem
+      type="slideUp"
+      distance={20}
+      duration={0.5}
       className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3"
-      variants={itemVariants}
     >
       <p className="text-gray-700 text-sm">{t('copyright')}</p>
       <div className="flex items-center gap-4">
@@ -62,7 +52,7 @@ const BottomBar: FC = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </StaggerItem>
   );
 };
 
