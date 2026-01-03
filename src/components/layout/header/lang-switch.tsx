@@ -12,9 +12,9 @@ const LangSwitch: FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleLanguageChange = (newLocale: 'en' | 'ar') => {
+  function handleLanguageChange(newLocale: 'en' | 'ar') {
     router.replace(pathname, { locale: newLocale });
-  };
+  }
 
   return (
     <Dropdown

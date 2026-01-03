@@ -17,6 +17,7 @@ const Dropdown: FC<DropdownProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const [panelPosition, setPanelPosition] = useState<{
     top: number;
     left: number;
@@ -34,33 +35,85 @@ const Dropdown: FC<DropdownProps> = ({
     const updatePosition = () => {
       if (!containerRef.current) return;
 
-      const rect = containerRef.current.getBoundingClientRect();
+      const triggerRect = containerRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
       const padding = 16;
-      const panelWidth = 180; // approximate dropdown width in px
+      const gap = 8; // gap between trigger and dropdown
+      
+      // Get actual panel width if available, otherwise use approximate
+      const panelWidth = panelRef.current?.offsetWidth || 180;
+      const panelHeight = panelRef.current?.offsetHeight || 200;
 
-      let left =
-        align === 'right'
-          ? rect.right - panelWidth + window.scrollX
-          : rect.left + window.scrollX;
+      // Calculate initial position based on align prop
+      let left = align === 'right' 
+        ? triggerRect.right - panelWidth 
+        : triggerRect.left;
+      
+      let top = triggerRect.bottom + gap;
 
-      const top = rect.bottom + 8 + window.scrollY;
+      // Smart positioning: prevent going outside viewport
+      // Horizontal adjustments
+      if (left + panelWidth > viewportWidth - padding) {
+        // If dropdown would overflow on the right, align to right edge
+        left = viewportWidth - panelWidth - padding;
+      }
+      if (left < padding) {
+        // If dropdown would overflow on the left, align to left edge
+        left = padding;
+      }
 
-      const maxLeft = viewportWidth - panelWidth - padding;
-      if (left > maxLeft) left = maxLeft;
-      if (left < padding) left = padding;
+      // Vertical adjustments
+      const spaceBelow = viewportHeight - triggerRect.bottom - gap;
+      const spaceAbove = triggerRect.top - gap;
+      
+      if (spaceBelow < panelHeight && spaceAbove > spaceBelow) {
+        // If not enough space below but more space above, show above
+        top = triggerRect.top - panelHeight - gap;
+      } else if (spaceBelow < panelHeight) {
+        // If not enough space below and not enough above, fit to viewport
+        top = Math.max(padding, viewportHeight - panelHeight - padding);
+      }
 
+      // Ensure dropdown doesn't go above viewport
+      if (top < padding) {
+        top = padding;
+      }
+
+      // Use fixed positioning with viewport coordinates (no scroll offset needed)
       setPanelPosition({ top, left });
     };
 
+    // Initial position calculation
     updatePosition();
 
+    // Recalculate position after panel renders to get accurate dimensions
+    const rafId = requestAnimationFrame(() => {
+      updatePosition();
+    });
+
+    // Use requestAnimationFrame for smooth updates during scroll
+    let scrollRafId: number;
+    const handleScroll = () => {
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
+      scrollRafId = requestAnimationFrame(updatePosition);
+    };
+
+    // Listen to scroll events on window and all scrollable parents
+    window.addEventListener('scroll', handleScroll, true);
     window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition, true);
+    
+    // Also listen to scroll on document and body
+    document.addEventListener('scroll', handleScroll, true);
+    document.body.addEventListener('scroll', handleScroll, true);
 
     return () => {
+      cancelAnimationFrame(rafId);
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
+      window.removeEventListener('scroll', handleScroll, true);
       window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition, true);
+      document.removeEventListener('scroll', handleScroll, true);
+      document.body.removeEventListener('scroll', handleScroll, true);
     };
   }, [align, open]);
 
@@ -91,6 +144,7 @@ const Dropdown: FC<DropdownProps> = ({
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0, y: -4, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
@@ -99,13 +153,13 @@ const Dropdown: FC<DropdownProps> = ({
             style={
               panelPosition
                 ? {
-                    top: panelPosition.top,
-                    left: panelPosition.left,
+                    top: `${panelPosition.top}px`,
+                    left: `${panelPosition.left}px`,
                   }
-                : undefined
+                : { visibility: 'hidden' }
             }
           >
-            <div className="mt-2 max-h-[min(320px,70vh)] w-40 sm:w-44 max-w-[calc(100vw-2rem)] overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5">
+            <div className="max-h-[min(320px,70vh)] w-40 sm:w-44 max-w-[calc(100vw-2rem)] overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5">
               {children}
             </div>
           </motion.div>
