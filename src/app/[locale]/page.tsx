@@ -12,7 +12,7 @@ import { productsData } from '@/temp/data/products-data';
 
 export default function Home() {
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 mt-4">
       <Hero />
       <PromotionalOffers />
       <ProductListing

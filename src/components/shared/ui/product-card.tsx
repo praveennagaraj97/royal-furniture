@@ -5,6 +5,7 @@ import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import { FC, useState } from 'react';
 
+import { Link } from '@/i18n/routing';
 import { Product } from '@/temp/data/products-data';
 
 export interface ProductCardProps {
@@ -29,57 +30,59 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image Container */}
-      <div className="relative w-full aspect-[4/4.5] rounded-lg overflow-hidden bg-gray-100 mb-3">
-        <Image
-          src={product.image}
-          alt={product.imageAlt}
-          fill
-          className="object-cover transition-transform duration-300"
-          sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
-          style={{
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          }}
-        />
-
-        {/* Discount Badge */}
-        {product.discount > 0 && (
-          <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
-            {product.discount}% OFF
-          </div>
-        )}
-
-        {/* Favorite Button */}
-        <button
-          onClick={handleFavoriteClick}
-          className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 z-10 hover:scale-110"
-          aria-label="Add to wishlist"
-        >
-          <Heart
-            className={`w-4 h-4 transition-colors duration-200 ${
-              isFavorite ? 'fill-black text-black' : 'text-black'
-            }`}
+      <Link href="/sofas/italian-right-lounger-with-pull-out-sofa-bed">
+        {/* Image Container */}
+        <div className="relative w-full aspect-[4/4.5] rounded-lg overflow-hidden bg-gray-100 mb-3">
+          <Image
+            src={product.image}
+            alt={product.imageAlt}
+            fill
+            className="object-cover transition-transform duration-300"
+            sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
+            style={{
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+            }}
           />
-        </button>
-      </div>
 
-      {/* Product Info */}
-      <div className="space-y-1">
-        {/* Price */}
-        <div className="flex items-center gap-2">
-          <span className="text-red-600 font-semibold text-lg">
-            ฿ {product.price.toLocaleString()}
-          </span>
-          {product.originalPrice > product.price && (
-            <span className="text-gray-400 text-sm font-medium line-through">
-              ฿ {product.originalPrice.toLocaleString()}
-            </span>
+          {/* Discount Badge */}
+          {product.discount > 0 && (
+            <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
+              {product.discount}% OFF
+            </div>
           )}
+
+          {/* Favorite Button */}
+          <button
+            onClick={handleFavoriteClick}
+            className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 z-10 hover:scale-110"
+            aria-label="Add to wishlist"
+          >
+            <Heart
+              className={`w-4 h-4 transition-colors duration-200 ${
+                isFavorite ? 'fill-black text-black' : 'text-black'
+              }`}
+            />
+          </button>
         </div>
 
-        {/* Product Name */}
-        <p className="text-indigo-slate text-base">{product.name}</p>
-      </div>
+        {/* Product Info */}
+        <div className="space-y-1">
+          {/* Price */}
+          <div className="flex items-center gap-2">
+            <span className="text-red-600 font-semibold text-lg">
+              ฿ {product.price.toLocaleString()}
+            </span>
+            {product.originalPrice > product.price && (
+              <span className="text-gray-400 text-sm font-medium line-through">
+                ฿ {product.originalPrice.toLocaleString()}
+              </span>
+            )}
+          </div>
+
+          {/* Product Name */}
+          <p className="text-indigo-slate text-base">{product.name}</p>
+        </div>
+      </Link>
     </StaggerItem>
   );
 };

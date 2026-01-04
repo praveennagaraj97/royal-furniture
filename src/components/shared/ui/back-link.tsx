@@ -31,7 +31,7 @@ export const BackLink: FC<BackLinkProps> = ({ onClick, href }) => {
       distance={10}
       duration={0.4}
       margin="-50px"
-      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2"
+      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6"
     >
       <button
         type="button"

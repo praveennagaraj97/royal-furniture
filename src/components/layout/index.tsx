@@ -19,7 +19,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   return (
     <>
       <div className="hidden lg:block">
-      <QuickLinksBar />
+        <QuickLinksBar />
       </div>
       <Header ref={headerRef} isSticky={isSticky} />
       {/* Spacer to prevent layout shift when header becomes sticky */}
@@ -32,7 +32,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
         categories={categories}
         categoriesData={categoriesData}
       />
-      <main className="mt-4">{children}</main>
+      <main>{children}</main>
       <Footer />
     </>
   );
