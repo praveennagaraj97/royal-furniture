@@ -16,7 +16,6 @@ import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { createSignupFormValidators } from '@/validators';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   useEffect,
@@ -27,6 +26,8 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { FiLoader } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 
 interface PhoneOtpLoginProps {
   onModeChange?: (mode: 'email-password') => void;
@@ -61,7 +62,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
   const prevCountryCodeRef = useRef<string>('+971');
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
-  
+
   const signupFormValidators = useMemo(
     () => createSignupFormValidators(tValidation),
     [tValidation]
@@ -330,7 +331,12 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
               />
             </StaggerItem>
 
-            <StaggerItem type="slideUp" distance={20} duration={0.4} className="flex justify-end">
+            <StaggerItem
+              type="slideUp"
+              distance={20}
+              duration={0.4}
+              className="flex justify-end"
+            >
               <button
                 type="button"
                 onClick={handleResendOtp}
@@ -356,7 +362,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
             >
               {isSendingOtp ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <ImSpinner2 className="w-5 h-5 animate-spin" />
                   <span>{t('forms.sendingOtp')}</span>
                 </>
               ) : (
@@ -372,7 +378,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
             >
               {isVerifying ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <FiLoader className="w-5 h-5 animate-spin" />
                   <span>{t('forms.verifying')}</span>
                 </>
               ) : (

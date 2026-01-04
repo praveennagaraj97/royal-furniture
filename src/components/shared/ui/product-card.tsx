@@ -1,9 +1,9 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import { FC, useState } from 'react';
+import { FiHeart } from 'react-icons/fi';
 
 import { Link } from '@/i18n/routing';
 import { Product } from '@/temp/data/products-data';
@@ -57,7 +57,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 z-10 hover:scale-110"
             aria-label="Add to wishlist"
           >
-            <Heart
+            <FiHeart
               className={`w-4 h-4 transition-colors duration-200 ${
                 isFavorite ? 'fill-black text-black' : 'text-black'
               }`}

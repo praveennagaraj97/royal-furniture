@@ -1,15 +1,15 @@
 'use client';
 
-import { Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import { FiSearch } from 'react-icons/fi';
 
 const SearchBar: FC = () => {
   const t = useTranslations('common');
 
   return (
     <div className="relative grow">
-      <Search className="text-[#9CA3AF] absolute left-3 rtl:left-auto rtl:right-3 lg:top-3 top-2 w-5" />
+      <FiSearch className="text-[#9CA3AF] absolute left-3 rtl:left-auto rtl:right-3 lg:top-3 top-2 w-5" />
       <input
         type="text"
         placeholder={t('searchPlaceholder')}

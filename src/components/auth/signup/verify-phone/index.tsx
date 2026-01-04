@@ -9,9 +9,9 @@ import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState, type FC } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 
 interface VerifyPhoneProps {
   isOpen: boolean;
@@ -211,7 +211,7 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <ImSpinner2 className="w-5 h-5 animate-spin" />
                 <span>{t('forms.verifying')}</span>
               </>
             ) : (

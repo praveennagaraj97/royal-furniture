@@ -5,9 +5,9 @@ import { useUser } from '@/contexts/user-context';
 import { useUserInitials } from '@/hooks/use-user-initials';
 import { useRouter } from '@/i18n/routing';
 import { motion } from 'framer-motion';
-import { LogIn } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
+import { FiLogIn } from 'react-icons/fi';
 
 interface AuthSectionProps {
   onSignIn: () => void;
@@ -92,7 +92,7 @@ export const AuthSection: FC<AuthSectionProps> = ({
             onClose();
           }}
         >
-          <LogIn className="h-5 w-5" />
+          <FiLogIn className="h-5 w-5" />
           <span className="text-base font-medium">{t('signInOrSignUp')}</span>
         </button>
       )}

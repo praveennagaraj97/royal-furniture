@@ -2,9 +2,9 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { useRouter } from '@/i18n/routing';
-import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import { FiArrowLeft } from 'react-icons/fi';
 
 interface BackLinkProps {
   onClick?: () => void;
@@ -38,7 +38,7 @@ export const BackLink: FC<BackLinkProps> = ({ onClick, href }) => {
         onClick={handleClick}
         className="flex items-center gap-2 text-gray-700 hover:text-deep-maroon transition-all duration-200 group"
       >
-        <ArrowLeft className="h-5 w-5 text-deep-maroon transition-transform duration-200 group-hover:-translate-x-1" />
+        <FiArrowLeft className="h-5 w-5 text-deep-maroon transition-transform duration-200 group-hover:-translate-x-1" />
         <span className="font-medium">{t('back')}</span>
       </button>
     </ViewOnce>

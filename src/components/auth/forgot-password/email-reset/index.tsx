@@ -6,7 +6,6 @@ import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createLoginFormValidators } from '@/validators';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   useEffect,
@@ -16,6 +15,7 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 import EmailResetSuccess from './email-reset-success';
 
 interface EmailResetProps {
@@ -167,7 +167,7 @@ const EmailReset: FC<EmailResetProps> = ({
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <ImSpinner2 className="w-5 h-5 animate-spin" />
                     <span>{t('forms.sendingResetLink')}</span>
                   </>
                 ) : (

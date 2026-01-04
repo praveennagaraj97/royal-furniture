@@ -9,7 +9,6 @@ import {
   createSignupFormValidators,
   createValidatePassword,
 } from '@/validators';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   useEffect,
@@ -19,6 +18,7 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 
 interface NewPasswordProps {
   resetToken: string;
@@ -236,7 +236,7 @@ const NewPassword: FC<NewPasswordProps> = ({
           >
             {isResetting ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <ImSpinner2 className="w-5 h-5 animate-spin" />
                 <span>{t('forms.resettingPassword')}</span>
               </>
             ) : (

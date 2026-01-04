@@ -1,16 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Route, Store, Truck } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
+import { FiNavigation, FiShoppingBag, FiTruck } from 'react-icons/fi';
 
 interface QuickLinksSectionProps {
   isVisible: boolean;
   containerVariants: {
     hidden: { opacity: number };
-    visible: { opacity: number; transition: { staggerChildren: number; delayChildren: number } };
-    exit: { opacity: number; transition: { staggerChildren: number; staggerDirection: number } };
+    visible: {
+      opacity: number;
+      transition: { staggerChildren: number; delayChildren: number };
+    };
+    exit: {
+      opacity: number;
+      transition: { staggerChildren: number; staggerDirection: number };
+    };
   };
   itemVariants: {
     hidden: { opacity: number; x: number };
@@ -29,9 +35,9 @@ export const QuickLinksSection: FC<QuickLinksSectionProps> = ({
   const isRTL = locale === 'ar';
 
   const quickLinks = [
-    { labelKey: 'freeShipping', icon: Truck },
-    { labelKey: 'clickAndCollect', icon: Store },
-    { labelKey: 'trackOrder', icon: Route },
+    { labelKey: 'freeShipping', icon: FiTruck },
+    { labelKey: 'clickAndCollect', icon: FiShoppingBag },
+    { labelKey: 'trackOrder', icon: FiNavigation },
     { labelKey: 'storeLocator' },
     { labelKey: 'help' },
     { labelKey: 'sellWithUs' },
@@ -74,4 +80,3 @@ export const QuickLinksSection: FC<QuickLinksSectionProps> = ({
     </motion.div>
   );
 };
-

@@ -1,7 +1,7 @@
 'use client';
 
-import { Clock } from 'lucide-react';
 import { FC, useEffect, useMemo, useState } from 'react';
+import { FiClock } from 'react-icons/fi';
 
 export interface CountdownTagProps {
   hours: number;
@@ -48,7 +48,7 @@ const CountdownTag: FC<CountdownTagProps> = ({
     <div
       className={`inline-flex items-center gap-1 bg-deep-maroon/10 px-2 rounded-md ${className}`}
     >
-      <Clock className="w-3 h-3 text-deep-maroon" />
+      <FiClock className="w-3 h-3 text-deep-maroon" />
       <span className="text-xs font-medium text-indigo-slate">
         Ends in {displayHours}h {displayMinutes}m {displaySeconds}s
       </span>

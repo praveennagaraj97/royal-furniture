@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  StaggerContainer,
-  StaggerItem,
-} from '@/components/shared/animations';
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { FormInput } from '@/components/shared/inputs/form-input';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
@@ -11,7 +8,6 @@ import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { createLoginFormValidators } from '@/validators';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   useEffect,
@@ -21,6 +17,7 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 
 interface EmailPasswordLoginProps {
   onModeChange?: (mode: 'phone-otp' | 'email-otp') => void;
@@ -53,7 +50,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
   const { checkAuthStatus } = useAuth();
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
-  
+
   const loginFormValidators = useMemo(
     () => createLoginFormValidators(tValidation),
     [tValidation]
@@ -225,7 +222,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <ImSpinner2 className="w-5 h-5 animate-spin" />
                 <span>{t('forms.loggingIn')}</span>
               </>
             ) : (
@@ -234,7 +231,12 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           </button>
         </StaggerItem>
 
-        <StaggerItem type="slideUp" distance={20} duration={0.4} className="flex justify-center">
+        <StaggerItem
+          type="slideUp"
+          distance={20}
+          duration={0.4}
+          className="flex justify-center"
+        >
           <button
             type="button"
             onClick={onForgotPassword}
@@ -247,7 +249,12 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
 
       {/* OTP Login Buttons */}
       {onModeChange && (
-        <StaggerItem type="slideUp" distance={20} duration={0.4} className="flex flex-col gap-3">
+        <StaggerItem
+          type="slideUp"
+          distance={20}
+          duration={0.4}
+          className="flex flex-col gap-3"
+        >
           <button
             type="button"
             onClick={() => onModeChange('phone-otp')}

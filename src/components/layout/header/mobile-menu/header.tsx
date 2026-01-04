@@ -1,10 +1,10 @@
 'use client';
 
 import { Link, usePathname, useRouter } from '@/i18n/routing';
-import { Heart, ShoppingCart, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
+import { FiHeart, FiShoppingCart, FiX } from 'react-icons/fi';
 
 import logo from '@/assets/logo.png';
 
@@ -26,7 +26,7 @@ export const MobileMenuHeader: FC<MobileMenuHeaderProps> = ({ onClose }) => {
           onClick={onClose}
           className="p-2 rounded-full hover:bg-gray-100 transition-colors"
         >
-          <X className="h-5 w-5 text-gray-600" />
+          <FiX className="h-5 w-5 text-gray-600" />
         </button>
         <button
           type="button"
@@ -52,10 +52,10 @@ export const MobileMenuHeader: FC<MobileMenuHeaderProps> = ({ onClose }) => {
 
       <div className="flex items-center gap-2">
         <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
-          <Heart className="h-5 w-5" />
+          <FiHeart className="h-5 w-5" />
         </button>
         <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
-          <ShoppingCart className="h-5 w-5" />
+          <FiShoppingCart className="h-5 w-5" />
         </button>
       </div>
     </div>

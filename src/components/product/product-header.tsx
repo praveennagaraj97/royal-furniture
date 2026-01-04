@@ -1,7 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { Star } from 'lucide-react';
+import { FiStar } from 'react-icons/fi';
 import type { ProductDetailData } from './types';
 
 export interface ProductHeaderProps {
@@ -84,11 +84,11 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         <div className="flex flex-wrap items-center gap-2 min-w-0">
           <div className="flex items-center gap-1 shrink-0">
             {[...Array(5)].map((_, i) => (
-              <Star
+              <FiStar
                 key={i}
                 className={`w-5 h-5 ${
                   i < Math.floor(product.rating)
-                    ? 'stroke-deep-maroon text-deep-maroon'
+                    ? 'fill-deep-maroon text-deep-maroon'
                     : 'text-gray-300'
                 }`}
               />

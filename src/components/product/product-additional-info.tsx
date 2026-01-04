@@ -1,7 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { ChevronRight, CreditCard, Store } from 'lucide-react';
+import { FiChevronRight, FiCreditCard, FiShoppingBag } from 'react-icons/fi';
 import type { ProductDetailData } from './types';
 
 export interface ProductAdditionalInfoProps {
@@ -55,11 +55,11 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-gray-100 rounded-lg">
-              <Store className="w-5 h-5 text-gray-700" />
+              <FiShoppingBag className="w-5 h-5 text-gray-700" />
             </div>
             <span className="font-semibold text-gray-900">Try in store!</span>
           </div>
-          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
+          <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
         </button>
       </ViewOnce>
 
@@ -75,7 +75,7 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
         <div className="p-2 bg-deep-maroon/10 rounded-lg">
           <div className="flex items-center gap-3 min-w-0">
             <div className="p-2 bg-white rounded-lg shrink-0">
-              <CreditCard className="w-5 h-5 text-deep-maroon" />
+              <FiCreditCard className="w-5 h-5 text-deep-maroon" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-medium">Flexi Payment Available</div>

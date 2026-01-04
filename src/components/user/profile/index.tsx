@@ -8,7 +8,6 @@ import { useUser } from '@/contexts/user-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createSignupFormValidators } from '@/validators';
-import { Loader2, Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   startTransition,
@@ -20,6 +19,8 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { FiEdit2 } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 
 // Parse phone number to extract country code and number
 const parsePhoneNumber = (phoneNumber: string) => {
@@ -248,7 +249,7 @@ const ProfilePage: FC = () => {
                           hover:text-deep-maroon/80 hover:scale-110 hover:bg-deep-maroon/20 transition-all duration-200"
                           title={t('change')}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <FiEdit2 className="h-4 w-4" />
                         </button>
                       }
                     />
@@ -298,7 +299,7 @@ const ProfilePage: FC = () => {
             disabled={isLoading}
             className="w-full md:w-auto bg-deep-maroon text-white py-3 px-8 rounded-md font-semibold text-base hover:bg-deep-maroon/90 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {isLoading && <Loader2 className="animate-spin h-5 w-5" />}
+            {isLoading && <ImSpinner2 className="animate-spin h-5 w-5" />}
             <span>{isLoading ? t('updating') : t('update')}</span>
           </button>
         </StaggerItem>

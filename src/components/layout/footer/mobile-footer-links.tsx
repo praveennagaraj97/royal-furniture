@@ -1,13 +1,10 @@
 'use client';
 
-import {
-  StaggerContainer,
-  StaggerItem,
-} from '@/components/shared/animations';
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { FC, useState } from 'react';
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import SupportLinks from './support-links';
 
 export interface FooterCategory {
@@ -45,7 +42,7 @@ const MobileFooterLinks: FC<MobileFooterLinksProps> = ({ categories }) => {
       {/* Accordion Categories */}
       {categories.map((category) => {
         const isOpen = openCategories.has(category.id);
-        const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
+        const ChevronIcon = isOpen ? FiChevronUp : FiChevronDown;
 
         return (
           <div

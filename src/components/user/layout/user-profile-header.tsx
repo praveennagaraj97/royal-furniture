@@ -3,9 +3,9 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { useUser } from '@/contexts/user-context';
 import { Link } from '@/i18n/routing';
-import { SquarePen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
+import { FiEdit2 } from 'react-icons/fi';
 
 const UserProfileHeader: FC = () => {
   const { user } = useUser();
@@ -42,7 +42,7 @@ const UserProfileHeader: FC = () => {
           href="/user/profile"
           className="flex flex-col items-center gap-1.5 text-white hover:text-white/80 transition-colors ml-4"
         >
-          <SquarePen className="h-4 w-4" />
+          <FiEdit2 className="h-4 w-4" />
           <span className="text-sm font-medium">{t('edit')}</span>
         </Link>
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { Minus, Plus } from 'lucide-react';
+import { FiMinus, FiPlus } from 'react-icons/fi';
 
 export interface QuantitySelectorProps {
   quantity: number;
@@ -27,7 +27,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               className="w-10 h-10 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               aria-label="Decrease quantity"
             >
-              <Minus className="w-4 h-4" />
+              <FiMinus className="w-4 h-4" />
             </button>
             <span className="px-2 py-2 text-2xl font-bold min-w-12 text-center">
               {quantity}
@@ -39,7 +39,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               className="w-10 h-10 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               aria-label="Increase quantity"
             >
-              <Plus className="w-4 h-4" />
+              <FiPlus className="w-4 h-4" />
             </button>
           </div>
           <span className="text-green-600 font-medium text-sm">In Stock</span>

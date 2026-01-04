@@ -7,9 +7,9 @@ import { useUser } from '@/contexts/user-context';
 import { useUserInitials } from '@/hooks/use-user-initials';
 import { Link } from '@/i18n/routing';
 import { motion } from 'framer-motion';
-import { LogIn } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, type FC } from 'react';
+import { FiLogIn } from 'react-icons/fi';
 
 interface AuthActionButtonProps {
   onClick: () => void;
@@ -77,7 +77,7 @@ export const AuthActionButton: FC<AuthActionButtonProps> = ({ onClick }) => {
         onClick={onClick}
       >
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7F1D1D] text-white">
-          <LogIn className="h-5 w-5" />
+          <FiLogIn className="h-5 w-5" />
         </span>
         <span>{t('signInOrSignUp')}</span>
       </motion.button>

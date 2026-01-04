@@ -8,7 +8,6 @@ import { useToast } from '@/contexts/toast-context';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createSignupFormValidators } from '@/validators';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   useEffect,
@@ -19,6 +18,7 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 import {
   initialState,
   signupReducer,
@@ -343,7 +343,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             transition-colors duration-200 mt-2 disabled:opacity-50 disabled:cursor-not-allowed
             flex space-x-2 justify-center items-center"
           >
-            {state.isLoading && <Loader2 className="animate-spin text-lg" />}
+            {state.isLoading && <ImSpinner2 className="animate-spin text-lg" />}
             <span>
               {state.isLoading ? t('forms.signingUp') : t('forms.signUp')}
             </span>

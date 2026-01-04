@@ -3,9 +3,14 @@
 import { Subcategory } from '@/components/category/subcategories/card';
 import { useRouter } from '@/i18n/routing';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
+import {
+  FiArrowLeft,
+  FiArrowRight,
+  FiChevronLeft,
+  FiChevronRight,
+} from 'react-icons/fi';
 
 import { categories } from '@/temp/data/categories';
 import { categoriesData, CategoriesData } from '@/temp/data/categories-data';
@@ -60,9 +65,9 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
             onClick={onBackClick}
           >
             {isRTL ? (
-              <ArrowRight className="h-5 w-5" />
+              <FiArrowRight className="h-5 w-5" />
             ) : (
-              <ArrowLeft className="h-5 w-5" />
+              <FiArrowLeft className="h-5 w-5" />
             )}
             <span className="text-base font-medium">
               {categories.find((c) => c.id === selectedCategory)
@@ -84,9 +89,7 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
                 onClose();
               }}
             >
-              <span className="text-base font-medium">
-                {subcategory.name}
-              </span>
+              <span className="text-base font-medium">{subcategory.name}</span>
             </button>
           ))}
         </motion.div>
@@ -127,9 +130,9 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
                   </span>
                   {hasSubcategories &&
                     (isRTL ? (
-                      <ChevronLeft className="h-5 w-5 text-gray-400" />
+                      <FiChevronLeft className="h-5 w-5 text-gray-400" />
                     ) : (
-                      <ChevronRight className="h-5 w-5 text-gray-400" />
+                      <FiChevronRight className="h-5 w-5 text-gray-400" />
                     ))}
                 </button>
               );
@@ -139,4 +142,3 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
     </AnimatePresence>
   );
 };
-

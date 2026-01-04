@@ -1,10 +1,10 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useState } from 'react';
+import { FiChevronRight } from 'react-icons/fi';
 
 import { Blog } from '@/temp/data/blogs-data';
 
@@ -56,7 +56,7 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
           className="text-indigo-slate text-sm sm:text-base font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 w-fit group"
         >
           <span>Read More</span>
-          <ChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+          <FiChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
         </Link>
       </div>
     </StaggerItem>

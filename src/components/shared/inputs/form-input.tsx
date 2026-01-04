@@ -1,7 +1,6 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Eye, EyeOff } from 'lucide-react';
 import {
   type ChangeEvent,
   type FC,
@@ -10,6 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -68,9 +68,7 @@ export const FormInput: FC<FormInputProps> = ({
   }
 
   const isNumericType =
-    type === 'number' ||
-    type === 'tel' ||
-    inputProps.inputMode === 'numeric';
+    type === 'number' || type === 'tel' || inputProps.inputMode === 'numeric';
   const paddingClasses =
     rightElement || isPasswordType
       ? isNumericType && rightElement
@@ -127,9 +125,9 @@ export const FormInput: FC<FormInputProps> = ({
             className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
           >
             {showPassword ? (
-              <EyeOff className="w-5 h-5" />
+              <FiEyeOff className="w-5 h-5" />
             ) : (
-              <Eye className="w-5 h-5" />
+              <FiEye className="w-5 h-5" />
             )}
           </button>
         )}

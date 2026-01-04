@@ -1,10 +1,10 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
+import { FiArrowRight } from 'react-icons/fi';
 
 import logo from '@/assets/logo.png';
 import { Link } from '@/i18n/routing';
@@ -37,7 +37,7 @@ const CompanyInfo: FC = () => {
         className="flex items-center justify-center gap-2 bg-deep-maroon text-white px-6 py-3 rounded-full font-medium hover:bg-[#6b0000] transition-colors duration-200 w-fit"
       >
         <span>{t('findOurStores')}</span>
-        <ArrowRight className="w-4 h-4" />
+        <FiArrowRight className="w-4 h-4" />
       </button>
     </StaggerItem>
   );

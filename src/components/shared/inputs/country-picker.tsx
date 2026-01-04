@@ -23,9 +23,9 @@ import {
   YE,
 } from 'country-flag-icons/react/3x2';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type ComponentType, type FC, useRef, useState } from 'react';
+import { FiChevronDown, FiSearch } from 'react-icons/fi';
 
 export interface Country {
   code: string;
@@ -139,7 +139,7 @@ export const CountryPicker: FC<CountryPickerProps> = ({
            w-fit text-gray-900 form-input-border-default ${className}`}
       >
         <span>{selectedCountry.dialCode}</span>
-        <ChevronDown
+        <FiChevronDown
           className={`w-4 h-4 text-gray-400 transition-transform ${
             isOpen ? 'rotate-180' : ''
           }`}
@@ -158,7 +158,7 @@ export const CountryPicker: FC<CountryPickerProps> = ({
             {/* Search Input */}
             <div className="p-3 border-b border-gray-200">
               <div className="relative">
-                <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <FiSearch className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
                 <input
                   type="text"
                   placeholder={t('searchCountry')}

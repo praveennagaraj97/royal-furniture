@@ -2,19 +2,19 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import { motion } from 'framer-motion';
-import { Route, Store, Truck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import { FiNavigation, FiShoppingBag, FiTruck } from 'react-icons/fi';
 
 type QuickLink = {
   labelKey: string;
-  icon: typeof Truck;
+  icon: typeof FiTruck;
 };
 
 const primaryLinks: QuickLink[] = [
-  { labelKey: 'freeShipping', icon: Truck },
-  { labelKey: 'clickAndCollect', icon: Store },
-  { labelKey: 'trackOrder', icon: Route },
+  { labelKey: 'freeShipping', icon: FiTruck },
+  { labelKey: 'clickAndCollect', icon: FiShoppingBag },
+  { labelKey: 'trackOrder', icon: FiNavigation },
 ];
 
 const secondaryLinkKeys = ['storeLocator', 'help', 'sellWithUs'];

@@ -2,14 +2,14 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { Link } from '@/i18n/routing';
-import {
-  Bookmark,
-  ChevronRight,
-  Languages,
-  Settings as SettingsIcon,
-} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import {
+  FiBookmark,
+  FiChevronRight,
+  FiGlobe,
+  FiSettings,
+} from 'react-icons/fi';
 
 const SettingsSection: FC = () => {
   const t = useTranslations('user.settings');
@@ -17,17 +17,17 @@ const SettingsSection: FC = () => {
   const settingsItems = [
     {
       key: 'savedForLater',
-      icon: Bookmark,
+      icon: FiBookmark,
       href: '#',
     },
     {
       key: 'notificationsSettings',
-      icon: SettingsIcon,
+      icon: FiSettings,
       href: '#',
     },
     {
       key: 'selectLanguage',
-      icon: Languages,
+      icon: FiGlobe,
       href: '#',
     },
   ];
@@ -69,7 +69,7 @@ const SettingsSection: FC = () => {
                       {t(item.key)}
                     </span>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                  <FiChevronRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 </Link>
               </StaggerItem>
             );

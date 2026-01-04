@@ -1,8 +1,8 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
-import { AlertTriangle } from 'lucide-react';
 import { type FC } from 'react';
+import { FiAlertTriangle } from 'react-icons/fi';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -47,7 +47,7 @@ export const ConfirmationModal: FC<ConfirmationModalProps> = ({
         {/* Icon at top */}
         <div className="flex justify-center mb-4">
           <div className={`${iconBgClass} rounded-full p-3`}>
-            <AlertTriangle className={`w-6 h-6 ${iconClass}`} />
+            <FiAlertTriangle className={`w-6 h-6 ${iconClass}`} />
           </div>
         </div>
 

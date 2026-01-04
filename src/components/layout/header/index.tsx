@@ -2,8 +2,8 @@
 
 import { SlideIn } from '@/components/shared/animations';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Heart, Menu, ShoppingCart, X } from 'lucide-react';
 import { forwardRef, useState } from 'react';
+import { FiHeart, FiMenu, FiShoppingCart, FiX } from 'react-icons/fi';
 
 import AuthModal from '@/components/auth/auth-modal';
 import { Link } from '@/i18n/routing';
@@ -64,7 +64,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                         exit={{ rotate: 90, opacity: 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <X className="h-6 w-6 text-gray-600" />
+                        <FiX className="h-6 w-6 text-gray-600" />
                       </motion.div>
                     ) : (
                       <motion.div
@@ -74,7 +74,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                         exit={{ rotate: -90, opacity: 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <Menu className="h-6 w-6 text-gray-600" />
+                        <FiMenu className="h-6 w-6 text-gray-600" />
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -100,10 +100,10 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 className="shrink-0 flex items-center gap-2 sm:gap-3"
               >
                 <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
-                  <Heart className="h-6 w-6" />
+                  <FiHeart className="h-6 w-6" />
                 </button>
                 <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
-                  <ShoppingCart className="h-6 w-6" />
+                  <FiShoppingCart className="h-6 w-6" />
                 </button>
               </SlideIn>
 

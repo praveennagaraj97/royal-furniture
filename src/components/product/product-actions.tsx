@@ -1,7 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { ShoppingCart } from 'lucide-react';
+import { FiShoppingCart } from 'react-icons/fi';
 
 export interface ProductActionsProps {
   onAddToCart?: () => void;
@@ -28,7 +28,7 @@ export const ProductActions: React.FC<ProductActionsProps> = ({
           onClick={onAddToCart}
           className="whitespace-nowrap flex items-center justify-center w-full gap-2 bg-deep-maroon text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#6b0000] transition-colors duration-200 shadow-md hover:shadow-lg"
         >
-          <ShoppingCart className="w-5 h-5" />
+          <FiShoppingCart className="w-5 h-5" />
           <span>Add to Cart</span>
         </button>
       </ViewOnce>

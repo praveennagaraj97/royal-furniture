@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface SwiperProps {
   children: ReactNode;
@@ -197,7 +197,7 @@ const Swiper: FC<SwiperProps> = ({
               disabled={isScrolling}
               aria-label="Scroll left"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-700" />
+              <FiChevronLeft className="w-5 h-5 text-gray-700" />
             </motion.button>
           )}
 
@@ -214,7 +214,7 @@ const Swiper: FC<SwiperProps> = ({
               disabled={isScrolling}
               aria-label="Scroll right"
             >
-              <ChevronRight className="w-5 h-5 text-gray-700" />
+              <FiChevronRight className="w-5 h-5 text-gray-700" />
             </motion.button>
           )}
         </div>

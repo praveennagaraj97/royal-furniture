@@ -2,17 +2,17 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { Link } from '@/i18n/routing';
-import {
-  ArrowLeftRight,
-  ChevronRight,
-  FileText,
-  Headphones,
-  HelpCircle,
-  Home,
-  Shield,
-} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import {
+  FiChevronRight,
+  FiFileText,
+  FiHeadphones,
+  FiHelpCircle,
+  FiHome,
+  FiShield,
+} from 'react-icons/fi';
+import { GrReturn } from 'react-icons/gr';
 
 const FeedbackInfoSection: FC = () => {
   const t = useTranslations('user.feedback');
@@ -20,32 +20,32 @@ const FeedbackInfoSection: FC = () => {
   const feedbackItems = [
     {
       key: 'returnPolicy',
-      icon: ArrowLeftRight,
+      icon: GrReturn,
       href: '#',
     },
     {
       key: 'privacyPolicy',
-      icon: Shield,
+      icon: FiShield,
       href: '#',
     },
     {
       key: 'termsConditions',
-      icon: FileText,
+      icon: FiFileText,
       href: '#',
     },
     {
       key: 'contactUs',
-      icon: Headphones,
+      icon: FiHeadphones,
       href: '#',
     },
     {
       key: 'faqs',
-      icon: HelpCircle,
+      icon: FiHelpCircle,
       href: '#',
     },
     {
       key: 'aboutUs',
-      icon: Home,
+      icon: FiHome,
       href: '#',
     },
   ];
@@ -87,7 +87,7 @@ const FeedbackInfoSection: FC = () => {
                       {t(item.key)}
                     </span>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                  <FiChevronRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 </Link>
               </StaggerItem>
             );

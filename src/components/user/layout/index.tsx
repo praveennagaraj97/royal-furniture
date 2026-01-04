@@ -3,8 +3,8 @@
 import { StaggerContainer, ViewOnce } from '@/components/shared/animations';
 import Portal from '@/components/shared/portal';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronRight, Menu, X } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
+import { FiChevronRight, FiMenu, FiX } from 'react-icons/fi';
 import AccountManagement from './account-management';
 import FeedbackInfoSection from './feedback-info-section';
 import SettingsSection from './settings-section';
@@ -35,11 +35,11 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
         >
           <div className="flex items-center gap-3">
             <div className="p-2 bg-deep-maroon/10 rounded-sm group-hover:bg-deep-maroon/20 transition-colors">
-              <Menu className="h-5 w-5 text-deep-maroon" />
+              <FiMenu className="h-5 w-5 text-deep-maroon" />
             </div>
             <span className="text-base font-semibold text-gray-900">Menu</span>
           </div>
-          <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
+          <FiChevronRight className="h-5 w-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
         </motion.button>
       </ViewOnce>
 
@@ -79,7 +79,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
                         onClick={() => setIsSidebarOpen(false)}
                         className="p-2 rounded-full hover:bg-gray-100 transition-colors"
                       >
-                        <X className="h-5 w-5 text-gray-600" />
+                        <FiX className="h-5 w-5 text-gray-600" />
                       </button>
                     </div>
 

@@ -1,10 +1,10 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
-import { HelpCircle, Mail, Phone } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
+import { FiHelpCircle, FiMail, FiPhone } from 'react-icons/fi';
 
 import facebookIcon from '@/assets/social/facebook.png';
 import instagramIcon from '@/assets/social/insta.png';
@@ -32,7 +32,7 @@ const SupportLinks: FC = () => {
           className="flex items-start gap-3"
         >
           <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
-            <Phone className="w-5 h-5 text-gray-700" />
+            <FiPhone className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
             <span className="text-gray-900 font-semibold text-sm">
@@ -51,7 +51,7 @@ const SupportLinks: FC = () => {
           className="flex items-start gap-3"
         >
           <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
-            <Mail className="w-5 h-5 text-gray-700" />
+            <FiMail className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
             <span className="text-gray-900 font-semibold text-sm">
@@ -72,7 +72,7 @@ const SupportLinks: FC = () => {
           className="flex items-start gap-3"
         >
           <div className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-500 shrink-0">
-            <HelpCircle className="w-5 h-5 text-gray-700" />
+            <FiHelpCircle className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
             <span className="text-gray-900 font-semibold text-sm">

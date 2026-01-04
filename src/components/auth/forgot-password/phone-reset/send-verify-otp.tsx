@@ -13,7 +13,6 @@ import { useCountdown } from '@/hooks';
 import { authService } from '@/services/api/auth-service';
 import type { ParsedAPIError } from '@/types/error';
 import { createSignupFormValidators } from '@/validators';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   useEffect,
@@ -24,6 +23,8 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { FiLoader } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 
 interface SendVerifyOtpProps {
   onOtpVerified: (
@@ -353,7 +354,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
             >
               {isSendingOtp ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <ImSpinner2 className="w-5 h-5 animate-spin" />
                   <span>{t('forms.sendingOtp')}</span>
                 </>
               ) : (
@@ -369,7 +370,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
             >
               {isVerifying ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <FiLoader className="w-5 h-5 animate-spin" />
                   <span>{t('forms.verifying')}</span>
                 </>
               ) : (

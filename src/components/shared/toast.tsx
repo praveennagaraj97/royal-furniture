@@ -1,8 +1,8 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, CheckCircle, Info, X } from 'lucide-react';
 import { type FC, useEffect, useState } from 'react';
+import { FiAlertCircle, FiCheckCircle, FiInfo, FiX } from 'react-icons/fi';
 import Portal from './portal';
 
 export type ToastType = 'success' | 'error' | 'info';
@@ -44,21 +44,21 @@ const ToastItem: FC<ToastItemProps> = ({ toast, onClose }) => {
           bg: 'bg-green-50',
           border: 'border-green-200',
           text: 'text-green-800',
-          icon: <CheckCircle className="w-5 h-5 text-green-600" />,
+          icon: <FiCheckCircle className="w-5 h-5 text-green-600" />,
         };
       case 'error':
         return {
           bg: 'bg-red-50',
           border: 'border-red-200',
           text: 'text-red-800',
-          icon: <AlertCircle className="w-5 h-5 text-red-600" />,
+          icon: <FiAlertCircle className="w-5 h-5 text-red-600" />,
         };
       case 'info':
         return {
           bg: 'bg-blue-50',
           border: 'border-blue-200',
           text: 'text-blue-800',
-          icon: <Info className="w-5 h-5 text-blue-600" />,
+          icon: <FiInfo className="w-5 h-5 text-blue-600" />,
         };
     }
   };
@@ -88,7 +88,7 @@ const ToastItem: FC<ToastItemProps> = ({ toast, onClose }) => {
         className="shrink-0 text-gray-400 hover:text-gray-600 transition-colors duration-200"
         aria-label="Close toast"
       >
-        <X className="w-4 h-4" />
+        <FiX className="w-4 h-4" />
       </button>
     </motion.div>
   );

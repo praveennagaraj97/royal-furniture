@@ -2,9 +2,9 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { Link } from '@/i18n/routing';
-import { ChevronRight, Percent } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import { FiChevronRight, FiPercent } from 'react-icons/fi';
 
 const ExclusiveOffersBanner: FC = () => {
   const t = useTranslations('user.exclusiveOffers');
@@ -19,10 +19,10 @@ const ExclusiveOffersBanner: FC = () => {
     >
       <Link href="#" className="flex items-center justify-between group">
         <div className="flex items-center gap-3">
-          <Percent className="h-6 w-6 text-deep-maroon" />
+          <FiPercent className="h-6 w-6 text-deep-maroon" />
           <span className="text-gray-900 font-semibold">{t('title')}</span>
         </div>
-        <ChevronRight className="h-5 w-5 text-gray-600 group-hover:text-deep-maroon transition-colors" />
+        <FiChevronRight className="h-5 w-5 text-gray-600 group-hover:text-deep-maroon transition-colors" />
       </Link>
     </ViewOnce>
   );

@@ -1,13 +1,10 @@
 'use client';
 
-import {
-  StaggerContainer,
-  StaggerItem,
-} from '@/components/shared/animations';
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { Link } from '@/i18n/routing';
-import { Heart, MapPin, Package, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
+import { FiHeart, FiMapPin, FiPackage, FiUser } from 'react-icons/fi';
 
 const QuickLinksGrid: FC = () => {
   const t = useTranslations('user.quickLinks');
@@ -15,22 +12,22 @@ const QuickLinksGrid: FC = () => {
   const quickLinks = [
     {
       key: 'myOrders',
-      icon: Package,
+      icon: FiPackage,
       href: '#',
     },
     {
       key: 'myProfile',
-      icon: User,
+      icon: FiUser,
       href: '/user/profile',
     },
     {
       key: 'wishlist',
-      icon: Heart,
+      icon: FiHeart,
       href: '#',
     },
     {
       key: 'savedAddresses',
-      icon: MapPin,
+      icon: FiMapPin,
       href: '#',
     },
   ];

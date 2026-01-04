@@ -2,9 +2,9 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
-import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { FC } from 'react';
+import { FiChevronRight } from 'react-icons/fi';
 
 import { blogsData } from '@/temp/data/blogs-data';
 import BlogCard from './blog-card';
@@ -26,7 +26,7 @@ const LatestBlogs: FC = () => {
           className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
         >
           <span>See All</span>
-          <ChevronRight className="sm:w-4 sm:h-4 w-2 h-2" />
+          <FiChevronRight className="sm:w-4 sm:h-4 w-2 h-2" />
         </Link>
       </div>
 

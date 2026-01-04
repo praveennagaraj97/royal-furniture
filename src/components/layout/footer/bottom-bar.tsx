@@ -2,9 +2,9 @@
 
 import { StaggerItem } from '@/components/shared/animations';
 import { usePathname, useRouter } from '@/i18n/routing';
-import { ChevronDown, Globe } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
+import { FiChevronDown, FiGlobe } from 'react-icons/fi';
 
 const BottomBar: FC = () => {
   const t = useTranslations('footer.bottomBar');
@@ -33,11 +33,11 @@ const BottomBar: FC = () => {
         >
           <span className="text-lg">🇦🇪</span>
           <span>{t('unitedArabEmirates')}</span>
-          <ChevronDown className="w-4 h-4" />
+          <FiChevronDown className="w-4 h-4" />
         </button>
         {/* Language Selector */}
         <div className="flex items-center gap-2">
-          <Globe className="w-4 h-4 text-gray-700" />
+          <FiGlobe className="w-4 h-4 text-gray-700" />
           <div className="relative">
             <select
               value={locale}
@@ -48,7 +48,7 @@ const BottomBar: FC = () => {
               <option value="en">{tCommon('english')}</option>
               <option value="ar">{tCommon('arabic')}</option>
             </select>
-            <ChevronDown className="w-4 h-4 text-gray-700 pointer-events-none absolute right-0 top-1/2 -translate-y-1/2" />
+            <FiChevronDown className="w-4 h-4 text-gray-700 pointer-events-none absolute right-0 top-1/2 -translate-y-1/2" />
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
 import type { FC } from 'react';
+import { FiCheckCircle } from 'react-icons/fi';
 
 interface EmailResetSuccessProps {
   email: string;
@@ -21,7 +21,7 @@ const EmailResetSuccess: FC<EmailResetSuccessProps> = ({ email }) => {
         animate={{ scale: 1 }}
         transition={{ type: 'spring', duration: 0.5 }}
       >
-        <CheckCircle2 className="w-16 h-16 text-green-500" />
+        <FiCheckCircle className="w-16 h-16 text-green-500" />
       </motion.div>
 
       <motion.h2

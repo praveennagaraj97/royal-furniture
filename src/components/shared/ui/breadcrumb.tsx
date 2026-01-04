@@ -2,7 +2,7 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { useRouter } from '@/i18n/routing';
-import { ChevronLeft } from 'lucide-react';
+import { FiChevronLeft } from 'react-icons/fi';
 import { FC } from 'react';
 
 export interface BreadcrumbItem {
@@ -48,7 +48,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items, onBackClick }) => {
           className="flex items-center text-deep-maroon transition-transform duration-200 hover:-translate-x-1"
           aria-label={'back'}
         >
-          <ChevronLeft className="h-5 w-5" />
+          <FiChevronLeft className="h-5 w-5" />
         </button>
 
         {/* Breadcrumbs */}

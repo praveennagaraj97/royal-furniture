@@ -5,9 +5,9 @@ import { ConfirmationModal } from '@/components/shared/confirmation-modal';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
 import { Link } from '@/i18n/routing';
-import { ChevronRight, LogOut, UserMinus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
+import { FiChevronRight, FiLogOut, FiUserMinus } from 'react-icons/fi';
 
 const AccountManagement: FC = () => {
   const { logout } = useAuth();
@@ -27,13 +27,13 @@ const AccountManagement: FC = () => {
   const accountItems = [
     {
       key: 'deleteAccount',
-      icon: UserMinus,
+      icon: FiUserMinus,
       href: '#',
       onClick: undefined,
     },
     {
       key: 'logout',
-      icon: LogOut,
+      icon: FiLogOut,
       href: '#',
       onClick: handleLogoutClick,
     },
@@ -58,7 +58,7 @@ const AccountManagement: FC = () => {
                       {t(item.key)}
                     </span>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                  <FiChevronRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 </div>
               );
 

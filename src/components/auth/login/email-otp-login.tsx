@@ -15,7 +15,6 @@ import type { ParsedAPIError } from '@/types/error';
 import type { VerifyOTPResponse } from '@/types/response';
 import { getTokenExpiry, setAuthToken, setRefreshToken } from '@/utils';
 import { createLoginFormValidators } from '@/validators';
-import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {
   useEffect,
@@ -26,6 +25,8 @@ import {
   type FC,
   type FormEvent,
 } from 'react';
+import { FiLoader } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 
 interface EmailOtpLoginProps {
   onModeChange?: (mode: 'email-password') => void;
@@ -58,7 +59,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
   const prevEmailRef = useRef<string>('');
   const t = useTranslations('auth');
   const tValidation = useTranslations('auth.validation');
-  
+
   const loginFormValidators = useMemo(
     () => createLoginFormValidators(tValidation),
     [tValidation]
@@ -297,7 +298,12 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
               />
             </StaggerItem>
 
-            <StaggerItem type="slideUp" distance={20} duration={0.4} className="flex justify-end">
+            <StaggerItem
+              type="slideUp"
+              distance={20}
+              duration={0.4}
+              className="flex justify-end"
+            >
               <button
                 type="button"
                 onClick={handleResendOtp}
@@ -323,7 +329,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
             >
               {isSendingOtp ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <ImSpinner2 className="w-5 h-5 animate-spin" />
                   <span>{t('forms.sendingOtp')}</span>
                 </>
               ) : (
@@ -339,7 +345,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
             >
               {isVerifying ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <FiLoader className="w-5 h-5 animate-spin" />
                   <span>{t('forms.verifying')}</span>
                 </>
               ) : (
