@@ -31,7 +31,7 @@ const ProductListingWithCart: FC<ProductListingWithCartProps> = ({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-end gap-3 flex-wrap">
           {typeof title === 'string' ? (
-            <span className="lg:text-2xl md:text-xl text-lg text-indigo-slate">
+            <span className="lg:text-2xl md:text-xl text-lg text-indigo-slate font-medium">
               {title}
             </span>
           ) : (

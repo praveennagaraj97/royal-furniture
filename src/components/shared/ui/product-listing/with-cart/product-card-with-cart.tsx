@@ -44,7 +44,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
       className="relative w-full min-w-[280px] sm:min-w-[300px] bg-white rounded-lg overflow-hidden"
     >
       {/* Image Container */}
-      <div className="relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100">
+      <div className="relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100 mb-3">
         <Image
           src={product.image}
           alt={product.imageAlt}
@@ -75,7 +75,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
       </div>
 
       {/* Product Info Section */}
-      <div className="p-4 space-y-3">
+      <div className="space-y-2">
         {/* Price */}
         <div className="flex items-center gap-2">
           <span className="text-red-600 font-bold text-lg">
@@ -92,7 +92,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
         <p className="text-gray-900 text-base">{product.name}</p>
 
         {/* Quantity Selector */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mb-4">
           <button
             type="button"
             onClick={(e) => {
@@ -100,7 +100,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
               handleQuantityChange(-1);
             }}
             disabled={quantity <= 1}
-            className="w-8 h-8 rounded-full border border-red-600 flex items-center justify-center text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shrink-0"
+            className="w-8 h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shrink-0"
             aria-label="Decrease quantity"
           >
             <FiMinus className="w-3 h-3" />
@@ -114,7 +114,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
               e.stopPropagation();
               handleQuantityChange(1);
             }}
-            className="w-8 h-8 rounded-full border border-red-600 flex items-center justify-center text-red-600 hover:bg-red-50 transition-colors duration-200 shrink-0"
+            className="w-8 h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 transition-colors duration-200 shrink-0"
             aria-label="Increase quantity"
           >
             <FiPlus className="w-3 h-3" />
@@ -125,9 +125,9 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
         <button
           type="button"
           onClick={handleAddToCart}
-          className="w-full flex items-center justify-center gap-2 border border-red-600 text-gray-900 py-2.5 px-4 rounded-lg font-medium hover:bg-red-50 transition-colors duration-200"
+          className="w-full flex items-center justify-center gap-2 border border-deep-maroon text-gray-900 py-2 px-4 rounded-lg font-medium hover:bg-deep-maroon/10 transition-colors duration-200"
         >
-          <FiShoppingCart className="w-4 h-4 text-black" />
+          <FiShoppingCart className="text-xl text-deep-maroon" />
           <span>Add to cart</span>
         </button>
       </div>

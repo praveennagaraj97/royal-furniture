@@ -198,7 +198,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
 
               {/* Product Images */}
               {review.productImages && review.productImages.length > 0 && (
-                <div className="flex gap-2 ml-[52px]">
+                <div className="flex gap-2 ml-12 overflow-x-auto">
                   {review.productImages.map((image, index) => (
                     <div
                       key={index}
