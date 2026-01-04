@@ -1,7 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { FiStar } from 'react-icons/fi';
+import { IoIosStarOutline } from 'react-icons/io';
 import type { ProductDetailData } from './types';
 
 export interface ProductHeaderProps {
@@ -84,7 +84,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         <div className="flex flex-wrap items-center gap-2 min-w-0">
           <div className="flex items-center gap-1 shrink-0">
             {[...Array(5)].map((_, i) => (
-              <FiStar
+              <IoIosStarOutline
                 key={i}
                 className={`w-5 h-5 ${
                   i < Math.floor(product.rating)
