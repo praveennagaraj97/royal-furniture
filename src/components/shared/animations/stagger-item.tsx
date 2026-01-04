@@ -50,16 +50,31 @@ const createVariants = (
   isRTL: boolean
 ): Variants => {
   const getXValue = () => {
-    if (direction === 'left')
-      return rtlAware && isRTL ? distance : `-${distance}`;
-    if (direction === 'right')
-      return rtlAware && isRTL ? `-${distance}` : distance;
+    if (direction === 'left') {
+      if (rtlAware && isRTL) {
+        return distance;
+      }
+      // If distance is a number, use arithmetic; if string, use template literal
+      return typeof distance === 'number' ? -distance : `-${distance}`;
+    }
+    if (direction === 'right') {
+      if (rtlAware && isRTL) {
+        // If distance is a number, use arithmetic; if string, use template literal
+        return typeof distance === 'number' ? -distance : `-${distance}`;
+      }
+      return distance;
+    }
     return 0;
   };
 
   const getYValue = () => {
-    if (direction === 'up') return `-${distance}`;
-    if (direction === 'down') return distance;
+    if (direction === 'up') {
+      // If distance is a number, use arithmetic; if string, use template literal
+      return typeof distance === 'number' ? -distance : `-${distance}`;
+    }
+    if (direction === 'down') {
+      return distance;
+    }
     return 0;
   };
 
