@@ -16,7 +16,14 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
 }) => {
   return (
     <div className="space-y-3">
-      <ViewOnce type="slideUp" distance={15} duration={0.4} delay={0.1} amount={0.01} margin="-100px">
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.1}
+        amount={0.01}
+        margin="-100px"
+      >
         <div className="flex items-center justify-between">
           <h3 className="text-base font-semibold text-gray-900">
             Select Colour and Fabric
@@ -37,9 +44,9 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
             <button
               type="button"
               onClick={() => onColorChange(color.id)}
-              className={`relative w-10 h-10 rounded-full border-2 transition-all duration-200 ${
+              className={`relative w-10 h-10 rounded-full border transition-all duration-200 ${
                 selectedColor === color.id
-                  ? 'border-deep-maroon ring-2 ring-deep-maroon/20 scale-110'
+                  ? 'border-deep-maroon ring ring-deep-maroon/20 scale-110'
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               aria-label={color.name}
@@ -76,4 +83,3 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
     </div>
   );
 };
-
