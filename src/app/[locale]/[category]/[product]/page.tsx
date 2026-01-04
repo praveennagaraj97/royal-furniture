@@ -1,5 +1,5 @@
-import type { ProductDetailData } from '@/components/product';
 import { ProductDetail } from '@/components/product';
+import { ProductDetailData } from '@/components/product/types';
 import { Breadcrumb } from '@/components/shared/ui/breadcrumb';
 import { Fragment } from 'react';
 
