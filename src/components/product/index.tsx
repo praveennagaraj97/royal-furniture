@@ -2,6 +2,7 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { useState, type FC } from 'react';
+import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
 import { ProductActions } from './product-actions';
@@ -130,6 +131,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             <ProductAdditionalInfo product={data} />
 
             <PaymentDeliveryInfo productPrice={data.price} />
+            <GeneralInformation />
           </div>
         </ViewOnce>
       </div>
