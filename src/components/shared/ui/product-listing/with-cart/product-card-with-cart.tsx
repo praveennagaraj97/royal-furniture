@@ -44,7 +44,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
       className="relative w-full min-w-[280px] sm:min-w-[300px] bg-white rounded-lg overflow-hidden"
     >
       {/* Image Container */}
-      <div className="relative w-full aspect-4/3 overflow-hidden bg-gray-100">
+      <div className="relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100">
         <Image
           src={product.image}
           alt={product.imageAlt}
