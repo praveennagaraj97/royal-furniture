@@ -10,6 +10,7 @@ import { ProductAdditionalInfo } from './product-additional-info';
 import { ProductHeader } from './product-header';
 import { ProductOptions } from './product-options';
 import type { ProductDetailData } from './types';
+import { UserReviews } from './user-reviews';
 
 export interface ProductDetailProps {
   data: ProductDetailData;
@@ -132,6 +133,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
 
             <PaymentDeliveryInfo productPrice={data.price} />
             <GeneralInformation />
+            <UserReviews />
           </div>
         </ViewOnce>
       </div>
