@@ -1,6 +1,6 @@
 'use client';
 
-import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import { useState, type FC } from 'react';
 import { ProductImages } from './image-carousel';
 import { ProductActions } from './product-actions';
@@ -46,23 +46,23 @@ export const ProductDetailSection: FC<ProductDetailSectionProps> = ({
   };
 
   return (
-    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
-      <StaggerContainer
-        staggerChildren={0.1}
-        delayChildren={0.1}
-        className="grid lg:grid-cols-2 gap-6"
-      >
+    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 max-w-full w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Side - Image Carousel */}
-        <ProductImages
-          product={product}
-          onWishlistClick={onWishlistClick}
-          onShareClick={onShareClick}
-          isWishlisted={isWishlisted}
-        />
+        <ViewOnce type="slideUp" distance={30} duration={0.6} delay={0.1} amount={0.01} margin="-100px">
+          <div className="min-w-0 w-full">
+            <ProductImages
+              product={product}
+              onWishlistClick={onWishlistClick}
+              onShareClick={onShareClick}
+              isWishlisted={isWishlisted}
+            />
+          </div>
+        </ViewOnce>
 
         {/* Right Side - Product Details */}
-        <StaggerItem type="slideUp" distance={30} duration={0.6}>
-          <div className="space-y-4">
+        <ViewOnce type="slideUp" distance={30} duration={0.6} delay={0.2} amount={0.01} margin="-100px">
+          <div className="min-w-0 w-full space-y-4">
             <ProductHeader product={product} />
             <ProductOptions
               product={product}
@@ -76,8 +76,8 @@ export const ProductDetailSection: FC<ProductDetailSectionProps> = ({
             <ProductActions onAddToCart={onAddToCart} onBuyNow={onBuyNow} />
             <ProductAdditionalInfo product={product} />
           </div>
-        </StaggerItem>
-      </StaggerContainer>
+        </ViewOnce>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { SlideIn } from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import type { SizeOption } from '../types';
 
 export interface SizeSelectionProps {
@@ -17,7 +17,7 @@ export const SizeSelection: React.FC<SizeSelectionProps> = ({
   const selectedSizeObj = sizes.find((s) => s.id === selectedSize);
 
   return (
-    <SlideIn direction="up" distance={15} duration={0.4} delay={0.5}>
+    <ViewOnce type="slideUp" distance={15} duration={0.4} delay={0.1} amount={0.01} margin="-100px">
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-semibold text-gray-900">
@@ -49,6 +49,6 @@ export const SizeSelection: React.FC<SizeSelectionProps> = ({
           ))}
         </div>
       </div>
-    </SlideIn>
+    </ViewOnce>
   );
 };

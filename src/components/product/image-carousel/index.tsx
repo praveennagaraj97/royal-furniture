@@ -1,6 +1,5 @@
 'use client';
 
-import { FadeIn, StaggerItem } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
 import { Box, Heart, Share2 } from 'lucide-react';
 import Image from 'next/image';
@@ -33,8 +32,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   };
 
   return (
-    <FadeIn duration={0.5} delay={0.1} className="w-full">
-      <div className="relative w-full">
+    <div className="relative w-full">
         {/* Main Image Container */}
         <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
           <Image
@@ -126,7 +124,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           </Swiper>
         )}
       </div>
-    </FadeIn>
   );
 };
 
@@ -144,16 +141,14 @@ export const ProductImages: FC<ProductImagesProps> = ({
   isWishlisted = false,
 }) => {
   return (
-    <StaggerItem type="slideUp" distance={30} duration={0.6}>
-      <ImageCarousel
-        images={product.images}
-        alt={product.name}
-        discount={product.discount}
-        showView3D={true}
-        onWishlistClick={onWishlistClick}
-        onShareClick={onShareClick}
-        isWishlisted={isWishlisted}
-      />
-    </StaggerItem>
+    <ImageCarousel
+      images={product.images}
+      alt={product.name}
+      discount={product.discount}
+      showView3D={true}
+      onWishlistClick={onWishlistClick}
+      onShareClick={onShareClick}
+      isWishlisted={isWishlisted}
+    />
   );
 };

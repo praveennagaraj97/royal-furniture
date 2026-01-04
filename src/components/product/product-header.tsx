@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  FadeIn,
-  SlideIn,
-  StaggerContainer,
-  StaggerItem,
-} from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import { Star } from 'lucide-react';
 import type { ProductDetailData } from './types';
 
@@ -21,45 +16,73 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
       <div>
         {/* Availability Notice */}
         {product.stockLeft !== undefined && product.stockLeft > 0 && (
-          <FadeIn duration={0.4} delay={0.2}>
+          <ViewOnce
+            type="fade"
+            duration={0.4}
+            delay={0.1}
+            amount={0.01}
+            margin="-100px"
+          >
             <div className="text-sm font-medium text-indigo-slate">
               Order now only {product.stockLeft} left
             </div>
-          </FadeIn>
+          </ViewOnce>
         )}
 
         {/* Product Name */}
-        <SlideIn direction="up" distance={20} duration={0.5} delay={0.2}>
+        <ViewOnce
+          type="slideUp"
+          distance={20}
+          duration={0.5}
+          delay={0.15}
+          amount={0.01}
+          margin="-100px"
+        >
           <h1 className="text-3xl lg:text-4xl font-medium">{product.name}</h1>
-        </SlideIn>
+        </ViewOnce>
       </div>
 
       {/* Savings and Views */}
-      <StaggerContainer
-        staggerChildren={0.05}
-        delayChildren={0.25}
-        className="flex flex-col"
-      >
+      <div className="flex flex-col">
         {savings > 0 && (
-          <StaggerItem type="fade" duration={0.4}>
+          <ViewOnce
+            type="fade"
+            duration={0.4}
+            delay={0.2}
+            amount={0.01}
+            margin="-100px"
+          >
             <span className="text-green-600 font-semibold text-lg">
               Save ฿ {savings.toLocaleString()}
             </span>
-          </StaggerItem>
+          </ViewOnce>
         )}
         {product.views24h && (
-          <StaggerItem type="fade" duration={0.4}>
+          <ViewOnce
+            type="fade"
+            duration={0.4}
+            delay={0.25}
+            amount={0.01}
+            margin="-100px"
+          >
             <span className="text-gray-600 text-sm">
               {product.views24h} views in 24 hrs
             </span>
-          </StaggerItem>
+          </ViewOnce>
         )}
-      </StaggerContainer>
+      </div>
 
       {/* Rating */}
-      <SlideIn direction="up" distance={15} duration={0.4} delay={0.3}>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.3}
+        amount={0.01}
+        margin="-100px"
+      >
+        <div className="flex flex-wrap items-center gap-2 min-w-0">
+          <div className="flex items-center gap-1 shrink-0">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
@@ -71,20 +94,27 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
               />
             ))}
           </div>
-          <span className="text-deep-maroon font-medium">
+          <span className="text-deep-maroon font-medium shrink-0">
             {product.rating} ({product.reviewCount} Reviews)
           </span>
           <button
             type="button"
-            className="text-indigo-slate hover:underline text-sm font-semibold"
+            className="text-indigo-slate hover:underline text-sm font-semibold whitespace-nowrap shrink-0"
           >
             See Reviews
           </button>
         </div>
-      </SlideIn>
+      </ViewOnce>
 
       {/* Price */}
-      <SlideIn direction="up" distance={15} duration={0.4} delay={0.35}>
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.35}
+        amount={0.01}
+        margin="-100px"
+      >
         <div className="flex items-center gap-3">
           <span className="text-3xl font-bold text-red-600">
             ฿ {product.price.toLocaleString()}
@@ -95,7 +125,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             </span>
           )}
         </div>
-      </SlideIn>
+      </ViewOnce>
     </div>
   );
 };

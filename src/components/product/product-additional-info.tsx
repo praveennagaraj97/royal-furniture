@@ -1,6 +1,6 @@
 'use client';
 
-import { SlideIn } from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import { ChevronRight, CreditCard, Store } from 'lucide-react';
 import type { ProductDetailData } from './types';
 
@@ -15,9 +15,16 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
     <div className="space-y-4">
       {/* Delivery Information */}
       {product.deliveryDate && (
-        <SlideIn direction="up" distance={15} duration={0.4} delay={0.7}>
-          <div className="p-4 bg-deep-maroon/5 rounded-lg flex justify-between">
-            <div className="flex items-center gap-2 text-sm text-deep-maroon">
+        <ViewOnce
+          type="slideUp"
+          distance={15}
+          duration={0.4}
+          delay={0.1}
+          amount={0.01}
+          margin="-100px"
+        >
+          <div className="p-4 bg-deep-maroon/5 rounded-lg flex flex-col sm:flex-row sm:justify-between items-start gap-3">
+            <div className="flex items-center gap-2 text-sm text-deep-maroon min-w-0">
               <span>Delivery on</span>
               <span className="font-semibold text-indigo-slate">
                 {product.deliveryDate}
@@ -25,16 +32,23 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
             </div>
             <button
               type="button"
-              className="text-indigo-slate hover:underline font-medium text-sm"
+              className="text-indigo-slate hover:underline font-medium text-sm whitespace-nowrap"
             >
               Update location
             </button>
           </div>
-        </SlideIn>
+        </ViewOnce>
       )}
 
       {/* In-Store Trial */}
-      <SlideIn direction="up" distance={15} duration={0.4} delay={0.75}>
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.15}
+        amount={0.01}
+        margin="-100px"
+      >
         <button
           type="button"
           className="w-full flex items-center justify-between p-2 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
@@ -47,16 +61,23 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
           </div>
           <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
         </button>
-      </SlideIn>
+      </ViewOnce>
 
       {/* Flexi Payment */}
-      <SlideIn direction="up" distance={15} duration={0.4} delay={0.8}>
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.2}
+        amount={0.01}
+        margin="-100px"
+      >
         <div className="p-2 bg-deep-maroon/10 rounded-lg">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-white rounded-lg">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="p-2 bg-white rounded-lg shrink-0">
               <CreditCard className="w-5 h-5 text-deep-maroon" />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="font-medium">Flexi Payment Available</div>
               <div className="text-sm text-deep-maroon font-medium">
                 Pay 20% now, the rest before delivery.
@@ -64,13 +85,13 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
             </div>
             <button
               type="button"
-              className="text-indigo-slate hover:underline text-sm font-medium"
+              className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap shrink-0"
             >
               See More
             </button>
           </div>
         </div>
-      </SlideIn>
+      </ViewOnce>
     </div>
   );
 };

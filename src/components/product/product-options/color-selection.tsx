@@ -1,6 +1,6 @@
 'use client';
 
-import { SlideIn } from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import type { ColorOption } from '../types';
 
 export interface ColorSelectionProps {
@@ -15,17 +15,26 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
   onColorChange,
 }) => {
   return (
-    <SlideIn direction="up" distance={15} duration={0.4} delay={0.4}>
-      <div className="space-y-3">
+    <div className="space-y-3">
+      <ViewOnce type="slideUp" distance={15} duration={0.4} delay={0.1} amount={0.01} margin="-100px">
         <div className="flex items-center justify-between">
           <h3 className="text-base font-semibold text-gray-900">
             Select Colour and Fabric
           </h3>
         </div>
-        <div className="flex gap-3 flex-wrap">
-          {colors.slice(0, 4).map((color) => (
+      </ViewOnce>
+      <div className="flex gap-3 flex-wrap">
+        {colors.slice(0, 4).map((color, index) => (
+          <ViewOnce
+            key={color.id}
+            type="scale"
+            initialScale={0.8}
+            duration={0.3}
+            delay={index * 0.05}
+            amount={0.01}
+            margin="-100px"
+          >
             <button
-              key={color.id}
               type="button"
               onClick={() => onColorChange(color.id)}
               className={`relative w-10 h-10 rounded-full border-2 transition-all duration-200 ${
@@ -47,16 +56,24 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
                 />
               )}
             </button>
-          ))}
+          </ViewOnce>
+        ))}
+        <ViewOnce
+          type="fade"
+          duration={0.3}
+          delay={0.2}
+          amount={0.01}
+          margin="-100px"
+        >
           <button
             type="button"
             className="text-deep-maroon hover:underline text-sm font-medium ml-3"
           >
             See All
           </button>
-        </div>
+        </ViewOnce>
       </div>
-    </SlideIn>
+    </div>
   );
 };
 

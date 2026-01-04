@@ -1,6 +1,6 @@
 'use client';
 
-import { SlideIn } from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import { Minus, Plus } from 'lucide-react';
 
 export interface QuantitySelectorProps {
@@ -15,7 +15,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   onQuantityChange,
 }) => {
   return (
-    <SlideIn direction="up" distance={15} duration={0.4} delay={0.55}>
+    <ViewOnce type="slideUp" distance={15} duration={0.4} delay={0.1} amount={0.01} margin="-100px">
       <div>
         <span className="text-base font-semibold text-gray-900">Quantity:</span>
         <div className="flex gap-3 items-center mt-3">
@@ -45,6 +45,6 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           <span className="text-green-600 font-medium text-sm">In Stock</span>
         </div>
       </div>
-    </SlideIn>
+    </ViewOnce>
   );
 };

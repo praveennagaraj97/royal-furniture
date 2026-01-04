@@ -1,11 +1,11 @@
 'use client';
 
-import { SlideIn } from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import { ChevronRight, Settings } from 'lucide-react';
 
 export const CustomizeSection: React.FC = () => {
   return (
-    <SlideIn direction="up" distance={15} duration={0.4} delay={0.45}>
+    <ViewOnce type="slideUp" distance={15} duration={0.4} delay={0.1} amount={0.01} margin="-100px">
       <button
         type="button"
         className="w-full flex items-center justify-between p-2 bg-deep-maroon/10 hover:bg-deep-maroon/20 rounded-lg transition-colors duration-200 group"
@@ -21,6 +21,6 @@ export const CustomizeSection: React.FC = () => {
         </div>
         <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
       </button>
-    </SlideIn>
+    </ViewOnce>
   );
 };
