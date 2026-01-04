@@ -1,6 +1,9 @@
 import { ProductDetail } from '@/components/product';
 import { ProductDetailData } from '@/components/product/types';
 import { Breadcrumb } from '@/components/shared/ui/breadcrumb';
+import ProductListing from '@/components/shared/ui/product-listing';
+import ProductListingWithCart from '@/components/shared/ui/product-listing/with-cart';
+import { productsData } from '@/temp/data/products-data';
 import { Fragment } from 'react';
 
 interface ProductPageProps {
@@ -65,6 +68,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
         ]}
       />
       <ProductDetail data={productData} />
+      <div className="py-6 mt-8 space-y-4">
+        <ProductListingWithCart
+          title="Frequently Bought Together"
+          seeAllHref="/products"
+          products={productsData}
+        />
+
+        <ProductListing
+          title="Similar Products"
+          seeAllHref="/products"
+          products={productsData}
+        />
+      </div>
     </Fragment>
   );
 }

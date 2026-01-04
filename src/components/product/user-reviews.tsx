@@ -104,9 +104,9 @@ export const UserReviews: FC<UserReviewsProps> = ({
         </h2>
 
         {/* Overall Rating and Distribution */}
-        <div className="flex flex-col sm:flex-row gap-8 items-start">
+        <div className="grid sm:grid-cols-2 grid-cols-1 gap-6 items-start">
           {/* Overall Rating Summary */}
-          <div className="flex items-center gap-3 ">
+          <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
               <span className="text-4xl font-medium text-indigo-slate">
                 {overallRating}
@@ -127,7 +127,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
           </div>
 
           {/* Rating Distribution Chart */}
-          <div className="w-full sm:grow space-y-2.5 sm:border-l-2 sm:border-gray-300 sm:pl-3">
+          <div className="w-full space-y-2.5 sm:border-l-2 sm:border-gray-300 sm:pl-3">
             {[5, 4, 3, 2, 1].map((stars) => {
               const count =
                 stars === 5
