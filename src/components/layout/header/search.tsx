@@ -9,7 +9,7 @@ const SearchBar: FC = () => {
 
   return (
     <div className="relative grow">
-      <FiSearch className="text-[#9CA3AF] absolute left-3 rtl:left-auto rtl:right-3 lg:top-3 top-2 w-5" />
+      <FiSearch className="text-[#9CA3AF] absolute left-2 rtl:left-auto rtl:right-2 top-3 w-6 h-6" />
       <input
         type="text"
         placeholder={t('searchPlaceholder')}
