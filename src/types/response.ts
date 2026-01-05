@@ -66,3 +66,14 @@ export interface User {
 }
 
 export type UserProfileResponse = BaseAPIResponse<User>;
+
+export interface CountryLanguage {
+  id: number;
+  country_name: string;
+  language: string;
+  language_code: string;
+  currency: string;
+  image: string;
+}
+
+export type CountryLanguageOptionsResponse = BaseAPIResponse<CountryLanguage[]>;

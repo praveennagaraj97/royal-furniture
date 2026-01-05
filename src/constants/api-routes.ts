@@ -18,4 +18,7 @@ export const API_ROUTES = {
     USER_VIEW: '/users/user-view/',
     USER_UPDATE: '/users/user-view/',
   },
+  CONFIG: {
+    COUNTRY_LANGUAGE_OPTIONS: '/users/country-language-options/',
+  },
 } as const;

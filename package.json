@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
+    "predev": "bun scripts/pre-run.ts",
     "build": "next build",
+    "prebuild": "bun scripts/pre-run.ts",
+    "postinstall": "bun scripts/pre-run.ts",
     "start": "next start",
     "lint": "eslint"
   },

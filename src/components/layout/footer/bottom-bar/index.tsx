@@ -5,6 +5,7 @@ import { usePathname, useRouter } from '@/i18n/routing';
 import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiChevronDown, FiGlobe } from 'react-icons/fi';
+import CurrencySelect from './currency-select';
 
 const BottomBar: FC = () => {
   const t = useTranslations('footer.bottomBar');
@@ -27,14 +28,7 @@ const BottomBar: FC = () => {
       <p className="text-gray-700 text-sm">{t('copyright')}</p>
       <div className="flex items-center gap-4">
         {/* Region Selector */}
-        <button
-          type="button"
-          className="flex items-center gap-2 text-gray-700 text-sm hover:text-deep-maroon transition-colors duration-200"
-        >
-          <span className="text-lg">🇦🇪</span>
-          <span>{t('unitedArabEmirates')}</span>
-          <FiChevronDown className="w-4 h-4" />
-        </button>
+        <CurrencySelect />
         {/* Language Selector */}
         <div className="flex items-center gap-2">
           <FiGlobe className="w-4 h-4 text-gray-700" />
