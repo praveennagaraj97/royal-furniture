@@ -11,8 +11,6 @@ import ProductListing from '@/components/shared/ui/product-listing';
 import { productsData } from '@/temp/data/products-data';
 import { getCurrenciesWithLocaleParams } from '@/utils/generated';
 
-export const dynamicParams = false;
-
 export default function Home() {
   return (
     <div className="grid gap-6 mt-4">
