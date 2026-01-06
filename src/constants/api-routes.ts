@@ -21,4 +21,7 @@ export const API_ROUTES = {
   CONFIG: {
     COUNTRY_LANGUAGE_OPTIONS: '/users/country-language-options/',
   },
+  PRODUCTS: {
+    HOME: '/products/home/',
+  },
 } as const;

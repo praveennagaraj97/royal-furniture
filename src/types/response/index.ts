@@ -1,3 +1,5 @@
+import { HomeData } from './home-page';
+
 export interface BaseAPIResponse<T = unknown> {
   detail: string;
   message: string;
@@ -79,3 +81,5 @@ export interface CountryLanguage {
 }
 
 export type CountryLanguageOptionsResponse = BaseAPIResponse<CountryLanguage[]>;
+
+export type HomePageResponse = BaseAPIResponse<HomeData>;

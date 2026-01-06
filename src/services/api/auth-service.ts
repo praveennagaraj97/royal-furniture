@@ -230,7 +230,9 @@ export class AuthService extends BaseAPIService {
     }
   }
 
-  async updateProfile(payload: UpdateProfilePayload): Promise<UserProfileResponse> {
+  async updateProfile(
+    payload: UpdateProfilePayload
+  ): Promise<UserProfileResponse> {
     try {
       const response = await this.http.patch<UserProfileResponse>(
         API_ROUTES.AUTH.USER_UPDATE,
