@@ -75,6 +75,7 @@ export interface CountryLanguage {
   language_code: string;
   currency: string;
   image: string;
+  is_default: boolean;
 }
 
 export type CountryLanguageOptionsResponse = BaseAPIResponse<CountryLanguage[]>;

@@ -1,16 +1,12 @@
 'use client';
 
 import { Select } from '@/components/shared/select';
-import { usePathname, useRouter } from '@/i18n/routing';
 import { currenciesData } from '@/utils/generated';
 import { useLocale } from 'next-intl';
 import Image from 'next/image';
 import { FC, useMemo } from 'react';
 
 const CurrencySelect: FC = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-
   const locale = useLocale();
 
   // Memoize options to prevent unnecessary re-renders
@@ -48,10 +44,13 @@ const CurrencySelect: FC = () => {
       (item) => item.id.toString() === val.toString()
     );
     if (selected) {
-      console.log(selected);
-      router.replace(`/${selected.currency.toLowerCase()}`, {
-        locale: selected.language_code,
-      });
+      const countryCode = selected.country_code.toLowerCase();
+      const languageCode = selected.language_code.toLowerCase();
+
+      // Navigate to the new country/locale path
+      // Note: We use window.location.href for a full refresh if switching countries,
+      // as it's cleaner to reset the entire app state in this case.
+      window.location.href = `/${countryCode}/${languageCode}`;
     }
   };
 
