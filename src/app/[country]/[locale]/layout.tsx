@@ -4,7 +4,7 @@ import { AuthProvider } from '@/contexts/auth-context';
 import { ToastProvider } from '@/contexts/toast-context';
 import { UserProvider } from '@/contexts/user-context';
 import { routing } from '@/i18n/routing';
-import { getCurrenciesWithLocaleParams } from '@/utils/generated';
+import { getCountriesWithLocaleParams } from '@/utils/generated';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import {
@@ -22,7 +22,7 @@ const montserrat = Montserrat({
 });
 
 export function generateStaticParams() {
-  return getCurrenciesWithLocaleParams();
+  return getCountriesWithLocaleParams();
 }
 
 export async function generateMetadata({

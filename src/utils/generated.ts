@@ -16,7 +16,7 @@ export const LOCALES = Array.from(
   new Set(countries.map((item) => item.language_code))
 );
 
-export const getCurrenciesWithLocaleParams = (): readonly {
+export const getCountriesWithLocaleParams = (): {
   locale: string;
   country: string;
 }[] => {

@@ -9,7 +9,7 @@ import SofaAndSeating from '@/components/home/sofa-and-seating';
 import CountdownTag from '@/components/shared/ui/countdown-tag';
 import ProductListing from '@/components/shared/ui/product-listing';
 import { productsData } from '@/temp/data/products-data';
-import { getCurrenciesWithLocaleParams } from '@/utils/generated';
+import { getCountriesWithLocaleParams } from '@/utils/generated';
 
 export default function Home() {
   return (
@@ -58,5 +58,5 @@ export default function Home() {
 }
 
 export function generateStaticParams() {
-  return getCurrenciesWithLocaleParams();
+  return getCountriesWithLocaleParams();
 }

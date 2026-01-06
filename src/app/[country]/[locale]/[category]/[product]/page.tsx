@@ -4,7 +4,7 @@ import { Breadcrumb } from '@/components/shared/ui/breadcrumb';
 import ProductListing from '@/components/shared/ui/product-listing';
 import ProductListingWithCart from '@/components/shared/ui/product-listing/with-cart';
 import { productsData } from '@/temp/data/products-data';
-import { getCurrenciesWithLocaleParams } from '@/utils/generated';
+import { getCountriesWithLocaleParams } from '@/utils/generated';
 import { Fragment } from 'react';
 
 interface ProductPageProps {
@@ -87,5 +87,5 @@ export default async function ProductPage({ params }: ProductPageProps) {
 }
 
 export function generateStaticParams() {
-  return getCurrenciesWithLocaleParams();
+  return getCountriesWithLocaleParams();
 }

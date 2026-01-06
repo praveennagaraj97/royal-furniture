@@ -16,7 +16,11 @@ export default async function CountryLayout({
   const { country } = await params;
 
   // Validate that the country code is supported
-  if (!SUPPORTED_COUNTRIES.includes(country)) {
+  if (
+    !SUPPORTED_COUNTRIES.includes(
+      country as (typeof SUPPORTED_COUNTRIES)[number]
+    )
+  ) {
     notFound();
   }
 
