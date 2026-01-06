@@ -2,7 +2,7 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
-import Link from 'next/link';
+import { AppLink } from '@/hooks';
 import { FC } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
@@ -21,13 +21,13 @@ const LatestBlogs: FC = () => {
         <h2 className="lg:text-2xl md:text-xl text-lg text-indigo-slate font-semibold">
           Latest Blogs
         </h2>
-        <Link
+        <AppLink
           href="/blogs"
           className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
         >
           <span>See All</span>
           <FiChevronRight className="sm:w-4 sm:h-4 w-2 h-2" />
-        </Link>
+        </AppLink>
       </div>
 
       {/* Blogs Swiper */}

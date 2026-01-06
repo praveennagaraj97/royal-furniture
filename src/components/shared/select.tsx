@@ -1,8 +1,7 @@
 'use client';
 
-import { useClickOutside } from '@/hooks';
+import { AppLink, useClickOutside } from '@/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -237,14 +236,14 @@ export const Select: FC<SelectProps> = ({
 
                   if (option.href) {
                     return (
-                      <Link
+                      <AppLink
                         key={option.value}
                         href={option.href}
                         className={itemClassName}
                         onClick={() => setIsOpen(false)}
                       >
                         {content}
-                      </Link>
+                      </AppLink>
                     );
                   }
 

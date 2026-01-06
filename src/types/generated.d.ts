@@ -1,5 +1,5 @@
 declare module '@/generated/currency' {
   import { CountryLanguage } from '@/types/response';
-  export const currencies: readonly CountryLanguage[];
-  export type Currency = (typeof currencies)[number];
+  export const countries: readonly CountryLanguage[];
+  export type Country = (typeof countries)[number];
 }

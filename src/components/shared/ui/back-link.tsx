@@ -1,7 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { useRouter } from '@/i18n/routing';
+import { useAppRouter } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
@@ -12,7 +12,7 @@ interface BackLinkProps {
 }
 
 export const BackLink: FC<BackLinkProps> = ({ onClick, href }) => {
-  const router = useRouter();
+  const router = useAppRouter();
   const t = useTranslations('common');
 
   const handleClick = () => {

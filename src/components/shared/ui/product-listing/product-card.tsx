@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { FC, useState } from 'react';
 import { FiHeart } from 'react-icons/fi';
 
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 import { Product } from '@/temp/data/products-data';
 
 export interface ProductCardProps {
@@ -30,7 +30,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href="/sofas/italian-right-lounger-with-pull-out-sofa-bed">
+      <AppLink href="/sofas/italian-right-lounger-with-pull-out-sofa-bed">
         {/* Image Container */}
         <div className="relative w-full aspect-[4/4.5] rounded-lg overflow-hidden bg-gray-100 mb-3">
           <Image
@@ -82,7 +82,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           {/* Product Name */}
           <p className="text-indigo-slate text-base">{product.name}</p>
         </div>
-      </Link>
+      </AppLink>
     </StaggerItem>
   );
 };

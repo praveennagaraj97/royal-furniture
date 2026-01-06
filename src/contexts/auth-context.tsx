@@ -1,6 +1,7 @@
 'use client';
 
-import { usePathname, useRouter } from '@/i18n/routing';
+import { useAppRouter } from '@/hooks';
+import { usePathname } from '@/i18n/routing';
 import { authService } from '@/services/api/auth-service';
 import {
   clearAuthTokens,
@@ -48,7 +49,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const logoutRef = useRef<(() => void) | null>(null);
   const isInitialLoadRef = useRef(true);
   const pathname = usePathname();
-  const router = useRouter();
+  const router = useAppRouter();
   const [, startTransition] = useTransition();
 
   const clearRefreshTimer = useCallback(() => {

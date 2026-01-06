@@ -2,8 +2,7 @@
 
 import { useAuth } from '@/contexts/auth-context';
 import { useUser } from '@/contexts/user-context';
-import { useUserInitials } from '@/hooks/use-user-initials';
-import { useRouter } from '@/i18n/routing';
+import { useAppRouter, useUserInitials } from '@/hooks';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
@@ -36,7 +35,7 @@ export const AuthSection: FC<AuthSectionProps> = ({
   const { isAuthenticated } = useAuth();
   const { user, isLoading } = useUser();
   const userInitials = useUserInitials(user);
-  const router = useRouter();
+  const router = useAppRouter();
 
   const displayName = useMemo(() => {
     if (!user) return 'User';

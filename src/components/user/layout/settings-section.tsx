@@ -1,7 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import {
@@ -59,7 +59,7 @@ const SettingsSection: FC = () => {
                 distance={20}
                 duration={0.4}
               >
-                <Link
+                <AppLink
                   href={item.href}
                   className="flex items-center justify-between p-3 rounded hover:bg-gray-50 transition-colors group"
                 >
@@ -70,7 +70,7 @@ const SettingsSection: FC = () => {
                     </span>
                   </div>
                   <FiChevronRight className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
-                </Link>
+                </AppLink>
               </StaggerItem>
             );
           })}

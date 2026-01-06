@@ -1,7 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiHeart, FiMapPin, FiPackage, FiUser } from 'react-icons/fi';
@@ -49,7 +49,7 @@ const QuickLinksGrid: FC = () => {
             initialScale={0.9}
             duration={0.4}
           >
-            <Link
+            <AppLink
               href={link.href}
               className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-sm shadow-sm hover:bg-gray-50 hover:shadow-md hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 ease-out group"
             >
@@ -57,7 +57,7 @@ const QuickLinksGrid: FC = () => {
               <span className="text-sm font-medium text-gray-700 group-hover:text-deep-maroon transition-colors duration-300">
                 {t(link.key)}
               </span>
-            </Link>
+            </AppLink>
           </StaggerItem>
         );
       })}

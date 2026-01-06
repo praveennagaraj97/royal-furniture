@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { AppLink } from '@/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import { FC, useState } from 'react';
@@ -83,12 +84,12 @@ const MobileFooterLinks: FC<MobileFooterLinksProps> = ({ categories }) => {
                         distance={10}
                         duration={0.3}
                       >
-                        <a
+                        <AppLink
                           href="#"
                           className="text-gray-700 text-sm hover:text-deep-maroon transition-colors duration-200 block py-1"
                         >
                           {link}
-                        </a>
+                        </AppLink>
                       </StaggerItem>
                     ))}
                   </StaggerContainer>

@@ -6,7 +6,7 @@ import { forwardRef, useState } from 'react';
 import { FiHeart, FiMenu, FiShoppingCart, FiX } from 'react-icons/fi';
 
 import AuthModal from '@/components/auth/auth-modal';
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 import Image from 'next/image';
 import { AuthActionButton } from './auth-action-button';
 import LangSwitch from './lang-switch';
@@ -80,7 +80,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                   </AnimatePresence>
                 </motion.button>
 
-                <Link href="/">
+                <AppLink href="/">
                   <Image
                     src={logo}
                     alt="..."
@@ -88,7 +88,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                     quality={100}
                     className="h-8 w-auto sm:h-10 object-contain"
                   />
-                </Link>
+                </AppLink>
               </SlideIn>
 
               <SlideIn
@@ -137,7 +137,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
               triggerOnView={false}
               className="shrink-0"
             >
-              <Link href="/">
+              <AppLink href="/">
                 <Image
                   src={logo}
                   alt="..."
@@ -145,7 +145,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                   quality={100}
                   className="h-auto w-32 object-contain"
                 />
-              </Link>
+              </AppLink>
             </SlideIn>
 
             <SlideIn

@@ -7,7 +7,7 @@ import { FC } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 
 import logo from '@/assets/logo.png';
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 
 const CompanyInfo: FC = () => {
   const t = useTranslations('footer.company');
@@ -20,14 +20,14 @@ const CompanyInfo: FC = () => {
       className="flex flex-col gap-3"
     >
       <div className="flex items-center gap-3">
-        <Link href="/">
+        <AppLink href="/">
           <Image
             src={logo}
             alt="Royal Furniture"
             className="h-8 w-auto sm:h-10 md:h-12 object-contain"
             priority
           />
-        </Link>
+        </AppLink>
       </div>
       <p className="text-gray-700 text-sm leading-relaxed max-w-md">
         {t('description')}

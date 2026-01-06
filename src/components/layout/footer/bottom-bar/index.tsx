@@ -1,8 +1,9 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import { usePathname, useRouter } from '@/i18n/routing';
+import { useAppRouter } from '@/hooks';
 import { useLocale, useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 import { FC } from 'react';
 import { FiChevronDown, FiGlobe } from 'react-icons/fi';
 import RegionSelect from './region-select';
@@ -11,11 +12,17 @@ const BottomBar: FC = () => {
   const t = useTranslations('footer.bottomBar');
   const tCommon = useTranslations('common');
   const locale = useLocale();
-  const router = useRouter();
+  const router = useAppRouter();
   const pathname = usePathname();
 
   const handleLanguageChange = (newLocale: string) => {
-    router.replace(pathname, { locale: newLocale as 'en' | 'ar' });
+    const segments = pathname.split('/').filter(Boolean);
+    // segments[0] is country, segments[1] is locale
+    const remainingPath = segments.slice(2).join('/');
+    const newPath = `/${segments[0]}/${newLocale}${
+      remainingPath ? `/${remainingPath}` : ''
+    }`;
+    router.replace(newPath);
   };
 
   return (

@@ -1,9 +1,9 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { useRouter } from '@/i18n/routing';
-import { FiChevronLeft } from 'react-icons/fi';
+import { useAppRouter } from '@/hooks';
 import { FC } from 'react';
+import { FiChevronLeft } from 'react-icons/fi';
 
 export interface BreadcrumbItem {
   label: string;
@@ -16,7 +16,7 @@ interface BreadcrumbProps {
 }
 
 export const Breadcrumb: FC<BreadcrumbProps> = ({ items, onBackClick }) => {
-  const router = useRouter();
+  const router = useAppRouter();
 
   const handleBack = () => {
     if (onBackClick) {

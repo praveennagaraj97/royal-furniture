@@ -2,7 +2,7 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { useUser } from '@/contexts/user-context';
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
@@ -38,13 +38,13 @@ const UserProfileHeader: FC = () => {
           </h2>
           <p className="text-white/90 text-sm">{email}</p>
         </div>
-        <Link
+        <AppLink
           href="/user/profile"
           className="flex flex-col items-center gap-1.5 text-white hover:text-white/80 transition-colors ml-4"
         >
           <FiEdit2 className="h-4 w-4" />
           <span className="text-sm font-medium">{t('edit')}</span>
-        </Link>
+        </AppLink>
       </div>
     </ViewOnce>
   );

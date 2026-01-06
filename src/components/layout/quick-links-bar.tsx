@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer } from '@/components/shared/animations';
+import { AppLink } from '@/hooks';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
@@ -61,14 +62,14 @@ const QuickLinksBar: FC = () => {
             className="flex items-center gap-3 text-xs font-semibold sm:gap-4 md:gap-6"
           >
             {secondaryLinkKeys.map((labelKey) => (
-              <motion.a
-                key={labelKey}
-                href="#"
-                className="whitespace-nowrap transition-colors hover:text-indigo-700"
-                whileHover={{ y: -1 }}
-              >
-                {t(labelKey)}
-              </motion.a>
+              <motion.div key={labelKey} whileHover={{ y: -1 }}>
+                <AppLink
+                  href="#"
+                  className="whitespace-nowrap transition-colors hover:text-indigo-700"
+                >
+                  {t(labelKey)}
+                </AppLink>
+              </motion.div>
             ))}
           </StaggerContainer>
         </div>

@@ -4,8 +4,7 @@ import { SlideIn } from '@/components/shared/animations';
 import { HeaderAuthSkeleton } from '@/components/skeletons/header-auth-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useUser } from '@/contexts/user-context';
-import { useUserInitials } from '@/hooks/use-user-initials';
-import { Link } from '@/i18n/routing';
+import { AppLink, useUserInitials } from '@/hooks';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useMemo, type FC } from 'react';
@@ -45,7 +44,7 @@ export const AuthActionButton: FC<AuthActionButtonProps> = ({ onClick }) => {
         triggerOnView={false}
         className="inline-block"
       >
-        <Link href="/user">
+        <AppLink href="/user">
           <motion.button
             className="flex shrink-0 items-center gap-2 rounded-full p-1.5 pe-3 text-sm font-medium text-black bg-gray-50 hover:text-[#7F1D1D] hover:bg-gray-100 transition-colors"
             whileHover={{ y: -1 }}
@@ -54,9 +53,9 @@ export const AuthActionButton: FC<AuthActionButtonProps> = ({ onClick }) => {
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7F1D1D] text-white font-semibold text-xs">
               {userInitials || 'U'}
             </span>
-            <span className="truncate max-w-[120px]">{displayName}</span>
+            <span className="truncate max-w-30">{displayName}</span>
           </motion.button>
-        </Link>
+        </AppLink>
       </SlideIn>
     );
   }

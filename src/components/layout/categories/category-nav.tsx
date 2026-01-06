@@ -1,7 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 
@@ -45,7 +45,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
                 duration={0.3}
                 className="shrink-0"
               >
-                <Link
+                <AppLink
                   href={href}
                   className={`whitespace-nowrap px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors block hover:scale-105 active:scale-95 ${
                     isSelected
@@ -54,7 +54,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
                   }`}
                 >
                   {t(category.key)}
-                </Link>
+                </AppLink>
               </StaggerItem>
             );
           })}

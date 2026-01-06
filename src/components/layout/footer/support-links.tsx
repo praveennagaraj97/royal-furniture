@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC } from 'react';
@@ -93,7 +94,7 @@ const SupportLinks: FC = () => {
       >
         {/* Instagram */}
         <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
-          <a
+          <AppLink
             href="#"
             className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           >
@@ -104,11 +105,11 @@ const SupportLinks: FC = () => {
               height={32}
               className="w-full h-full object-contain"
             />
-          </a>
+          </AppLink>
         </StaggerItem>
         {/* Facebook */}
         <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
-          <a
+          <AppLink
             href="#"
             className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           >
@@ -119,11 +120,11 @@ const SupportLinks: FC = () => {
               height={32}
               className="w-full h-full object-contain"
             />
-          </a>
+          </AppLink>
         </StaggerItem>
         {/* X */}
         <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
-          <a
+          <AppLink
             href="#"
             className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           >
@@ -134,11 +135,11 @@ const SupportLinks: FC = () => {
               height={32}
               className="w-full h-full object-contain"
             />
-          </a>
+          </AppLink>
         </StaggerItem>
         {/* YouTube */}
         <StaggerItem type="slide" direction="left" distance={10} duration={0.3}>
-          <a
+          <AppLink
             href="#"
             className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center cursor-pointer hover:scale-110 transition-transform duration-200"
           >
@@ -149,7 +150,7 @@ const SupportLinks: FC = () => {
               height={32}
               className="w-full h-full object-contain"
             />
-          </a>
+          </AppLink>
         </StaggerItem>
       </StaggerContainer>
     </StaggerContainer>

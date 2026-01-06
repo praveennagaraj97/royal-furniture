@@ -1,7 +1,8 @@
 'use client';
 
+import { AppLink } from '@/hooks';
 import { motion } from 'framer-motion';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiNavigation, FiShoppingBag, FiTruck } from 'react-icons/fi';
 
@@ -31,8 +32,6 @@ export const QuickLinksSection: FC<QuickLinksSectionProps> = ({
   itemVariants,
 }) => {
   const tQuickLinks = useTranslations('quickLinks');
-  const locale = useLocale();
-  const isRTL = locale === 'ar';
 
   const quickLinks = [
     { labelKey: 'freeShipping', icon: FiTruck },
@@ -65,14 +64,14 @@ export const QuickLinksSection: FC<QuickLinksSectionProps> = ({
                 </span>
               </div>
             ) : (
-              <a
+              <AppLink
                 href="#"
                 className="flex items-center gap-2 px-1 py-2 text-sm text-gray-700 hover:text-[#7F1D1D] transition-colors"
               >
                 <span className="font-semibold">
                   {tQuickLinks(link.labelKey)}
                 </span>
-              </a>
+              </AppLink>
             )}
           </motion.div>
         );

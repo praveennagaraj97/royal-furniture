@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { AppLink } from '@/hooks';
 import { FC } from 'react';
 
 export interface LinkColumnProps {
@@ -31,12 +32,12 @@ const LinkColumn: FC<LinkColumnProps> = ({ title, links }) => {
             distance={10}
             duration={0.3}
           >
-            <a
+            <AppLink
               href="#"
               className="text-gray-700 text-sm hover:text-deep-maroon transition-colors duration-200"
             >
               {link}
-            </a>
+            </AppLink>
           </StaggerItem>
         ))}
       </StaggerContainer>

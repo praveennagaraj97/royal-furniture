@@ -4,7 +4,7 @@ import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { ConfirmationModal } from '@/components/shared/confirmation-modal';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
-import { Link } from '@/i18n/routing';
+import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 import { FiChevronRight, FiLogOut, FiUserMinus } from 'react-icons/fi';
@@ -79,9 +79,9 @@ const AccountManagement: FC = () => {
                       {content}
                     </button>
                   ) : (
-                    <Link href={item.href} className="block">
+                    <AppLink href={item.href} className="block">
                       {content}
-                    </Link>
+                    </AppLink>
                   )}
                 </StaggerItem>
               );

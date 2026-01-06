@@ -1,7 +1,7 @@
 'use client';
 
 import { Subcategory } from '@/components/category/subcategories/card';
-import { useRouter } from '@/i18n/routing';
+import { useAppRouter } from '@/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
@@ -31,7 +31,7 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
   const t = useTranslations('common');
   const tCategories = useTranslations('categories');
   const locale = useLocale();
-  const router = useRouter();
+  const router = useAppRouter();
   const isRTL = locale === 'ar';
 
   const getSubcategories = (): Subcategory[] => {

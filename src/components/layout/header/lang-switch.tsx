@@ -1,7 +1,7 @@
 'use client';
 
+import { AppLink } from '@/hooks';
 import { useLocale, useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FC } from 'react';
 import { FiGlobe } from 'react-icons/fi';
@@ -16,7 +16,7 @@ const LangSwitch: FC = () => {
   const remainingPath = segments.slice(2).join('/');
 
   const getLangPath = (newLocale: string) => {
-    // segments[0] is country code, segments[1] is locale code
+    // segments[0] is country code
     return `/${segments[0]}/${newLocale}${
       remainingPath ? `/${remainingPath}` : ''
     }`;
@@ -32,7 +32,7 @@ const LangSwitch: FC = () => {
         </div>
       }
     >
-      <Link
+      <AppLink
         href={getLangPath('en')}
         className={`flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 ${
           locale === 'en' ? 'bg-gray-100' : ''
@@ -40,8 +40,8 @@ const LangSwitch: FC = () => {
       >
         <span>{t('english')}</span>
         <span className="text-xs text-gray-400">EN</span>
-      </Link>
-      <Link
+      </AppLink>
+      <AppLink
         href={getLangPath('ar')}
         className={`flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 ${
           locale === 'ar' ? 'bg-gray-100' : ''
@@ -49,7 +49,7 @@ const LangSwitch: FC = () => {
       >
         <span>{t('arabic')}</span>
         <span className="text-xs text-gray-400">AR</span>
-      </Link>
+      </AppLink>
     </Dropdown>
   );
 };
