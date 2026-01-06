@@ -40,16 +40,15 @@ const Dropdown: FC<DropdownProps> = ({
       const viewportHeight = window.innerHeight;
       const padding = 16;
       const gap = 8; // gap between trigger and dropdown
-      
+
       // Get actual panel width if available, otherwise use approximate
       const panelWidth = panelRef.current?.offsetWidth || 180;
       const panelHeight = panelRef.current?.offsetHeight || 200;
 
       // Calculate initial position based on align prop
-      let left = align === 'right' 
-        ? triggerRect.right - panelWidth 
-        : triggerRect.left;
-      
+      let left =
+        align === 'right' ? triggerRect.right - panelWidth : triggerRect.left;
+
       let top = triggerRect.bottom + gap;
 
       // Smart positioning: prevent going outside viewport
@@ -66,7 +65,7 @@ const Dropdown: FC<DropdownProps> = ({
       // Vertical adjustments
       const spaceBelow = viewportHeight - triggerRect.bottom - gap;
       const spaceAbove = triggerRect.top - gap;
-      
+
       if (spaceBelow < panelHeight && spaceAbove > spaceBelow) {
         // If not enough space below but more space above, show above
         top = triggerRect.top - panelHeight - gap;
@@ -102,7 +101,7 @@ const Dropdown: FC<DropdownProps> = ({
     // Listen to scroll events on window and all scrollable parents
     window.addEventListener('scroll', handleScroll, true);
     window.addEventListener('resize', updatePosition);
-    
+
     // Also listen to scroll on document and body
     document.addEventListener('scroll', handleScroll, true);
     document.body.addEventListener('scroll', handleScroll, true);
@@ -159,7 +158,10 @@ const Dropdown: FC<DropdownProps> = ({
                 : { visibility: 'hidden' }
             }
           >
-            <div className="max-h-[min(320px,70vh)] w-40 sm:w-44 max-w-[calc(100vw-2rem)] overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5">
+            <div
+              className="max-h-[min(320px,70vh)] w-40 sm:w-44 max-w-[calc(100vw-2rem)] overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5"
+              onClick={() => setOpen(false)}
+            >
               {children}
             </div>
           </motion.div>

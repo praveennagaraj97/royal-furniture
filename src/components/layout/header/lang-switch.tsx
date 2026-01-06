@@ -1,7 +1,8 @@
 'use client';
 
-import { usePathname, useRouter } from '@/i18n/routing';
 import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FC } from 'react';
 import { FiGlobe } from 'react-icons/fi';
 import Dropdown from '../../shared/dropdown';
@@ -9,12 +10,17 @@ import Dropdown from '../../shared/dropdown';
 const LangSwitch: FC = () => {
   const t = useTranslations('common');
   const locale = useLocale();
-  const router = useRouter();
   const pathname = usePathname();
 
-  function handleLanguageChange(newLocale: 'en' | 'ar') {
-    router.replace(pathname, { locale: newLocale });
-  }
+  const segments = pathname.split('/').filter(Boolean);
+  const remainingPath = segments.slice(2).join('/');
+
+  const getLangPath = (newLocale: string) => {
+    // segments[0] is country code, segments[1] is locale code
+    return `/${segments[0]}/${newLocale}${
+      remainingPath ? `/${remainingPath}` : ''
+    }`;
+  };
 
   return (
     <Dropdown
@@ -26,26 +32,24 @@ const LangSwitch: FC = () => {
         </div>
       }
     >
-      <button
-        type="button"
-        onClick={() => handleLanguageChange('en')}
+      <Link
+        href={getLangPath('en')}
         className={`flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 ${
           locale === 'en' ? 'bg-gray-100' : ''
         }`}
       >
         <span>{t('english')}</span>
         <span className="text-xs text-gray-400">EN</span>
-      </button>
-      <button
-        type="button"
-        onClick={() => handleLanguageChange('ar')}
+      </Link>
+      <Link
+        href={getLangPath('ar')}
         className={`flex w-full items-center justify-between px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 ${
           locale === 'ar' ? 'bg-gray-100' : ''
         }`}
       >
         <span>{t('arabic')}</span>
         <span className="text-xs text-gray-400">AR</span>
-      </button>
+      </Link>
     </Dropdown>
   );
 };
