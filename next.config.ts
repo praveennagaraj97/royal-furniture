@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'rylqus.ae',
       },
+      {
+        protocol: 'http',
+        hostname: '13.50.85.23',
+      },
     ],
     qualities: [100, 75, 90],
   },

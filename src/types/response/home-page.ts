@@ -248,8 +248,8 @@ export interface HomeLatestBlog {
 export interface HomeData {
   top_bar: HomeTopBar;
   active_sale: HomeActiveSale;
-  promotional_banners?: PromotionalBanner[] | null;
-  offer_banners?: OfferBanner[] | null;
+  promotional_banners?: PromotionalBanner[];
+  offer_banners?: OfferBanner[];
   sofas_and_seating: HomeSofasAndSeating;
   bedroom: HomeBedroomOrDiningRoom;
   diningroom: HomeBedroomOrDiningRoom;
@@ -259,10 +259,10 @@ export interface HomeData {
   personalized_for_you: HomePersonalizedForYou;
   featured_deals: HomeProductCollection;
   new_launches: HomeNewLaunches;
-  shop_by_category?: HomeShopByCategory[] | null;
-  room_offers?: OfferBanner[] | null;
+  shop_by_category?: HomeShopByCategory[];
+  room_offers?: OfferBanner[];
   find_stores: HomeFindStores;
   social_media: HomeSocialMedia;
   floating_offers: HomeFloatingOffers;
-  latest_blog?: HomeLatestBlog[] | null;
+  latest_blog?: HomeLatestBlog[];
 }

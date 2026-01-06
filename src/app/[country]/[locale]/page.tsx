@@ -20,7 +20,9 @@ const Home: NextPage = async () => {
 
   return (
     <div className="grid gap-6 mt-4">
-      <Hero />
+      {data.promotional_banners && (
+        <Hero banners={data.promotional_banners || []} />
+      )}
       <PromotionalOffers />
       <ProductListing
         title="Trending Products"
