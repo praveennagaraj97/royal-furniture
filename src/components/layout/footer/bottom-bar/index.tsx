@@ -5,7 +5,7 @@ import { usePathname, useRouter } from '@/i18n/routing';
 import { useLocale, useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiChevronDown, FiGlobe } from 'react-icons/fi';
-import CurrencySelect from './currency-select';
+import RegionSelect from './region-select';
 
 const BottomBar: FC = () => {
   const t = useTranslations('footer.bottomBar');
@@ -28,7 +28,7 @@ const BottomBar: FC = () => {
       <p className="text-gray-700 text-sm">{t('copyright')}</p>
       <div className="flex items-center gap-4">
         {/* Region Selector */}
-        <CurrencySelect />
+        <RegionSelect />
         {/* Language Selector */}
         <div className="flex items-center gap-2">
           <FiGlobe className="w-4 h-4 text-gray-700" />

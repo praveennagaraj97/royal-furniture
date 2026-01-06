@@ -1,17 +1,17 @@
 'use client';
 
 import { Select } from '@/components/shared/select';
-import { currenciesData } from '@/utils/generated';
+import { countries } from '@/utils/generated';
 import { useLocale } from 'next-intl';
 import Image from 'next/image';
 import { FC, useMemo } from 'react';
 
-const CurrencySelect: FC = () => {
+const RegionSelect: FC = () => {
   const locale = useLocale();
 
   // Memoize options to prevent unnecessary re-renders
   const regionOptions = useMemo(() => {
-    return currenciesData.map((item) => ({
+    return countries.map((item) => ({
       label: (
         <span className="flex items-center gap-2">
           {item.image && (
@@ -34,18 +34,17 @@ const CurrencySelect: FC = () => {
   // Determine the currently selected item based on the active locale
   const selectedItem = useMemo(() => {
     return (
-      currenciesData.find((item) => item.language_code === locale) ||
-      currenciesData[0]
+      countries.find((item) => item.language_code === locale) || countries[0]
     );
   }, [locale]);
 
-  const handleCurrencyChange = (val: string | number) => {
-    const selected = currenciesData.find(
+  const handleRegionChange = (val: string | number) => {
+    const selected = countries.find(
       (item) => item.id.toString() === val.toString()
     );
     if (selected) {
-      const countryCode = selected.country_code.toLowerCase();
-      const languageCode = selected.language_code.toLowerCase();
+      const countryCode = selected.country_code;
+      const languageCode = selected.language_code;
 
       // Navigate to the new country/locale path
       // Note: We use window.location.href for a full refresh if switching countries,
@@ -54,14 +53,14 @@ const CurrencySelect: FC = () => {
     }
   };
 
-  if (!currenciesData || currenciesData.length === 0) {
+  if (!countries) {
     return null;
   }
 
   return (
     <Select
       value={selectedItem?.id.toString()}
-      onChange={handleCurrencyChange}
+      onChange={handleRegionChange}
       options={regionOptions}
       customBaseClassName="flex items-center gap-2 text-gray-700 text-sm hover:text-deep-maroon transition-colors duration-200"
       className="w-auto border-none! bg-transparent! p-0!"
@@ -70,4 +69,4 @@ const CurrencySelect: FC = () => {
   );
 };
 
-export default CurrencySelect;
+export default RegionSelect;

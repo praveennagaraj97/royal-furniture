@@ -1,12 +1,13 @@
+import { DEFAULT_LOCALE, LOCALES } from '@/utils/generated';
 import { createNavigation } from 'next-intl/navigation';
 import { defineRouting } from 'next-intl/routing';
 
 export const routing = defineRouting({
   // A list of all locales that are supported
-  locales: ['en', 'ar'],
+  locales: LOCALES,
 
   // Used when no locale matches
-  defaultLocale: 'en',
+  defaultLocale: DEFAULT_LOCALE,
 
   // Only prefix non-default locale in the URL
   // This means: / for English, /ar for Arabic

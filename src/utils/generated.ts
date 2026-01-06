@@ -1,21 +1,26 @@
-import { currencies } from '@/generated/currency';
-import { CountryLanguage } from '@/types/response';
+import { countries } from '@/generated/countries';
 
-export const currenciesData = currencies || ([] as CountryLanguage[]);
+export { countries };
 
 export const SUPPORTED_COUNTRIES = Array.from(
-  new Set(currenciesData.map((item) => item.country_code.toLowerCase()))
+  new Set(countries.map((item) => item.country_code))
 );
 
 export const DEFAULT_COUNTRY =
-  currenciesData.find((item) => item.is_default)?.country_code.toLowerCase() ||
-  'ae';
+  countries.find((item) => item.is_default)?.country_code || 'ae';
+
+export const DEFAULT_LOCALE =
+  countries.find((item) => item.is_default)?.language_code || 'en';
+
+export const LOCALES = Array.from(
+  new Set(countries.map((item) => item.language_code))
+);
 
 export const getCurrenciesWithLocaleParams = (): readonly {
   locale: string;
   country: string;
 }[] => {
-  return currenciesData.map((item) => ({
+  return countries.map((item) => ({
     locale: item.language_code,
     country: item.country_code,
   }));
