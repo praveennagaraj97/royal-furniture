@@ -2,6 +2,7 @@
 
 import { useClickOutside } from '@/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -11,6 +12,7 @@ import { FiChevronDown } from 'react-icons/fi';
 export interface SelectOption {
   label: ReactNode;
   value: string | number;
+  href?: string;
 }
 
 /**
@@ -216,25 +218,49 @@ export const Select: FC<SelectProps> = ({
           >
             <div className="max-h-60 overflow-auto rounded-lg bg-white py-1 shadow-xl ring-1 ring-black/5">
               {options.length > 0 ? (
-                options.map((option) => (
-                  <button
-                    key={option.value}
-                    role="option"
-                    aria-selected={value === option.value}
-                    type="button"
-                    onClick={() => handleSelect(option)}
-                    className={`w-full px-4 py-2.5 text-start text-sm transition-colors hover:bg-gray-50 flex items-center justify-between ${
-                      value === option.value
-                        ? 'bg-pale-blush text-deep-maroon font-medium'
-                        : 'text-gray-700'
-                    }`}
-                  >
-                    <span className="truncate">{option.label}</span>
-                    {value === option.value && (
-                      <span className="text-deep-maroon text-xs ml-2">✓</span>
-                    )}
-                  </button>
-                ))
+                options.map((option) => {
+                  const isSelected = value === option.value;
+                  const itemClassName = `w-full px-4 py-2.5 text-start text-sm transition-colors hover:bg-gray-50 flex items-center justify-between ${
+                    isSelected
+                      ? 'bg-pale-blush text-deep-maroon font-medium'
+                      : 'text-gray-700'
+                  }`;
+
+                  const content = (
+                    <>
+                      <span className="truncate">{option.label}</span>
+                      {isSelected && (
+                        <span className="text-deep-maroon text-xs ml-2">✓</span>
+                      )}
+                    </>
+                  );
+
+                  if (option.href) {
+                    return (
+                      <Link
+                        key={option.value}
+                        href={option.href}
+                        className={itemClassName}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {content}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={option.value}
+                      role="option"
+                      aria-selected={isSelected}
+                      type="button"
+                      onClick={() => handleSelect(option)}
+                      className={itemClassName}
+                    >
+                      {content}
+                    </button>
+                  );
+                })
               ) : (
                 <div className="px-4 py-4 text-sm text-gray-400 text-center">
                   No options available
