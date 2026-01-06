@@ -5,13 +5,13 @@ import Swiper from '@/components/shared/swiper';
 import { FC, ReactNode } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
-import { Product } from '@/temp/data/products-data';
+import { ProductItem } from '@/types/response/home-page';
 import ProductCardWithCart from './product-card-with-cart';
 
 export interface ProductListingWithCartProps {
   title: ReactNode;
   seeAllHref: string;
-  products: Product[];
+  products: ProductItem[];
   onAddToCart?: (productId: string, quantity: number) => void;
 }
 

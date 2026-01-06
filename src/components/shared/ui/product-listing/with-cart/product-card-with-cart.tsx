@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { FC, useState } from 'react';
 import { FiHeart, FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
 
-import { Product } from '@/temp/data/products-data';
+import { ProductItem } from '@/types/response/home-page';
 
 export interface ProductCardWithCartProps {
-  product: Product;
+  product: ProductItem;
   onAddToCart?: (productId: string, quantity: number) => void;
 }
 
@@ -32,7 +32,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onAddToCart) {
-      onAddToCart(product.id, quantity);
+      // onAddToCart(product.id, quantity);
     }
   };
 
@@ -41,22 +41,22 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="relative w-full min-w-[280px] sm:min-w-[300px] bg-white rounded-lg overflow-hidden"
+      className="relative w-full min-w-70 sm:min-w-75 bg-white rounded-lg overflow-hidden"
     >
       {/* Image Container */}
       <div className="relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100 mb-3">
         <Image
-          src={product.image}
-          alt={product.imageAlt}
+          src={product.thumbnail_image}
+          alt={product.name}
           fill
           className="object-cover"
           sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
         />
 
         {/* Discount Badge */}
-        {product.discount > 0 && (
+        {product.pricing.offer_percentage > 0 && (
           <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
-            {product.discount}% OFF
+            {product.pricing.offer_percentage}% OFF
           </div>
         )}
 
@@ -79,11 +79,11 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
         {/* Price */}
         <div className="flex items-center gap-2">
           <span className="text-red-600 font-bold text-lg">
-            ฿ {product.price.toLocaleString()}
+            ฿ {product.pricing.offer_price.toLocaleString()}
           </span>
-          {product.originalPrice > product.price && (
+          {product.pricing.base_price > product.pricing.offer_price && (
             <span className="text-gray-400 text-sm font-medium line-through">
-              ฿ {product.originalPrice.toLocaleString()}
+              ฿ {product.pricing.base_price.toLocaleString()}
             </span>
           )}
         </div>
