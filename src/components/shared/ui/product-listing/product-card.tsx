@@ -26,7 +26,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="relative w-full min-w-[280px] sm:min-w-[300px] cursor-pointer group"
+      className="relative w-full min-w-70 sm:min-w-75 cursor-pointer group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

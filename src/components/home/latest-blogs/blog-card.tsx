@@ -20,7 +20,7 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="flex flex-col w-full min-w-[280px] sm:min-w-[300px] md:min-w-[320px]"
+      className="flex flex-col w-full min-w-70 sm:min-w-75 md:min-w-[320px]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
