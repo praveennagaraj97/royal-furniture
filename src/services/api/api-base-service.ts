@@ -1,73 +1,13 @@
+import { getAxiosConfig, setupAxiosInterceptors } from '@/config/axios';
 import { type ParsedAPIError } from '@/types/error';
-import { getAuthToken } from '@/utils';
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-} from 'axios';
-
-const isTokenInvalidError = (error: AxiosError): boolean => {
-  // Check for 401 status
-  if (error.response?.status === 401) {
-    return true;
-  }
-
-  // Check for token_not_valid in the error message
-  const responseData = error.response?.data;
-  if (responseData && typeof responseData === 'object') {
-    const message = (responseData as { message?: string }).message;
-    if (typeof message === 'string' && message.includes('token_not_valid')) {
-      return true;
-    }
-
-    // Check for token_not_valid in detail field
-    const detail = (responseData as { detail?: string }).detail;
-    if (typeof detail === 'string' && detail.includes('token_not_valid')) {
-      return true;
-    }
-  }
-
-  return false;
-};
+import axios, { AxiosInstance } from 'axios';
 
 export class BaseAPIService {
   protected http: AxiosInstance;
 
   constructor() {
-    const baseURL = process.env.NEXT_PUBLIC_BASE_API_URL!;
-
-    this.http = axios.create({
-      baseURL,
-      timeout: 30000,
-    });
-
-    // Add request interceptor to attach auth token
-    this.http.interceptors.request.use(
-      (config: InternalAxiosRequestConfig) => {
-        const token = getAuthToken();
-        if (token && config.headers) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
-
-    // Add response interceptor to handle token invalidation
-    this.http.interceptors.response.use(
-      (response) => response,
-      (error: AxiosError) => {
-        if (isTokenInvalidError(error)) {
-          // Dispatch custom event to trigger logout
-          if (typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent('token-invalid'));
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
+    this.http = axios.create(getAxiosConfig());
+    setupAxiosInterceptors(this.http);
   }
 
   protected formDataBuilder(payload: Record<string, unknown>): FormData {
