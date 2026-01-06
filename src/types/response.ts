@@ -70,6 +70,7 @@ export type UserProfileResponse = BaseAPIResponse<User>;
 export interface CountryLanguage {
   id: number;
   country_name: string;
+  country_code: string;
   language: string;
   language_code: string;
   currency: string;

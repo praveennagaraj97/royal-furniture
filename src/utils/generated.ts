@@ -5,10 +5,10 @@ export const currenciesData = currencies || ([] as CountryLanguage[]);
 
 export const getCurrenciesWithLocaleParams = (): readonly {
   locale: string;
-  currency: string;
+  country_code: string;
 }[] => {
   return currenciesData.map((item) => ({
     locale: item.language_code,
-    currency: item.currency.toLowerCase(),
+    country_code: item.country_code.toLowerCase(),
   }));
 };
