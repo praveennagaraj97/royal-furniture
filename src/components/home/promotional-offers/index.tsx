@@ -2,37 +2,15 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
+import { OfferBanner } from '@/types/response/home-page';
 import { FC } from 'react';
 import OfferCard from './offer-card';
 
-const offers = [
-  {
-    id: 'discount-offer',
-    image:
-      'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=400&fit=crop',
-    imageAlt: 'Bar stool with discounts',
-    title: 'Up to 50% Off',
-    description: 'Find products with discounts up to 50%',
-  },
-  {
-    id: 'buy-one-get-one',
-    image:
-      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop',
-    imageAlt: 'Two-seater sofa',
-    title: 'Buy 1 Get 1',
-    description: 'Grab exclusive sensitive offers.',
-  },
-  {
-    id: 'desk-offer',
-    image:
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop',
-    imageAlt: 'Wooden desk',
-    title: 'Desk',
-    description: 'Grab exclusive sensitive offers.',
-  },
-];
+interface PromotionalOffersProps {
+  offers: OfferBanner[];
+}
 
-const PromotionalOffers: FC = () => {
+const PromotionalOffers: FC<PromotionalOffersProps> = ({ offers }) => {
   return (
     <StaggerContainer
       staggerChildren={0.15}
@@ -44,7 +22,7 @@ const PromotionalOffers: FC = () => {
           <OfferCard
             key={offer.id}
             image={offer.image}
-            imageAlt={offer.imageAlt}
+            imageAlt={offer.description}
             title={offer.title}
             description={offer.description}
           />

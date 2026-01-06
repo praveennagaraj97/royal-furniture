@@ -6,10 +6,8 @@ import MegaPriceDropBanner from '@/components/home/mega-price-drop-banner';
 import PromotionalBanner from '@/components/home/promotional-banner';
 import PromotionalOffers from '@/components/home/promotional-offers';
 import SofaAndSeating from '@/components/home/sofa-and-seating';
-import CountdownTag from '@/components/shared/ui/countdown-tag';
 import ProductListing from '@/components/shared/ui/product-listing';
 import { ecommerceService } from '@/services/api/ecommerce-service';
-import { productsData } from '@/temp/data/products-data';
 import { getCountriesWithLocaleParams } from '@/utils/generated';
 import { NextPage } from 'next';
 
@@ -23,17 +21,18 @@ const Home: NextPage = async () => {
       {data.promotional_banners && (
         <Hero banners={data.promotional_banners || []} />
       )}
-      <PromotionalOffers />
-      <ProductListing
-        title="Trending Products"
-        seeAllHref="/products"
-        products={productsData}
-      />
+      <PromotionalOffers offers={data.offer_banners || []} />
+      {data.trending_products && (
+        <ProductListing
+          title="Trending Products"
+          products={data.trending_products.items || []}
+        />
+      )}
       <MegaPriceDropBanner />
       <SofaAndSeating />
       <FurnitureShowcase />
 
-      <ProductListing
+      {/* <ProductListing
         title={
           <div className="flex gap-1.5 flex-wrap">
             <span className="lg:text-2xl md:text-xl text-lg text-indigo-slate">
@@ -44,7 +43,7 @@ const Home: NextPage = async () => {
         }
         seeAllHref="/products"
         products={productsData}
-      />
+      /> */}
 
       <PromotionalBanner />
 
@@ -53,11 +52,11 @@ const Home: NextPage = async () => {
       <HouseHolds />
       <PromotionalBanner />
       <FurnitureShowcase />
-      <ProductListing
+      {/* <ProductListing
         title="New Arrivals"
         seeAllHref="/products"
         products={productsData}
-      />
+      /> */}
 
       <PromotionalBanner />
       <LatestBlogs />

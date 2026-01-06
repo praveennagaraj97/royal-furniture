@@ -6,14 +6,14 @@ import { FC, useState } from 'react';
 import { FiHeart } from 'react-icons/fi';
 
 import { AppLink } from '@/hooks';
-import { Product } from '@/temp/data/products-data';
+import { ProductItem } from '@/types/response/home-page';
 
 export interface ProductCardProps {
-  product: Product;
+  product: ProductItem;
 }
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(product.is_in_wishlist);
   const [isHovered, setIsHovered] = useState(false);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -30,12 +30,12 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <AppLink href="/sofas/italian-right-lounger-with-pull-out-sofa-bed">
+      <AppLink href={`/${product.sub_category.id}/${product.id}`}>
         {/* Image Container */}
         <div className="relative w-full aspect-[4/4.5] rounded-lg overflow-hidden bg-gray-100 mb-3">
           <Image
-            src={product.image}
-            alt={product.imageAlt}
+            src={product.thumbnail_image}
+            alt={product.name}
             fill
             className="object-cover transition-transform duration-300"
             sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
@@ -45,9 +45,9 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           />
 
           {/* Discount Badge */}
-          {product.discount > 0 && (
+          {product.pricing.offer_percentage > 0 && (
             <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
-              {product.discount}% OFF
+              {product.pricing.offer_percentage}% OFF
             </div>
           )}
 
@@ -70,11 +70,11 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           {/* Price */}
           <div className="flex items-center gap-2">
             <span className="text-red-600 font-semibold text-lg">
-              ฿ {product.price.toLocaleString()}
+              ฿ {product.pricing.offer_price}
             </span>
-            {product.originalPrice > product.price && (
+            {product.pricing.base_price !== product.pricing.offer_price && (
               <span className="text-gray-400 text-sm font-medium line-through">
-                ฿ {product.originalPrice.toLocaleString()}
+                ฿ {product.pricing.base_price}
               </span>
             )}
           </div>

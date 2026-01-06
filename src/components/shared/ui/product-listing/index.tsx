@@ -6,13 +6,13 @@ import { AppLink } from '@/hooks';
 import { FC, ReactNode } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
-import { Product } from '@/temp/data/products-data';
+import { ProductItem } from '@/types/response/home-page';
 import ProductCard from './product-card';
 
 export interface ProductListingProps {
   title: ReactNode;
-  seeAllHref: string;
-  products: Product[];
+  seeAllHref?: string;
+  products: ProductItem[];
 }
 
 const ProductListing: FC<ProductListingProps> = ({
@@ -37,13 +37,15 @@ const ProductListing: FC<ProductListingProps> = ({
             title
           )}
         </div>
-        <AppLink
-          href={seeAllHref}
-          className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
-        >
-          <span>See All</span>
-          <FiChevronRight className="sm:w-4 sm:h-4 w-2 h-2" />
-        </AppLink>
+        {seeAllHref && (
+          <AppLink
+            href={seeAllHref}
+            className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
+          >
+            <span>See All</span>
+            <FiChevronRight className="sm:w-4 sm:h-4 w-2 h-2" />
+          </AppLink>
+        )}
       </div>
 
       {/* Products Swiper */}

@@ -6,7 +6,7 @@ export interface HomeLocation {
 
 export interface HomeTopBar {
   search_placeholder: string;
-  categories?: string[] | null;
+  categories?: string[];
   notification_count: number;
   location: HomeLocation;
 }
@@ -60,7 +60,7 @@ export interface HomeBanner {
   is_active: boolean;
 }
 
-export interface HomeSubCategory {
+export interface SubCategory {
   id: number;
   name: string;
   icon: string;
@@ -90,7 +90,7 @@ export interface HomeSofasAndSeating {
   id: number;
   title: string;
   banner: HomeBanner;
-  subcategories?: HomeSubCategory[] | null;
+  subcategories?: SubCategory[];
   video_banner: HomeVideoBanner;
 }
 
@@ -98,7 +98,7 @@ export interface HomeBedroomOrDiningRoom {
   id: number;
   title: string;
   banner: HomeBanner;
-  subcategories?: HomeSubCategory[] | null;
+  subcategories?: SubCategory[];
   video_banner?: null;
 }
 
@@ -107,10 +107,10 @@ export interface HomeOffersSpotlight {
   description: string;
   section_type: string;
   main_banner: OfferBanner;
-  subcategories?: HomeSubCategory[] | null;
+  subcategories?: SubCategory[];
 }
 
-export interface HomeCategory {
+export interface Category {
   id: number;
   name: string;
   icon: string;
@@ -135,13 +135,13 @@ export interface HomeProductLabel {
   name?: null;
 }
 
-export interface HomeProductItem {
+export interface ProductItem {
   id: number;
   name: string;
   slug: string;
   description: string;
-  category: HomeCategory;
-  sub_category: HomeSubCategory;
+  category: Category;
+  sub_category: SubCategory;
   pricing: HomeProductPricing;
   thumbnail_image: string;
   label: HomeProductLabel;
@@ -162,7 +162,7 @@ export interface HomeProductItem {
 
 export interface HomeProductCollection {
   auto_scroll_seconds: number;
-  items?: HomeProductItem[] | null;
+  items?: ProductItem[];
 }
 
 export interface HomeSavedProducts {
@@ -172,12 +172,12 @@ export interface HomeSavedProducts {
 
 export interface HomePersonalizedForYou {
   available: boolean;
-  items?: null[] | null;
+  items?: null[];
 }
 
 export interface HomeNewLaunches {
   auto_scroll_seconds: number;
-  items?: null[] | null;
+  items?: null[];
 }
 
 export interface HomeShopByCategory {
@@ -211,7 +211,7 @@ export interface HomeStoreLocation {
 
 export interface HomeFindStores {
   map_url: string;
-  list?: HomeStoreLocation[] | null;
+  list?: HomeStoreLocation[];
 }
 
 export interface HomeSocialMedia {
