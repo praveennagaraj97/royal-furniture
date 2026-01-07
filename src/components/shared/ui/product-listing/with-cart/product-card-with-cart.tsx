@@ -105,7 +105,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
           >
             <FiMinus className="w-3 h-3" />
           </button>
-          <span className="text-gray-900 font-bold text-base min-w-[24px] text-center">
+          <span className="text-gray-900 font-bold text-base min-w-6 text-center">
             {quantity}
           </span>
           <button
