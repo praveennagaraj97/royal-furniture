@@ -29,7 +29,7 @@ const Categories = forwardRef<HTMLElement, CategoriesProps>(
     }, [pathname, categories]);
 
     return (
-      <section ref={ref} className="w-full">
+      <section ref={ref} className="w-full relative z-40">
         <CategoryNav
           categories={categories}
           selectedCategory={selectedCategory}

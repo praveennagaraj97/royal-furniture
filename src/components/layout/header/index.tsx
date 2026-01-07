@@ -31,10 +31,10 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
         className={`${
           isSticky
             ? 'fixed top-0 left-0 right-0 z-50 bg-white rounded-b-2xl shadow-2xl'
-            : 'relative'
+            : 'relative z-50 bg-white'
         } transition-shadow duration-300 ease-out`}
       >
-        <div className="relative container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2.5 md:py-3">
+        <div className="relative container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2.5 md:py-3 z-50">
           {/* Mobile/Tablet: Two-row layout */}
           <div className="flex flex-col gap-2 lg:hidden">
             {/* Top row: hamburger + logo (left) + heart/cart (right) */}
