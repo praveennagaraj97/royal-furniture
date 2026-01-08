@@ -2,6 +2,8 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { useState, type FC } from 'react';
+import { FiChevronRight } from 'react-icons/fi';
+import { IoStorefront } from 'react-icons/io5';
 import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
@@ -114,29 +116,58 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           amount={0.01}
           margin="-100px"
         >
-          <div className="min-w-0 w-full space-y-4">
-            <ProductHeader product={data} />
-            <ProductOptions
-              product={data}
-              selectedColor={selectedColor}
-              selectedSize={selectedSize}
-              quantity={quantity}
-              onColorChange={setSelectedColor}
-              onSizeChange={setSelectedSize}
-              onQuantityChange={handleQuantityChange}
-            />
-            <ProductActions
-              onAddToCart={handleAddToCart}
-              onBuyNow={handleBuyNow}
-            />
-            <ProductAdditionalInfo product={data} />
+          <div className="min-w-0 w-full grid 2xl:grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <ProductHeader product={data} />
+              <ProductOptions
+                product={data}
+                selectedColor={selectedColor}
+                selectedSize={selectedSize}
+                quantity={quantity}
+                onColorChange={setSelectedColor}
+                onSizeChange={setSelectedSize}
+                onQuantityChange={handleQuantityChange}
+              />
+              <ViewOnce
+                type="slideUp"
+                distance={15}
+                duration={0.4}
+                delay={0.15}
+                amount={0.01}
+                margin="-100px"
+              >
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
+                >
+                  <div className="flex items-center gap-2">
+                    <IoStorefront className="text-xl text-deep-maroon" />
 
-            <PaymentDeliveryInfo productPrice={data.price} />
-            <GeneralInformation />
-            <UserReviews />
+                    <span className="font-semibold text-sm text-gray-900">
+                      Try in store!
+                    </span>
+                  </div>
+                  <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
+                </button>
+              </ViewOnce>
+
+              <GeneralInformation />
+            </div>
+            <div className="space-y-4">
+              <ProductActions
+                onAddToCart={handleAddToCart}
+                onBuyNow={handleBuyNow}
+              />
+
+              <ProductAdditionalInfo product={data} />
+              <PaymentDeliveryInfo productPrice={data.price} />
+            </div>
           </div>
         </ViewOnce>
       </div>
+
+      <br />
+      <UserReviews />
     </div>
   );
 };

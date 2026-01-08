@@ -15,7 +15,7 @@ export const ProductActions: React.FC<ProductActionsProps> = ({
 }) => {
   const t = useTranslations();
   return (
-    <div className="flex flex-col sm:flex-row gap-3">
+    <div className="flex flex-col gap-3">
       <ViewOnce
         type="slideUp"
         distance={20}

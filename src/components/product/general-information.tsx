@@ -93,7 +93,7 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
           <h2 className="text-lg font-semibold text-indigo-slate mb-2">
             General Information
           </h2>
-          <p className="text-sm text-gray-900 leading-relaxed">{description}</p>
+          <p className=" text-gray-900 leading-relaxed">{description}</p>
         </div>
 
         <Accordion items={accordionItems} allowMultiple={true} />

@@ -51,6 +51,77 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
 
   return (
     <div className="space-y-4">
+      {/* Tabby Payment Plan Card */}
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.4}
+        amount={0.01}
+        margin="-100px"
+      >
+        <div className="p-4 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+          <Image
+            src={tabbyIcon}
+            alt="Tabby"
+            width={60}
+            height={30}
+            className="h-4 w-auto object-contain"
+          />
+          <div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-gray-700">
+                4 interest-free payments or as low as{' '}
+                <span className="text-red-600 font-bold">
+                  ฿{tabbyAmount}/month.
+                </span>
+              </p>
+            </div>
+            <button
+              type="button"
+              className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap"
+            >
+              More options
+            </button>
+          </div>
+        </div>
+      </ViewOnce>
+
+      {/* Tamara Payment Plan Card */}
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.45}
+        amount={0.01}
+        margin="-100px"
+      >
+        <div className="p-4 bg-white rounded-lg border border-gray-200 flex items-center gap-3">
+          <Image
+            src={tamaraIcon}
+            alt="Tamara"
+            width={60}
+            height={30}
+            className="h-4 w-auto object-contain"
+          />
+          <div className="">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-gray-700">
+                Or split in 4 payments of{' '}
+                <span className="text-red-600 font-bold">฿{tamaraAmount}</span>{' '}
+                No late fees, Sharia compliant!
+              </p>
+            </div>
+            <button
+              type="button"
+              className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap"
+            >
+              Learn more
+            </button>
+          </div>
+        </div>
+      </ViewOnce>
+
       {/* Ways of Payment Section */}
       <ViewOnce
         type="slideUp"
@@ -150,77 +221,6 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
           <p className="text-xs text-gray-600">
             Extra Charges May Apply for Express delivery
           </p>
-        </div>
-      </ViewOnce>
-
-      {/* Tabby Payment Plan Card */}
-      <ViewOnce
-        type="slideUp"
-        distance={15}
-        duration={0.4}
-        delay={0.4}
-        amount={0.01}
-        margin="-100px"
-      >
-        <div className="p-4 bg-white rounded-lg border border-gray-200">
-          <div className="flex items-center gap-3 flex-wrap">
-            <Image
-              src={tabbyIcon}
-              alt="Tabby"
-              width={60}
-              height={30}
-              className="h-4 w-auto object-contain"
-            />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-700">
-                4 interest-free payments or as low as{' '}
-                <span className="text-red-600 font-bold">
-                  ฿{tabbyAmount}/month.
-                </span>
-              </p>
-            </div>
-            <button
-              type="button"
-              className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap"
-            >
-              More options
-            </button>
-          </div>
-        </div>
-      </ViewOnce>
-
-      {/* Tamara Payment Plan Card */}
-      <ViewOnce
-        type="slideUp"
-        distance={15}
-        duration={0.4}
-        delay={0.45}
-        amount={0.01}
-        margin="-100px"
-      >
-        <div className="p-4 bg-white rounded-lg border border-gray-200">
-          <div className="flex items-center gap-3 flex-wrap">
-            <Image
-              src={tamaraIcon}
-              alt="Tamara"
-              width={60}
-              height={30}
-              className="h-4 w-auto object-contain"
-            />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-700">
-                Or split in 4 payments of{' '}
-                <span className="text-red-600 font-bold">฿{tamaraAmount}</span>{' '}
-                No late fees, Sharia compliant!
-              </p>
-            </div>
-            <button
-              type="button"
-              className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap"
-            >
-              Learn more
-            </button>
-          </div>
         </div>
       </ViewOnce>
     </div>
