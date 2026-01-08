@@ -2,7 +2,7 @@
 
 import { StaggerItem } from '@/components/shared/animations';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 export interface CardShowcaseCardProps {
   image: string;
@@ -15,16 +15,12 @@ const CardShowcaseCard: FC<CardShowcaseCardProps> = ({
   imageAlt,
   label,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <StaggerItem
       type="slideUp"
       distance={30}
       duration={0.6}
       className="flex flex-col w-full min-w-[280px] sm:min-w-[320px] md:min-w-[360px]"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Card Image Container */}
       <div className="relative w-full aspect-3/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300">
@@ -32,11 +28,8 @@ const CardShowcaseCard: FC<CardShowcaseCardProps> = ({
           src={image}
           alt={imageAlt}
           fill
-          className="object-cover transition-transform duration-300"
+          className="object-cover transition-transform duration-300 hover:scale-105"
           sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, 360px"
-          style={{
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          }}
         />
       </div>
 

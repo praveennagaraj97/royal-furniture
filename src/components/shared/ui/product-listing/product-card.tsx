@@ -30,12 +30,12 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       className="relative w-full min-w-70 sm:min-w-75 bg-white rounded-lg overflow-hidden"
     >
       {/* Image Container */}
-      <div className="relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100 mb-3">
+      <div className="group/image relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100 mb-3">
         <Image
           src={product.thumbnail_image}
           alt={product.name}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-300 group-hover/image:scale-105"
           sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
         />
 

@@ -1,3 +1,5 @@
+import PromotionalBanner from '@/components/category/promotional-banner';
+import HomeFurnitureShowcase from '@/components/home/furniture-showcase';
 import Hero from '@/components/home/hero';
 import PromotionalOffers from '@/components/home/promotional-offers';
 import CountdownTag from '@/components/shared/ui/countdown-tag';
@@ -55,9 +57,11 @@ const Home: NextPage = async () => {
 
       {
         // TODO : personalise_banners
-        /* <PromotionalBanner />
-      <FurnitureShowcase /> */
+        /*
+         */
       }
+      <PromotionalBanner />
+      <HomeFurnitureShowcase />
 
       {
         // TODO
