@@ -1,7 +1,7 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { FC, useState } from 'react';
@@ -22,6 +22,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
   const params = useParams();
   const locale = useLocale();
+  const t = useTranslations();
   const countryCode = params.country as string;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -55,8 +56,11 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           {/* Discount Badge */}
           {parseFloat(product.pricing.offer_percentage || '0') > 0 && (
             <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
-              {parseFloat(product.pricing.offer_percentage || '0').toFixed(0)}%
-              OFF
+              {t('common.off', {
+                percentage: parseFloat(
+                  product.pricing.offer_percentage || '0'
+                ).toFixed(0),
+              })}
             </div>
           )}
 

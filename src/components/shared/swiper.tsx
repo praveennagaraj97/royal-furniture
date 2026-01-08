@@ -30,14 +30,30 @@ const Swiper: FC<SwiperProps> = ({
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const isHorizontalScrollRef = useRef<boolean | null>(null);
 
+  /* eslint-disable-next-line react-hooks/exhaustive-deps */
   const checkScrollPosition = useCallback(() => {
     if (!containerRef.current) return;
 
     const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
     const threshold = 5; // Use a small threshold to account for rounding
+    const isRTL =
+      document.dir === 'rtl' || document.documentElement.dir === 'rtl';
 
-    setCanScrollLeft(scrollLeft > threshold);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - threshold);
+    if (isRTL) {
+      // Handle RTL scroll behavior
+      // Most modern browsers use negative scroll values for RTL
+      const normalizeScroll = Math.abs(scrollLeft);
+      const maxScroll = scrollWidth - clientWidth;
+
+      // Right button (Go Right/Start): Visible if we have scrolled away from 0
+      setCanScrollRight(normalizeScroll > threshold);
+
+      // Left button (Go Left/End): Visible if we haven't reached the end
+      setCanScrollLeft(normalizeScroll < maxScroll - threshold);
+    } else {
+      setCanScrollLeft(scrollLeft > threshold);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - threshold);
+    }
   }, []);
 
   const scrollTo = useCallback((direction: 'left' | 'right') => {
@@ -197,7 +213,7 @@ const Swiper: FC<SwiperProps> = ({
               disabled={isScrolling}
               aria-label="Scroll left"
             >
-              <FiChevronLeft className="w-5 h-5 text-gray-700" />
+              <FiChevronLeft className="w-5 h-5 text-gray-700 rtl:rotate-180" />
             </motion.button>
           )}
 
@@ -214,7 +230,7 @@ const Swiper: FC<SwiperProps> = ({
               disabled={isScrolling}
               aria-label="Scroll right"
             >
-              <FiChevronRight className="w-5 h-5 text-gray-700" />
+              <FiChevronRight className="w-5 h-5 text-gray-700 rtl:rotate-180" />
             </motion.button>
           )}
         </div>

@@ -8,7 +8,10 @@
     "cart": "السلة",
     "searchPlaceholder": "ماذا تبحث عنه؟",
     "back": "رجوع",
-    "categories": "الفئات"
+    "categories": "الفئات",
+    "seeAll": "مشاهدة الكل",
+    "addToCart": "أضف إلى السلة",
+    "off": "خصم {percentage}%"
   },
   "quickLinks": {
     "freeShipping": "شحن مجاني",

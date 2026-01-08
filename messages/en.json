@@ -8,7 +8,10 @@
     "cart": "Cart",
     "searchPlaceholder": "What you are looking for?",
     "back": "Back",
-    "categories": "Categories"
+    "categories": "Categories",
+    "seeAll": "See All",
+    "addToCart": "Add to Cart",
+    "off": "{percentage}% OFF"
   },
   "quickLinks": {
     "freeShipping": "Free shipping",

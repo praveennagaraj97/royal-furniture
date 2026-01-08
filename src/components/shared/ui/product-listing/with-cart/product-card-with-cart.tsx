@@ -7,7 +7,7 @@ import { FiHeart, FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
 
 import { ProductItem } from '@/types';
 import { formatCurrency } from '@/utils/format-currency';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 
 export interface ProductCardWithCartProps {
@@ -24,6 +24,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
 
   const params = useParams();
   const locale = useLocale();
+  const t = useTranslations();
   const countryCode = params.country as string;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -143,7 +144,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
           className="w-full flex items-center justify-center gap-2 border border-deep-maroon text-gray-900 py-2 px-4 rounded-lg font-medium hover:bg-deep-maroon/10 transition-colors duration-200"
         >
           <FiShoppingCart className="text-xl text-deep-maroon" />
-          <span>Add to cart</span>
+          <span>{t('common.addToCart')}</span>
         </button>
       </div>
     </StaggerItem>

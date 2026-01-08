@@ -70,11 +70,11 @@ const Home: NextPage = async () => {
       <PromotionalBanner />
       <FurnitureShowcase /> */}
 
-      <ProductListing
+      {/* <ProductListing
         title="New Arrivals"
         seeAllHref="/product?type=new_arrivals"
         products={data.new_launches.items || []}
-      />
+      /> */}
 
       {/* <PromotionalBanner /> */}
       {/* 

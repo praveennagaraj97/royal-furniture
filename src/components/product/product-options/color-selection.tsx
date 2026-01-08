@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { useTranslations } from 'next-intl';
 import type { ColorOption } from '../types';
 
 export interface ColorSelectionProps {
@@ -14,6 +15,8 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
   selectedColor,
   onColorChange,
 }) => {
+  const t = useTranslations();
+
   return (
     <div className="space-y-3">
       <ViewOnce
@@ -76,7 +79,7 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
             type="button"
             className="text-deep-maroon hover:underline text-sm font-medium ml-3"
           >
-            See All
+            {t('common.seeAll')}
           </button>
         </ViewOnce>
       </div>
