@@ -1,9 +1,13 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
+import { useLocale } from 'next-intl';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import { FC, useState } from 'react';
 import { FiHeart } from 'react-icons/fi';
+
+import { formatCurrency } from '@/utils/format-currency';
 
 import { AppLink } from '@/hooks';
 import { ProductItem } from '@/types';
@@ -14,7 +18,11 @@ export interface ProductCardProps {
 
 const ProductCard: FC<ProductCardProps> = ({ product }) => {
   const [isFavorite, setIsFavorite] = useState(product.is_in_wishlist);
+
   const [isHovered, setIsHovered] = useState(false);
+  const params = useParams();
+  const locale = useLocale();
+  const countryCode = params.country as string;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -71,11 +79,19 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           {/* Price */}
           <div className="flex items-center gap-2">
             <span className="text-red-600 font-semibold text-lg">
-              ฿ {product.pricing.offer_price}
+              {formatCurrency(
+                product.pricing.offer_price || 0,
+                countryCode,
+                locale
+              )}
             </span>
             {product.pricing.base_price !== product.pricing.offer_price && (
               <span className="text-gray-400 text-sm font-medium line-through">
-                ฿ {product.pricing.base_price}
+                {formatCurrency(
+                  product.pricing.base_price || 0,
+                  countryCode,
+                  locale
+                )}
               </span>
             )}
           </div>

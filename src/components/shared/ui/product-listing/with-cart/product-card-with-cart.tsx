@@ -6,6 +6,9 @@ import { FC, useState } from 'react';
 import { FiHeart, FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
 
 import { ProductItem } from '@/types';
+import { formatCurrency } from '@/utils/format-currency';
+import { useLocale } from 'next-intl';
+import { useParams } from 'next/navigation';
 
 export interface ProductCardWithCartProps {
   product: ProductItem;
@@ -18,6 +21,10 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
 }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
+
+  const params = useParams();
+  const locale = useLocale();
+  const countryCode = params.country as string;
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -77,16 +84,24 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
       {/* Product Info Section */}
       <div className="space-y-2">
         {/* Price */}
-        {/* <div className="flex items-center gap-2">
-          <span className="text-red-600 font-bold text-lg">
-            ฿ {product.pricing.offer_price.toLocaleString()}
+        <div className="flex items-center gap-2">
+          <span className="text-red-600 font-semibold text-lg">
+            {formatCurrency(
+              product.pricing.offer_price || 0,
+              countryCode,
+              locale
+            )}
           </span>
-          {product.pricing.base_price > product.pricing.offer_price && (
+          {product.pricing.base_price !== product.pricing.offer_price && (
             <span className="text-gray-400 text-sm font-medium line-through">
-              ฿ {product.pricing.base_price.toLocaleString()}
+              {formatCurrency(
+                product.pricing.base_price || 0,
+                countryCode,
+                locale
+              )}
             </span>
           )}
-        </div> */}
+        </div>
 
         {/* Product Name */}
         <p className="text-gray-900 text-base">{product.name}</p>
