@@ -2,7 +2,6 @@ import Hero from '@/components/home/hero';
 import PromotionalOffers from '@/components/home/promotional-offers';
 import CountdownTag from '@/components/shared/ui/countdown-tag';
 import ProductListing from '@/components/shared/ui/product-listing';
-import ProductListingWithCart from '@/components/shared/ui/product-listing/with-cart';
 import { ecommerceService } from '@/services/api/ecommerce-service';
 import { getCountriesWithLocaleParams } from '@/utils/generated';
 import { NextPage } from 'next';
@@ -48,7 +47,7 @@ const Home: NextPage = async () => {
         products={data.featured_deals.items || []}
       />
 
-      <ProductListingWithCart
+      <ProductListing
         title="Deal of the day"
         seeAllHref="/products?type=deal_of_the_day"
         products={data.featured_deals.items || []}

@@ -2,7 +2,6 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
-import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC, ReactNode } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
@@ -22,6 +21,7 @@ const ProductListing: FC<ProductListingProps> = ({
   products,
 }) => {
   const t = useTranslations();
+
   return (
     <StaggerContainer
       staggerChildren={0.1}
@@ -39,15 +39,15 @@ const ProductListing: FC<ProductListingProps> = ({
             title
           )}
         </div>
-        {seeAllHref && (
-          <AppLink
+        {seeAllHref ? (
+          <a
             href={seeAllHref}
             className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
           >
             <span>{t('common.seeAll')}</span>
             <FiChevronRight className="sm:w-4 sm:h-4 w-2 h-2 rtl:rotate-180" />
-          </AppLink>
-        )}
+          </a>
+        ) : null}
       </div>
 
       {/* Products Swiper */}
