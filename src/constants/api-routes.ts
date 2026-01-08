@@ -23,5 +23,6 @@ export const API_ROUTES = {
   },
   PRODUCTS: {
     HOME: '/products/home/',
+    DETAIL: '/products/product-detail/',
   },
 } as const;

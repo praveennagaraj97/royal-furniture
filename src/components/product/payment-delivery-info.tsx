@@ -11,8 +11,15 @@ import tabbyIcon from '@/assets/payments/tabby.png';
 import tamaraIcon from '@/assets/payments/tamara.png';
 import { FaTruckFast } from 'react-icons/fa6';
 
+import type { ProductDetailData } from '@/types/response';
+
 interface PaymentDeliveryInfoProps {
   productPrice?: number;
+  deliveryInfo?: ProductDetailData['delivery_info'];
+  flexiPayment?: ProductDetailData['flexi_payment'];
+  paymentOptions?: ProductDetailData['payment_options'];
+  freeAssembly?: ProductDetailData['free_assembly'];
+  expressDeliveryTimer?: ProductDetailData['express_delivery_timer'];
 }
 
 const formatCountdown = (totalSeconds: number): string => {
@@ -28,6 +35,11 @@ const formatCountdown = (totalSeconds: number): string => {
 
 export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
   productPrice = 4485,
+  deliveryInfo,
+  flexiPayment,
+  paymentOptions,
+  freeAssembly,
+  expressDeliveryTimer,
 }) => {
   // Calculate payment plan amounts (4 payments)
   const tabbyAmount = (productPrice / 4).toFixed(2);
@@ -175,54 +187,62 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
       </ViewOnce>
 
       {/* Free Assembly Available Card */}
-      <ViewOnce
-        type="slideUp"
-        distance={15}
-        duration={0.4}
-        delay={0.3}
-        amount={0.01}
-        margin="-100px"
-      >
-        <div className="p-4 bg-white rounded-lg border border-gray-200">
-          <h4 className="text-sm font-bold mb-1.5">
-            <span className="text-green-600">Free</span>{' '}
-            <span className="text-gray-900">Assembly Available</span>
-          </h4>
-          <p className="text-sm text-gray-700">
-            We will happily assemble your furniture for you at no additional
-            cost
-          </p>
-        </div>
-      </ViewOnce>
+      {freeAssembly?.is_assemble && (
+        <ViewOnce
+          type="slideUp"
+          distance={15}
+          duration={0.4}
+          delay={0.3}
+          amount={0.01}
+          margin="-100px"
+        >
+          <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <h4 className="text-sm font-bold mb-1.5">
+              <span className="text-green-600">Free</span>{' '}
+              <span className="text-gray-900">Assembly Available</span>
+            </h4>
+            <p className="text-sm text-gray-700">
+              {freeAssembly.description ||
+                'We will happily assemble your furniture for you at no additional cost'}
+            </p>
+          </div>
+        </ViewOnce>
+      )}
 
       {/* Express Delivery Available Card */}
-      <ViewOnce
-        type="slideUp"
-        distance={15}
-        duration={0.4}
-        delay={0.35}
-        amount={0.01}
-        margin="-100px"
-      >
-        <div className="p-4 rounded-lg border border-gray-200 bg-gray-100">
-          <div className="flex items-center gap-2 mb-1.5">
-            <FaTruckFast className="text-deep-maroon text-lg" />
-            <h4 className="text-sm font-bold">
-              <span className="text-green-600">Express Delivery</span>{' '}
-              <span className="text-gray-900">Available</span>
-            </h4>
-          </div>
-          <p className="text-sm text-gray-700 mb-1">
-            Get it by tomorrow If ordered within{' '}
-            <span className="text-red-600 font-medium">
-              {formatCountdown(countdown)}
-            </span>
-          </p>
-          <p className="text-xs text-gray-600">
-            Extra Charges May Apply for Express delivery
-          </p>
-        </div>
-      </ViewOnce>
+      {expressDeliveryTimer?.available &&
+        deliveryInfo?.supports_express_delivery && (
+          <ViewOnce
+            type="slideUp"
+            distance={15}
+            duration={0.4}
+            delay={0.35}
+            amount={0.01}
+            margin="-100px"
+          >
+            <div className="p-4 rounded-lg border border-gray-200 bg-gray-100">
+              <div className="flex items-center gap-2 mb-1.5">
+                <FaTruckFast className="text-deep-maroon text-lg" />
+                <h4 className="text-sm font-bold">
+                  <span className="text-green-600">Express Delivery</span>{' '}
+                  <span className="text-gray-900">Available</span>
+                </h4>
+              </div>
+              <p className="text-sm text-gray-700 mb-1">
+                Get it by {deliveryInfo.express_delivery_duration || 'tomorrow'}{' '}
+                If ordered within{' '}
+                <span className="text-red-600 font-medium">
+                  {formatCountdown(countdown)}
+                </span>
+              </p>
+              {deliveryInfo.express_delivery_charge && (
+                <p className="text-xs text-gray-600">
+                  Extra Charges: {deliveryInfo.express_delivery_charge}
+                </p>
+              )}
+            </div>
+          </ViewOnce>
+        )}
     </div>
   );
 };

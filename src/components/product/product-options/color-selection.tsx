@@ -2,7 +2,14 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { useTranslations } from 'next-intl';
-import type { ColorOption } from '../types';
+
+export interface ColorOption {
+  id: string;
+  name: string;
+  value: string; // hex color or image URL
+  isImage?: boolean;
+  imageUrl?: string;
+}
 
 export interface ColorSelectionProps {
   colors: ColorOption[];
@@ -54,10 +61,12 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
               }`}
               aria-label={color.name}
             >
-              {color.isImage ? (
+              {color.isImage || color.imageUrl ? (
                 <div
                   className="w-full h-full rounded-full bg-cover bg-center"
-                  style={{ backgroundImage: `url(${color.value})` }}
+                  style={{
+                    backgroundImage: `url(${color.imageUrl || color.value})`,
+                  }}
                 />
               ) : (
                 <div
@@ -68,7 +77,7 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
             </button>
           </ViewOnce>
         ))}
-        <ViewOnce
+        {/* <ViewOnce
           type="fade"
           duration={0.3}
           delay={0.2}
@@ -81,7 +90,7 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
           >
             {t('common.seeAll')}
           </button>
-        </ViewOnce>
+        </ViewOnce> */}
       </div>
     </div>
   );

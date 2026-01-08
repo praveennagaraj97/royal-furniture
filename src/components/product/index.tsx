@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import type { ProductDetailData } from '@/types/response';
 import { useState, type FC } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import { IoStorefront } from 'react-icons/io5';
@@ -11,27 +12,43 @@ import { ProductActions } from './product-actions';
 import { ProductAdditionalInfo } from './product-additional-info';
 import { ProductHeader } from './product-header';
 import { ProductOptions } from './product-options';
-import type { ProductDetailData } from './types';
 import { UserReviews } from './user-reviews';
 
 export interface ProductDetailProps {
   data: ProductDetailData;
 }
 
-export interface ProductDetailProps {
-  data: ProductDetailData;
-}
-
 export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(data.colors[0]?.id || '');
-  const [selectedSize, setSelectedSize] = useState(data.sizes[0]?.id || '');
+  // Get first variant, fabric, and color for initial state
+  const firstVariant = data.variants[0];
+  const firstFabric = firstVariant?.fabricsList[0];
+  const firstColor = firstFabric?.colorsList[0];
+
+  const [isWishlisted, setIsWishlisted] = useState(
+    firstColor?.is_wishlist || false
+  );
+  const [selectedVariant, setSelectedVariant] = useState(
+    firstVariant?.name || ''
+  );
+  const [selectedFabric, setSelectedFabric] = useState(firstFabric?.name || '');
+  const [selectedColor, setSelectedColor] = useState(
+    String(firstColor?.id || '')
+  );
   const [quantity, setQuantity] = useState(1);
+
+  // Get current selected color variant
+  const currentVariant = data.variants.find((v) => v.name === selectedVariant);
+  const currentFabric = currentVariant?.fabricsList.find(
+    (f) => f.name === selectedFabric
+  );
+  const currentColor = currentFabric?.colorsList.find(
+    (c) => String(c.id) === selectedColor
+  );
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = Math.max(1, quantity + delta);
-    if (data.stockCount) {
-      setQuantity(Math.min(newQuantity, data.stockCount));
+    if (currentColor?.stock) {
+      setQuantity(Math.min(newQuantity, currentColor.stock));
     } else {
       setQuantity(newQuantity);
     }
@@ -40,20 +57,22 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const handleAddToCart = () => {
     // Handle add to cart logic
     console.log('Add to cart', {
-      productId: data.id,
+      productId: data.product_info.id,
       quantity,
       selectedColor,
-      selectedSize,
+      selectedVariant,
+      selectedFabric,
     });
   };
 
   const handleBuyNow = () => {
     // Handle buy now logic
     console.log('Buy now', {
-      productId: data.id,
+      productId: data.product_info.id,
       quantity,
       selectedColor,
-      selectedSize,
+      selectedVariant,
+      selectedFabric,
     });
   };
 
@@ -61,7 +80,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     setIsWishlisted(!isWishlisted);
     // Handle wishlist toggle logic
     console.log('Wishlist toggle', {
-      productId: data.id,
+      productId: data.product_info.id,
+      colorId: selectedColor,
       isWishlisted: !isWishlisted,
     });
   };
@@ -71,8 +91,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     if (navigator.share) {
       navigator
         .share({
-          title: data.name,
-          text: `Check out ${data.name}`,
+          title: data.product_info.name,
+          text: `Check out ${data.product_info.name}`,
           url: window.location.href,
         })
         .catch((error) => {
@@ -100,6 +120,9 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           <div className="min-w-0 w-full">
             <ProductImages
               product={data}
+              selectedVariant={selectedVariant}
+              selectedFabric={selectedFabric}
+              selectedColor={selectedColor}
               onWishlistClick={handleWishlistClick}
               onShareClick={handleShareClick}
               isWishlisted={isWishlisted}
@@ -121,11 +144,13 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               <ProductHeader product={data} />
               <ProductOptions
                 product={data}
+                selectedVariant={selectedVariant}
+                selectedFabric={selectedFabric}
                 selectedColor={selectedColor}
-                selectedSize={selectedSize}
                 quantity={quantity}
+                onVariantChange={setSelectedVariant}
+                onFabricChange={setSelectedFabric}
                 onColorChange={setSelectedColor}
-                onSizeChange={setSelectedSize}
                 onQuantityChange={handleQuantityChange}
               />
               <ViewOnce
@@ -151,7 +176,10 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 </button>
               </ViewOnce>
 
-              <GeneralInformation />
+              <GeneralInformation
+                description={data.general_information}
+                infoSection={currentColor?.info_section}
+              />
             </div>
             <div className="space-y-4">
               <ProductActions
@@ -160,7 +188,20 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               />
 
               <ProductAdditionalInfo product={data} />
-              <PaymentDeliveryInfo productPrice={data.price} />
+              <PaymentDeliveryInfo
+                productPrice={
+                  currentColor?.region_prices.offer_price
+                    ? parseFloat(currentColor.region_prices.offer_price)
+                    : data.product_info.pricing.offer_price
+                    ? parseFloat(data.product_info.pricing.offer_price)
+                    : 0
+                }
+                deliveryInfo={data.delivery_info}
+                flexiPayment={data.flexi_payment}
+                paymentOptions={data.payment_options}
+                freeAssembly={data.free_assembly}
+                expressDeliveryTimer={data.express_delivery_timer}
+              />
             </div>
           </div>
         </ViewOnce>

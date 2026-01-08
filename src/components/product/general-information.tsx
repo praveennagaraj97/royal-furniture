@@ -2,38 +2,22 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { Accordion } from '@/components/shared/ui/accordion';
+import type { ProductInfoSection } from '@/types/response';
 import type { FC } from 'react';
 
 export interface GeneralInformationProps {
   description?: string;
-  dimensions?: Array<{ label: string; value: string }>;
-  specifications?: Array<{ label: string; value: string }>;
-  warrantyAndCare?: Array<{ label: string; value: string }>;
-  assembly?: Array<{ label: string; value: string }>;
+  infoSection?: ProductInfoSection;
 }
 
 export const GeneralInformation: FC<GeneralInformationProps> = ({
-  description = 'This premium sofa offers a perfect blend of style and comfort, featuring high-quality materials and a modern design to enhance any living space.',
-  dimensions = [
-    { label: 'Upholstery Material', value: 'Fabric' },
-    { label: 'Frame Material', value: 'Wood & MDF' },
-    { label: 'Leg Type', value: 'Polymer' },
-  ],
-  specifications = [
-    { label: 'Seating Capacity', value: '6 Seater' },
-    { label: 'No. of Throw pillows', value: 'Nill' },
-    { label: 'Colour', value: 'Grey' },
-  ],
-  warrantyAndCare = [
-    { label: 'Warranty Period', value: '2 Years' },
-    { label: 'Care Instructions', value: 'Dry clean only' },
-  ],
-  assembly = [
-    { label: 'Assembly Required', value: 'Yes' },
-    { label: 'Assembly Time', value: '30-45 minutes' },
-    { label: 'Tools Required', value: 'Screwdriver, Allen key' },
-  ],
+  description,
+  infoSection,
 }) => {
+  const dimensions = infoSection?.dimensions || [];
+  const specifications = infoSection?.specs || [];
+  const warrantyAndCare = infoSection?.warranty || [];
+  const assembly = infoSection?.assembly || [];
   const renderDataRows = (data: Array<{ label: string; value: string }>) => {
     return (
       <div>

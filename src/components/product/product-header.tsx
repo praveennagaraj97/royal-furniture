@@ -1,34 +1,28 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import type { ProductDetailData } from '@/types/response';
 import { IoIosStarOutline } from 'react-icons/io';
-import type { ProductDetailData } from './types';
 
 export interface ProductHeaderProps {
   product: ProductDetailData;
 }
 
 export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
-  const savings = product.originalPrice - product.price;
+  const basePrice = product.product_info.pricing.base_price
+    ? parseFloat(product.product_info.pricing.base_price)
+    : 0;
+  const offerPrice = product.product_info.pricing.offer_price
+    ? parseFloat(product.product_info.pricing.offer_price)
+    : basePrice;
+  const savings = basePrice - offerPrice;
+  const amountSaved = product.product_info.pricing.amount_saved
+    ? parseFloat(product.product_info.pricing.amount_saved)
+    : savings;
 
   return (
     <div className="space-y-3">
       <div>
-        {/* Availability Notice */}
-        {product.stockLeft !== undefined && product.stockLeft > 0 && (
-          <ViewOnce
-            type="fade"
-            duration={0.4}
-            delay={0.1}
-            amount={0.01}
-            margin="-100px"
-          >
-            <div className="text-sm font-medium text-indigo-slate">
-              Order now only {product.stockLeft} left
-            </div>
-          </ViewOnce>
-        )}
-
         {/* Product Name */}
         <ViewOnce
           type="slideUp"
@@ -38,7 +32,9 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
           amount={0.01}
           margin="-100px"
         >
-          <h1 className="text-3xl lg:text-4xl font-medium">{product.name}</h1>
+          <h1 className="text-3xl lg:text-4xl font-medium">
+            {product.product_info.name}
+          </h1>
         </ViewOnce>
       </div>
 
@@ -52,12 +48,14 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             amount={0.01}
             margin="-100px"
           >
-            <span className="text-green-600 font-semibold text-lg">
-              Save ฿ {savings.toLocaleString()}
-            </span>
+            {amountSaved > 0 && (
+              <span className="text-green-600 font-semibold text-lg">
+                Save ฿ {amountSaved.toLocaleString()}
+              </span>
+            )}
           </ViewOnce>
         )}
-        {product.views24h && (
+        {product.product_info.view_count > 0 && (
           <ViewOnce
             type="fade"
             duration={0.4}
@@ -66,7 +64,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             margin="-100px"
           >
             <span className="text-gray-600 text-sm">
-              {product.views24h} views in 24 hrs
+              {product.product_info.view_count} views in 24 hrs
             </span>
           </ViewOnce>
         )}
@@ -87,7 +85,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
               <IoIosStarOutline
                 key={i}
                 className={`w-5 h-5 ${
-                  i < Math.floor(product.rating)
+                  i < Math.floor(product.reviews_summary.average_rating)
                     ? 'fill-deep-maroon text-deep-maroon'
                     : 'text-gray-300'
                 }`}
@@ -95,7 +93,8 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             ))}
           </div>
           <span className="text-deep-maroon font-medium shrink-0">
-            {product.rating} ({product.reviewCount} Reviews)
+            {product.reviews_summary.average_rating} (
+            {product.reviews_summary.total_reviews} Reviews)
           </span>
           <button
             type="button"
@@ -117,11 +116,11 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
       >
         <div className="flex items-center gap-3">
           <span className="text-3xl font-bold text-red-600">
-            ฿ {product.price.toLocaleString()}
+            ฿ {offerPrice.toLocaleString()}
           </span>
-          {product.originalPrice > product.price && (
+          {basePrice > offerPrice && (
             <span className="text-xl text-gray-400 line-through font-bold">
-              ฿ {product.originalPrice.toLocaleString()}
+              ฿ {basePrice.toLocaleString()}
             </span>
           )}
         </div>

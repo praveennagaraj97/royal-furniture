@@ -1,10 +1,10 @@
 'use client';
 
 import Swiper from '@/components/shared/swiper';
+import type { ProductDetailData } from '@/types/response';
 import Image from 'next/image';
-import { useState, type FC } from 'react';
+import { useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
-import type { ProductDetailData } from '../types';
 
 export interface ImageCarouselProps {
   images: string[];
@@ -37,7 +37,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
       <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
         <Image
           src={images[selectedIndex] || images[0]}
-          alt={`${alt} ${selectedIndex + 1}`}
+          alt={`${alt}`}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -45,11 +45,11 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
         />
 
         {/* Discount Badge */}
-        {discount && discount > 0 && (
+        {discount && discount > 0 ? (
           <div className="absolute top-4 left-4 bg-deep-maroon text-white text-sm font-bold px-3 py-1.5 rounded-md z-10">
             {discount}% OFF
           </div>
-        )}
+        ) : null}
 
         {/* Action Icons - Top Right */}
         <div className="absolute top-4 right-4 flex gap-2 z-10">
@@ -78,7 +78,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
         </div>
 
         {/* View in 3D Button */}
-        {showView3D && (
+        {showView3D ? (
           <div className="absolute bottom-4 left-4 z-10">
             <button
               type="button"
@@ -89,7 +89,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               <span>View in 3D</span>
             </button>
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* Thumbnail Images */}
@@ -129,6 +129,9 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
 
 export interface ProductImagesProps {
   product: ProductDetailData;
+  selectedVariant: string;
+  selectedFabric: string;
+  selectedColor: string;
   onWishlistClick?: () => void;
   onShareClick?: () => void;
   isWishlisted?: boolean;
@@ -136,15 +139,42 @@ export interface ProductImagesProps {
 
 export const ProductImages: FC<ProductImagesProps> = ({
   product,
+  selectedVariant,
+  selectedFabric,
+  selectedColor,
   onWishlistClick,
   onShareClick,
   isWishlisted = false,
 }) => {
+  // Extract images from selected variant/fabric/color
+  const images = useMemo(() => {
+    const variant = product.variants.find((v) => v.name === selectedVariant);
+    const fabric = variant?.fabricsList.find((f) => f.name === selectedFabric);
+    const color = fabric?.colorsList.find(
+      (c) => String(c.id) === selectedColor
+    );
+
+    if (color?.images && color.images.length > 0) {
+      return color.images;
+    }
+
+    // Fallback to first available images
+    const firstVariant = product.variants[0];
+    const firstFabric = firstVariant?.fabricsList[0];
+    const firstColor = firstFabric?.colorsList[0];
+
+    return firstColor?.images || [product.product_info.thumbnail_image];
+  }, [product, selectedVariant, selectedFabric, selectedColor]);
+
+  const discount = product.product_info.pricing.offer_percentage
+    ? Math.round(parseFloat(product.product_info.pricing.offer_percentage))
+    : 0;
+
   return (
     <ImageCarousel
-      images={product.images}
-      alt={product.name}
-      discount={product.discount}
+      images={images}
+      alt={product.product_info.name}
+      discount={discount}
       showView3D={true}
       onWishlistClick={onWishlistClick}
       onShareClick={onShareClick}

@@ -2,11 +2,11 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import Modal from '@/components/shared/modal';
+import type { ProductDetailData } from '@/types/response';
 import { useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { GiWallet } from 'react-icons/gi';
 import { HiMapPin } from 'react-icons/hi2';
-import type { ProductDetailData } from './types';
 
 export interface ProductAdditionalInfoProps {
   product: ProductDetailData;
@@ -21,7 +21,7 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
     <>
       <div className="space-y-4">
         {/* Delivery Information */}
-        {product.deliveryDate && (
+        {product.delivery_info.estimated_delivery && (
           <ViewOnce
             type="slideUp"
             distance={15}
@@ -35,7 +35,7 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
                 <HiMapPin className="text-deep-maroon text-xl min-w-5" />
                 <span>Delivery on</span>
                 <span className="font-semibold text-indigo-slate">
-                  {product.deliveryDate}
+                  {product.delivery_info.estimated_delivery}
                 </span>
               </div>
               <button
@@ -49,35 +49,38 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
         )}
 
         {/* Flexi Payment */}
-        <ViewOnce
-          type="slideUp"
-          distance={15}
-          duration={0.4}
-          delay={0.2}
-          amount={0.01}
-          margin="-100px"
-        >
-          <div className="p-2 pl-4 bg-deep-maroon/10 rounded-lg flex space-x-2 items-start">
-            <GiWallet className="text-xl text-deep-maroon mt-1" />
-            <div>
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium">Flexi Payment Available</div>
-                  <div className="text-xs text-deep-maroon font-medium">
-                    Pay 20% now, the rest before delivery.
+        {product.flexi_payment.available && (
+          <ViewOnce
+            type="slideUp"
+            distance={15}
+            duration={0.4}
+            delay={0.2}
+            amount={0.01}
+            margin="-100px"
+          >
+            <div className="p-2 pl-4 bg-deep-maroon/10 rounded-lg flex space-x-2 items-start">
+              <GiWallet className="text-xl text-deep-maroon mt-1" />
+              <div>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium">Flexi Payment Available</div>
+                    <div className="text-xs text-deep-maroon font-medium">
+                      {product.flexi_payment.description ||
+                        `Pay ${product.flexi_payment.upfront_percentage}% now, the rest before delivery.`}
+                    </div>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setIsFlexiPaymentModalOpen(true)}
+                  className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap shrink-0"
+                >
+                  See More
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsFlexiPaymentModalOpen(true)}
-                className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap shrink-0"
-              >
-                See More
-              </button>
             </div>
-          </div>
-        </ViewOnce>
+          </ViewOnce>
+        )}
       </div>
 
       {/* Flexi Payment Info Modal */}
@@ -108,34 +111,33 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
               {/* What is Flexi Payment? */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  What is Flexi Payment?
+                  {product.flexi_payment.modal_content.title ||
+                    'What is Flexi Payment?'}
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Flexi Payment lets you book your order by paying a part of the
-                  total amount upfront and the rest before delivery.
+                  {product.flexi_payment.modal_content.description ||
+                    'Flexi Payment lets you book your order by paying a part of the total amount upfront and the rest before delivery.'}
                 </p>
               </div>
 
               {/* How does it work? */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  How does it work?
-                </h3>
-                <ol className="space-y-2 text-sm text-gray-600">
-                  <li className="leading-relaxed">
-                    <span className="font-medium">1.</span> Pay 20% upfront to
-                    confirm your order.
-                  </li>
-                  <li className="leading-relaxed">
-                    <span className="font-medium">2.</span> Pay the remaining
-                    80% before delivery.
-                  </li>
-                  <li className="leading-relaxed">
-                    <span className="font-medium">3.</span> Available only for
-                    select products.
-                  </li>
-                </ol>
-              </div>
+              {product.flexi_payment.modal_content.benefits.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    Benefits
+                  </h3>
+                  <ol className="space-y-2 text-sm text-gray-600">
+                    {product.flexi_payment.modal_content.benefits.map(
+                      (benefit, index) => (
+                        <li key={index} className="leading-relaxed">
+                          <span className="font-medium">{index + 1}.</span>{' '}
+                          {benefit}
+                        </li>
+                      )
+                    )}
+                  </ol>
+                </div>
+              )}
             </div>
           </div>
 
