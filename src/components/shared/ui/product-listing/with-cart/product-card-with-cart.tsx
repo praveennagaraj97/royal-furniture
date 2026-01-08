@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { FC, useState } from 'react';
 import { FiHeart, FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
 
-import { ProductItem } from '@/types/response/home-page';
+import { ProductItem } from '@/types';
 
 export interface ProductCardWithCartProps {
   product: ProductItem;
@@ -54,11 +54,11 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
         />
 
         {/* Discount Badge */}
-        {product.pricing.offer_percentage > 0 && (
+        {/* {product.pricing.offer_percentage > 0 && (
           <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
             {product.pricing.offer_percentage}% OFF
           </div>
-        )}
+        )} */}
 
         {/* Favorite Button */}
         <button
@@ -77,7 +77,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
       {/* Product Info Section */}
       <div className="space-y-2">
         {/* Price */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <span className="text-red-600 font-bold text-lg">
             ฿ {product.pricing.offer_price.toLocaleString()}
           </span>
@@ -86,7 +86,7 @@ const ProductCardWithCart: FC<ProductCardWithCartProps> = ({
               ฿ {product.pricing.base_price.toLocaleString()}
             </span>
           )}
-        </div>
+        </div> */}
 
         {/* Product Name */}
         <p className="text-gray-900 text-base">{product.name}</p>

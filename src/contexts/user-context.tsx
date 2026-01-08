@@ -1,7 +1,7 @@
 'use client';
 
 import { authService } from '@/services/api/auth-service';
-import type { User } from '@/types/response';
+import type { User } from '@/types';
 import {
   type FC,
   type ReactNode,

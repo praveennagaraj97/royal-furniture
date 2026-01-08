@@ -6,7 +6,7 @@ import { AppLink } from '@/hooks';
 import { FC, ReactNode } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
-import { ProductItem } from '@/types/response/home-page';
+import { ProductItem } from '@/types';
 import ProductCard from './product-card';
 
 export interface ProductListingProps {

@@ -1,12 +1,12 @@
 'use client';
 
-import { PromotionalBanner } from '@/types/response/home-page';
+import { BannerItem } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 
 interface FadeSlideshowProps {
-  banners: PromotionalBanner[];
+  banners: BannerItem[];
   showDots?: boolean;
   autoplayDuration?: number;
   className?: string;
@@ -51,7 +51,7 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
               className="block w-full h-full relative"
             >
               <Image
-                src={banner.image}
+                src={banner.image || ''}
                 alt={banner.title || 'Promotional Banner'}
                 fill
                 className="object-cover"
@@ -62,7 +62,7 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
           ) : (
             <div className="block w-full h-full relative">
               <Image
-                src={banner.image}
+                src={banner.image || ''}
                 alt={banner.title || 'Promotional Banner'}
                 fill
                 className="object-cover"

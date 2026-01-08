@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/api-routes';
-import type { CountryLanguageOptionsResponse } from '@/types/response';
+import type { CountryLanguageOptionsResponse } from '@/types';
 import { BaseAPIService } from './api-base-service';
 
 export class ConfigService extends BaseAPIService {

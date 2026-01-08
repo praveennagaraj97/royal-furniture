@@ -5,7 +5,7 @@ import Swiper from '@/components/shared/swiper';
 import { FC, ReactNode } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
-import { ProductItem } from '@/types/response/home-page';
+import { ProductItem } from '@/types';
 import ProductCardWithCart from './product-card-with-cart';
 
 export interface ProductListingWithCartProps {

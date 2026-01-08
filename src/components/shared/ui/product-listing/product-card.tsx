@@ -6,7 +6,7 @@ import { FC, useState } from 'react';
 import { FiHeart } from 'react-icons/fi';
 
 import { AppLink } from '@/hooks';
-import { ProductItem } from '@/types/response/home-page';
+import { ProductItem } from '@/types';
 
 export interface ProductCardProps {
   product: ProductItem;
@@ -45,9 +45,10 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
           />
 
           {/* Discount Badge */}
-          {product.pricing.offer_percentage > 0 && (
+          {parseFloat(product.pricing.offer_percentage || '0') > 0 && (
             <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
-              {product.pricing.offer_percentage}% OFF
+              {parseFloat(product.pricing.offer_percentage || '0').toFixed(0)}%
+              OFF
             </div>
           )}
 

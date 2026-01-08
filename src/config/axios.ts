@@ -51,9 +51,8 @@ export const setupAxiosInterceptors = (instance: AxiosInstance): void => {
         }
 
         if (config.headers) {
-          // config.headers['locale'] = locale;
-          // config.headers['country'] = country;
-          console.log(locale, country);
+          config.headers['locale'] = locale;
+          config.headers['country'] = country;
         }
       }
 

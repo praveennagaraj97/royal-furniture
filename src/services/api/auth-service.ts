@@ -1,5 +1,15 @@
 import { API_ROUTES } from '@/constants/api-routes';
 import type {
+  BaseAPIResponse,
+  ForgotPasswordVerifyOTPResponse,
+  LoginWithPasswordResponse,
+  RefreshTokenResponse,
+  RegisterResponse,
+  User,
+  UserProfileResponse,
+  VerifyOTPResponse,
+} from '@/types';
+import type {
   EmailLoginPayload,
   ForgotPasswordEmailPayload,
   ForgotPasswordResendOTPPayload,
@@ -14,16 +24,6 @@ import type {
   VerifyOTPLoginPayload,
   VerifyOTPPayload,
 } from '@/types/payload';
-import type {
-  BaseAPIResponse,
-  ForgotPasswordVerifyOTPResponse,
-  LoginWithPasswordResponse,
-  RefreshTokenResponse,
-  RegisterResponse,
-  User,
-  UserProfileResponse,
-  VerifyOTPResponse,
-} from '@/types/response';
 import { BaseAPIService } from './api-base-service';
 
 export class AuthService extends BaseAPIService {

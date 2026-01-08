@@ -1,4 +1,4 @@
-import { ProductItem } from '@/types/response/home-page';
+import { ProductItem } from '@/types';
 
 export interface Product {
   id: string;

@@ -1,11 +1,11 @@
 import { API_ROUTES } from '@/constants/api-routes';
-import type { HomePageResponse } from '@/types/response';
+import type { HomeApiResponse } from '@/types';
 import { BaseAPIService } from './api-base-service';
 
 export class EcommerceService extends BaseAPIService {
-  async getHomePageData(countryId: number): Promise<HomePageResponse> {
+  async getHomePageData(countryId: number): Promise<HomeApiResponse> {
     try {
-      const response = await this.http.get<HomePageResponse>(
+      const response = await this.http.get<HomeApiResponse>(
         API_ROUTES.PRODUCTS.HOME,
         {
           params: { country_id: countryId },
