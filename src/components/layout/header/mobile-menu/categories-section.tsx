@@ -1,6 +1,5 @@
 'use client';
 
-import { Subcategory } from '@/components/category/subcategories/card';
 import { useAppRouter } from '@/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
@@ -12,8 +11,7 @@ import {
   FiChevronRight,
 } from 'react-icons/fi';
 
-import { categories } from '@/temp/data/categories';
-import { categoriesData, CategoriesData } from '@/temp/data/categories-data';
+import { useLayoutData } from '@/contexts/layout-context';
 
 interface CategoriesSectionProps {
   selectedCategory: string | null;
@@ -29,17 +27,11 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
   onClose,
 }) => {
   const t = useTranslations('common');
-  const tCategories = useTranslations('categories');
   const locale = useLocale();
   const router = useAppRouter();
   const isRTL = locale === 'ar';
 
-  const getSubcategories = (): Subcategory[] => {
-    if (!selectedCategory) return [];
-    return categoriesData[selectedCategory as keyof CategoriesData] || [];
-  };
-
-  const subcategories = getSubcategories();
+  const { categories } = useLayoutData();
 
   // Animation values based on RTL
   const slideInX = isRTL ? -20 : 20;
@@ -70,28 +62,44 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
               <FiArrowLeft className="h-5 w-5" />
             )}
             <span className="text-base font-medium">
-              {categories.find((c) => c.id === selectedCategory)
-                ? tCategories(
-                    categories.find((c) => c.id === selectedCategory)?.key || ''
-                  )
-                : t('back')}
+              {categories.find((c) => c.slug === selectedCategory)?.name ||
+                t('back')}
             </span>
           </button>
 
           {/* Subcategories */}
-          {subcategories.map((subcategory) => (
-            <button
-              key={subcategory.id}
-              className="flex items-center gap-3 w-full px-1 py-3 text-left text-gray-700 hover:bg-gray-50 hover:text-[#7F1D1D] transition-colors border-b border-gray-200"
-              type="button"
-              onClick={() => {
-                router.push(`/${selectedCategory}/${subcategory.id}`);
-                onClose();
-              }}
-            >
-              <span className="text-base font-medium">{subcategory.name}</span>
-            </button>
-          ))}
+          {(() => {
+            const selectedCategoryData = categories.find(
+              (c) => c.slug === selectedCategory
+            );
+            const subcategories = selectedCategoryData?.subCategories || [];
+
+            if (subcategories.length === 0) {
+              return null;
+            }
+
+            return subcategories.map((subcategory) => (
+              <button
+                key={subcategory.id}
+                className="flex items-center gap-3 w-full px-1 py-3 text-left text-gray-700 hover:bg-gray-50 hover:text-[#7F1D1D] transition-colors border-b border-gray-200"
+                type="button"
+                onClick={() => {
+                  if (subcategory.slug) {
+                    router.push(`/${selectedCategory}/${subcategory.slug}`);
+                  } else {
+                    router.push(
+                      `/${selectedCategory}?subcategory=${subcategory.id}`
+                    );
+                  }
+                  onClose();
+                }}
+              >
+                <span className="text-base font-medium">
+                  {subcategory.name}
+                </span>
+              </button>
+            ));
+          })()}
         </motion.div>
       ) : (
         <motion.div
@@ -105,38 +113,33 @@ export const CategoriesSection: FC<CategoriesSectionProps> = ({
           <div className="text-sm font-semibold text-gray-500 uppercase mb-2">
             {t('categories')}
           </div>
-          {categories
-            .filter((cat) => cat.id !== 'all')
-            .map((category) => {
-              const hasSubcategories =
-                categoriesData[category.id as keyof CategoriesData] &&
-                categoriesData[category.id as keyof CategoriesData].length > 0;
-              return (
-                <button
-                  key={category.id}
-                  className="flex items-center justify-between gap-3 w-full px-1 py-3 text-left text-gray-700 hover:bg-gray-50 hover:text-[#7F1D1D] rounded-xl transition-colors"
-                  type="button"
-                  onClick={() => {
-                    if (hasSubcategories) {
-                      onCategoryClick(category.id);
-                    } else {
-                      router.push(`/${category.id}`);
-                      onClose();
-                    }
-                  }}
-                >
-                  <span className="text-base font-medium">
-                    {tCategories(category.key)}
-                  </span>
-                  {hasSubcategories &&
-                    (isRTL ? (
-                      <FiChevronLeft className="h-5 w-5 text-gray-400" />
-                    ) : (
-                      <FiChevronRight className="h-5 w-5 text-gray-400" />
-                    ))}
-                </button>
-              );
-            })}
+          {categories.map((category) => {
+            const hasSubcategories =
+              category.subCategories && category.subCategories.length > 0;
+            return (
+              <button
+                key={category.id}
+                className="flex items-center justify-between gap-3 w-full px-1 py-3 text-left text-gray-700 hover:bg-gray-50 hover:text-[#7F1D1D] rounded-xl transition-colors"
+                type="button"
+                onClick={() => {
+                  if (hasSubcategories) {
+                    onCategoryClick(category.slug);
+                  } else {
+                    router.push(`/${category.slug}`);
+                    onClose();
+                  }
+                }}
+              >
+                <span className="text-base font-medium">{category.name}</span>
+                {hasSubcategories &&
+                  (isRTL ? (
+                    <FiChevronLeft className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <FiChevronRight className="h-5 w-5 text-gray-400" />
+                  ))}
+              </button>
+            );
+          })}
         </motion.div>
       )}
     </AnimatePresence>
