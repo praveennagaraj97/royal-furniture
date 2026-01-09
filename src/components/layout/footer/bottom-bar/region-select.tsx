@@ -1,16 +1,17 @@
 'use client';
 
 import { Select } from '@/components/shared/select';
+import { useAppPathName } from '@/hooks';
 import { countries } from '@/utils/generated';
 import { useLocale } from 'next-intl';
 import Image from 'next/image';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { FC, useMemo } from 'react';
 
 const RegionSelect: FC = () => {
   const locale = useLocale();
   const params = useParams();
-  const pathname = usePathname();
+  const pathname = useAppPathName();
 
   const country = params?.country as string;
 
@@ -21,12 +22,8 @@ const RegionSelect: FC = () => {
       const languageCode = item.language_code;
 
       // Construct the href to preserve the current path after the country/locale segments
-      const segments = pathname.split('/').filter(Boolean);
-      // segments[0] is country, segments[1] is locale
-      const remainingPath = segments.slice(2).join('/');
-      const href = `/${countryCode}/${languageCode}${
-        remainingPath ? `/${remainingPath}` : ''
-      }`;
+
+      const href = `/${countryCode}/${languageCode}${pathname}`;
 
       return {
         label: (

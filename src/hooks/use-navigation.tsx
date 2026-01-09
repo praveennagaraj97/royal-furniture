@@ -3,8 +3,12 @@
 import { LOCALES, SUPPORTED_COUNTRIES } from '@/utils/generated';
 import { useLocale } from 'next-intl';
 import Link, { LinkProps } from 'next/link';
-import { useRouter as useNextRouter, useParams } from 'next/navigation';
-import { ReactNode, forwardRef, useCallback } from 'react';
+import {
+  usePathname as useNextPathname,
+  useRouter as useNextRouter,
+  useParams,
+} from 'next/navigation';
+import { ReactNode, forwardRef, useCallback, useMemo } from 'react';
 
 /**
  * Custom hook to handle navigation with country and locale prefixing
@@ -59,6 +63,39 @@ export function useAppRouter() {
       router.prefetch(formatHref(href), options),
     formatHref,
   };
+}
+
+/**
+ * Custom hook to get the current pathname without country and locale prefixes
+ */
+export function useAppPathName() {
+  const pathname = useNextPathname();
+
+  const cleanPathname = useMemo(() => {
+    if (!pathname) return '/';
+
+    // Split pathname into segments
+    const segments = pathname.split('/').filter(Boolean);
+    const firstSegment = segments[0];
+    const secondSegment = segments[1];
+
+    // Check if first segment is a country and second is a locale
+    const isCountry = (SUPPORTED_COUNTRIES as string[]).includes(firstSegment);
+    const isLocale = (LOCALES as string[]).includes(secondSegment);
+
+    if (isCountry && isLocale) {
+      // Remove country and locale segments
+      const remainingSegments = segments.slice(2);
+      return remainingSegments.length > 0
+        ? `/${remainingSegments.join('/')}`
+        : '/';
+    }
+
+    // If it doesn't match the pattern, return as is
+    return pathname;
+  }, [pathname]);
+
+  return cleanPathname;
 }
 
 export interface AppLinkProps extends Omit<LinkProps, 'href'> {
