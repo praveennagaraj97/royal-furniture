@@ -45,7 +45,7 @@ const SubCategories: FC<SubCategoriesProps> = ({
           </ViewOnce>
         </div>
 
-        <div className="bg-soft-pink">
+        <div className="">
           <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-4">
             <Swiper className="px-0" gap={3} showNavigation hideArrowOnMobile>
               {subcategories.map((subcategory, index) => (
