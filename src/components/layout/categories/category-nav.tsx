@@ -1,69 +1,64 @@
 'use client';
 
-import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { StaggerItem } from '@/components/shared/animations';
 import { AppLink, useAppPathName } from '@/hooks';
-import { CategoryItem } from '@/types';
-import { useTranslations } from 'next-intl';
-import { FC } from 'react';
+import { CategoryWithSubCategories } from '@/types';
+import { Dispatch, FC, Fragment, SetStateAction } from 'react';
+import CategoryDropdown from './category-dropdown';
 
 interface CategoryNavProps {
-  categories: CategoryItem[];
+  category: CategoryWithSubCategories;
+
+  setActiveCategory: Dispatch<SetStateAction<string | null>>;
+  activeCategory: string | null;
 }
 
-const CategoryNav: FC<CategoryNavProps> = ({ categories }) => {
+const CategoryNav: FC<CategoryNavProps> = ({
+  category,
+  activeCategory,
+  setActiveCategory,
+}) => {
   const pathName = useAppPathName();
-  const t = useTranslations('header');
 
   return (
-    <div className="shadow-md relative z-40">
-      <nav className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 max-w-5xl flex justify-center">
-        {/* Mobile: horizontal scroll, Desktop: centered wrap */}
-        <StaggerContainer
-          mode="animate"
-          staggerChildren={0.05}
-          delayChildren={0}
-          duration={0.3}
-          className="flex items-center gap-2 sm:gap-3 overflow-x-auto py-3 "
+    <Fragment>
+      <StaggerItem
+        key={category.id}
+        type="slide"
+        direction="down"
+        distance={10}
+        duration={0.3}
+        className="shrink-0"
+      >
+        <div
+          className="relative"
+          onMouseEnter={() => {
+            setActiveCategory(category.slug);
+          }}
         >
           <AppLink
-            href="/"
+            href={`/${category.slug}`}
             className={`whitespace-nowrap px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors block hover:scale-105 active:scale-95 ${
-              pathName === '/'
+              pathName === category.slug
                 ? 'bg-deep-maroon text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            {t('all')}
+            {category.name}
           </AppLink>
-
-          {categories.map((category) => {
-            return (
-              <StaggerItem
-                key={category.id}
-                type="slide"
-                direction="down"
-                distance={10}
-                duration={0.3}
-                className="shrink-0"
-              >
-                <div className="relative">
-                  <AppLink
-                    href="/"
-                    className={`whitespace-nowrap px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors block hover:scale-105 active:scale-95 ${
-                      pathName === category.slug
-                        ? 'bg-deep-maroon text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {category.name}
-                  </AppLink>
-                </div>
-              </StaggerItem>
-            );
-          })}
-        </StaggerContainer>
-      </nav>
-    </div>
+        </div>
+        {category.subCategories?.length ? (
+          <div onMouseLeave={() => setActiveCategory(null)}>
+            <CategoryDropdown
+              isOpen={activeCategory === category.slug}
+              categoryName={category.name}
+              categorySlug={category.slug}
+              subcategories={category.subCategories}
+            />
+          </div>
+        ) : null}
+      </StaggerItem>
+    </Fragment>
   );
 };
 

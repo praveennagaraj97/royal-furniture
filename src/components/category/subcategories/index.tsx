@@ -41,7 +41,7 @@ const SubCategories: FC<SubCategoriesProps> = ({
             delay={0.15}
             className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4"
           >
-            <h2>{t(selectedCategoryKey)}</h2>
+            <h2>{selectedCategoryKey}</h2>
           </ViewOnce>
         </div>
 
