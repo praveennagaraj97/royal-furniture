@@ -55,7 +55,7 @@ export const setCookie = (
 
 export const getCookie = (name: CookieName | string): string | null => {
   if (typeof document === 'undefined') {
-    console.warn('getCookie() can only be used in browser environment');
+    // console.warn('getCookie() can only be used in browser environment');
     return null;
   }
 
@@ -77,7 +77,7 @@ export const removeCookie = (
   options: { path?: string; domain?: string } = {}
 ): void => {
   if (typeof document === 'undefined') {
-    console.warn('removeCookie() can only be used in browser environment');
+    // console.warn('removeCookie() can only be used in browser environment');
     return;
   }
 

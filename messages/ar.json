@@ -21,13 +21,8 @@
     "help": "مساعدة",
     "sellWithUs": "بيع معنا"
   },
-  "categories": {
-    "all": "الكل",
-    "sofa": "أريكة",
-    "livingRoom": "غرفة المعيشة",
-    "diningRoom": "غرفة الطعام",
-    "bedroom": "غرفة النوم",
-    "office": "المكتب"
+  "header": {
+    "all": "الكل"
   },
   "metadata": {
     "title": "الأثاث الملكي",

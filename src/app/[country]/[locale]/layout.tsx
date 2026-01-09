@@ -70,10 +70,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   // Fetch categories with locale and country
-  const categories = await ecommerceService.getCategories({
-    locale,
-    country,
-  });
+  const categories = await ecommerceService.getCategories(locale, country);
 
   return (
     <html
@@ -82,7 +79,9 @@ export default async function LocaleLayout({
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
     >
       <body className={`${montserrat.variable} antialiased`}>
-        <VercelToolbarComponent />
+        {process.env.NODE_ENV !== 'development' ? (
+          <VercelToolbarComponent />
+        ) : null}
         <NextIntlClientProvider messages={messages}>
           <ToastProvider>
             <AuthProvider>

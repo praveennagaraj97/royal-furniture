@@ -21,13 +21,8 @@
     "help": "Help",
     "sellWithUs": "Sell With Us"
   },
-  "categories": {
-    "all": "All",
-    "sofa": "Sofa",
-    "livingRoom": "Living Room",
-    "diningRoom": "Dining Room",
-    "bedroom": "Bedroom",
-    "office": "Office"
+  "header": {
+    "all": "All"
   },
   "metadata": {
     "title": "Royal Furniture",

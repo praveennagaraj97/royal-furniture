@@ -111,4 +111,17 @@ export class BaseAPIService {
       generalError,
     };
   }
+
+  getLocaleAndCountryHeader = (locale?: string, country?: string) => {
+    const headers: Record<string, string> = {};
+
+    if (locale) {
+      headers['locale'] = locale;
+    }
+    if (country) {
+      headers['country'] = country;
+    }
+
+    return headers;
+  };
 }

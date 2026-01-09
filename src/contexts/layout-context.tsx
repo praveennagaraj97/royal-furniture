@@ -25,7 +25,7 @@ export const LayoutProvider: FC<LayoutProviderProps> = ({
   );
 };
 
-export const useLayout = (): LayoutContextType => {
+export const useLayoutData = (): LayoutContextType => {
   const context = useContext(LayoutContext);
   if (!context) {
     throw new Error('useLayout must be used within LayoutProvider');

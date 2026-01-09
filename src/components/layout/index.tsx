@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayout } from '@/contexts/layout-context';
+import { useLayoutData } from '@/contexts/layout-context';
 import { useStickyHeader } from '@/hooks/use-sticky-header';
 import { FC, ReactNode } from 'react';
 import Categories from './categories';
@@ -14,7 +14,7 @@ interface AppLayoutProps {
 
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   const { isSticky, headerHeight, headerRef, categoryRef } = useStickyHeader();
-  const { categories } = useLayout();
+  const { categories } = useLayoutData();
 
   return (
     <>

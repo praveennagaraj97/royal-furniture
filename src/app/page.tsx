@@ -1,5 +1,5 @@
 import { routing } from '@/i18n/routing';
-import { DEFAULT_COUNTRY } from '@/utils/generated';
+
 import { redirect } from 'next/navigation';
 
 /**
@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 export default function RootPage() {
   // Redirect to default country and locale
   const defaultLocale = routing.defaultLocale;
-  const defaultCountry = DEFAULT_COUNTRY;
+  const defaultCountry = 'ae';
 
   redirect(`/${defaultCountry}/${defaultLocale}`);
 }

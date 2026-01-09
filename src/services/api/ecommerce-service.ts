@@ -28,18 +28,13 @@ export class EcommerceService extends BaseAPIService {
     options?: { locale?: string; country?: string }
   ): Promise<ProductDetailResponse> {
     try {
-      const headers: Record<string, string> = {};
-      if (options?.locale) {
-        headers['locale'] = options.locale;
-      }
-      if (options?.country) {
-        headers['country'] = options.country;
-      }
-
       const response = await this.http.get<ProductDetailResponse>(
         `${API_ROUTES.PRODUCTS.DETAIL}${productSlug}`,
         {
-          headers,
+          headers: this.getLocaleAndCountryHeader(
+            options?.locale,
+            options?.country
+          ),
         }
       );
       return response.data;
@@ -48,18 +43,12 @@ export class EcommerceService extends BaseAPIService {
     }
   }
 
-  async getCategories(options?: {
-    locale?: string;
-    country?: string;
-  }): Promise<CategoryWithSubCategories[]> {
+  async getCategories(
+    locale?: string,
+    country?: string
+  ): Promise<CategoryWithSubCategories[]> {
     try {
-      const headers: Record<string, string> = {};
-      if (options?.locale) {
-        headers['locale'] = options.locale;
-      }
-      if (options?.country) {
-        headers['country'] = options.country;
-      }
+      const headers = this.getLocaleAndCountryHeader(locale, country);
 
       const response = await this.http.get<CategoriesResponse>(
         API_ROUTES.PRODUCTS.CATEGORIES,
@@ -89,7 +78,7 @@ export class EcommerceService extends BaseAPIService {
             ...category,
             subCategories: subCategories.length > 0 ? subCategories : null,
           });
-        } catch (error) {
+        } catch {
           // If subcategories fetch fails, set to null
           categoriesWithSubCategories.push({
             ...category,
