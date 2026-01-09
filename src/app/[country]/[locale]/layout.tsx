@@ -1,9 +1,11 @@
 import AppLayout from '@/components/layout';
 import { VercelToolbarComponent } from '@/components/vercel-toolbar';
 import { AuthProvider } from '@/contexts/auth-context';
+import { LayoutProvider } from '@/contexts/layout-context';
 import { ToastProvider } from '@/contexts/toast-context';
 import { UserProvider } from '@/contexts/user-context';
 import { routing } from '@/i18n/routing';
+import { ecommerceService } from '@/services/api/ecommerce-service';
 import { getCountriesWithLocaleParams } from '@/utils/generated';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
@@ -20,6 +22,8 @@ const montserrat = Montserrat({
   variable: '--font-montserrat',
   subsets: ['latin'],
 });
+
+export const dynamic = 'force-static';
 
 export function generateStaticParams() {
   return getCountriesWithLocaleParams();
@@ -51,7 +55,7 @@ export default async function LocaleLayout({
   children: ReactNode;
   params: Promise<{ locale: string; country: string }>;
 }) {
-  const { locale } = await params;
+  const { locale, country } = await params;
 
   // Ensure that the incoming `locale` is valid
   if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
@@ -65,6 +69,12 @@ export default async function LocaleLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
+  // Fetch categories with locale and country
+  const categories = await ecommerceService.getCategories({
+    locale,
+    country,
+  });
+
   return (
     <html
       style={{ overflowX: 'hidden' }}
@@ -77,7 +87,9 @@ export default async function LocaleLayout({
           <ToastProvider>
             <AuthProvider>
               <UserProvider>
-                <AppLayout>{children}</AppLayout>
+                <LayoutProvider categories={categories}>
+                  <AppLayout>{children}</AppLayout>
+                </LayoutProvider>
               </UserProvider>
             </AuthProvider>
           </ToastProvider>

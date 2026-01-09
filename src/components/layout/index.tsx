@@ -1,8 +1,7 @@
 'use client';
 
+import { useLayout } from '@/contexts/layout-context';
 import { useStickyHeader } from '@/hooks/use-sticky-header';
-import { categories } from '@/temp/data/categories';
-import { categoriesData } from '@/temp/data/categories-data';
 import { FC, ReactNode } from 'react';
 import Categories from './categories';
 import Footer from './footer';
@@ -15,6 +14,7 @@ interface AppLayoutProps {
 
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   const { isSticky, headerHeight, headerRef, categoryRef } = useStickyHeader();
+  const { categories } = useLayout();
 
   return (
     <>
@@ -27,11 +27,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
         <div style={{ height: `${headerHeight}px` }} aria-hidden="true" />
       )}
       <hr className="text-gray-200 w-full container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3" />
-      <Categories
-        ref={categoryRef}
-        categories={categories}
-        categoriesData={categoriesData}
-      />
+      <Categories ref={categoryRef} categories={categories} />
       <main>{children}</main>
       <Footer />
     </>

@@ -40,8 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# generated files
-# Note: countries.ts is committed as a stub and will be overwritten by postinstall script
-/src/generated/*
-!/src/generated/countries.ts
+
 

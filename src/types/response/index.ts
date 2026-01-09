@@ -150,6 +150,7 @@ export interface SubCategoryItem {
   id: number;
   name: string;
   slug: string | null;
+  image: string;
   category_name: string;
   category_id: number;
 }
@@ -411,3 +412,10 @@ export interface ProductDetailData {
 }
 
 export type ProductDetailResponse = BaseAPIResponse<ProductDetailData>;
+
+export interface CategoryWithSubCategories extends CategoryItem {
+  subCategories: SubCategoryItem[] | null;
+}
+
+export type CategoriesResponse = BaseAPIResponse<CategoryItem[]>;
+export type SubCategoriesResponse = BaseAPIResponse<SubCategoryItem[]>;
