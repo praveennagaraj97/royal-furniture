@@ -6,7 +6,7 @@ import { HomeBanner } from '@/types/response/home';
 import Image from 'next/image';
 import { FC } from 'react';
 
-const SofaAndSeating: FC<{ banners: HomeBanner[]; title: string }> = ({
+const SpotlightBanner: FC<{ banners: HomeBanner[]; title: string }> = ({
   banners,
   title,
 }) => {
@@ -38,4 +38,4 @@ const SofaAndSeating: FC<{ banners: HomeBanner[]; title: string }> = ({
   );
 };
 
-export default SofaAndSeating;
+export default SpotlightBanner;

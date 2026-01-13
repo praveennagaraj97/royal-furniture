@@ -1,17 +1,19 @@
-import HomeFurnitureShowcase from '@/components/home/furniture-showcase';
-import Hero from '@/components/home/hero';
+import Hero, { FullWidthBanner } from '@/components/home/hero';
 import LatestBlogs from '@/components/home/latest-blogs';
-import PromotionalOffers from '@/components/home/promotional-offers';
-import SofaAndSeating from '@/components/home/sofa-and-seating';
+import Offers from '@/components/home/offers';
 import CountdownTag from '@/components/shared/ui/countdown-tag';
 import ProductListing from '@/components/shared/ui/product-listing';
 import { ecommerceService } from '@/services/api/ecommerce-service';
 import { CountryAndLocaleParams } from '@/types';
 import { getCountriesWithLocaleParams } from '@/utils/generated';
 import { NextPage } from 'next';
-import { Fragment } from 'react';
 
 export const dynamicParams = false;
+
+// hero - hero_slider | full_width_card
+// top_offers - banner_grid_3
+// products_section - horizontal_slider
+// subcategory_showcase - with_full_width_banner, without_banner, with_banner (NOTE: if title exits we will show, else it will be hidden)
 
 const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
   const { country, locale } = await params;
@@ -30,10 +32,19 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
         deal_ends_at,
         subcategories,
         view_all_type,
+        layout_type,
       }) => {
         switch (section_type) {
           case 'hero':
             if (banners) {
+              if (layout_type === 'full_width_card') {
+                return (
+                  <FullWidthBanner
+                    banners={banners || []}
+                    key={section_type + sort_order}
+                  />
+                );
+              }
               return (
                 <Hero banners={banners || []} key={section_type + sort_order} />
               );
@@ -43,7 +54,12 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
           case 'top_offers':
             if (banners) {
               return (
-                <PromotionalOffers
+                <Offers
+                  gridNumber={
+                    layout_type === 'banner_grid_3'
+                      ? parseInt(layout_type.split('_')[1])
+                      : 0
+                  }
                   offers={banners || []}
                   key={section_type + sort_order}
                 />
@@ -77,35 +93,13 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
             }
             return null;
 
-          case 'subcategory_showcase':
-            return (
-              <Fragment key={section_type + sort_order}>
-                {banners ? (
-                  <SofaAndSeating title={title || ''} banners={banners || []} />
-                ) : null}
-                <HomeFurnitureShowcase
-                  items={
-                    subcategories?.map((subcategory) => ({
-                      id: subcategory.id.toString(),
-                      image: subcategory.image || '',
-                      imageAlt: subcategory.name || '',
-                      label: subcategory.name || '',
-                    })) || []
-                  }
-                />
-              </Fragment>
-            );
-
-          case 'spotlight':
-            if (banners && banners.length > 0) {
-              return (
-                <PromotionalOffers
-                  offers={banners}
-                  key={section_type + sort_order}
-                />
-              );
-            }
-            return null;
+          // case 'subcategory_showcase':
+          //   if (subcategories && subcategories.length > 0) {
+          //     switch (layout_type) {
+          //       default:
+          //         return null;
+          //     }
+          //   }
 
           case 'blog_slider':
             if (blogs && blogs.length > 0) {
@@ -115,80 +109,15 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
             }
             return null;
           default:
-            return <p key={section_type + sort_order}>{section_type}</p>;
+            return (
+              <p key={section_type + sort_order}>{section_type + '- TODO'}</p>
+            );
         }
       }
     );
   };
 
-  return (
-    <div className="grid gap-6 mt-4">
-      {renderBlocks()}
-      {/* Dynamic Sections */}
-
-      {/* {data.promotional_banners && (
-        <Hero banners={data.promotional_banners || []} />
-      )}
-      <PromotionalOffers offers={data.offer_banners || []} />
-      {data.trending_products && (
-        <ProductListing
-          title="Trending Products"
-          seeAllHref="/products?type=trending"
-          products={data.trending_products.items || []}
-        />
-      )} */}
-
-      {/* <MegaPriceDropBanner /> */}
-
-      {/* Include Video */}
-      {/* {data.sofa_and_seating && (
-        }
-      
-      */}
-
-      {/* TODO : COUNTDOWN */}
-      {/* <ProductListing
-        title={
-          
-        }
-        products={data.featured_deals.items || []}
-      />
-
-      <ProductListing
-        title="Deal of the day"
-        seeAllHref="/products?type=deal_of_the_day"
-        products={data.featured_deals.items || []}
-      /> */}
-
-      {
-        // TODO : personalise_banners
-        /*
-         */
-      }
-      {/* <PromotionalBanner />
-      <HomeFurnitureShowcase /> */}
-
-      {
-        // TODO
-        /* <HouseHolds /> */
-      }
-
-      {/* 
-     TODO : WIRE TO offers_spotlight
-      <PromotionalBanner />
-      <FurnitureShowcase /> */}
-
-      {/* <ProductListing
-        title="New Arrivals"
-        seeAllHref="/product?type=new_arrivals"
-        products={data.new_launches.items || []}
-      /> */}
-
-      {/* <PromotionalBanner /> */}
-      {/* 
-      <LatestBlogs /> */}
-    </div>
-  );
+  return <div className="grid gap-6 mt-4">{renderBlocks()}</div>;
 };
 
 export default Home;

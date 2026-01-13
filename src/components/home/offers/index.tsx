@@ -7,11 +7,12 @@ import { HomeBanner } from '@/types/response/home';
 import { FC } from 'react';
 import OfferCard from './offer-card';
 
-interface PromotionalOffersProps {
+interface OffersProps {
   offers: HomeBanner[];
+  gridNumber: number;
 }
 
-const PromotionalOffers: FC<PromotionalOffersProps> = ({ offers }) => {
+const Offers: FC<OffersProps> = ({ offers }) => {
   return (
     <StaggerContainer
       staggerChildren={0.15}
@@ -33,4 +34,4 @@ const PromotionalOffers: FC<PromotionalOffersProps> = ({ offers }) => {
   );
 };
 
-export default PromotionalOffers;
+export default Offers;
