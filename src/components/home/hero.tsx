@@ -4,10 +4,10 @@ import { ViewOnce } from '@/components/shared/animations';
 import { FC } from 'react';
 
 import FadeSlideshow from '@/components/shared/ui/fade-slideshow';
-import type { BannerItem } from '@/types';
+import { HomeBanner } from '@/types/response/home';
 
 interface HeroProps {
-  banners: BannerItem[];
+  banners: HomeBanner[];
 }
 
 const Hero: FC<HeroProps> = ({ banners }) => {

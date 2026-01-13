@@ -22,7 +22,7 @@ export const API_ROUTES = {
     COUNTRY_LANGUAGE_OPTIONS: '/users/country-language-options/',
   },
   PRODUCTS: {
-    HOME: '/products/home/',
+    HOME: '/products/home/v1/',
     DETAIL: '/products/product-detail/',
     CATEGORIES: '/products/category/',
     CATEGORY_SUBCATEGORIES: (slug: string) => `/products/category/${slug}`,

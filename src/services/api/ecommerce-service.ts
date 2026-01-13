@@ -2,30 +2,36 @@ import { API_ROUTES } from '@/constants/api-routes';
 import type {
   CategoriesResponse,
   CategoryWithSubCategories,
-  HomeApiResponse,
+  CountryAndLocaleParam,
   ProductDetailResponse,
   SubCategoriesResponse,
 } from '@/types';
+import { DynamicHomeResponse } from '@/types/response/home';
 import { BaseAPIService } from './api-base-service';
 
 export class EcommerceService extends BaseAPIService {
-  async getHomePageData(countryId: number): Promise<HomeApiResponse> {
+  async getHomePageData(
+    options: CountryAndLocaleParam
+  ): Promise<DynamicHomeResponse> {
     try {
-      const response = await this.http.get<HomeApiResponse>(
+      const response = await this.http.get<DynamicHomeResponse>(
         API_ROUTES.PRODUCTS.HOME,
         {
-          params: { country_id: countryId },
+          headers: this.getLocaleAndCountryHeader(
+            options.locale,
+            options.country
+          ),
         }
       );
       return response.data;
-    } catch (error) {
-      throw this.parseError(error);
+    } catch {
+      return { data: [], detail: '', message: '' };
     }
   }
 
   async getProductDetail(
     productSlug: string,
-    options?: { locale?: string; country?: string }
+    options?: CountryAndLocaleParam
   ): Promise<ProductDetailResponse> {
     try {
       const response = await this.http.get<ProductDetailResponse>(

@@ -6,10 +6,10 @@ import Image from 'next/image';
 import { FC, useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
-import { Blog } from '@/temp/data/blogs-data';
+import { BlogItem } from '@/types';
 
 export interface BlogCardProps {
-  blog: Blog;
+  blog: BlogItem;
 }
 
 const BlogCard: FC<BlogCardProps> = ({ blog }) => {
@@ -27,8 +27,8 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
       {/* Image Container */}
       <div className="relative w-full aspect-[4/1.8] rounded-sm overflow-hidden mb-4 shadow-md hover:shadow-xl transition-all duration-300">
         <Image
-          src={blog.image}
-          alt={blog.imageAlt}
+          src={blog.thumbnail}
+          alt={blog.title}
           fill
           className="object-cover transition-transform duration-300"
           sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
@@ -47,12 +47,12 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
 
         {/* Description */}
         <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
-          {blog.description}
+          {blog.short_description}
         </p>
 
         {/* Read More Link */}
         <AppLink
-          href={`/blogs/${blog.slug}`}
+          href={`/blog/${blog.slug}`}
           className="text-indigo-slate text-sm sm:text-base font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 w-fit group"
         >
           <span>Read More</span>

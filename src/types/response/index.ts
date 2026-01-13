@@ -80,64 +80,15 @@ export interface CountryLanguage {
 
 export type CountryLanguageOptionsResponse = BaseAPIResponse<CountryLanguage[]>;
 
-export interface HomePageData {
-  top_bar: TopBar;
-  active_sale: ActiveSale;
-  promotional_banners: BannerItem[];
-  offer_banners: BannerItem[];
-  sofas_and_seating: CategorySection;
-  bedroom: CategorySection;
-  diningroom: CategorySection;
-  offers_spotlight: OfferSpotlight;
-  trending_products: ProductCarousel;
-  saved_products: ProductCarousel;
-  personalized_for_you: PersonalizedSection;
-  featured_deals: ProductCarousel;
-  new_launches: ProductCarousel;
-  shop_by_category: CategoryItem[];
-  room_offers: BannerItem[];
-  find_stores: StoreLocator;
-  social_media: SocialMediaLinks;
-  floating_offers: FloatingOffer;
-  latest_blog: BlogItem[];
-}
-
-export interface TopBar {
-  search_placeholder: string;
-  categories: string[];
-  notification_count: number;
-  location: LocationInfo;
-}
-
-export interface LocationInfo {
-  current: string;
-  can_update: boolean;
-}
-
-export interface ActiveSale {
-  is_active: boolean;
-}
-
-export interface FloatingOffer {
-  visible: boolean;
-  badge_count: number;
-  label: string;
-  link_url: string;
-}
-
-export interface BannerItem {
+export interface BlogItem {
   id: number;
   title: string;
-  description: string;
-  type: 'section' | 'category' | 'subcategory' | 'offer_card' | 'room';
-  image: string | null;
-  video: string | null;
-  link_url: string | null;
-  start_time: string | null;
-  end_time: string | null;
-  show_countdown: boolean;
-  sort_order: number;
-  is_active: boolean;
+  slug: string;
+  author: string | null;
+  category: CategoryItem;
+  thumbnail: string;
+  short_description: string;
+  published_at: string;
 }
 
 export interface CategoryItem {
@@ -153,23 +104,6 @@ export interface SubCategoryItem {
   image: string;
   category_name: string;
   category_id: number;
-}
-
-export interface CategorySection {
-  id: number;
-  slug: string;
-  title: string;
-  banner: BannerItem | null;
-  subcategories: SubCategoryItem[];
-  video_banner: BannerItem | null;
-}
-
-export interface OfferSpotlight {
-  title: string;
-  description: string;
-  section_type: 'subcategory';
-  main_banner: BannerItem;
-  subcategories: SubCategoryItem[];
 }
 
 export interface ProductItem {
@@ -205,66 +139,6 @@ export interface ProductLabel {
   name: string;
   slug: string;
 }
-
-export interface ProductCarousel {
-  auto_scroll_seconds: number | null;
-  items: ProductItem[] | null;
-}
-
-export interface PersonalizedSection {
-  available: boolean;
-  items: ProductItem[];
-}
-
-export interface StoreLocator {
-  map_url: string;
-  list: StoreItem[];
-}
-
-export interface StoreLocator {
-  map_url: string;
-  list: StoreItem[];
-}
-
-export interface StoreItem {
-  id: number;
-  name: string;
-  phone_number: string;
-  email: string;
-  country: string;
-  street: string;
-  city: string;
-  state: string;
-  postal_code: string;
-  latitude: number;
-  longitude: number;
-}
-
-export interface SocialMediaLinks {
-  facebook: string;
-  instagram: string;
-  youtube: string;
-  twitter: string;
-}
-
-export interface BlogItem {
-  id: number;
-  title: string;
-  slug: string;
-  author: string | null;
-  category: BlogCategory;
-  thumbnail: string;
-  short_description: string;
-  published_at: string;
-}
-
-export interface BlogCategory {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-export type HomeApiResponse = BaseAPIResponse<HomePageData>;
 
 export interface ProductDetailPricing extends ProductPricing {
   amount_saved: string;

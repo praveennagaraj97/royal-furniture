@@ -2,12 +2,13 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
-import { BannerItem } from '@/types';
+
+import { HomeBanner } from '@/types/response/home';
 import { FC } from 'react';
 import OfferCard from './offer-card';
 
 interface PromotionalOffersProps {
-  offers: BannerItem[];
+  offers: HomeBanner[];
 }
 
 const PromotionalOffers: FC<PromotionalOffersProps> = ({ offers }) => {
@@ -22,9 +23,9 @@ const PromotionalOffers: FC<PromotionalOffersProps> = ({ offers }) => {
           <OfferCard
             key={offer.id}
             image={offer.image || ''}
-            imageAlt={offer.description}
-            title={offer.title}
-            description={offer.description}
+            imageAlt={offer.offer_text || ''}
+            title={offer.offer_text || ''}
+            description={offer.offer_text || ''}
           />
         ))}
       </Swiper>

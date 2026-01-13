@@ -1,12 +1,12 @@
 'use client';
 
-import { BannerItem } from '@/types';
+import { HomeBanner } from '@/types/response/home';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 
 interface FadeSlideshowProps {
-  banners: BannerItem[];
+  banners: HomeBanner[];
   showDots?: boolean;
   autoplayDuration?: number;
   className?: string;
@@ -38,41 +38,43 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
 
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`}>
-      {banners.map((banner, index) => (
-        <div
-          key={banner.id}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-            index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-          }`}
-        >
-          {banner.link_url ? (
-            <Link
-              href={banner.link_url}
-              className="block w-full h-full relative"
-            >
-              <Image
-                src={banner.image || ''}
-                alt={banner.title || 'Promotional Banner'}
-                fill
-                className="object-cover"
-                priority={index === 0 && imagePriority}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1200px"
-              />
-            </Link>
-          ) : (
-            <div className="block w-full h-full relative">
-              <Image
-                src={banner.image || ''}
-                alt={banner.title || 'Promotional Banner'}
-                fill
-                className="object-cover"
-                priority={index === 0 && imagePriority}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1200px"
-              />
-            </div>
-          )}
-        </div>
-      ))}
+      {banners.map((banner, index) => {
+        return (
+          <div
+            key={banner.id}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+              index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+            }`}
+          >
+            {banner.link_url ? (
+              <Link
+                href={banner.link_url}
+                className="block w-full h-full relative"
+              >
+                <Image
+                  src={banner.image || banner.video || ''}
+                  alt={banner.offer_text || 'Promotional Banner'}
+                  fill
+                  className="object-cover"
+                  priority={index === 0 && imagePriority}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1200px"
+                />
+              </Link>
+            ) : (
+              <div className="block w-full h-full relative">
+                <Image
+                  src={banner.image || banner.video || ''}
+                  alt={banner.offer_text || 'Promotional Banner'}
+                  fill
+                  className="object-cover"
+                  priority={index === 0 && imagePriority}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1200px"
+                />
+              </div>
+            )}
+          </div>
+        );
+      })}
 
       {showDots && banners.length > 1 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">

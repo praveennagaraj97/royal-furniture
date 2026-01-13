@@ -7,10 +7,10 @@ import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
-import { blogsData } from '@/temp/data/blogs-data';
+import { BlogItem } from '@/types';
 import BlogCard from './blog-card';
 
-const LatestBlogs: FC = () => {
+const LatestBlogs: FC<{ blogs: BlogItem[] }> = ({ blogs }) => {
   const t = useTranslations();
 
   return (
@@ -35,7 +35,7 @@ const LatestBlogs: FC = () => {
 
       {/* Blogs Swiper */}
       <Swiper gap={4} showNavigation hideArrowOnMobile>
-        {blogsData.map((blog) => (
+        {blogs.map((blog) => (
           <BlogCard key={blog.id} blog={blog} />
         ))}
       </Swiper>
