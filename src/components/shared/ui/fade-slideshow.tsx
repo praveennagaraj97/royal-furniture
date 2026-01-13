@@ -3,7 +3,8 @@
 import { HomeBanner } from '@/types/response/home';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+import VideoPlayer from './video-player';
 
 interface FadeSlideshowProps {
   banners: HomeBanner[];
@@ -21,29 +22,70 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
   imagePriority = true,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (banners.length <= 1) return;
+    if (isHovered) return; // Pause when hovered
 
-    const interval = setInterval(() => {
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    // Start the interval
+    intervalRef.current = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
     }, autoplayDuration);
 
-    return () => clearInterval(interval);
-  }, [banners.length, autoplayDuration]);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [banners.length, autoplayDuration, isHovered]);
 
   if (!banners || banners.length === 0) {
     return null;
   }
 
   return (
-    <div className={`relative w-full h-full overflow-hidden ${className}`}>
+    <div
+      className={`relative w-full h-full overflow-hidden ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {banners.map((banner, index) => {
+        const isActive = index === currentIndex;
+
+        if (banner.media_type === 'video') {
+          return (
+            <div
+              key={banner.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            >
+              {banner.video && (
+                <VideoPlayer
+                  src={banner.video}
+                  autoplay={isActive}
+                  playing={isActive}
+                  loop={true}
+                  muted={true}
+                  linkUrl={banner.link_url}
+                />
+              )}
+            </div>
+          );
+        }
+
         return (
           <div
             key={banner.id}
             className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-              index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
             }`}
           >
             {banner.link_url ? (
