@@ -14,9 +14,15 @@ import WishlistAction from './wishlist';
 
 export interface ProductCardProps {
   product: ProductItem;
+  className?: string;
+  isResponsive?: boolean;
 }
 
-const ProductCard: FC<ProductCardProps> = ({ product }) => {
+const ProductCard: FC<ProductCardProps> = ({
+  product,
+  className,
+  isResponsive = false,
+}) => {
   const params = useParams();
   const locale = useLocale();
   const t = useTranslations();
@@ -28,7 +34,9 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="relative w-full min-w-70 sm:min-w-75 bg-white rounded-lg overflow-hidden"
+      className={`relative w-full bg-white rounded-lg overflow-hidden ${
+        isResponsive ? '' : 'min-w-70 sm:min-w-75'
+      } ${className || ''}`}
     >
       <AppLink
         href={`/${product.category.slug}/${product.sub_category.slug}/${product.slug}`}

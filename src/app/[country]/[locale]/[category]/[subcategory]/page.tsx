@@ -1,3 +1,5 @@
+import SubcategoryContent from '@/components/category/subcategory-content';
+
 interface SubCategoryPageProps {
   params: Promise<{
     locale: string;
@@ -7,10 +9,15 @@ interface SubCategoryPageProps {
   }>;
 }
 
-export default async function SubCategoryPage({
-  params,
-}: SubCategoryPageProps) {
+export default async function SubCategoryPage({ params }: SubCategoryPageProps) {
   const { subcategory } = await params;
 
-  return <div className="grid gap-6 mt-4">tag</div>;
+  // TODO: Fetch products from API
+  // const products = await ecommerceService.getSubcategoryProducts(subcategory, {
+  //   country,
+  //   locale,
+  // });
+
+  // For now, pass empty array to use dummy data
+  return <SubcategoryContent products={[]} />;
 }
