@@ -112,7 +112,7 @@ const VideoPlayer: FC<VideoPlayerProps> = ({
 
       {/* Native Video Controls (optional) */}
       {showControls && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+        <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-4">
           <div className="flex items-center gap-4">
             <button
               onClick={handlePlayButtonClick}
