@@ -5,7 +5,7 @@ import { SubCategoryItem } from '@/types';
 import { FC } from 'react';
 
 import { BannerItem } from '@/types/response/home';
-import SpotLightShowcase from '../../subcategories/subcategories';
+import SpotLightShowcase from '../../subcategories';
 import SpotlightBanner from './banner';
 
 interface SpotLightProps {
