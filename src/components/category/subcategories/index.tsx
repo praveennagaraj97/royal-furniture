@@ -5,27 +5,29 @@ import {
   StaggerItem,
   ViewOnce,
 } from '@/components/shared/animations';
+import { useLayoutData } from '@/contexts/layout-context';
+import { useAppPathName } from '@/hooks';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import Swiper from '../../shared/swiper';
-import SubCategoryCard, { Subcategory } from './card';
+import SubCategoryCard from './card';
 
-interface SubCategoriesProps {
-  selectedCategoryId: string;
-  selectedCategoryKey: string;
-  subcategories: Subcategory[];
-}
-
-const SubCategories: FC<SubCategoriesProps> = ({
-  selectedCategoryId,
-  selectedCategoryKey,
-  subcategories,
-}) => {
+const SubCategories: FC = () => {
   const t = useTranslations('categories');
+
+  const { categories } = useLayoutData();
+  const pathName = useAppPathName();
+
+  const selectedCategory = categories.find(
+    (category) => category.slug === pathName.split('/')[1]
+  );
+
+  if (!selectedCategory || !selectedCategory.subCategories) return null;
+
+  const subcategories = selectedCategory.subCategories;
 
   return (
     <StaggerContainer
-      key={selectedCategoryId}
       mode="animate"
       staggerChildren={0.08}
       delayChildren={0.1}
@@ -41,14 +43,14 @@ const SubCategories: FC<SubCategoriesProps> = ({
             delay={0.15}
             className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4"
           >
-            <h2>{selectedCategoryKey}</h2>
+            <h2>{selectedCategory.name}</h2>
           </ViewOnce>
         </div>
 
         <div className="">
           <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-4">
             <Swiper className="px-0" gap={3} showNavigation hideArrowOnMobile>
-              {subcategories.map((subcategory, index) => (
+              {subcategories.map((subcategory) => (
                 <StaggerItem
                   key={subcategory.id}
                   type="slideScale"
@@ -58,7 +60,10 @@ const SubCategories: FC<SubCategoriesProps> = ({
                   duration={0.6}
                   className="min-w-[45%] sm:min-w-[35%] md:min-w-[25%] lg:min-w-[200px]"
                 >
-                  <SubCategoryCard subcategory={subcategory} index={index} />
+                  <SubCategoryCard
+                    subcategory={subcategory}
+                    categorySlug={selectedCategory.slug}
+                  />
                 </StaggerItem>
               ))}
             </Swiper>
