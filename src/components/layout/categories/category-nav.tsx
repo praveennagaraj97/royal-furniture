@@ -1,7 +1,7 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import { AppLink, useAppPathName } from '@/hooks';
+import { AppLink, useAppParams, useAppPathName } from '@/hooks';
 import { CategoryWithSubCategories } from '@/types';
 import { Dispatch, FC, Fragment, SetStateAction } from 'react';
 import CategoryDropdown from './category-dropdown';
@@ -19,6 +19,10 @@ const CategoryNav: FC<CategoryNavProps> = ({
   setActiveCategory,
 }) => {
   const pathName = useAppPathName();
+  const { category: currentCategory } = useAppParams();
+
+  // Don't show dropdown if user is on the same category page
+  const shouldShowDropdown = currentCategory !== category.slug;
 
   return (
     <Fragment>
@@ -33,7 +37,10 @@ const CategoryNav: FC<CategoryNavProps> = ({
         <div
           className="relative"
           onMouseEnter={() => {
-            setActiveCategory(category.slug);
+            // Don't open dropdown if user is on the same category page
+            if (shouldShowDropdown) {
+              setActiveCategory(category.slug);
+            }
           }}
         >
           <AppLink
@@ -47,7 +54,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
             {category.name}
           </AppLink>
         </div>
-        {category.subCategories?.length ? (
+        {category.subCategories?.length && shouldShowDropdown ? (
           <div onMouseLeave={() => setActiveCategory(null)}>
             <CategoryDropdown
               isOpen={activeCategory === category.slug}

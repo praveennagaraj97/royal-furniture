@@ -1,24 +1,18 @@
-import SubCategories from '@/components/category/subcategories';
-import Hero from '@/components/shared/ui/hero';
-import LatestBlogs from '@/components/shared/ui/latest-blogs';
-import Offers from '@/components/shared/ui/offers';
-import SubCategoriesSwiper from '@/components/shared/ui/subcategories';
 import CountdownTag from '@/components/shared/ui/countdown-tag';
 import FadeSlideshow from '@/components/shared/ui/fade-slideshow';
 import FullWidthBanner from '@/components/shared/ui/fullwidth-banner';
+import Hero from '@/components/shared/ui/hero';
+import LatestBlogs from '@/components/shared/ui/latest-blogs';
+import Offers from '@/components/shared/ui/offers';
 import ProductListing from '@/components/shared/ui/product-listing';
 import SectionTitleTag from '@/components/shared/ui/section-title-tag';
+import SubCategoriesSwiper from '@/components/shared/ui/subcategories';
 import { ecommerceService } from '@/services/api/ecommerce-service';
 import { Fragment } from 'react';
 
 interface CategoryPageProps {
   params: Promise<{ locale: string; category: string; country: string }>;
 }
-
-// hero - hero_slider | full_width_card
-// top_offers - banner_grid_3
-// products_section - horizontal_slider
-// subcategory_showcase - with_full_width_banner, without_banner, with_banner (NOTE: if title exits we will show, else it will be hidden)
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category, country, locale } = await params;
@@ -154,10 +148,5 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     );
   };
 
-  return (
-    <div className="grid gap-6 mt-4">
-      <SubCategories />
-      {renderBlocks()}
-    </div>
-  );
+  return <div className="grid gap-6 mt-4">{renderBlocks()}</div>;
 }
