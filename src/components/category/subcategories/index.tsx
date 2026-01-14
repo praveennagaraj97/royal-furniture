@@ -7,14 +7,15 @@ import {
 } from '@/components/shared/animations';
 import { useLayoutData } from '@/contexts/layout-context';
 import { useAppPathName } from '@/hooks';
-import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import Swiper from '../../shared/swiper';
 import SubCategoryCard from './card';
 
-const SubCategories: FC = () => {
-  const t = useTranslations('categories');
+interface SubCategoriesProps {
+  activeSubcategorySlug?: string;
+}
 
+const SubCategories: FC<SubCategoriesProps> = ({ activeSubcategorySlug }) => {
   const { categories } = useLayoutData();
   const pathName = useAppPathName();
 
@@ -63,6 +64,7 @@ const SubCategories: FC = () => {
                   <SubCategoryCard
                     subcategory={subcategory}
                     categorySlug={selectedCategory.slug}
+                    isActive={activeSubcategorySlug === subcategory.slug}
                   />
                 </StaggerItem>
               ))}

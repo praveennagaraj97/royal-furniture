@@ -8,16 +8,20 @@ import { FC } from 'react';
 interface SubCategoryCardProps {
   subcategory: SubCategoryItem;
   categorySlug: string;
+  isActive?: boolean;
 }
 
 const SubCategoryCard: FC<SubCategoryCardProps> = ({
   subcategory,
   categorySlug,
+  isActive = false,
 }) => {
   return (
     <AppLink
       href={`/${categorySlug}/${subcategory.slug}`}
-      className="flex flex-col items-center gap-3 cursor-pointer group/card bg-soft-pink pb-2 rounded-lg"
+      className={`flex flex-col items-center gap-3 cursor-pointer group/card bg-soft-pink pb-2 rounded-lg transition-all duration-300 ${
+        isActive ? 'border border-deep-maroon shadow-lg' : ''
+      }`}
     >
       <div className="relative w-full aspect-video rounded-lg overflow-hidden">
         <Image
