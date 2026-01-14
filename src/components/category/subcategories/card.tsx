@@ -19,7 +19,7 @@ const SubCategoryCard: FC<SubCategoryCardProps> = ({
       href={`/${categorySlug}/${subcategory.slug}`}
       className="flex flex-col items-center gap-3 cursor-pointer group/card bg-soft-pink pb-2 rounded-lg"
     >
-      <div className="relative w-full aspect-square rounded-lg overflow-hidden ">
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden">
         <Image
           src={subcategory.image}
           alt={subcategory.name}

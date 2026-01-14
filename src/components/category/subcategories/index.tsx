@@ -58,7 +58,7 @@ const SubCategories: FC = () => {
                   distance={20}
                   initialScale={0.9}
                   duration={0.6}
-                  className="min-w-[45%] sm:min-w-[35%] md:min-w-[25%] lg:min-w-[200px]"
+                  className="min-w-72 aspect-video"
                 >
                   <SubCategoryCard
                     subcategory={subcategory}
