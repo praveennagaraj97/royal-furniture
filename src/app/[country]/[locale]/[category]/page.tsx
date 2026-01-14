@@ -8,7 +8,6 @@ import ProductListing from '@/components/shared/ui/product-listing';
 import SectionTitleTag from '@/components/shared/ui/section-title-tag';
 import SubCategoriesSwiper from '@/components/shared/ui/subcategories';
 import { ecommerceService } from '@/services/api/ecommerce-service';
-import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
 interface CategoryPageProps {
@@ -148,10 +147,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       }
     );
   };
-
-  if (!data.length) {
-    return notFound();
-  }
 
   return <div className="grid gap-6 mt-4">{renderBlocks()}</div>;
 }

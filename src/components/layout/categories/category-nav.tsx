@@ -40,6 +40,9 @@ const CategoryNav: FC<CategoryNavProps> = ({
             // Don't open dropdown if user is on the same category page
             if (shouldShowDropdown) {
               setActiveCategory(category.slug);
+            } else {
+              // Close any open dropdown when hovering over active category
+              setActiveCategory(null);
             }
           }}
         >

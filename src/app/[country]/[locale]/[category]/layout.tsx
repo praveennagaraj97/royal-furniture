@@ -1,3 +1,4 @@
+import CategoryBreadcrumb from '@/components/category/breadcrumb';
 import SubCategories from '@/components/category/subcategories';
 import { ReactNode } from 'react';
 
@@ -14,9 +15,10 @@ export default async function SubCategoryLayout({
   children,
 }: SubCategoryLayoutProps) {
   return (
-    <div className="mt-4">
+    <>
+      <CategoryBreadcrumb />
       <SubCategories />
       {children}
-    </div>
+    </>
   );
 }
