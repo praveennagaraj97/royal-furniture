@@ -3,9 +3,11 @@
 import ProductsList from '@/components/category/subcategory-detail/products-list';
 import SubcategoryFilters from '@/components/category/subcategory-detail/subcategory-filters';
 import SubcategoryTopBar from '@/components/category/subcategory-detail/subcategory-top-bar';
+import { useLayoutData } from '@/contexts/layout-context';
 import { useResizeWindow } from '@/hooks/use-resize-window';
 import { ProductItem } from '@/types';
 import { AnimatePresence } from 'framer-motion';
+import { useParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 
 export interface SortOption {
@@ -64,8 +66,21 @@ const generateDummyProducts = (count: number): ProductItem[] => {
 };
 
 const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
+  const params = useParams();
+  const { categories } = useLayoutData();
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState('recommended');
+
+  // Get subcategory ID from layout context
+  const subcategoryId = useMemo(() => {
+    const categorySlug = params.category as string;
+    const subcategorySlug = params.subcategory as string;
+    const category = categories.find((cat) => cat.slug === categorySlug);
+    const subcategory = category?.subCategories?.find(
+      (sub) => sub.slug === subcategorySlug
+    );
+    return subcategory?.id || null;
+  }, [categories, params.category, params.subcategory]);
 
   // Update filter visibility on window resize
   useResizeWindow(() => {
@@ -105,6 +120,7 @@ const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
               key="filters"
               isVisible={isFilterVisible}
               onHide={handleToggleFilter}
+              subcategoryId={subcategoryId}
             />
           )}
         </AnimatePresence>

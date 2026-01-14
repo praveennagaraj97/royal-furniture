@@ -287,6 +287,22 @@ export interface ProductDetailData {
 
 export type ProductDetailResponse = BaseAPIResponse<ProductDetailData>;
 
+export interface FilterDataItem {
+  id: number;
+  label: string;
+  key: string;
+  filter_type: string;
+}
+
+export interface FilterViewItem {
+  type: string;
+  type_id: number;
+  display_order: number;
+  filter_data: FilterDataItem[];
+}
+
+export type FilterViewResponse = BaseAPIResponse<FilterViewItem[]>;
+
 export interface CategoryWithSubCategories extends CategoryItem {
   subCategories: SubCategoryItem[] | null;
 }

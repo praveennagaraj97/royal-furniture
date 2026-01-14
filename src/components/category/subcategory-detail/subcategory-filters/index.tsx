@@ -2,93 +2,64 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import Portal from '@/components/shared/portal';
+import { SubcategoryFiltersSkeleton } from '@/components/skeletons/subcategory-filters-skeleton';
+import { useGetFiltersBySubCategoryId } from '@/hooks/api';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FC, useMemo, useState } from 'react';
-import { BiSortAlt2 } from 'react-icons/bi';
 import { FiX } from 'react-icons/fi';
-
-interface FilterOption {
-  id: string;
-  label: string;
-  value: string;
-}
-
-interface FilterSection {
-  id: string;
-  title: string;
-  options: FilterOption[];
-}
+import { FiltersEmptyState } from './empty-state';
 
 interface SubcategoryFiltersProps {
   isVisible: boolean;
   onHide: () => void;
+  subcategoryId: number | null;
 }
-
-// Static filter sections
-const FILTER_SECTIONS: FilterSection[] = [
-  {
-    id: 'sort',
-    title: 'Sort by',
-    options: [
-      { id: 'best-seller', label: 'Best seller', value: 'best-seller' },
-      { id: 'price-low', label: 'Price- Low to High', value: 'price-low' },
-      { id: 'price-high', label: 'Price-High to Low', value: 'price-high' },
-      { id: 'new-arrival', label: 'New Arrival', value: 'new-arrival' },
-      { id: 'relevant', label: 'Relevant Products', value: 'relevant' },
-      { id: 'discount', label: 'Discount', value: 'discount' },
-    ],
-  },
-  {
-    id: 'filter',
-    title: 'Filter',
-    options: [
-      { id: 'best-seller', label: 'Best seller', value: 'best-seller' },
-      { id: 'price-low', label: 'Price- Low to High', value: 'price-low' },
-      { id: 'price-high', label: 'Price-High to Low', value: 'price-high' },
-      { id: 'new-arrival', label: 'New Arrival', value: 'new-arrival' },
-    ],
-  },
-  {
-    id: 'seating-capacity',
-    title: 'Seating Capacity',
-    options: [
-      { id: '1-seater', label: '1 seater', value: '1-seater' },
-      { id: '2-seater', label: '2 seater', value: '2-seater' },
-      { id: '3-seater', label: '3 seater', value: '3-seater' },
-      { id: '4-seater', label: '4 seater', value: '4-seater' },
-    ],
-  },
-  {
-    id: 'leg-material',
-    title: 'Leg Material',
-    options: [
-      { id: 'wood', label: 'Wood', value: 'wood' },
-      { id: 'plastic', label: 'Plastic', value: 'plastic' },
-      { id: 'metal', label: 'Metal', value: 'metal' },
-    ],
-  },
-];
 
 const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   isVisible,
   onHide,
+  subcategoryId,
 }) => {
+  const { filters, isLoading } = useGetFiltersBySubCategoryId({
+    subcategoryId,
+  });
+
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string>
-  >({
-    sort: 'best-seller',
-    filter: 'best-seller',
-  });
+  >({});
 
   const handleFilterChange = (sectionId: string, value: string) => {
     setSelectedFilters((prev) => ({ ...prev, [sectionId]: value }));
   };
 
-  const filterContent = useMemo(
-    () => (
+  // Transform API data to filter sections
+  const filterSections = useMemo(() => {
+    return filters
+      .sort((a, b) => a.display_order - b.display_order)
+      .map((filter) => ({
+        id: `filter-${filter.type_id}`,
+        title: filter.type,
+        options: filter.filter_data.map((item) => ({
+          id: `option-${item.id}`,
+          label: item.label,
+          value: item.key,
+        })),
+      }));
+  }, [filters]);
+
+  const filterContent = useMemo(() => {
+    if (isLoading) {
+      return <SubcategoryFiltersSkeleton />;
+    }
+
+    if (filterSections.length === 0) {
+      return <FiltersEmptyState />;
+    }
+
+    return (
       <div className="space-y-6 min-w-0 w-full lg:pr-4">
         {/* Filter Sections */}
-        {FILTER_SECTIONS.map((section, index) => (
+        {filterSections.map((section, index) => (
           <ViewOnce
             key={section.id}
             type="slideUp"
@@ -99,11 +70,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
           >
             <div className="space-y-3">
               <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                {section.id === 'sort' ? (
-                  <BiSortAlt2 className="w-4 h-4 text-deep-maroon" />
-                ) : (
-                  <span className="text-deep-maroon">✓</span>
-                )}
+                <span className="text-deep-maroon">✓</span>
                 {section.title}
               </h3>
               <div className="space-y-2.5">
@@ -133,9 +100,8 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
           </ViewOnce>
         ))}
       </div>
-    ),
-    [selectedFilters]
-  );
+    );
+  }, [selectedFilters, filterSections, isLoading]);
 
   if (!isVisible) return null;
 

@@ -1,10 +1,4 @@
 import { getAuthToken } from '@/utils';
-import {
-  DEFAULT_COUNTRY,
-  DEFAULT_LOCALE,
-  LOCALES,
-  SUPPORTED_COUNTRIES,
-} from '@/utils/generated';
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -29,32 +23,32 @@ export const setupAxiosInterceptors = (instance: AxiosInstance): void => {
       }
 
       //  Add locale and country headers
-      if (typeof window !== 'undefined') {
-        const pathSegments = window.location.pathname
-          .split('/')
-          .filter(Boolean);
-        let country: string = DEFAULT_COUNTRY;
-        if (
-          pathSegments.length > 0 &&
-          (SUPPORTED_COUNTRIES as string[]).includes(pathSegments[0])
-        ) {
-          country = pathSegments[0];
-        }
+      // if (typeof window !== 'undefined') {
+      //   const pathSegments = window.location.pathname
+      //     .split('/')
+      //     .filter(Boolean);
+      //   let country: string = DEFAULT_COUNTRY;
+      //   if (
+      //     pathSegments.length > 0 &&
+      //     (SUPPORTED_COUNTRIES as string[]).includes(pathSegments[0])
+      //   ) {
+      //     country = pathSegments[0];
+      //   }
 
-        let locale: string = DEFAULT_LOCALE;
-        if (
-          pathSegments.length > 1 &&
-          (SUPPORTED_COUNTRIES as string[]).includes(pathSegments[0]) &&
-          (LOCALES as string[]).includes(pathSegments[1])
-        ) {
-          locale = pathSegments[1];
-        }
+      //   let locale: string = DEFAULT_LOCALE;
+      //   if (
+      //     pathSegments.length > 1 &&
+      //     (SUPPORTED_COUNTRIES as string[]).includes(pathSegments[0]) &&
+      //     (LOCALES as string[]).includes(pathSegments[1])
+      //   ) {
+      //     locale = pathSegments[1];
+      //   }
 
-        if (config.headers) {
-          config.headers['locale'] = locale;
-          config.headers['country'] = country;
-        }
-      }
+      //   if (config.headers) {
+      //     config.headers['locale'] = locale;
+      //     config.headers['country'] = country;
+      //   }
+      // }
 
       return config;
     },

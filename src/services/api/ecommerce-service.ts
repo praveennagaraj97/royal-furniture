@@ -42,7 +42,7 @@ export class EcommerceService extends BaseAPIService {
         API_ROUTES.PRODUCTS.HOME,
         {
           params: {
-            category
+            category,
           },
           headers: this.getLocaleAndCountryHeader(
             options.locale,
