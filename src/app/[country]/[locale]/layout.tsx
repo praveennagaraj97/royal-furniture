@@ -1,4 +1,5 @@
 import AppLayout from '@/components/layout';
+import ProgressBar from '@/components/shared/ui/progress-bar';
 import { VercelToolbarComponent } from '@/components/vercel-toolbar';
 import { AuthProvider } from '@/contexts/auth-context';
 import { LayoutProvider } from '@/contexts/layout-context';
@@ -79,6 +80,7 @@ export default async function LocaleLayout({
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
     >
       <body className={`${montserrat.variable} antialiased`}>
+        <ProgressBar />
         {process.env.NODE_ENV !== 'development' ? (
           <VercelToolbarComponent />
         ) : null}
