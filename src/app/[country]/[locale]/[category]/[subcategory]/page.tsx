@@ -1,4 +1,4 @@
-import SubcategoryContent from '@/components/category/subcategory-content';
+import SubcategoryDetail from '@/components/category/subcategory-detail';
 
 interface SubCategoryPageProps {
   params: Promise<{
@@ -9,7 +9,9 @@ interface SubCategoryPageProps {
   }>;
 }
 
-export default async function SubCategoryPage({ params }: SubCategoryPageProps) {
+export default async function SubCategoryPage({
+  params,
+}: SubCategoryPageProps) {
   const { subcategory } = await params;
 
   // TODO: Fetch products from API
@@ -19,5 +21,5 @@ export default async function SubCategoryPage({ params }: SubCategoryPageProps) 
   // });
 
   // For now, pass empty array to use dummy data
-  return <SubcategoryContent products={[]} />;
+  return <SubcategoryDetail products={[]} />;
 }

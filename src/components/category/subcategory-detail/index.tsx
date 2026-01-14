@@ -1,8 +1,8 @@
 'use client';
 
-import ProductsList from '@/components/category/subcategory-content/products-list';
-import SubcategoryFilters from '@/components/category/subcategory-filters';
-import SubcategoryTopBar from '@/components/category/subcategory-top-bar';
+import ProductsList from '@/components/category/subcategory-detail/products-list';
+import SubcategoryFilters from '@/components/category/subcategory-detail/subcategory-filters';
+import SubcategoryTopBar from '@/components/category/subcategory-detail/subcategory-top-bar';
 import { useResizeWindow } from '@/hooks/use-resize-window';
 import { ProductItem } from '@/types';
 import { AnimatePresence } from 'framer-motion';
@@ -23,7 +23,7 @@ const sortOptions: SortOption[] = [
   { id: 'discount', label: 'Discount' },
 ];
 
-interface SubcategoryContentProps {
+interface SubcategoryDetailProps {
   products: ProductItem[];
 }
 
@@ -63,7 +63,7 @@ const generateDummyProducts = (count: number): ProductItem[] => {
   }));
 };
 
-const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
+const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState('recommended');
 
@@ -119,4 +119,4 @@ const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
   );
 };
 
-export default SubcategoryContent;
+export default SubcategoryDetail;
