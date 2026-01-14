@@ -6,7 +6,6 @@ interface SubCategoryLayoutProps {
     locale: string;
     category: string;
     country: string;
-    subcategory: string;
   }>;
   children: ReactNode;
 }
