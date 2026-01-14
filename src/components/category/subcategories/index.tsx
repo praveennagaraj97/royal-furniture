@@ -34,7 +34,7 @@ const SubCategories: FC = () => {
       duration={0.3}
       className="overflow-hidden"
     >
-      <div className="pt-2">
+      <div>
         <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
           <ViewOnce
             type="slideDown"

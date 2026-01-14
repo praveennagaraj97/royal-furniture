@@ -16,6 +16,10 @@ const CategoryBreadcrumb: FC = () => {
     (subcategory) => subcategory.slug === subcategorySlug
   );
 
+  // if (!subcategorySlug) {
+  //   return <div className="mt-4"></div>;
+  // }
+
   return (
     <Breadcrumb
       items={
