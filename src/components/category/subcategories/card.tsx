@@ -32,7 +32,13 @@ const SubCategoryCard: FC<SubCategoryCardProps> = ({
           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
         />
       </div>
-      <span className="text-sm font-medium text-gray-800 text-center group-hover/card:text-deep-maroon transition-colors">
+      <span
+        className={`text-sm font-medium transition-colors ${
+          isActive
+            ? 'text-deep-maroon'
+            : 'text-gray-800 text-center group-hover/card:text-deep-maroon'
+        }`}
+      >
         {subcategory.name}
       </span>
     </AppLink>

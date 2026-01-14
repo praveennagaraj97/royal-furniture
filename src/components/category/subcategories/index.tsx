@@ -7,17 +7,16 @@ import {
 } from '@/components/shared/animations';
 import { useLayoutData } from '@/contexts/layout-context';
 import { useAppPathName } from '@/hooks';
+import { useParams } from 'next/navigation';
 import { FC } from 'react';
 import Swiper from '../../shared/swiper';
 import SubCategoryCard from './card';
 
-interface SubCategoriesProps {
-  activeSubcategorySlug?: string;
-}
-
-const SubCategories: FC<SubCategoriesProps> = ({ activeSubcategorySlug }) => {
+const SubCategories: FC = () => {
   const { categories } = useLayoutData();
   const pathName = useAppPathName();
+
+  const { subcategory: activeSubcategory } = useParams();
 
   const selectedCategory = categories.find(
     (category) => category.slug === pathName.split('/')[1]
@@ -64,6 +63,7 @@ const SubCategories: FC<SubCategoriesProps> = ({ activeSubcategorySlug }) => {
                   <SubCategoryCard
                     subcategory={subcategory}
                     categorySlug={selectedCategory.slug}
+                    isActive={activeSubcategory === subcategory.slug}
                   />
                 </StaggerItem>
               ))}

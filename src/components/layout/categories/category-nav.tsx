@@ -1,8 +1,9 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import { AppLink, useAppParams } from '@/hooks';
+import { AppLink } from '@/hooks';
 import { CategoryWithSubCategories } from '@/types';
+import { useParams } from 'next/navigation';
 import { Dispatch, FC, Fragment, SetStateAction } from 'react';
 import CategoryDropdown from './category-dropdown';
 
@@ -18,7 +19,7 @@ const CategoryNav: FC<CategoryNavProps> = ({
   activeCategory,
   setActiveCategory,
 }) => {
-  const { category: currentCategory } = useAppParams();
+  const { category: currentCategory } = useParams();
 
   // Don't show dropdown if user is on the same category page
   const shouldShowDropdown = currentCategory !== category.slug;
