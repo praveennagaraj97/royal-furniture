@@ -34,7 +34,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
 }) => {
   const filterContent = useMemo(
     () => (
-      <div className="bg-white rounded-lg space-y-6 max-h-[calc(100vh-38px)] overflow-y-auto min-w-72 pr-6">
+      <div className="space-y-6 min-w-0 w-full lg:pr-4">
         {/* Filter Sections */}
         {sections.map((section, index) => (
           <ViewOnce
@@ -58,9 +58,9 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                 {section.options.map((option) => (
                   <label
                     key={option.id}
-                    className="flex items-center gap-2.5 cursor-pointer group justify-between space-x-6"
+                    className="flex items-center gap-2.5 cursor-pointer group justify-between min-w-0"
                   >
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
+                    <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors truncate flex-1 min-w-0">
                       {option.label}
                     </span>
 
@@ -72,7 +72,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                       onChange={() =>
                         section.onSelect(section.id, option.value)
                       }
-                      className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon"
+                      className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon shrink-0"
                     />
                   </label>
                 ))}
@@ -95,12 +95,14 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: -20, opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="hidden lg:block  pr-4"
+        className="hidden lg:block w-1/4 pr-4"
       >
-        <div className="sticky top-24">{filterContent}</div>
+        <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+          {filterContent}
+        </div>
       </motion.aside>
 
-      {/* Mobile/Tablet Drawer */}
+      {/* Mobile/Tablet Bottom Sheet */}
       <Portal>
         <AnimatePresence>
           {isVisible && (
@@ -115,31 +117,32 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                 onClick={onHide}
               />
 
-              {/* Drawer Panel */}
+              {/* Bottom Sheet Panel */}
               <motion.div
-                className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 lg:hidden shadow-xl overflow-y-auto"
-                initial={{ x: '-100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '-100%' }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="fixed bottom-0 left-0 right-0 bg-white z-50 lg:hidden shadow-2xl rounded-t-2xl overflow-hidden max-h-[85vh] flex flex-col"
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                onClick={(e) => e.stopPropagation()}
               >
-                <div className="p-4">
-                  {/* Close Button */}
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold text-gray-900">
-                      Filters
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={onHide}
-                      className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                      aria-label="Close filters"
-                    >
-                      <FiX className="h-5 w-5 text-gray-600" />
-                    </button>
-                  </div>
+                {/* Header */}
+                <div className="flex justify-between items-center p-4 border-b border-gray-200 shrink-0">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Filters
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={onHide}
+                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                    aria-label="Close filters"
+                  >
+                    <FiX className="h-5 w-5 text-gray-600" />
+                  </button>
+                </div>
 
-                  {/* Filter Content */}
+                {/* Filter Content - Scrollable */}
+                <div className="overflow-y-auto flex-1 px-4 py-4">
                   {filterContent}
                 </div>
               </motion.div>

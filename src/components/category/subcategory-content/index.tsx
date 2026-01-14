@@ -6,6 +6,7 @@ import SubcategoryFilters, {
 import SubcategoryTopBar from '@/components/category/subcategory-top-bar';
 import { StaggerContainer } from '@/components/shared/animations';
 import ProductCard from '@/components/shared/ui/product-listing/product-card';
+import { useResizeWindow } from '@/hooks/use-resize-window';
 import { ProductItem } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FC, useMemo, useState } from 'react';
@@ -51,11 +52,24 @@ const generateDummyProducts = (count: number): ProductItem[] => {
 };
 
 const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
-  const [isFilterVisible, setIsFilterVisible] = useState(true);
+  // Filter should be visible by default only on lg+ screens
+  const [isFilterVisible, setIsFilterVisible] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024; // lg breakpoint
+    }
+    return true; // SSR default
+  });
   const [selectedSort, setSelectedSort] = useState('recommended');
   const [filters, setFilters] = useState<Record<string, string>>({
     sort: 'best-seller',
     filter: 'best-seller',
+  });
+
+  // Update filter visibility on window resize
+  useResizeWindow(() => {
+    if (window.innerWidth < 1024) {
+      setIsFilterVisible(false);
+    }
   });
 
   // Use provided products or generate dummy ones
@@ -167,7 +181,6 @@ const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
     <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6">
       {/* Top Bar */}
       <SubcategoryTopBar
-        productCount={displayProducts.length}
         isFilterVisible={isFilterVisible}
         onToggleFilter={handleToggleFilter}
         sortOptions={sortOptions}

@@ -5,10 +5,9 @@ import Dropdown from '@/components/shared/dropdown';
 import { motion } from 'framer-motion';
 import { FC } from 'react';
 import { BiSortAlt2 } from 'react-icons/bi';
-import { FiChevronDown, FiFilter, FiGrid } from 'react-icons/fi';
+import { FiChevronDown, FiFilter } from 'react-icons/fi';
 
 interface SubcategoryTopBarProps {
-  productCount: number;
   isFilterVisible: boolean;
   onToggleFilter: () => void;
   sortOptions: { id: string; label: string }[];
@@ -17,7 +16,6 @@ interface SubcategoryTopBarProps {
 }
 
 const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
-  productCount,
   isFilterVisible,
   onToggleFilter,
   sortOptions,
@@ -31,55 +29,41 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
 
   return (
     <ViewOnce type="slideDown" distance={10} duration={0.3} delay={0.1}>
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
         {/* Left Side - Toggle Filter Button */}
         <motion.button
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -10 }}
           onClick={onToggleFilter}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 group"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 group shrink-0"
         >
-          <FiFilter className="w-4 h-4 text-deep-maroon" />
-          <span className="text-sm font-medium text-gray-900">
+          <FiFilter className="w-4 h-4 text-deep-maroon shrink-0" />
+          <span className="text-xs sm:text-sm font-medium text-gray-900 whitespace-nowrap">
             {isFilterVisible ? 'Hide Filter' : 'Show Filter'}
           </span>
           <FiChevronDown
-            className={`w-4 h-4 text-gray-600 group-hover:text-deep-maroon transition-all duration-200 lg:${
+            className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-deep-maroon transition-all duration-200 shrink-0 lg:${
               isFilterVisible ? 'rotate-180' : ''
             }`}
           />
         </motion.button>
 
-        {/* Right Side - Product Count, Grid Icon, Sort Dropdown */}
-        <div className="flex items-center gap-4 ml-auto">
-          {/* Product Count */}
-          <div className="px-3 py-1.5 bg-gray-100 rounded-lg">
-            <span className="text-sm font-medium text-gray-900">
-              {productCount} Products
-            </span>
-          </div>
-
-          {/* Grid View Icon */}
-          <button
-            className="p-2 text-deep-maroon hover:bg-gray-100 rounded-lg transition-colors duration-200"
-            aria-label="Grid view"
-          >
-            <FiGrid className="w-5 h-5" />
-          </button>
-
+        {/* Right Side - Sort Dropdown */}
+        <div className="flex items-center gap-2 sm:gap-4 ml-auto">
           {/* Sort Dropdown */}
           <Dropdown
             align="right"
             trigger={
-              <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 group">
-                <div className="flex items-center gap-1.5 text-deep-maroon">
-                  <BiSortAlt2 className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 group shrink-0">
+                <div className="flex items-center gap-1 sm:gap-1.5 text-deep-maroon shrink-0">
+                  <BiSortAlt2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-sm font-medium text-gray-900">
-                  Sort by: {selectedSortLabel}
+                <span className="text-xs sm:text-sm font-medium text-gray-900 whitespace-nowrap">
+                  <span className="hidden sm:inline">Sort by: </span>
+                  {selectedSortLabel}
                 </span>
-                <FiChevronDown className="w-4 h-4 text-gray-600 group-hover:text-deep-maroon transition-colors" />
+                <FiChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-deep-maroon transition-colors shrink-0" />
               </div>
             }
           >
