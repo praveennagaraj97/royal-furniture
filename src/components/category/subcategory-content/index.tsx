@@ -1,15 +1,27 @@
 'use client';
 
-import SubcategoryFilters, {
-  FilterSection,
-} from '@/components/category/subcategory-filters';
+import ProductsList from '@/components/category/subcategory-content/products-list';
+import SubcategoryFilters from '@/components/category/subcategory-filters';
 import SubcategoryTopBar from '@/components/category/subcategory-top-bar';
-import { StaggerContainer } from '@/components/shared/animations';
-import ProductCard from '@/components/shared/ui/product-listing/product-card';
 import { useResizeWindow } from '@/hooks/use-resize-window';
 import { ProductItem } from '@/types';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { FC, useMemo, useState } from 'react';
+
+export interface SortOption {
+  id: string;
+  label: string;
+}
+
+const sortOptions: SortOption[] = [
+  { id: 'recommended', label: 'Recommended' },
+  { id: 'best-seller', label: 'Best seller' },
+  { id: 'price-low', label: 'Price- Low to High' },
+  { id: 'price-high', label: 'Price-High to Low' },
+  { id: 'new-arrival', label: 'New Arrival' },
+  { id: 'relevant', label: 'Relevant Products' },
+  { id: 'discount', label: 'Discount' },
+];
 
 interface SubcategoryContentProps {
   products: ProductItem[];
@@ -52,18 +64,8 @@ const generateDummyProducts = (count: number): ProductItem[] => {
 };
 
 const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
-  // Filter should be visible by default only on lg+ screens
-  const [isFilterVisible, setIsFilterVisible] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth >= 1024; // lg breakpoint
-    }
-    return true; // SSR default
-  });
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState('recommended');
-  const [filters, setFilters] = useState<Record<string, string>>({
-    sort: 'best-seller',
-    filter: 'best-seller',
-  });
 
   // Update filter visibility on window resize
   useResizeWindow(() => {
@@ -78,101 +80,6 @@ const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
     [products]
   );
 
-  // Sort options
-  const sortOptions = [
-    { id: 'recommended', label: 'Recommended' },
-    { id: 'best-seller', label: 'Best seller' },
-    { id: 'price-low', label: 'Price- Low to High' },
-    { id: 'price-high', label: 'Price-High to Low' },
-    { id: 'new-arrival', label: 'New Arrival' },
-    { id: 'relevant', label: 'Relevant Products' },
-    { id: 'discount', label: 'Discount' },
-  ];
-
-  // Filter sections
-  const filterSections: FilterSection[] = useMemo(
-    () => [
-      {
-        id: 'sort',
-        title: 'Sort by',
-        options: [
-          { id: 'best-seller', label: 'Best seller', value: 'best-seller' },
-          {
-            id: 'price-low',
-            label: 'Price- Low to High',
-            value: 'price-low',
-          },
-          {
-            id: 'price-high',
-            label: 'Price-High to Low',
-            value: 'price-high',
-          },
-          { id: 'new-arrival', label: 'New Arrival', value: 'new-arrival' },
-          {
-            id: 'relevant',
-            label: 'Relevant Products',
-            value: 'relevant',
-          },
-          { id: 'discount', label: 'Discount', value: 'discount' },
-        ],
-        selectedValue: filters.sort,
-        onSelect: (sectionId, value) => {
-          setFilters((prev) => ({ ...prev, [sectionId]: value }));
-        },
-      },
-      {
-        id: 'filter',
-        title: 'Filter',
-        options: [
-          { id: 'best-seller', label: 'Best seller', value: 'best-seller' },
-          {
-            id: 'price-low',
-            label: 'Price- Low to High',
-            value: 'price-low',
-          },
-          {
-            id: 'price-high',
-            label: 'Price-High to Low',
-            value: 'price-high',
-          },
-          { id: 'new-arrival', label: 'New Arrival', value: 'new-arrival' },
-        ],
-        selectedValue: filters.filter,
-        onSelect: (sectionId, value) => {
-          setFilters((prev) => ({ ...prev, [sectionId]: value }));
-        },
-      },
-      {
-        id: 'seating-capacity',
-        title: 'Seating Capacity',
-        options: [
-          { id: '1-seater', label: '1 seater', value: '1-seater' },
-          { id: '2-seater', label: '2 seater', value: '2-seater' },
-          { id: '3-seater', label: '3 seater', value: '3-seater' },
-          { id: '4-seater', label: '4 seater', value: '4-seater' },
-        ],
-        selectedValue: filters['seating-capacity'],
-        onSelect: (sectionId, value) => {
-          setFilters((prev) => ({ ...prev, [sectionId]: value }));
-        },
-      },
-      {
-        id: 'leg-material',
-        title: 'Leg Material',
-        options: [
-          { id: 'wood', label: 'Wood', value: 'wood' },
-          { id: 'plastic', label: 'Plastic', value: 'plastic' },
-          { id: 'metal', label: 'Metal', value: 'metal' },
-        ],
-        selectedValue: filters['leg-material'],
-        onSelect: (sectionId, value) => {
-          setFilters((prev) => ({ ...prev, [sectionId]: value }));
-        },
-      },
-    ],
-    [filters]
-  );
-
   const handleToggleFilter = () => {
     setIsFilterVisible(!isFilterVisible);
   };
@@ -181,6 +88,7 @@ const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
     <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6">
       {/* Top Bar */}
       <SubcategoryTopBar
+        productCount={displayProducts.length}
         isFilterVisible={isFilterVisible}
         onToggleFilter={handleToggleFilter}
         sortOptions={sortOptions}
@@ -189,7 +97,7 @@ const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
       />
 
       {/* Main Content */}
-      <div className="flex mt-6 border-t border-gray-200 pt-6">
+      <div className="flex gap-6 mt-6 border-t border-gray-200 pt-6">
         {/* Filter Sidebar - Only on lg+ screens */}
         <AnimatePresence mode="wait">
           {isFilterVisible && (
@@ -197,41 +105,15 @@ const SubcategoryContent: FC<SubcategoryContentProps> = ({ products }) => {
               key="filters"
               isVisible={isFilterVisible}
               onHide={handleToggleFilter}
-              sections={filterSections}
             />
           )}
         </AnimatePresence>
 
-        {/* Product Grid */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.98 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className={`flex-1 transition-all duration-300 ${
-            isFilterVisible ? 'lg:w-3/4' : 'w-full'
-          }`}
-        >
-          <StaggerContainer
-            staggerChildren={0.05}
-            delayChildren={0.1}
-            className={`grid gap-x-3 gap-y-6 transition-all duration-300 ${
-              // On mobile/tablet, always use 2 columns when filter is visible, 2 columns when hidden
-              // On lg+, use 3 columns when filter visible, 4 columns when hidden
-              isFilterVisible
-                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
-            }`}
-          >
-            {displayProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                isResponsive={true}
-              />
-            ))}
-          </StaggerContainer>
-        </motion.div>
+        {/* Products List */}
+        <ProductsList
+          products={displayProducts}
+          isFilterVisible={isFilterVisible}
+        />
       </div>
     </div>
   );

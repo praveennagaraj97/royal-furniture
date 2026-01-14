@@ -3,40 +3,92 @@
 import { ViewOnce } from '@/components/shared/animations';
 import Portal from '@/components/shared/portal';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { FiX } from 'react-icons/fi';
 
-export interface FilterOption {
+interface FilterOption {
   id: string;
   label: string;
   value: string;
 }
 
-export interface FilterSection {
+interface FilterSection {
   id: string;
   title: string;
   options: FilterOption[];
-  selectedValue?: string;
-  onSelect: (sectionId: string, value: string) => void;
 }
 
 interface SubcategoryFiltersProps {
   isVisible: boolean;
   onHide: () => void;
-  sections: FilterSection[];
 }
+
+// Static filter sections
+const FILTER_SECTIONS: FilterSection[] = [
+  {
+    id: 'sort',
+    title: 'Sort by',
+    options: [
+      { id: 'best-seller', label: 'Best seller', value: 'best-seller' },
+      { id: 'price-low', label: 'Price- Low to High', value: 'price-low' },
+      { id: 'price-high', label: 'Price-High to Low', value: 'price-high' },
+      { id: 'new-arrival', label: 'New Arrival', value: 'new-arrival' },
+      { id: 'relevant', label: 'Relevant Products', value: 'relevant' },
+      { id: 'discount', label: 'Discount', value: 'discount' },
+    ],
+  },
+  {
+    id: 'filter',
+    title: 'Filter',
+    options: [
+      { id: 'best-seller', label: 'Best seller', value: 'best-seller' },
+      { id: 'price-low', label: 'Price- Low to High', value: 'price-low' },
+      { id: 'price-high', label: 'Price-High to Low', value: 'price-high' },
+      { id: 'new-arrival', label: 'New Arrival', value: 'new-arrival' },
+    ],
+  },
+  {
+    id: 'seating-capacity',
+    title: 'Seating Capacity',
+    options: [
+      { id: '1-seater', label: '1 seater', value: '1-seater' },
+      { id: '2-seater', label: '2 seater', value: '2-seater' },
+      { id: '3-seater', label: '3 seater', value: '3-seater' },
+      { id: '4-seater', label: '4 seater', value: '4-seater' },
+    ],
+  },
+  {
+    id: 'leg-material',
+    title: 'Leg Material',
+    options: [
+      { id: 'wood', label: 'Wood', value: 'wood' },
+      { id: 'plastic', label: 'Plastic', value: 'plastic' },
+      { id: 'metal', label: 'Metal', value: 'metal' },
+    ],
+  },
+];
 
 const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   isVisible,
   onHide,
-  sections,
 }) => {
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, string>
+  >({
+    sort: 'best-seller',
+    filter: 'best-seller',
+  });
+
+  const handleFilterChange = (sectionId: string, value: string) => {
+    setSelectedFilters((prev) => ({ ...prev, [sectionId]: value }));
+  };
+
   const filterContent = useMemo(
     () => (
       <div className="space-y-6 min-w-0 w-full lg:pr-4">
         {/* Filter Sections */}
-        {sections.map((section, index) => (
+        {FILTER_SECTIONS.map((section, index) => (
           <ViewOnce
             key={section.id}
             type="slideUp"
@@ -68,9 +120,9 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                       type="radio"
                       name={section.id}
                       value={option.value}
-                      checked={section.selectedValue === option.value}
+                      checked={selectedFilters[section.id] === option.value}
                       onChange={() =>
-                        section.onSelect(section.id, option.value)
+                        handleFilterChange(section.id, option.value)
                       }
                       className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon shrink-0"
                     />
@@ -82,7 +134,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
         ))}
       </div>
     ),
-    [sections]
+    [selectedFilters]
   );
 
   if (!isVisible) return null;

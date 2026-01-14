@@ -5,9 +5,10 @@ import Dropdown from '@/components/shared/dropdown';
 import { motion } from 'framer-motion';
 import { FC } from 'react';
 import { BiSortAlt2 } from 'react-icons/bi';
-import { FiChevronDown, FiFilter } from 'react-icons/fi';
+import { FiChevronDown, FiFilter, FiGrid } from 'react-icons/fi';
 
 interface SubcategoryTopBarProps {
+  productCount: number;
   isFilterVisible: boolean;
   onToggleFilter: () => void;
   sortOptions: { id: string; label: string }[];
@@ -16,6 +17,7 @@ interface SubcategoryTopBarProps {
 }
 
 const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
+  productCount,
   isFilterVisible,
   onToggleFilter,
   sortOptions,
@@ -49,8 +51,23 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
           />
         </motion.button>
 
-        {/* Right Side - Sort Dropdown */}
+        {/* Right Side - Product Count, Grid Icon, Sort Dropdown */}
         <div className="flex items-center gap-2 sm:gap-4 ml-auto">
+          {/* Product Count - Desktop only */}
+          <div className="hidden lg:block px-3 py-1.5 bg-gray-100 rounded-lg">
+            <span className="text-sm font-medium text-gray-900">
+              {productCount} Products
+            </span>
+          </div>
+
+          {/* Grid View Icon - Desktop only */}
+          <button
+            className="hidden lg:flex p-2 text-deep-maroon hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            aria-label="Grid view"
+          >
+            <FiGrid className="w-5 h-5" />
+          </button>
+
           {/* Sort Dropdown */}
           <Dropdown
             align="right"
