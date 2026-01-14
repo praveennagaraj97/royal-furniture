@@ -64,7 +64,6 @@ const SubCategories: FC<SubCategoriesProps> = ({ activeSubcategorySlug }) => {
                   <SubCategoryCard
                     subcategory={subcategory}
                     categorySlug={selectedCategory.slug}
-                    isActive={activeSubcategorySlug === subcategory.slug}
                   />
                 </StaggerItem>
               ))}

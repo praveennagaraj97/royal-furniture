@@ -9,14 +9,10 @@ interface SubCategoryLayoutProps {
   }>;
 }
 
-export default async function SubCategoryLayout({
-  params,
-}: SubCategoryLayoutProps) {
-  const { subcategory } = await params;
-
+export default async function SubCategoryLayout({}: SubCategoryLayoutProps) {
   return (
     <div className="grid gap-6 mt-4">
-      <SubCategories activeSubcategorySlug={subcategory} />
+      <SubCategories />
     </div>
   );
 }
