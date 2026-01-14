@@ -34,14 +34,14 @@ const SubCategories: FC = () => {
       duration={0.3}
       className="overflow-hidden"
     >
-      <div className="pt-4">
+      <div className="pt-2">
         <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
           <ViewOnce
             type="slideDown"
             distance={10}
             duration={0.3}
             delay={0.15}
-            className="text-xl md:text-2xl font-semibold text-indigo-slate mb-4"
+            className="text-xl md:text-2xl font-semibold text-indigo-slate"
           >
             <h2>{selectedCategory.name}</h2>
           </ViewOnce>

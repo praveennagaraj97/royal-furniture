@@ -33,6 +33,33 @@ export class EcommerceService extends BaseAPIService {
     }
   }
 
+  async getCategoryHomeData(
+    category: string,
+    options: CountryAndLocaleParam
+  ): Promise<DynamicHomeResponse> {
+    try {
+      const response = await this.http.get<DynamicHomeResponse>(
+        API_ROUTES.PRODUCTS.HOME,
+        {
+          params: {
+            category
+          },
+          headers: this.getLocaleAndCountryHeader(
+            options.locale,
+            options.country
+          ),
+        }
+      );
+      return {
+        data: response.data?.data?.filter((section) => !section.is_mobile_only),
+        detail: response.data.detail,
+        message: response.data.message,
+      };
+    } catch {
+      return { data: [], detail: '', message: '' };
+    }
+  }
+
   async getProductDetail(
     productSlug: string,
     options?: CountryAndLocaleParam
