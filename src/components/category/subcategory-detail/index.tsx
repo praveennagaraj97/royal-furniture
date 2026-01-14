@@ -100,7 +100,7 @@ const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
   };
 
   return (
-    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6">
+    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
       {/* Top Bar */}
       <SubcategoryTopBar
         productCount={displayProducts.length}
