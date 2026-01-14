@@ -1,13 +1,13 @@
 'use client';
 
-import { HomeBanner } from '@/types/response/home';
+import { BannerItem } from '@/types/response/home';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useEffect, useRef, useState } from 'react';
 import VideoPlayer from './video-player';
 
 interface FadeSlideshowProps {
-  banners: HomeBanner[];
+  banners: BannerItem[];
   showDots?: boolean;
   autoplayDuration?: number;
   className?: string;

@@ -23,7 +23,11 @@ export class EcommerceService extends BaseAPIService {
           ),
         }
       );
-      return response.data;
+      return {
+        data: response.data?.data?.filter((section) => !section.is_mobile_only),
+        detail: response.data.detail,
+        message: response.data.message,
+      };
     } catch {
       return { data: [], detail: '', message: '' };
     }

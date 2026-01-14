@@ -1,12 +1,17 @@
-import Hero, { FullWidthBanner } from '@/components/home/hero';
+import Hero from '@/components/home/hero';
 import LatestBlogs from '@/components/home/latest-blogs';
 import Offers from '@/components/home/offers';
+import SubCategoriesSwiper from '@/components/home/subcategories/subcategories';
 import CountdownTag from '@/components/shared/ui/countdown-tag';
+import FadeSlideshow from '@/components/shared/ui/fade-slideshow';
+import FullWidthBanner from '@/components/shared/ui/fullwidth-banner';
 import ProductListing from '@/components/shared/ui/product-listing';
+import SectionTitleTag from '@/components/shared/ui/section-title-tag';
 import { ecommerceService } from '@/services/api/ecommerce-service';
 import { CountryAndLocaleParams } from '@/types';
 import { getCountriesWithLocaleParams } from '@/utils/generated';
 import { NextPage } from 'next';
+import { Fragment } from 'react';
 
 export const dynamicParams = false;
 
@@ -22,31 +27,37 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
 
   const renderBlocks = () => {
     return data.map(
-      ({
-        section_type,
-        banners,
-        sort_order,
-        title,
-        products,
-        blogs,
-        deal_ends_at,
-        subcategories,
-        view_all_type,
-        layout_type,
-      }) => {
+      (
+        {
+          section_type,
+          banners,
+          sort_order,
+          title,
+          products,
+          blogs,
+          deal_ends_at,
+          subcategories,
+          view_all_type,
+          layout_type,
+        },
+        idx
+      ) => {
         switch (section_type) {
           case 'hero':
             if (banners) {
-              if (layout_type === 'full_width_card') {
+              if (layout_type === 'full_width_banner') {
                 return (
                   <FullWidthBanner
                     banners={banners || []}
-                    key={section_type + sort_order}
+                    key={section_type + sort_order + idx}
                   />
                 );
               }
               return (
-                <Hero banners={banners || []} key={section_type + sort_order} />
+                <Hero
+                  banners={banners || []}
+                  key={section_type + sort_order + idx}
+                />
               );
             }
             return null;
@@ -61,7 +72,7 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
                       : 0
                   }
                   offers={banners || []}
-                  key={section_type + sort_order}
+                  key={section_type + sort_order + idx}
                 />
               );
             }
@@ -87,30 +98,52 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
                       ? `/products?type=${view_all_type}`
                       : undefined
                   }
-                  key={section_type + sort_order}
+                  key={section_type + sort_order + idx}
                 />
               );
             }
             return null;
 
-          // case 'subcategory_showcase':
-          //   if (subcategories && subcategories.length > 0) {
-          //     switch (layout_type) {
-          //       default:
-          //         return null;
-          //     }
-          //   }
+          // Subcategory Showcase
+          case 'subcategory_showcase':
+            if (subcategories && subcategories.length > 0) {
+              return (
+                <Fragment key={section_type + sort_order + idx}>
+                  {title ? (
+                    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
+                      <SectionTitleTag
+                        title={title}
+                        className="text-xl font-semibold"
+                      />
+                    </div>
+                  ) : null}
+                  {layout_type === 'with_fullwidth_banner' ? (
+                    <FullWidthBanner banners={banners || []} />
+                  ) : null}
+                  {layout_type === 'with_banner' ? (
+                    <FadeSlideshow banners={banners || []} />
+                  ) : null}
+                  <SubCategoriesSwiper items={subcategories || []} />
+                </Fragment>
+              );
+            }
 
           case 'blog_slider':
             if (blogs && blogs.length > 0) {
               return (
-                <LatestBlogs blogs={blogs} key={section_type + sort_order} />
+                <LatestBlogs
+                  blogs={blogs || []}
+                  key={section_type + sort_order + idx}
+                />
               );
             }
             return null;
+
           default:
             return (
-              <p key={section_type + sort_order}>{section_type + '- TODO'}</p>
+              <p key={section_type + sort_order + idx}>
+                {section_type + layout_type}
+              </p>
             );
         }
       }

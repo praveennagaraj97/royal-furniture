@@ -2,11 +2,11 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import SectionTitleTag from '@/components/shared/ui/section-title-tag';
-import { HomeBanner } from '@/types/response/home';
+import { BannerItem } from '@/types/response/home';
 import Image from 'next/image';
 import { FC } from 'react';
 
-const SpotlightBanner: FC<{ banners: HomeBanner[]; title: string }> = ({
+const SpotlightBanner: FC<{ banners: BannerItem[]; title: string }> = ({
   banners,
   title,
 }) => {

@@ -6,11 +6,11 @@ import { SubCategoryItem } from '@/types';
 import Image from 'next/image';
 import { FC, useState } from 'react';
 
-interface SpotLightShowcaseProps {
+interface SubCategoriesSwiperProps {
   items: SubCategoryItem[];
 }
 
-const SpotLightShowcase: FC<SpotLightShowcaseProps> = ({ items }) => {
+const SubCategoriesSwiper: FC<SubCategoriesSwiperProps> = ({ items }) => {
   return (
     <StaggerContainer
       staggerChildren={0.15}
@@ -62,4 +62,4 @@ const SpotLightCard: FC<{ item: SubCategoryItem }> = ({ item }) => {
   );
 };
 
-export default SpotLightShowcase;
+export default SubCategoriesSwiper;

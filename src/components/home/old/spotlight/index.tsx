@@ -4,13 +4,13 @@ import SectionTitleTag from '@/components/shared/ui/section-title-tag';
 import { SubCategoryItem } from '@/types';
 import { FC } from 'react';
 
-import { HomeBanner } from '@/types/response/home';
+import { BannerItem } from '@/types/response/home';
+import SpotLightShowcase from '../../subcategories/subcategories';
 import SpotlightBanner from './banner';
-import SpotLightShowcase from './showcase';
 
 interface SpotLightProps {
   items: SubCategoryItem[];
-  banners: HomeBanner[];
+  banners: BannerItem[];
   title: string;
 }
 

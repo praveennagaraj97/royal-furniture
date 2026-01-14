@@ -3,12 +3,12 @@
 import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
 
-import { HomeBanner } from '@/types/response/home';
+import { BannerItem } from '@/types/response/home';
 import { FC } from 'react';
 import OfferCard from './offer-card';
 
 interface OffersProps {
-  offers: HomeBanner[];
+  offers: BannerItem[];
   gridNumber: number;
 }
 

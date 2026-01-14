@@ -5,19 +5,16 @@ export type HomeSectionType =
   | 'top_offers'
   | 'products_section'
   | 'subcategory_showcase'
-  | 'spotlight'
   | 'blog_slider';
 
 export type HomeLayoutType =
   | 'hero_slider'
   | 'banner_grid_3'
+  | 'full_width_banner'
   | 'horizontal_slider'
-  | 'pattern_1'
-  | 'pattern_2'
-  | 'pattern_3'
-  | 'pattern_4'
-  | 'pattern_5'
-  | 'full_width_card';
+  | 'with_fullwidth_banner'
+  | 'without_banner'
+  | 'with_banner';
 
 export type ViewAllType =
   | 'trending'
@@ -26,7 +23,7 @@ export type ViewAllType =
   | 'saved_items'
   | 'personalized';
 
-export interface HomeBanner {
+export interface BannerItem {
   id: number;
   slug: string;
   offer_text: string | null;
@@ -42,12 +39,15 @@ export interface HomeSection {
   layout_type: HomeLayoutType;
   sort_order: number;
   // Optional fields based on section_type
-  banners?: HomeBanner[];
+  banners?: BannerItem[];
   products?: ProductItem[];
   subcategories?: SubCategoryItem[];
   blogs?: BlogItem[];
   view_all_type?: ViewAllType;
   deal_ends_at?: string; // ISO Date string for countdowns
+
+  is_mobile_only: boolean;
+  is_web_only: boolean;
 }
 
 /**
