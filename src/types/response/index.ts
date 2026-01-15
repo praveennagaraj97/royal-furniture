@@ -309,3 +309,40 @@ export interface CategoryWithSubCategories extends CategoryItem {
 
 export type CategoriesResponse = BaseAPIResponse<CategoryItem[]>;
 export type SubCategoriesResponse = BaseAPIResponse<SubCategoryItem[]>;
+
+// Search API Types
+export interface PopularSearch {
+  id: number;
+  search_term: string;
+  display_order: number;
+}
+
+export interface TrendingCategory {
+  id: number;
+  name: string;
+  icon: string;
+  banner_image: string | null;
+  product_count: number;
+}
+
+export interface SearchSuggestionsData {
+  popular_searches: PopularSearch[];
+  most_searched_products: {
+    items: ProductItem[];
+  };
+  trending_categories: {
+    items: TrendingCategory[];
+  };
+}
+
+export type SearchSuggestionsResponse = BaseAPIResponse<SearchSuggestionsData>;
+
+export interface SearchResultsData {
+  results: ProductItem[];
+  total_count: number;
+  page: number;
+  total_pages: number;
+  query: string;
+}
+
+export type SearchResultsResponse = BaseAPIResponse<SearchResultsData>;

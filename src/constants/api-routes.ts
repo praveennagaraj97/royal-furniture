@@ -27,5 +27,7 @@ export const API_ROUTES = {
     CATEGORIES: '/products/category/',
     CATEGORY_SUBCATEGORIES: (slug: string) => `/products/category/${slug}`,
     FILTER_VIEW: '/products/filter-view/',
+    SEARCH_SUGGESTIONS: '/products/search/',
+    SEARCH_RESULTS: '/products/search/results/',
   },
 } as const;
