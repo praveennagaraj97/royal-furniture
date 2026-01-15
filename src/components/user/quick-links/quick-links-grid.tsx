@@ -23,7 +23,7 @@ const QuickLinksGrid: FC = () => {
     {
       key: 'wishlist',
       icon: FiHeart,
-      href: '#',
+      href: '/user/wishlist',
     },
     {
       key: 'savedAddresses',
