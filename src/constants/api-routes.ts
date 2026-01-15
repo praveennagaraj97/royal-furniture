@@ -33,5 +33,7 @@ export const API_ROUTES = {
   WISHLIST: {
     COLLECTIONS: '/wishlist/wishlist/',
     CREATE_COLLECTION: '/wishlist/wishlist/create-collection/',
+    ADD_ITEM: '/wishlist/wishlist/add-item/',
+    REMOVE_VARIANT: (variantId: number) => `/wishlist/wishlist/remove-variant/${variantId}/`,
   },
 } as const;

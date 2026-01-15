@@ -1,65 +1,62 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
-import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FiArrowLeft, FiCheck, FiHeart, FiPlus } from 'react-icons/fi';
 import CreateCollectionModal from './create-collection-modal';
+import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 
 interface AddToWishlistModalProps {
   isOpen: boolean;
   onClose: () => void;
-  productId?: string;
+  variantId: number;
+  productId?: number;
+  onSuccess?: () => void;
 }
-
-// Dummy collections data
-const dummyCollections = [
-  {
-    id: '1',
-    name: 'My Wishlist',
-    itemCount: 2,
-    icon: 'heart',
-    isSelected: true,
-  },
-  {
-    id: '2',
-    name: 'Sofas',
-    itemCount: 5,
-    thumbnail:
-      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&h=100&fit=crop',
-    isSelected: false,
-  },
-  {
-    id: '3',
-    name: 'Beds',
-    itemCount: 6,
-    thumbnail:
-      'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=100&h=100&fit=crop',
-    isSelected: false,
-  },
-];
 
 const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
   isOpen,
   onClose,
+  variantId,
   productId,
+  onSuccess,
 }) => {
-  const [selectedCollections, setSelectedCollections] = useState<string[]>(
-    dummyCollections.filter((c) => c.isSelected).map((c) => c.id)
+  const { collections, addToWishlist, isAdding } = useWishlistActions();
+  const [selectedCollectionId, setSelectedCollectionId] = useState<number | null>(
+    null
   );
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const handleCollectionToggle = (collectionId: string) => {
-    setSelectedCollections((prev) =>
-      prev.includes(collectionId)
-        ? prev.filter((id) => id !== collectionId)
-        : [...prev, collectionId]
-    );
+  // Set default collection as selected when collections load
+  useEffect(() => {
+    if (collections.length > 0 && selectedCollectionId === null) {
+      const defaultCollection = collections.find((c) => c.is_default);
+      if (defaultCollection) {
+        setSelectedCollectionId(defaultCollection.id);
+      }
+    }
+  }, [collections, selectedCollectionId]);
+
+  const handleCollectionToggle = (collectionId: number) => {
+    setSelectedCollectionId(collectionId);
   };
 
-  const handleDone = () => {
-    // TODO: Wire API call here
-    onClose();
+  const handleDone = async () => {
+    if (!selectedCollectionId) return;
+
+    try {
+      const defaultCollection = collections.find((c) => c.is_default);
+      const collectionIdToUse =
+        selectedCollectionId === defaultCollection?.id
+          ? undefined
+          : selectedCollectionId;
+
+      await addToWishlist(variantId, collectionIdToUse);
+      onSuccess?.();
+      onClose();
+    } catch (error) {
+      // Error is handled in the hook with toast
+    }
   };
 
   return (
@@ -102,58 +99,55 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
             </button>
 
             {/* Collections List */}
-            <div className="space-y-2">
-              {dummyCollections.map((collection) => {
-                const isSelected = selectedCollections.includes(collection.id);
-                return (
-                  <button
-                    key={collection.id}
-                    type="button"
-                    onClick={() => handleCollectionToggle(collection.id)}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    {/* Icon/Thumbnail */}
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center shrink-0">
-                      {collection.icon === 'heart' ? (
-                        <FiHeart className="w-6 h-6 text-deep-maroon fill-deep-maroon" />
-                      ) : (
-                        <Image
-                          src={
-                            collection.thumbnail ||
-                            'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&h=100&fit=crop'
-                          }
-                          alt={collection.name}
-                          width={48}
-                          height={48}
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
+            {collections.length > 0 ? (
+              <div className="space-y-2">
+                {collections.map((collection) => {
+                  const isSelected = selectedCollectionId === collection.id;
 
-                    {/* Collection Info */}
-                    <div className="flex-1 text-left">
-                      <h3 className="text-base font-medium text-gray-900">
-                        {collection.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {collection.itemCount} Items
-                      </p>
-                    </div>
-
-                    {/* Checkbox */}
-                    <div
-                      className={`w-6 h-6 rounded border-2 flex items-center justify-center shrink-0 transition-all ${
-                        isSelected
-                          ? 'bg-deep-maroon border-deep-maroon'
-                          : 'border-gray-300'
-                      }`}
+                  return (
+                    <button
+                      key={collection.id}
+                      type="button"
+                      onClick={() => handleCollectionToggle(collection.id)}
+                      className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                     >
-                      {isSelected && <FiCheck className="w-4 h-4 text-white" />}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+                      {/* Icon/Thumbnail */}
+                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center shrink-0">
+                        {collection.is_default ? (
+                          <FiHeart className="w-6 h-6 text-deep-maroon fill-deep-maroon" />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300" />
+                        )}
+                      </div>
+
+                      {/* Collection Info */}
+                      <div className="flex-1 text-left">
+                        <h3 className="text-base font-medium text-gray-900">
+                          {collection.title}
+                        </h3>
+                      </div>
+
+                      {/* Radio Button */}
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                          isSelected
+                            ? 'bg-deep-maroon border-deep-maroon'
+                            : 'border-gray-300'
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="w-2.5 h-2.5 rounded-full bg-white" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500 text-sm">
+                No collections found. Create one to get started.
+              </div>
+            )}
           </div>
 
           {/* Footer */}
@@ -161,9 +155,10 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
             <button
               type="button"
               onClick={handleDone}
-              className="w-full py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-colors"
+              disabled={!selectedCollectionId || isAdding}
+              className="w-full py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Done
+              {isAdding ? 'Adding...' : 'Done'}
             </button>
           </div>
         </div>
@@ -175,7 +170,6 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
         onClose={() => setIsCreateModalOpen(false)}
         onSuccess={() => {
           setIsCreateModalOpen(false);
-          // Optionally refresh collections list
         }}
       />
     </>

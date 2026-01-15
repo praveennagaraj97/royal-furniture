@@ -2,9 +2,11 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import type { ProductDetailData } from '@/types/response';
-import { useState, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import { IoStorefront } from 'react-icons/io5';
+import { useWishlistActions } from '@/hooks/use-wishlist-actions';
+import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
 import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
@@ -35,6 +37,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     String(firstColor?.id || '')
   );
   const [quantity, setQuantity] = useState(1);
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const { removeFromWishlist, isRemoving } = useWishlistActions();
 
   // Get current selected color variant
   const currentVariant = data.variants.find((v) => v.name === selectedVariant);
@@ -44,6 +48,13 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const currentColor = currentFabric?.colorsList.find(
     (c) => String(c.id) === selectedColor
   );
+
+  // Update wishlist state when color changes
+  useEffect(() => {
+    if (currentColor) {
+      setIsWishlisted(currentColor.is_wishlist || false);
+    }
+  }, [currentColor]);
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = Math.max(1, quantity + delta);
@@ -76,14 +87,21 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     });
   };
 
-  const handleWishlistClick = () => {
-    setIsWishlisted(!isWishlisted);
-    // Handle wishlist toggle logic
-    console.log('Wishlist toggle', {
-      productId: data.product_info.id,
-      colorId: selectedColor,
-      isWishlisted: !isWishlisted,
-    });
+  const handleWishlistClick = async () => {
+    if (!currentColor?.variant_id) return;
+
+    if (isWishlisted) {
+      // Remove from wishlist
+      try {
+        await removeFromWishlist(currentColor.variant_id);
+        setIsWishlisted(false);
+      } catch (error) {
+        // Error is handled in the hook with toast
+      }
+    } else {
+      // Show modal to select collection
+      setIsWishlistModalOpen(true);
+    }
   };
 
   const handleShareClick = () => {
@@ -209,6 +227,17 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
 
       <br />
       <UserReviews />
+
+      {/* Add to Wishlist Modal */}
+      {currentColor?.variant_id && (
+        <AddToWishlistModal
+          isOpen={isWishlistModalOpen}
+          onClose={() => setIsWishlistModalOpen(false)}
+          variantId={currentColor.variant_id}
+          productId={data.product_info.id}
+          onSuccess={() => setIsWishlisted(true)}
+        />
+      )}
     </div>
   );
 };

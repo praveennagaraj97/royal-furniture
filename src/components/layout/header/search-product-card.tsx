@@ -55,7 +55,10 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
             </div>
           )}
 
-          <WishlistAction />
+          <WishlistAction
+            isInWishlist={product.is_in_wishlist}
+            productId={product.id}
+          />
         </div>
 
         {/* Product Info Section - Compact */}
