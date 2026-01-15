@@ -346,3 +346,37 @@ export interface SearchResultsData {
 }
 
 export type SearchResultsResponse = BaseAPIResponse<SearchResultsData>;
+
+// Wishlist API Types
+export interface WishlistPreviewItem {
+  product_name: string;
+  product_image: string;
+  is_extra: boolean;
+}
+
+export interface WishlistCollection {
+  id: number;
+  title: string;
+  is_default: boolean;
+  preview_items: WishlistPreviewItem[];
+  total_items: number;
+  created_at: string;
+}
+
+export type WishlistCollectionsResponse = BaseAPIResponse<WishlistCollection[]>;
+
+export interface CreateCollectionPayload {
+  title: string;
+}
+
+export interface CreateCollectionResponseData {
+  id: number;
+  title: string;
+  is_default: boolean;
+  preview_items: WishlistPreviewItem[];
+  total_items: number;
+  created_at: string;
+}
+
+export type CreateCollectionResponse =
+  BaseAPIResponse<CreateCollectionResponseData>;

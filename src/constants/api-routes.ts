@@ -30,4 +30,8 @@ export const API_ROUTES = {
     SEARCH_SUGGESTIONS: '/products/search/',
     SEARCH_RESULTS: '/products/search/results/',
   },
+  WISHLIST: {
+    COLLECTIONS: '/wishlist/wishlist/',
+    CREATE_COLLECTION: '/wishlist/wishlist/create-collection/',
+  },
 } as const;

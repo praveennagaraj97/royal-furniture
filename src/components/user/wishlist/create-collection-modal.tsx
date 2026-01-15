@@ -1,8 +1,10 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
+import { wishlistService } from '@/services/api/wishlist-service';
 import { FC, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
+import { useToast } from '@/contexts/toast-context';
 
 interface CreateCollectionModalProps {
   isOpen: boolean;
@@ -16,13 +18,28 @@ const CreateCollectionModal: FC<CreateCollectionModalProps> = ({
   onSuccess,
 }) => {
   const [collectionName, setCollectionName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { showError, showSuccess } = useToast();
 
-  const handleDone = () => {
-    if (collectionName.trim()) {
-      // TODO: Wire API call here
+  const handleDone = async () => {
+    if (!collectionName.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      await wishlistService.createCollection({ title: collectionName.trim() });
       setCollectionName('');
+      showSuccess('Collection created successfully');
       onSuccess?.();
       onClose();
+    } catch (error) {
+      const parsedError = error as { generalError?: string; fieldErrors?: Record<string, string> };
+      const errorMessage =
+        parsedError?.generalError ||
+        parsedError?.fieldErrors?.title ||
+        'Failed to create collection. Please try again.';
+      showError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -76,10 +93,10 @@ const CreateCollectionModal: FC<CreateCollectionModalProps> = ({
           <button
             type="button"
             onClick={handleDone}
-            disabled={!collectionName.trim()}
+            disabled={!collectionName.trim() || isSubmitting}
             className="w-full py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Done
+            {isSubmitting ? 'Creating...' : 'Done'}
           </button>
         </div>
       </div>
