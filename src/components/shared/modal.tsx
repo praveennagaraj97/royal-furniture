@@ -187,7 +187,9 @@ const Modal: FC<ModalProps> = ({
                 {/* Modal Content */}
                 <motion.div
                   ref={modalRef}
-                  className={`bg-white shadow-2xl ${isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`} ${className} flex flex-col overflow-hidden ${
+                  className={`bg-white shadow-2xl ${
+                    isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`
+                  } ${className} flex flex-col overflow-hidden ${
                     isMobile
                       ? 'rounded-t-2xl max-h-[95vh]'
                       : 'sm:rounded-lg rounded-t-2xl max-h-[95vh]'
@@ -251,7 +253,9 @@ const Modal: FC<ModalProps> = ({
                 {/* Modal Content */}
                 <motion.div
                   ref={modalRef}
-                  className={`bg-white shadow-2xl ${isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`} ${className} flex flex-col overflow-hidden ${
+                  className={`bg-white shadow-2xl ${
+                    isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`
+                  } ${className} flex flex-col overflow-hidden ${
                     isMobile
                       ? 'rounded-t-2xl max-h-[95vh]'
                       : 'rounded-lg max-h-[95vh]'
@@ -297,28 +301,34 @@ const Modal: FC<ModalProps> = ({
       <AnimatePresence mode="wait">
         {isOpen && (
           <>
-              {/* Backdrop */}
-              <motion.div
-                ref={backdropRef}
-                className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-start sm:justify-end p-0 sm:p-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                onMouseDown={handleBackdropMouseDown}
-                onMouseUp={handleBackdropMouseUp}
-                onTouchStart={handleBackdropTouchStart}
-                onTouchEnd={handleBackdropTouchEnd}
-                onClick={preventClose ? handleBackdropClick : undefined}
-              >
+            {/* Backdrop */}
+            <motion.div
+              ref={backdropRef}
+              className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-start sm:justify-end p-0 sm:p-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onMouseDown={handleBackdropMouseDown}
+              onMouseUp={handleBackdropMouseUp}
+              onTouchStart={handleBackdropTouchStart}
+              onTouchEnd={handleBackdropTouchEnd}
+              onClick={preventClose ? handleBackdropClick : undefined}
+            >
               {/* Modal Content */}
               <motion.div
                 ref={modalRef}
-                className={`bg-white shadow-2xl ${isMobile ? 'w-full' : 'sm:w-auto sm:min-w-[400px] sm:max-w-[500px]'} ${sizeClassMap[size]} ${className} fixed sm:fixed bottom-0 sm:bottom-0 left-0 sm:left-auto right-0 sm:right-0 sm:top-0 ${
+                className={`bg-white shadow-2xl ${
+                  isMobile ? 'w-full' : 'sm:w-auto sm:min-w-100 sm:max-w-125'
+                } ${
+                  sizeClassMap[size]
+                } ${className} fixed sm:fixed bottom-0 sm:bottom-0 left-0 sm:left-auto right-0 sm:right-0 sm:top-0 ${
                   isMobile
                     ? 'rounded-t-2xl max-h-[95vh]'
                     : 'sm:h-screen max-h-[95vh] sm:max-h-none rounded-t-2xl sm:rounded-l-2xl sm:rounded-t-2xl'
-                } flex flex-col overflow-hidden ${shouldShake ? 'modal-shake' : ''}`}
+                } flex flex-col overflow-hidden ${
+                  shouldShake ? 'modal-shake' : ''
+                }`}
                 initial={
                   isMobile
                     ? { opacity: 0, y: '100%' }
