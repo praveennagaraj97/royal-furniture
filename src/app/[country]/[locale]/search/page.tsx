@@ -5,14 +5,8 @@ interface SearchPageProps {
     locale: string;
     country: string;
   }>;
-  searchParams: Promise<{
-    q?: string;
-  }>;
 }
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { q } = await searchParams;
-  const searchQuery = q || '';
-
-  return <SearchResults searchQuery={searchQuery} />;
+export default async function SearchPage({}: SearchPageProps) {
+  return <SearchResults />;
 }

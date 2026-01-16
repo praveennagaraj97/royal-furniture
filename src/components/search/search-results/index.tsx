@@ -5,6 +5,7 @@ import ProductCard from '@/components/shared/ui/product-listing/product-card';
 import { ProductsListSkeleton } from '@/components/skeletons/products-list-skeleton';
 import { useGetSearchResults } from '@/hooks/api';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 import { SearchEmptyState } from './empty-state';
 import SortBar from './sort-bar';
@@ -23,12 +24,15 @@ const sortOptions: SortOption[] = [
   { id: 'discount', label: 'Discount' },
 ];
 
-interface SearchResultsProps {
-  searchQuery: string;
-}
-
-const SearchResults: FC<SearchResultsProps> = ({ searchQuery }) => {
+const SearchResults: FC = () => {
   const [selectedSort, setSelectedSort] = useState('relevant');
+  const searchParams = useSearchParams();
+
+  // Read search query directly from URL
+  const searchQuery = useMemo(() => {
+    const q = searchParams?.get('q');
+    return q || '';
+  }, [searchParams]);
 
   // Fetch search results from API
   const {
