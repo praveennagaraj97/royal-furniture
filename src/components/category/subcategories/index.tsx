@@ -16,7 +16,11 @@ const SubCategories: FC = () => {
   const { categories } = useLayoutData();
   const pathName = useAppPathName();
 
-  const { subcategory: activeSubcategory } = useParams();
+  const params = useParams();
+  const { subcategory: activeSubcategory, product } = params;
+
+  // Don't show subcategories on product detail pages
+  if (product) return null;
 
   const selectedCategory = categories.find(
     (category) => category.slug === pathName.split('/')[1]
