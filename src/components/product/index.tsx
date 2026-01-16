@@ -1,12 +1,12 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
+import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
-import { useState, useEffect, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import { IoStorefront } from 'react-icons/io5';
-import { useWishlistActions } from '@/hooks/use-wishlist-actions';
-import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
 import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
@@ -14,6 +14,7 @@ import { ProductActions } from './product-actions';
 import { ProductAdditionalInfo } from './product-additional-info';
 import { ProductHeader } from './product-header';
 import { ProductOptions } from './product-options';
+import StoreLocatorModal from './store-locator-modal';
 import { UserReviews } from './user-reviews';
 
 export interface ProductDetailProps {
@@ -38,6 +39,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
   const { removeFromWishlist, isRemoving } = useWishlistActions();
 
   // Get current selected color variant
@@ -181,6 +183,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               >
                 <button
                   type="button"
+                  onClick={() => setIsStoreLocatorOpen(true)}
                   className="w-full flex items-center justify-between p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
                 >
                   <div className="flex items-center gap-2">
@@ -238,6 +241,12 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           onSuccess={() => setIsWishlisted(true)}
         />
       )}
+
+      {/* Store Locator Modal */}
+      <StoreLocatorModal
+        isOpen={isStoreLocatorOpen}
+        onClose={() => setIsStoreLocatorOpen(false)}
+      />
     </div>
   );
 };
