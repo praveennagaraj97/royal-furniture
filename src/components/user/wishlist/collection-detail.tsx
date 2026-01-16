@@ -29,6 +29,7 @@ const dummyProducts: ProductItem[] = [
       slug: 'sofas',
     },
     sub_category: {
+      category_slug: 'sofas',
       id: 1,
       name: 'Sectionals',
       slug: 'sectionals',
@@ -60,6 +61,7 @@ const dummyProducts: ProductItem[] = [
       slug: 'sofas',
     },
     sub_category: {
+      category_slug: 'sofas',
       id: 1,
       name: 'Sectionals',
       slug: 'sectionals',
@@ -91,6 +93,7 @@ const dummyProducts: ProductItem[] = [
       slug: 'dining',
     },
     sub_category: {
+      category_slug: 'dining',
       id: 2,
       name: 'Dining Sets',
       slug: 'dining-sets',
@@ -122,6 +125,7 @@ const dummyProducts: ProductItem[] = [
       slug: 'tables',
     },
     sub_category: {
+      category_slug: 'tables',
       id: 3,
       name: 'Coffee Tables',
       slug: 'coffee-tables',

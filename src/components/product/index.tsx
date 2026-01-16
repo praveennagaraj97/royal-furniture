@@ -99,7 +99,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       try {
         await removeFromWishlist(currentColor.variant_id);
         setIsWishlisted(false);
-      } catch (error) {
+      } catch {
         // Error is handled in the hook with toast
       }
     } else {

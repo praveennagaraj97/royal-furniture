@@ -56,7 +56,7 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
           {/* Product Count - Desktop only */}
           <div className="hidden lg:block px-3 py-1.5 bg-gray-100 rounded-lg">
             <span className="text-sm font-medium text-gray-900">
-              {productCount} Products
+              {productCount} {productCount === 1 ? 'Product' : 'Products'}
             </span>
           </div>
 
