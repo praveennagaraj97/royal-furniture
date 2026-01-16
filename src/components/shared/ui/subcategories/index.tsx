@@ -2,6 +2,7 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
+import { AppLink } from '@/hooks';
 import { SubCategoryItem } from '@/types';
 import Image from 'next/image';
 import { FC, useState } from 'react';
@@ -40,16 +41,18 @@ const SpotLightCard: FC<{ item: SubCategoryItem }> = ({ item }) => {
     >
       {/* Card Image Container */}
       <div className="relative w-full aspect-3/4 rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300">
-        <Image
-          src={item.image || ''}
-          alt={item.name || ''}
-          fill
-          className="object-cover transition-transform duration-300"
-          sizes="(max-width: 640px) 200px, (max-width: 768px) 220px, (max-width: 1024px) 240px, 260px"
-          style={{
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          }}
-        />
+        <AppLink href={`/${item.category_slug}/${item.slug}`}>
+          <Image
+            src={item.image || ''}
+            alt={item.name || ''}
+            fill
+            className="object-cover transition-transform duration-300"
+            sizes="(max-width: 640px) 200px, (max-width: 768px) 220px, (max-width: 1024px) 240px, 260px"
+            style={{
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+            }}
+          />
+        </AppLink>
       </div>
 
       {/* Label Text Below Card */}

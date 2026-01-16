@@ -6,7 +6,6 @@ import SubcategoryTopBar from '@/components/category/subcategory-detail/subcateg
 import { useLayoutData } from '@/contexts/layout-context';
 import { useGetProducts } from '@/hooks/api';
 import { useResizeWindow } from '@/hooks/use-resize-window';
-import { ProductItem } from '@/types';
 import { AnimatePresence } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
@@ -25,11 +24,7 @@ const sortOptions: SortOption[] = [
   { id: 'discount', label: 'Discount' },
 ];
 
-interface SubcategoryDetailProps {
-  products?: ProductItem[];
-}
-
-const SubcategoryDetail: FC<SubcategoryDetailProps> = () => {
+const SubcategoryDetail: FC = () => {
   const params = useParams();
   const { categories } = useLayoutData();
   const [isFilterVisible, setIsFilterVisible] = useState(false);

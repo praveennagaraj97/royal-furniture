@@ -4,7 +4,7 @@ import { ViewOnce } from '@/components/shared/animations';
 import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
-import { useEffect, useState, type FC } from 'react';
+import { startTransition, useEffect, useState, type FC } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import { IoStorefront } from 'react-icons/io5';
 import { GeneralInformation } from './general-information';
@@ -40,7 +40,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const [quantity, setQuantity] = useState(1);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
-  const { removeFromWishlist, isRemoving } = useWishlistActions();
+  const { removeFromWishlist } = useWishlistActions();
 
   // Get current selected color variant
   const currentVariant = data.variants.find((v) => v.name === selectedVariant);
@@ -54,7 +54,9 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   // Update wishlist state when color changes
   useEffect(() => {
     if (currentColor) {
-      setIsWishlisted(currentColor.is_wishlist || false);
+      startTransition(() => {
+        setIsWishlisted(currentColor.is_wishlist || false);
+      });
     }
   }, [currentColor]);
 

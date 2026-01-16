@@ -1,4 +1,5 @@
 import { ProductDetail } from '@/components/product';
+import ProductListing from '@/components/shared/ui/product-listing';
 import { ecommerceService } from '@/services/api/ecommerce-service';
 import { getCountriesWithLocaleParams } from '@/utils/generated';
 import { notFound } from 'next/navigation';
@@ -30,19 +31,32 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <Fragment>
       <ProductDetail data={productData} />
-      {/* <div className="py-6 mt-8 space-y-4">
-        <ProductListing
-          title="Frequently Bought Together"
-          seeAllHref="/products"
-          products={response.data.frequently_bought_together || []}
-        />
+      {(productData.frequently_bought_together.length > 0 ||
+        productData.similar_products.length > 0 ||
+        productData.you_may_also_like.length > 0) && (
+        <div className="py-6 mt-8 space-y-4">
+          {productData.frequently_bought_together.length > 0 && (
+            <ProductListing
+              title="Frequently Bought Together"
+              products={productData.frequently_bought_together || []}
+            />
+          )}
 
-        <ProductListing
-          title="Similar Products"
-          seeAllHref="/products"
-          products={response.data.similar_products || []}
-        />
-      </div> */}
+          {productData.similar_products.length > 0 && (
+            <ProductListing
+              title="Similar Products"
+              products={productData.similar_products || []}
+            />
+          )}
+
+          {productData.you_may_also_like.length > 0 && (
+            <ProductListing
+              title="You May Also Like"
+              products={productData.you_may_also_like || []}
+            />
+          )}
+        </div>
+      )}
     </Fragment>
   );
 }

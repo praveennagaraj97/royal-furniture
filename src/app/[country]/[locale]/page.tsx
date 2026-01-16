@@ -1,12 +1,12 @@
-import Hero from '@/components/shared/ui/hero';
-import LatestBlogs from '@/components/shared/ui/latest-blogs';
-import Offers from '@/components/shared/ui/offers';
-import SubCategoriesSwiper from '@/components/shared/ui/subcategories';
 import CountdownTag from '@/components/shared/ui/countdown-tag';
 import FadeSlideshow from '@/components/shared/ui/fade-slideshow';
 import FullWidthBanner from '@/components/shared/ui/fullwidth-banner';
+import Hero from '@/components/shared/ui/hero';
+import LatestBlogs from '@/components/shared/ui/latest-blogs';
+import Offers from '@/components/shared/ui/offers';
 import ProductListing from '@/components/shared/ui/product-listing';
 import SectionTitleTag from '@/components/shared/ui/section-title-tag';
+import SubCategoriesSwiper from '@/components/shared/ui/subcategories';
 import { ecommerceService } from '@/services/api/ecommerce-service';
 import { CountryAndLocaleParams } from '@/types';
 import { getCountriesWithLocaleParams } from '@/utils/generated';

@@ -13,12 +13,14 @@ export interface ProductListingProps {
   title: ReactNode;
   seeAllHref?: string;
   products: ProductItem[];
+  isResponsive?: boolean;
 }
 
 const ProductListing: FC<ProductListingProps> = ({
   title,
   seeAllHref,
   products,
+  isResponsive = false,
 }) => {
   const t = useTranslations();
 
@@ -53,7 +55,9 @@ const ProductListing: FC<ProductListingProps> = ({
       {/* Products Swiper */}
       <Swiper gap={4} showNavigation hideArrowOnMobile>
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <div key={product.id} className="shrink-0 w-80 max-w-80">
+            <ProductCard product={product} isResponsive={isResponsive} />
+          </div>
         ))}
       </Swiper>
     </StaggerContainer>

@@ -104,6 +104,7 @@ export interface SubCategoryItem {
   image: string;
   category_name: string;
   category_id: number;
+  category_slug: string;
 }
 
 export interface ProductColor {
