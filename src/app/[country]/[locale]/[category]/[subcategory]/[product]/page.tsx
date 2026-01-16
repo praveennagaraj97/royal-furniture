@@ -8,13 +8,18 @@ interface ProductPageProps {
   params: Promise<{
     category: string;
     product: string;
+    locale: string;
+    country: string;
   }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { product } = await params;
+  const { product, country, locale } = await params;
 
-  const response = await ecommerceService.getProductDetail(product);
+  const response = await ecommerceService.getProductDetail(product, {
+    country,
+    locale,
+  });
 
   if (!response.data) {
     notFound();
@@ -25,19 +30,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <Fragment>
       <ProductDetail data={productData} />
-      <div className="py-6 mt-8 space-y-4">
-        {/* <ProductListingWithCart
+      {/* <div className="py-6 mt-8 space-y-4">
+        <ProductListing
           title="Frequently Bought Together"
           seeAllHref="/products"
-          products={productsData}
-        /> */}
+          products={response.data.frequently_bought_together || []}
+        />
 
-        {/* <ProductListing
+        <ProductListing
           title="Similar Products"
           seeAllHref="/products"
-          products={productsData}
-        /> */}
-      </div>
+          products={response.data.similar_products || []}
+        />
+      </div> */}
     </Fragment>
   );
 }

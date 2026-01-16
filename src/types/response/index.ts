@@ -265,7 +265,7 @@ export interface ProductDetailData {
     total_reviews: number;
     rating_breakdown: Record<string, number>;
   };
-  frequently_bought_together: unknown[];
+  frequently_bought_together: ProductItem[];
   payment_options: {
     methods: string[];
     flexi_payment_available: boolean;
@@ -282,14 +282,8 @@ export interface ProductDetailData {
     category: Pick<ProductCategory, 'id' | 'name'>;
     sub_category: Pick<SubCategoryItem, 'id' | 'name'>[];
   };
-  similar_products: Array<
-    Pick<ProductItem, 'id' | 'name' | 'slug' | 'pricing'> & {
-      thumbnail: string;
-      label: string[];
-      sku: string;
-    }
-  >;
-  you_may_also_like: unknown[];
+  similar_products: ProductItem[];
+  you_may_also_like: ProductItem[];
 }
 
 export type ProductDetailResponse = BaseAPIResponse<ProductDetailData>;
