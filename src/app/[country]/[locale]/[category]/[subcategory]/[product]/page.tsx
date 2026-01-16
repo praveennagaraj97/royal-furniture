@@ -1,5 +1,4 @@
 import { ProductDetail } from '@/components/product';
-import { Breadcrumb } from '@/components/shared/ui/breadcrumb';
 import { ecommerceService } from '@/services/api/ecommerce-service';
 import { getCountriesWithLocaleParams } from '@/utils/generated';
 import { notFound } from 'next/navigation';
@@ -13,7 +12,7 @@ interface ProductPageProps {
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { category, product } = await params;
+  const { product } = await params;
 
   const response = await ecommerceService.getProductDetail(product);
 
@@ -25,13 +24,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <Fragment>
-      <Breadcrumb
-        items={[
-          { label: 'Home', href: '/' },
-          { label: category, href: `/${category}` },
-          { label: productData.product_info.name },
-        ]}
-      />
       <ProductDetail data={productData} />
       <div className="py-6 mt-8 space-y-4">
         {/* <ProductListingWithCart

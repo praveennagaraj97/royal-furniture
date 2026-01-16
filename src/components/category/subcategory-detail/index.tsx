@@ -4,6 +4,7 @@ import ProductsList from '@/components/category/subcategory-detail/products-list
 import SubcategoryFilters from '@/components/category/subcategory-detail/subcategory-filters';
 import SubcategoryTopBar from '@/components/category/subcategory-detail/subcategory-top-bar';
 import { useLayoutData } from '@/contexts/layout-context';
+import { useGetProducts } from '@/hooks/api';
 import { useResizeWindow } from '@/hooks/use-resize-window';
 import { ProductItem } from '@/types';
 import { AnimatePresence } from 'framer-motion';
@@ -16,71 +17,48 @@ export interface SortOption {
 }
 
 const sortOptions: SortOption[] = [
-  { id: 'recommended', label: 'Recommended' },
-  { id: 'best-seller', label: 'Best seller' },
-  { id: 'price-low', label: 'Price- Low to High' },
-  { id: 'price-high', label: 'Price-High to Low' },
-  { id: 'new-arrival', label: 'New Arrival' },
   { id: 'relevant', label: 'Relevant Products' },
+  { id: 'best_seller', label: 'Best Seller' },
+  { id: 'new_arrival', label: 'New Arrival' },
+  { id: 'price_asc', label: 'Price: Low to High' },
+  { id: 'price_desc', label: 'Price: High to Low' },
   { id: 'discount', label: 'Discount' },
 ];
 
 interface SubcategoryDetailProps {
-  products: ProductItem[];
+  products?: ProductItem[];
 }
 
-// Dummy product data generator
-const generateDummyProducts = (count: number): ProductItem[] => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i + 1,
-    name: 'Premium Sofa Set',
-    slug: `premium-sofa-set-${i + 1}`,
-    description: 'Premium quality sofa set',
-    category: {
-      id: 1,
-      name: 'Furniture',
-      slug: 'furniture',
-    },
-    sub_category: {
-      id: 1,
-      name: 'Sofas',
-      slug: 'sofas',
-      image: '',
-      description: '',
-      category_name: 'Furniture',
-      category_id: 1,
-    },
-    pricing: {
-      base_price: '799',
-      offer_price: '799',
-      offer_percentage: '25',
-      tax: null,
-    },
-    thumbnail_image:
-      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=500&fit=crop',
-    label: [],
-    is_offer: true,
-    average_rating: 4.5,
-    is_in_wishlist: false,
-  }));
-};
-
-const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
+const SubcategoryDetail: FC<SubcategoryDetailProps> = () => {
   const params = useParams();
   const { categories } = useLayoutData();
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-  const [selectedSort, setSelectedSort] = useState('recommended');
+  const [selectedSort, setSelectedSort] = useState('relevant');
 
-  // Get subcategory ID from layout context
+  // Get subcategory slug and ID from layout context
+  const subcategorySlug = useMemo(() => {
+    return params.subcategory as string;
+  }, [params.subcategory]);
+
   const subcategoryId = useMemo(() => {
     const categorySlug = params.category as string;
-    const subcategorySlug = params.subcategory as string;
     const category = categories.find((cat) => cat.slug === categorySlug);
     const subcategory = category?.subCategories?.find(
       (sub) => sub.slug === subcategorySlug
     );
     return subcategory?.id || null;
-  }, [categories, params.category, params.subcategory]);
+  }, [categories, params.category, subcategorySlug]);
+
+  // Fetch products from API
+  const {
+    products: apiProducts,
+    isLoading: isLoadingProducts,
+    count: productCount,
+  } = useGetProducts({
+    sub_category_id: subcategorySlug,
+    sort: selectedSort !== 'relevant' ? selectedSort : undefined,
+    enabled: true,
+  });
 
   // Update filter visibility on window resize
   useResizeWindow(() => {
@@ -89,11 +67,10 @@ const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
     }
   });
 
-  // Use provided products or generate dummy ones
-  const displayProducts = useMemo(
-    () => (products.length > 0 ? products : generateDummyProducts(48)),
-    [products]
-  );
+  // Use API products only
+  const displayProducts = useMemo(() => {
+    return apiProducts || [];
+  }, [apiProducts]);
 
   const handleToggleFilter = () => {
     setIsFilterVisible(!isFilterVisible);
@@ -103,7 +80,7 @@ const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
     <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
       {/* Top Bar */}
       <SubcategoryTopBar
-        productCount={displayProducts.length}
+        productCount={productCount || displayProducts.length}
         isFilterVisible={isFilterVisible}
         onToggleFilter={handleToggleFilter}
         sortOptions={sortOptions}
@@ -129,6 +106,7 @@ const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
         <ProductsList
           products={displayProducts}
           isFilterVisible={isFilterVisible}
+          isLoading={isLoadingProducts}
         />
       </div>
     </div>

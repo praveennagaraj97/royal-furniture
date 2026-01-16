@@ -106,6 +106,12 @@ export interface SubCategoryItem {
   category_id: number;
 }
 
+export interface ProductColor {
+  id: number;
+  name: string;
+  hex: string;
+}
+
 export interface ProductItem {
   id: number;
   name: string;
@@ -119,6 +125,7 @@ export interface ProductItem {
   is_offer: boolean;
   average_rating: number;
   is_in_wishlist: boolean;
+  available_colors?: ProductColor[];
 }
 
 export interface ProductCategory {
@@ -309,3 +316,84 @@ export interface CategoryWithSubCategories extends CategoryItem {
 
 export type CategoriesResponse = BaseAPIResponse<CategoryItem[]>;
 export type SubCategoriesResponse = BaseAPIResponse<SubCategoryItem[]>;
+
+// Search API Types
+export interface PopularSearch {
+  id: number;
+  search_term: string;
+  display_order: number;
+}
+
+export interface TrendingCategory {
+  id: number;
+  name: string;
+  icon: string;
+  banner_image: string | null;
+  product_count: number;
+}
+
+export interface SearchSuggestionsData {
+  popular_searches: PopularSearch[];
+  most_searched_products: {
+    items: ProductItem[];
+  };
+  trending_categories: {
+    items: TrendingCategory[];
+  };
+}
+
+export type SearchSuggestionsResponse = BaseAPIResponse<SearchSuggestionsData>;
+
+export interface SearchResultsData {
+  results: ProductItem[];
+  total_count: number;
+  page: number;
+  total_pages: number;
+  query: string;
+}
+
+export type SearchResultsResponse = BaseAPIResponse<SearchResultsData>;
+
+// Product Listing API Types
+export interface ProductListingData {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProductItem[];
+}
+
+export type ProductListingResponse = BaseAPIResponse<ProductListingData>;
+
+// Wishlist API Types
+export interface WishlistPreviewItem {
+  product_name: string;
+  product_image: string;
+  is_extra: boolean;
+}
+
+export interface WishlistCollection {
+  id: number;
+  title: string;
+  is_default: boolean;
+  preview_items: WishlistPreviewItem[];
+  total_items: number;
+  created_at: string;
+}
+
+export type WishlistCollectionsResponse = BaseAPIResponse<WishlistCollection[]>;
+
+export interface CreateCollectionPayload {
+  title: string;
+}
+
+export interface CreateCollectionResponseData {
+  id: number;
+  title: string;
+  is_default: boolean;
+  preview_items: WishlistPreviewItem[];
+  total_items: number;
+  created_at: string;
+}
+
+export type CreateCollectionResponse =
+  BaseAPIResponse<CreateCollectionResponseData>;
