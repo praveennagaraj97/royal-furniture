@@ -12,9 +12,13 @@ import SearchProductCard from './search-product-card';
 interface SearchDropdownProps {
   isOpen: boolean;
   searchQuery: string;
+  onItemClick?: () => void;
 }
 
-const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen }) => {
+const SearchDropdown: FC<SearchDropdownProps> = ({
+  isOpen,
+  onItemClick,
+}) => {
   const {
     popularSearches,
     mostSearchedProducts,
@@ -57,6 +61,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen }) => {
                       href={`/search?q=${encodeURIComponent(
                         search.search_term
                       )}`}
+                      onClick={onItemClick}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 transition-colors"
                     >
                       {search.search_term.toLowerCase().includes('flash') && (
@@ -81,6 +86,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen }) => {
                 </h3>
                 <AppLink
                   href="/search"
+                  onClick={onItemClick}
                   className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 transition-colors"
                 >
                   <span>See all</span>
@@ -95,7 +101,9 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen }) => {
                     distance={10}
                     duration={0.3}
                   >
-                    <SearchProductCard product={product} />
+                    <div onClick={onItemClick}>
+                      <SearchProductCard product={product} />
+                    </div>
                   </StaggerItem>
                 ))}
               </div>
@@ -113,6 +121,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen }) => {
                 </h3>
                 <AppLink
                   href="/categories"
+                  onClick={onItemClick}
                   className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 transition-colors"
                 >
                   <span>See all</span>
@@ -130,6 +139,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen }) => {
                     >
                       <AppLink
                         href={`/search?q=${encodeURIComponent(category.name)}`}
+                        onClick={onItemClick}
                         className="group relative block w-full aspect-square rounded-lg overflow-hidden bg-gray-100 hover:shadow-md transition-shadow"
                       >
                         <Image

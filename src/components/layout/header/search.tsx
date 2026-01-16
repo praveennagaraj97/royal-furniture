@@ -4,9 +4,9 @@ import { SearchResultsSkeleton } from '@/components/skeletons/search-results-ske
 import { useGetSearchResults } from '@/hooks/api';
 import { useClickOutside } from '@/hooks/use-click-outside';
 import { useDebounce } from '@/hooks/use-debounce';
+import { useAppRouter } from '@/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import { FC, useRef, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import SearchDropdown from './search-dropdown';
@@ -14,12 +14,17 @@ import SearchProductCard from './search-product-card';
 
 const SearchBar: FC = () => {
   const t = useTranslations('common');
-  const router = useRouter();
+  const router = useAppRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const debouncedQuery = useDebounce(searchQuery, 300);
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+    setIsFocused(false);
+  };
 
   const { results, isLoading } = useGetSearchResults({
     query: debouncedQuery,
@@ -54,7 +59,7 @@ const SearchBar: FC = () => {
   };
 
   const hasQuery = debouncedQuery.trim().length > 0;
-  const hasResults = results.length > 0;
+  const hasResults = results && results.length > 0;
   const showEmptyState = hasQuery && !hasResults && !isLoading;
   const showSuggestions = !hasQuery || (hasQuery && isLoading);
 
@@ -86,7 +91,11 @@ const SearchBar: FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             {showSuggestions ? (
-              <SearchDropdown isOpen={true} searchQuery={searchQuery} />
+              <SearchDropdown
+                isOpen={true}
+                searchQuery={searchQuery}
+                onItemClick={closeDropdown}
+              />
             ) : showEmptyState ? (
               <div
                 className="bg-white rounded-xl shadow-2xl border border-gray-200 max-h-[80vh] overflow-y-auto"
@@ -144,7 +153,7 @@ const SearchBar: FC = () => {
                       <h3 className="text-base font-semibold text-gray-900 mb-4">
                         Search Results
                       </h3>
-                      {results.length > 0 ? (
+                      {results && results.length > 0 ? (
                         <div className="grid grid-cols-3 gap-3">
                           {results.map((product, index) => (
                             <motion.div
@@ -156,6 +165,7 @@ const SearchBar: FC = () => {
                                 delay: index * 0.05,
                                 ease: 'easeOut',
                               }}
+                              onClick={closeDropdown}
                             >
                               <SearchProductCard product={product} />
                             </motion.div>

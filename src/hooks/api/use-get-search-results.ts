@@ -6,23 +6,34 @@ import type { SearchResultsResponse } from '@/types/response';
 import useSWR from 'swr';
 
 interface UseGetSearchResultsProps {
-  query: string;
-  limit?: number;
-  page?: number;
+  q?: string | null;
+  query?: string | null;
+  sort?: string;
   enabled?: boolean;
 }
 
 export const useGetSearchResults = ({
+  q,
   query,
-  limit = 10,
-  page = 1,
+  sort,
   enabled = true,
 }: UseGetSearchResultsProps) => {
+  // Support both 'q' and 'query' parameters for backward compatibility
+  const searchQuery = q || query || null;
+
+  const params = new URLSearchParams();
+
+  if (searchQuery) {
+    params.append('q', searchQuery);
+  }
+  if (sort) {
+    params.append('sort', sort);
+  }
+
+  const queryString = params.toString();
   const url =
-    enabled && query.trim()
-      ? `${API_ROUTES.PRODUCTS.SEARCH_RESULTS}?q=${encodeURIComponent(
-          query
-        )}&limit=${limit}&page=${page}`
+    enabled && searchQuery
+      ? `${API_ROUTES.PRODUCTS.SEARCH_RESULTS}?${queryString}`
       : null;
 
   const { data, error, isLoading, mutate } = useSWR<SearchResultsResponse>(
@@ -34,12 +45,16 @@ export const useGetSearchResults = ({
     }
   );
 
+  const products = data?.data?.results || [];
+
   return {
-    results: data?.data?.results || [],
+    // Return both 'results' and 'products' for backward compatibility
+    results: products,
+    products: products,
     totalCount: data?.data?.total_count || 0,
     page: data?.data?.page || 1,
-    totalPages: data?.data?.total_pages || 0,
-    query: data?.data?.query || '',
+    totalPages: data?.data?.total_pages || 1,
+    query: data?.data?.query || searchQuery || '',
     isLoading,
     error,
     mutate,
