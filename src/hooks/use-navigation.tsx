@@ -8,6 +8,7 @@ import {
   useRouter as useNextRouter,
   useParams,
 } from 'next/navigation';
+import NProgress from 'nprogress';
 import { ReactNode, forwardRef, useCallback, useMemo } from 'react';
 
 /**
@@ -53,12 +54,28 @@ export function useAppRouter() {
     [country, locale]
   );
 
+  const handlePush = useCallback(
+    (href: string, options?: Parameters<typeof router.push>[1]) => {
+      // Start progress bar immediately for programmatic navigation
+      NProgress.start();
+      return router.push(formatHref(href), options);
+    },
+    [router, formatHref]
+  );
+
+  const handleReplace = useCallback(
+    (href: string, options?: Parameters<typeof router.replace>[1]) => {
+      // Start progress bar immediately for programmatic navigation
+      NProgress.start();
+      return router.replace(formatHref(href), options);
+    },
+    [router, formatHref]
+  );
+
   return {
     ...router,
-    push: (href: string, options?: Parameters<typeof router.push>[1]) =>
-      router.push(formatHref(href), options),
-    replace: (href: string, options?: Parameters<typeof router.replace>[1]) =>
-      router.replace(formatHref(href), options),
+    push: handlePush,
+    replace: handleReplace,
     prefetch: (href: string, options?: Parameters<typeof router.prefetch>[1]) =>
       router.prefetch(formatHref(href), options),
     formatHref,
@@ -114,12 +131,32 @@ export interface AppLinkProps extends Omit<LinkProps, 'href'> {
  * Custom Link component that automatically prefixes href with country and locale
  */
 export const AppLink = forwardRef<HTMLAnchorElement, AppLinkProps>(
-  ({ href, children, onClick, ...props }, ref) => {
+  ({ href, children, onClick, target, ...props }, ref) => {
     const { formatHref } = useAppRouter();
     const finalHref = formatHref(href);
 
+    const handleClick = useCallback(
+      (e: React.MouseEvent<HTMLAnchorElement>) => {
+        // Start progress bar immediately for AppLink navigation
+        // Only for internal links without target="_blank"
+        if (
+          !target &&
+          finalHref &&
+          !finalHref.startsWith('http') &&
+          !finalHref.startsWith('mailto:') &&
+          !finalHref.startsWith('tel:')
+        ) {
+          NProgress.start();
+        }
+
+        // Call user's onClick handler if provided
+        onClick?.(e);
+      },
+      [finalHref, target, onClick]
+    );
+
     return (
-      <Link ref={ref} href={finalHref} onClick={onClick} {...props}>
+      <Link ref={ref} href={finalHref} onClick={handleClick} target={target} {...props}>
         {children}
       </Link>
     );
