@@ -16,12 +16,11 @@ export interface SortOption {
 }
 
 const sortOptions: SortOption[] = [
-  { id: 'recommended', label: 'Recommended' },
-  { id: 'best-seller', label: 'Best seller' },
-  { id: 'price-low', label: 'Price- Low to High' },
-  { id: 'price-high', label: 'Price-High to Low' },
-  { id: 'new-arrival', label: 'New Arrival' },
   { id: 'relevant', label: 'Relevant Products' },
+  { id: 'best_seller', label: 'Best Seller' },
+  { id: 'new_arrival', label: 'New Arrival' },
+  { id: 'price_asc', label: 'Price: Low to High' },
+  { id: 'price_desc', label: 'Price: High to Low' },
   { id: 'discount', label: 'Discount' },
 ];
 
@@ -69,7 +68,7 @@ const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
   const params = useParams();
   const { categories } = useLayoutData();
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-  const [selectedSort, setSelectedSort] = useState('recommended');
+  const [selectedSort, setSelectedSort] = useState('relevant');
 
   // Get subcategory ID from layout context
   const subcategoryId = useMemo(() => {
@@ -90,10 +89,68 @@ const SubcategoryDetail: FC<SubcategoryDetailProps> = ({ products }) => {
   });
 
   // Use provided products or generate dummy ones
-  const displayProducts = useMemo(
+  const rawProducts = useMemo(
     () => (products.length > 0 ? products : generateDummyProducts(48)),
     [products]
   );
+
+  // Sort products based on selected sort option
+  const displayProducts = useMemo(() => {
+    const productsToSort = [...rawProducts];
+
+    switch (selectedSort) {
+      case 'price_asc':
+        return productsToSort.sort((a, b) => {
+          const priceA = parseFloat(
+            a.pricing.offer_price || a.pricing.base_price || '0'
+          );
+          const priceB = parseFloat(
+            b.pricing.offer_price || b.pricing.base_price || '0'
+          );
+          return priceA - priceB;
+        });
+
+      case 'price_desc':
+        return productsToSort.sort((a, b) => {
+          const priceA = parseFloat(
+            a.pricing.offer_price || a.pricing.base_price || '0'
+          );
+          const priceB = parseFloat(
+            b.pricing.offer_price || b.pricing.base_price || '0'
+          );
+          return priceB - priceA;
+        });
+
+      case 'new_arrival':
+        // Sort by ID descending (assuming higher IDs are newer)
+        // If you have a created_at or date field, use that instead
+        return productsToSort.sort((a, b) => b.id - a.id);
+
+      case 'discount':
+        // Sort by discount percentage (highest discount first)
+        return productsToSort.sort((a, b) => {
+          const discountA = a.pricing.offer_percentage
+            ? parseFloat(a.pricing.offer_percentage)
+            : 0;
+          const discountB = b.pricing.offer_percentage
+            ? parseFloat(b.pricing.offer_percentage)
+            : 0;
+          return discountB - discountA;
+        });
+
+      case 'best_seller':
+        // Sort by rating (highest rating first)
+        // If you have a sales_count field, use that instead
+        return productsToSort.sort(
+          (a, b) => b.average_rating - a.average_rating
+        );
+
+      case 'relevant':
+      default:
+        // Keep original order (relevant/default sorting)
+        return productsToSort;
+    }
+  }, [rawProducts, selectedSort]);
 
   const handleToggleFilter = () => {
     setIsFilterVisible(!isFilterVisible);
