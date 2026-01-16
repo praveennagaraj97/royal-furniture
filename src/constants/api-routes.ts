@@ -29,11 +29,13 @@ export const API_ROUTES = {
     FILTER_VIEW: '/products/filter-view/',
     SEARCH_SUGGESTIONS: '/products/search/',
     SEARCH_RESULTS: '/products/search/results/',
+    LISTING: '/products/listing/',
   },
   WISHLIST: {
     COLLECTIONS: '/wishlist/wishlist/',
     CREATE_COLLECTION: '/wishlist/wishlist/create-collection/',
     ADD_ITEM: '/wishlist/wishlist/add-item/',
-    REMOVE_VARIANT: (variantId: number) => `/wishlist/wishlist/remove-variant/${variantId}/`,
+    REMOVE_VARIANT: (variantId: number) =>
+      `/wishlist/wishlist/remove-variant/${variantId}/`,
   },
 } as const;

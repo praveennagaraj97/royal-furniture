@@ -2,6 +2,8 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import ProductCard from '@/components/shared/ui/product-listing/product-card';
+import { ProductsListSkeleton } from '@/components/skeletons/products-list-skeleton';
+import { ProductsEmptyState } from '@/components/category/subcategory-detail/empty-state';
 import { ProductItem } from '@/types';
 import { motion } from 'framer-motion';
 import { FC } from 'react';
@@ -9,9 +11,30 @@ import { FC } from 'react';
 interface ProductsListProps {
   products: ProductItem[];
   isFilterVisible: boolean;
+  isLoading?: boolean;
 }
 
-const ProductsList: FC<ProductsListProps> = ({ products, isFilterVisible }) => {
+const ProductsList: FC<ProductsListProps> = ({
+  products,
+  isFilterVisible,
+  isLoading = false,
+}) => {
+  if (isLoading) {
+    return <ProductsListSkeleton isFilterVisible={isFilterVisible} />;
+  }
+
+  if (!products || products.length === 0) {
+    return (
+      <div
+        className={`flex-1 transition-all duration-300 ${
+          isFilterVisible ? 'lg:w-3/4' : 'w-full'
+        }`}
+      >
+        <ProductsEmptyState />
+      </div>
+    );
+  }
+
   return (
     <motion.div
       key={isFilterVisible ? 'with-filter' : 'without-filter'}

@@ -106,6 +106,12 @@ export interface SubCategoryItem {
   category_id: number;
 }
 
+export interface ProductColor {
+  id: number;
+  name: string;
+  hex: string;
+}
+
 export interface ProductItem {
   id: number;
   name: string;
@@ -119,6 +125,7 @@ export interface ProductItem {
   is_offer: boolean;
   average_rating: number;
   is_in_wishlist: boolean;
+  available_colors?: ProductColor[];
 }
 
 export interface ProductCategory {
@@ -346,6 +353,16 @@ export interface SearchResultsData {
 }
 
 export type SearchResultsResponse = BaseAPIResponse<SearchResultsData>;
+
+// Product Listing API Types
+export interface ProductListingData {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProductItem[];
+}
+
+export type ProductListingResponse = BaseAPIResponse<ProductListingData>;
 
 // Wishlist API Types
 export interface WishlistPreviewItem {
