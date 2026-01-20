@@ -12,6 +12,7 @@ interface SwiperProps {
   autoScroll?: boolean;
   autoScrollInterval?: number;
   hideArrowOnMobile?: boolean;
+  alwaysAlignStart?: boolean;
 }
 
 const Swiper: FC<SwiperProps> = ({
@@ -22,6 +23,7 @@ const Swiper: FC<SwiperProps> = ({
   autoScroll = false,
   autoScrollInterval = 5000,
   hideArrowOnMobile = false,
+  alwaysAlignStart = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -31,7 +33,6 @@ const Swiper: FC<SwiperProps> = ({
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const isHorizontalScrollRef = useRef<boolean | null>(null);
 
-  /* eslint-disable-next-line react-hooks/exhaustive-deps */
   const checkScrollPosition = useCallback(() => {
     if (!containerRef.current) return;
 
@@ -190,7 +191,7 @@ const Swiper: FC<SwiperProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`flex overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden overscroll-x-contain ${isCentered ? 'justify-center' : 'justify-start'}`}
+        className={`flex overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden overscroll-x-contain ${!alwaysAlignStart && isCentered ? 'justify-center' : 'justify-start'}`}
         style={{
           gap: `${gap * 0.25}rem`,
           WebkitOverflowScrolling: 'touch',

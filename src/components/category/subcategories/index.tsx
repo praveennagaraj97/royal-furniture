@@ -53,7 +53,13 @@ const SubCategories: FC = () => {
 
         <div className="">
           <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-4">
-            <Swiper className="px-0" gap={3} showNavigation hideArrowOnMobile>
+            <Swiper
+              className="px-0"
+              gap={3}
+              showNavigation
+              hideArrowOnMobile
+              alwaysAlignStart
+            >
               {subcategories.map((subcategory) => (
                 <StaggerItem
                   key={subcategory.id}
@@ -62,7 +68,7 @@ const SubCategories: FC = () => {
                   distance={20}
                   initialScale={0.9}
                   duration={0.6}
-                  className="min-w-40 sm:min-w-48 md:min-w-56 lg:min-w-64 xl:min-w-80 aspect-10/9"
+                  className="min-w-32 w-32"
                 >
                   <SubCategoryCard
                     subcategory={subcategory}
