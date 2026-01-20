@@ -1,7 +1,6 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { useTranslations } from 'next-intl';
 
 export interface ColorOption {
   id: string;
@@ -22,8 +21,6 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
   selectedColor,
   onColorChange,
 }) => {
-  const t = useTranslations();
-
   return (
     <div className="space-y-3">
       <ViewOnce
@@ -31,8 +28,8 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
         distance={15}
         duration={0.4}
         delay={0.1}
-        amount={0.01}
-        margin="-100px"
+        amount={0.1}
+        margin="0px"
       >
         <div className="flex items-center justify-between">
           <h3 className="text-sm md:text-base font-semibold text-gray-900">
@@ -41,56 +38,40 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
         </div>
       </ViewOnce>
       <div className="flex gap-3 flex-wrap">
-        {colors.slice(0, 4).map((color, index) => (
-          <ViewOnce
-            key={color.id}
-            type="scale"
-            initialScale={0.8}
-            duration={0.3}
-            delay={index * 0.05}
-            amount={0.01}
-            margin="-100px"
-          >
+        {colors.slice(0, 4).map((color) => {
+          const imageUrl = color.imageUrl || color.value;
+          const shouldUseImage = color.isImage || color.imageUrl;
+          const fallbackColor = color.value && color.value.startsWith('#') ? color.value : '#cccccc';
+
+          return (
             <button
+              key={color.id}
               type="button"
               onClick={() => onColorChange(color.id)}
-              className={`relative w-10 h-10 rounded-full border transition-all duration-200 ${
+              className={`relative w-10 h-10 rounded-full border transition-all duration-200 flex items-center justify-center overflow-hidden ${
                 selectedColor === color.id
                   ? 'border-deep-maroon ring ring-deep-maroon/20 scale-110'
                   : 'border-gray-300 hover:border-gray-400'
               }`}
               aria-label={color.name}
             >
-              {color.isImage || color.imageUrl ? (
-                <div
-                  className="w-full h-full rounded-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${color.imageUrl || color.value})`,
-                  }}
+              {shouldUseImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={imageUrl}
+                  alt={color.name}
+                  className="w-full h-full rounded-full object-cover"
                 />
               ) : (
                 <div
                   className="w-full h-full rounded-full"
-                  style={{ backgroundColor: color.value }}
+                  style={{ backgroundColor: fallbackColor }}
+                  title={color.name}
                 />
               )}
             </button>
-          </ViewOnce>
-        ))}
-        {/* <ViewOnce
-          type="fade"
-          duration={0.3}
-          delay={0.2}
-          amount={0.01}
-          margin="-100px"
-        >
-          <button
-            type="button"
-            className="text-deep-maroon hover:underline text-sm font-medium ml-3"
-          >
-            {t('common.seeAll')}
-          </button>
-        </ViewOnce> */}
+          );
+        })}
       </div>
     </div>
   );

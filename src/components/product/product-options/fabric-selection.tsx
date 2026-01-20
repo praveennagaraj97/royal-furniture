@@ -2,7 +2,6 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import type { ProductFabric } from '@/types/response';
-import Image from 'next/image';
 
 export interface FabricSelectionProps {
   fabrics: ProductFabric[];
@@ -21,8 +20,8 @@ export const FabricSelection: React.FC<FabricSelectionProps> = ({
       distance={15}
       duration={0.4}
       delay={0.1}
-      amount={0.01}
-      margin="-100px"
+      amount={0.1}
+      margin="0px"
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -31,35 +30,25 @@ export const FabricSelection: React.FC<FabricSelectionProps> = ({
           </h3>
         </div>
         <div className="flex gap-3 flex-wrap">
-          {fabrics.map((fabric, index) => (
-            <ViewOnce
+          {fabrics.map((fabric) => (
+            <button
               key={fabric.name}
-              type="scale"
-              initialScale={0.8}
-              duration={0.3}
-              delay={index * 0.05}
-              amount={0.01}
-              margin="-100px"
+              type="button"
+              onClick={() => onFabricChange(fabric.name)}
+              className={`relative w-16 h-16 rounded-lg border-2 transition-all duration-200 overflow-hidden ${
+                selectedFabric === fabric.name
+                  ? 'border-deep-maroon ring ring-deep-maroon/20 scale-110'
+                  : 'border-gray-300 hover:border-gray-400'
+              }`}
+              aria-label={fabric.name}
             >
-              <button
-                type="button"
-                onClick={() => onFabricChange(fabric.name)}
-                className={`relative w-16 h-16 rounded-lg border-2 transition-all duration-200 overflow-hidden ${
-                  selectedFabric === fabric.name
-                    ? 'border-deep-maroon ring ring-deep-maroon/20 scale-110'
-                    : 'border-gray-300 hover:border-gray-400'
-                }`}
-                aria-label={fabric.name}
-              >
-                <Image
-                  src={fabric.image}
-                  alt={fabric.name}
-                  fill
-                  className="object-cover"
-                  sizes="64px"
-                />
-              </button>
-            </ViewOnce>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={fabric.image}
+                alt={fabric.name}
+                className="w-full h-full object-cover"
+              />
+            </button>
           ))}
         </div>
       </div>
