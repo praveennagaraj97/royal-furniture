@@ -29,7 +29,7 @@ const formatCountdown = (totalSeconds: number): string => {
 
   return `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(
     2,
-    '0'
+    '0',
   )}m ${String(seconds).padStart(2, '0')}s`;
 };
 
@@ -82,7 +82,7 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
           />
           <div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-700">
+              <p className="text-xs md:text-sm text-gray-700">
                 4 interest-free payments or as low as{' '}
                 <span className="text-red-600 font-bold">
                   ฿{tabbyAmount}/month.
@@ -91,7 +91,7 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
             </div>
             <button
               type="button"
-              className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap"
+              className="text-indigo-slate hover:underline text-xs md:text-sm font-medium whitespace-nowrap"
             >
               More options
             </button>
@@ -118,7 +118,7 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
           />
           <div className="">
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-700">
+              <p className="text-xs md:text-sm text-gray-700">
                 Or split in 4 payments of{' '}
                 <span className="text-red-600 font-bold">฿{tamaraAmount}</span>{' '}
                 No late fees, Sharia compliant!
@@ -126,7 +126,7 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
             </div>
             <button
               type="button"
-              className="text-indigo-slate hover:underline text-sm font-medium whitespace-nowrap"
+              className="text-indigo-slate hover:underline text-xs md:text-sm font-medium whitespace-nowrap"
             >
               Learn more
             </button>
@@ -144,7 +144,9 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
         margin="-100px"
       >
         <div className="space-y-3">
-          <h3 className="font-medium text-indigo-slate">Ways of Payment</h3>
+          <h3 className="font-medium text-sm md:text-base text-indigo-slate">
+            Ways of Payment
+          </h3>
           <div className="flex flex-wrap items-center gap-3">
             <Image
               src={tamaraIcon}
@@ -197,11 +199,11 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
           margin="-100px"
         >
           <div className="p-4 bg-white rounded-lg border border-gray-200">
-            <h4 className="text-sm font-bold mb-1.5">
+            <h4 className="text-xs md:text-sm font-bold mb-1.5">
               <span className="text-green-600">Free</span>{' '}
               <span className="text-gray-900">Assembly Available</span>
             </h4>
-            <p className="text-sm text-gray-700">
+            <p className="text-xs md:text-sm text-gray-700">
               {freeAssembly.description ||
                 'We will happily assemble your furniture for you at no additional cost'}
             </p>
@@ -222,13 +224,13 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
           >
             <div className="p-4 rounded-lg border border-gray-200 bg-gray-100">
               <div className="flex items-center gap-2 mb-1.5">
-                <FaTruckFast className="text-deep-maroon text-lg" />
-                <h4 className="text-sm font-bold">
+                <FaTruckFast className="text-deep-maroon text-base md:text-lg" />
+                <h4 className="text-xs md:text-sm font-bold">
                   <span className="text-green-600">Express Delivery</span>{' '}
                   <span className="text-gray-900">Available</span>
                 </h4>
               </div>
-              <p className="text-sm text-gray-700 mb-1">
+              <p className="text-xs md:text-sm text-gray-700 mb-1">
                 Get it by {deliveryInfo.express_delivery_duration || 'tomorrow'}{' '}
                 If ordered within{' '}
                 <span className="text-red-600 font-medium">

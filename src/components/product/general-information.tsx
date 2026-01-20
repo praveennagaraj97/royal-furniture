@@ -28,8 +28,12 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
               index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
             }`}
           >
-            <span className="text-sm text-gray-900">{item.label}</span>
-            <span className="text-sm text-gray-900">{item.value}</span>
+            <span className="text-xs md:text-sm text-gray-900">
+              {item.label}
+            </span>
+            <span className="text-xs md:text-sm text-gray-900">
+              {item.value}
+            </span>
           </div>
         ))}
       </div>
@@ -74,7 +78,7 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
     >
       <div className="space-y-3">
         <div>
-          <h2 className="text-lg font-semibold text-indigo-slate mb-2">
+          <h2 className="text-base md:text-lg font-semibold text-indigo-slate mb-2">
             General Information
           </h2>
           <p className=" text-gray-900 leading-relaxed">{description}</p>

@@ -49,7 +49,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             margin="-100px"
           >
             {amountSaved > 0 && (
-              <span className="text-green-600 font-semibold text-lg">
+              <span className="text-green-600 font-semibold text-base md:text-lg">
                 Save ฿ {amountSaved.toLocaleString()}
               </span>
             )}
@@ -63,7 +63,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             amount={0.01}
             margin="-100px"
           >
-            <span className="text-gray-600 text-sm">
+            <span className="text-gray-600 text-xs md:text-sm">
               {product.product_info.view_count} views in 24 hrs
             </span>
           </ViewOnce>
@@ -92,13 +92,13 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
               />
             ))}
           </div>
-          <span className="text-deep-maroon font-medium shrink-0">
+          <span className="text-deep-maroon font-medium text-sm md:text-base">
             {product.reviews_summary.average_rating} (
             {product.reviews_summary.total_reviews} Reviews)
           </span>
           <button
             type="button"
-            className="text-indigo-slate hover:underline text-sm font-semibold whitespace-nowrap shrink-0"
+            className="text-indigo-slate hover:underline text-xs md:text-sm font-semibold whitespace-nowrap shrink-0"
           >
             See Reviews
           </button>
@@ -115,11 +115,11 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         margin="-100px"
       >
         <div className="flex items-center gap-3">
-          <span className="text-3xl font-bold text-red-600">
+          <span className="text-2xl md:text-3xl font-bold text-red-600">
             ฿ {offerPrice.toLocaleString()}
           </span>
           {basePrice > offerPrice && (
-            <span className="text-xl text-gray-400 line-through font-bold">
+            <span className="text-lg md:text-xl text-gray-400 line-through font-bold">
               ฿ {basePrice.toLocaleString()}
             </span>
           )}

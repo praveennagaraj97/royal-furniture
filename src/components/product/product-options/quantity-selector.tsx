@@ -15,9 +15,18 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   onQuantityChange,
 }) => {
   return (
-    <ViewOnce type="slideUp" distance={15} duration={0.4} delay={0.1} amount={0.01} margin="-100px">
+    <ViewOnce
+      type="slideUp"
+      distance={15}
+      duration={0.4}
+      delay={0.1}
+      amount={0.01}
+      margin="-100px"
+    >
       <div>
-        <span className="text-base font-semibold text-gray-900">Quantity:</span>
+        <span className="text-sm md:text-base font-semibold text-gray-900">
+          Quantity:
+        </span>
         <div className="flex gap-3 items-center mt-3">
           <div className="flex items-center">
             <button
@@ -29,7 +38,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
             >
               <FiMinus className="w-4 h-4" />
             </button>
-            <span className="px-2 py-2 text-2xl font-bold min-w-12 text-center">
+            <span className="px-2 py-2 text-xl md:text-2xl font-bold min-w-12 text-center">
               {quantity}
             </span>
             <button
@@ -42,7 +51,9 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               <FiPlus className="w-4 h-4" />
             </button>
           </div>
-          <span className="text-green-600 font-medium text-sm">In Stock</span>
+          <span className="text-green-600 font-medium text-xs md:text-sm">
+            In Stock
+          </span>
         </div>
       </div>
     </ViewOnce>

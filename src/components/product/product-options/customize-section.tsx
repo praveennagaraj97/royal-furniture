@@ -23,7 +23,9 @@ export const CustomizeSection: React.FC = () => {
           </div>
           <div className="text-left">
             <div className="font-semibold text-gray-900">Customize Yours</div>
-            <div className="text-sm text-gray-600">Any Color, Any Size!</div>
+            <div className="text-xs md:text-sm text-gray-600">
+              Any Color, Any Size!
+            </div>
           </div>
         </div>
         <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />

@@ -49,7 +49,8 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
           onLoad={(e) => {
-            const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
+            const { naturalWidth, naturalHeight } =
+              e.currentTarget as HTMLImageElement;
             if (!aspectRatio) {
               setAspectRatio(naturalWidth / naturalHeight);
             }
@@ -58,7 +59,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
 
         {/* Discount Badge */}
         {discount && discount > 0 ? (
-          <div className="absolute top-4 left-4 bg-deep-maroon text-white text-sm font-bold px-3 py-1.5 rounded-md z-10">
+          <div className="absolute top-4 left-4 bg-deep-maroon text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-md z-10">
             {discount}% OFF
           </div>
         ) : null}
@@ -94,7 +95,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           <div className="absolute bottom-4 left-4 z-10">
             <button
               type="button"
-              className="flex items-center gap-2 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-lg font-medium text-sm hover:bg-white transition-all duration-200 shadow-md hover:shadow-lg"
+              className="flex items-center gap-2 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-lg font-medium text-xs md:text-sm hover:bg-white transition-all duration-200 shadow-md hover:shadow-lg"
               aria-label="View in 3D"
             >
               <FiBox className="w-4 h-4" />
@@ -111,6 +112,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           showNavigation={images.length > 4}
           hideArrowOnMobile={true}
           className="mt-2"
+          alwaysAlignStart
         >
           {images.map((image, index) => (
             <button

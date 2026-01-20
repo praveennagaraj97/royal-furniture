@@ -83,7 +83,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
       ratingDistribution.four,
       ratingDistribution.three,
       ratingDistribution.two,
-      ratingDistribution.one
+      ratingDistribution.one,
     );
     return (count / maxCount) * 100;
   };
@@ -99,7 +99,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
     >
       <div className="space-y-6">
         {/* Header */}
-        <h2 className="text-xl font-semibold text-indigo-slate">
+        <h2 className="text-lg md:text-xl font-semibold text-indigo-slate">
           User Reviews
         </h2>
 
@@ -108,18 +108,18 @@ export const UserReviews: FC<UserReviewsProps> = ({
           {/* Overall Rating Summary */}
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <span className="text-4xl font-medium text-indigo-slate">
+              <span className="text-3xl md:text-4xl font-medium text-indigo-slate">
                 {overallRating}
               </span>
               <IoIosStar className="w-7 h-7 text-yellow-500 fill-yellow-500" />
             </div>
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-sm text-gray-900">
+              <span className="text-xs md:text-sm text-gray-900">
                 {reviewCount} Reviews
               </span>
               <button
                 type="button"
-                className="text-sm text-indigo-slate hover:underline font-medium"
+                className="text-xs md:text-sm text-indigo-slate hover:underline font-medium"
               >
                 {ratingCount} ratings
               </button>
@@ -133,17 +133,17 @@ export const UserReviews: FC<UserReviewsProps> = ({
                 stars === 5
                   ? ratingDistribution.five
                   : stars === 4
-                  ? ratingDistribution.four
-                  : stars === 3
-                  ? ratingDistribution.three
-                  : stars === 2
-                  ? ratingDistribution.two
-                  : ratingDistribution.one;
+                    ? ratingDistribution.four
+                    : stars === 3
+                      ? ratingDistribution.three
+                      : stars === 2
+                        ? ratingDistribution.two
+                        : ratingDistribution.one;
               const width = getBarWidth(count);
 
               return (
                 <div key={stars} className="flex items-center gap-2">
-                  <span className="text-sm text-gray-900 w-4 shrink-0">
+                  <span className="text-xs md:text-sm text-gray-900 w-4 shrink-0">
                     {stars}
                   </span>
                   <div className="flex-1 min-w-0 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -176,11 +176,11 @@ export const UserReviews: FC<UserReviewsProps> = ({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-sm text-gray-900">
+                      <span className="font-bold text-xs md:text-sm text-gray-900">
                         {review.userName}
                       </span>
                       <div className="flex items-center gap-1">
-                        <span className="text-sm text-gray-900">
+                        <span className="text-xs md:text-sm text-gray-900">
                           {review.rating}
                         </span>
                         <IoIosStar className="w-4 h-4 text-yellow-500 fill-yellow-500" />
@@ -190,7 +190,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
                       {review.timestamp}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-700 leading-relaxed">
+                  <p className="text-xs md:text-sm text-gray-700 leading-relaxed">
                     {review.reviewText}
                   </p>
                 </div>

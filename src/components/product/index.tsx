@@ -139,7 +139,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           amount={0.01}
           margin="-100px"
         >
-          <div className="min-w-0 w-full sticky top-20">
+          <div className="min-w-0 w-full lg:sticky top-20">
             <ProductImages
               product={data}
               selectedVariant={selectedVariant}
@@ -191,7 +191,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                   <div className="flex items-center gap-2">
                     <IoStorefront className="text-xl text-deep-maroon" />
 
-                    <span className="font-semibold text-sm text-gray-900">
+                    <span className="font-semibold text-xs md:text-sm text-gray-900">
                       Try in store!
                     </span>
                   </div>
