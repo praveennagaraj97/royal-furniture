@@ -2,6 +2,7 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
+import { useIntersectionObserver } from '@/hooks';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
 import { startTransition, useEffect, useRef, useState, type FC } from 'react';
@@ -40,8 +41,11 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const [quantity, setQuantity] = useState(1);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
-  const [isActionsVisible, setIsActionsVisible] = useState(true);
   const actionsRef = useRef<HTMLDivElement>(null);
+  const isActionsVisible = useIntersectionObserver({
+    ref: actionsRef,
+    options: { threshold: 0 },
+  });
   const { removeFromWishlist } = useWishlistActions();
 
   // Get current selected color variant
@@ -61,22 +65,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       });
     }
   }, [currentColor]);
-
-  // Observe ProductActions visibility
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsActionsVisible(entry.isIntersecting);
-      },
-      { threshold: 0 },
-    );
-
-    if (actionsRef.current) {
-      observer.observe(actionsRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = Math.max(1, quantity + delta);

@@ -1,6 +1,7 @@
 export * from './use-click-outside';
 export * from './use-countdown';
 export * from './use-debounce';
+export * from './use-intersection-observer';
 export * from './use-navigation';
 export * from './use-resize-window';
 export * from './use-sticky-header';
