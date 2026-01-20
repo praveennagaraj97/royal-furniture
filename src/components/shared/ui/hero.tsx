@@ -19,7 +19,7 @@ const Hero: FC<HeroProps> = ({ banners }) => {
         initialScale={1.05}
         duration={0.8}
         margin="-100px"
-        className="relative w-full aspect-2/1 rounded-lg overflow-hidden"
+        className="relative w-full rounded-lg overflow-hidden"
       >
         <FadeSlideshow banners={banners} showDots={false} />
       </ViewOnce>

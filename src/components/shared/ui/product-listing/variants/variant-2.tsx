@@ -39,15 +39,13 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
       type="slideUp"
       distance={30}
       duration={0.6}
-      className={`relative w-full bg-white rounded-lg overflow-hidden ${
-        isResponsive ? '' : 'min-w-70 sm:min-w-75'
-      } ${className || ''}`}
+      className={`relative w-full bg-white rounded-lg overflow-hidden ${className || ''}`}
     >
       <AppLink
         href={`/${product.category.slug}/${product.sub_category.slug}/${product.slug}`}
       >
         {/* Image Container with Overlays */}
-        <div className="group/image relative w-full aspect-[4/4.5] overflow-visible bg-gray-100 mb-3">
+        <div className="group/image relative w-full aspect-square overflow-visible bg-gray-100 mb-3">
           <div className="relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100">
             <Image
               src={product.thumbnail_image}
@@ -74,10 +72,10 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
           {/* Add to Cart Button - Positioned between image and content (half on top, half on bottom) */}
           <button
             onClick={handleAddToCart}
-            className="absolute bottom-0 right-3 w-10 h-10 bg-white rounded-full flex items-center justify-center border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 z-10 shadow-sm translate-y-1/2"
+            className="absolute bottom-0 right-2 sm:right-3 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 z-10 shadow-sm translate-y-1/2"
             aria-label="Add to cart"
           >
-            <FiShoppingCart className="w-5 h-5 text-gray-600" />
+            <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
           </button>
         </div>
 
@@ -85,27 +83,29 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
         <div className="space-y-2">
           {/* Price */}
           <div className="flex items-center gap-2">
-            <span className="text-red-600 font-semibold text-lg">
+            <span className="text-red-600 font-semibold text-xs sm:text-sm">
               {formatCurrency(
                 product.pricing.offer_price || 0,
                 countryCode,
-                locale
+                locale,
               )}
             </span>
             {product.pricing.base_price &&
               product.pricing.base_price !== product.pricing.offer_price && (
-                <span className="text-gray-400 text-sm font-medium line-through">
+                <span className="text-gray-400 text-xs font-medium line-through">
                   {formatCurrency(
                     product.pricing.base_price || 0,
                     countryCode,
-                    locale
+                    locale,
                   )}
                 </span>
               )}
           </div>
 
           {/* Product Name */}
-          <p className="text-gray-900">{product.name}</p>
+          <p className="text-gray-900 text-sm sm:text-base line-clamp-1">
+            {product.name}
+          </p>
 
           {/* Color Options */}
           {product.available_colors && product.available_colors.length > 0 && (
@@ -113,7 +113,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
               {product.available_colors.slice(0, 4).map((color) => (
                 <div
                   key={color.id}
-                  className="w-5 h-5 rounded-full border-2 border-gray-200 shadow-sm"
+                  className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-gray-200 shadow-sm"
                   style={{ backgroundColor: color.hex }}
                   title={color.name}
                 />

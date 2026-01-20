@@ -15,11 +15,6 @@ import { Fragment } from 'react';
 
 export const dynamicParams = false;
 
-// hero - hero_slider | full_width_card
-// top_offers - banner_grid_3
-// products_section - horizontal_slider
-// subcategory_showcase - with_full_width_banner, without_banner, with_banner (NOTE: if title exits we will show, else it will be hidden)
-
 const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
   const { country, locale } = await params;
 
@@ -40,7 +35,7 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
           view_all_type,
           layout_type,
         },
-        idx
+        idx,
       ) => {
         switch (section_type) {
           case 'hero':
@@ -146,7 +141,7 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
               </p>
             );
         }
-      }
+      },
     );
   };
 

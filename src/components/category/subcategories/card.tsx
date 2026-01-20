@@ -19,7 +19,7 @@ const SubCategoryCard: FC<SubCategoryCardProps> = ({
   return (
     <AppLink
       href={`/${categorySlug}/${subcategory.slug}`}
-      className={`flex flex-col items-center gap-3 cursor-pointer group/card bg-soft-pink pb-2 rounded-lg transition-all duration-300 ${
+      className={`flex flex-col items-center gap-2 cursor-pointer group/card bg-soft-pink pb-1 rounded-lg transition-all duration-300 ${
         isActive ? 'border border-deep-maroon shadow-lg' : ''
       }`}
     >
@@ -33,7 +33,7 @@ const SubCategoryCard: FC<SubCategoryCardProps> = ({
         />
       </div>
       <span
-        className={`text-sm font-medium transition-colors ${
+        className={`text-xs sm:text-sm font-medium transition-colors ${
           isActive
             ? 'text-deep-maroon'
             : 'text-gray-800 text-center group-hover/card:text-deep-maroon'

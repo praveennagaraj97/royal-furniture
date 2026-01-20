@@ -15,7 +15,7 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ banners }) => {
       initialScale={1.05}
       duration={0.8}
       margin="-100px"
-      className="relative w-full rounded-lg overflow-hidden"
+      className="relative w-full overflow-hidden"
     >
       {banners.map((banner) => (
         <Image

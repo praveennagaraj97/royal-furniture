@@ -24,7 +24,7 @@ const OfferCard: FC<OfferCardProps> = ({
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="relative w-full aspect-video rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer transition-shadow duration-300 min-w-80"
+      className="relative w-full aspect-video rounded-xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer transition-shadow duration-300 min-w-64 sm:min-w-72 md:min-w-80"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -45,9 +45,9 @@ const OfferCard: FC<OfferCardProps> = ({
       </div>
 
       {/* Text content overlaid on image */}
-      <div className="relative h-full flex flex-col justify-center px-3 sm:px-4 md:px-6 py-4 z-10">
-        <h3 className="text-xl sm:text-2xl font-medium  mb-2">{title}</h3>
-        <p className="text-base leading-relaxed">{description}</p>
+      <div className="relative h-full flex flex-col justify-center px-2 sm:px-3 md:px-4 py-2 z-10">
+        <h3 className="text-lg sm:text-xl font-medium mb-1">{title}</h3>
+        <p className="text-sm leading-relaxed">{description}</p>
       </div>
     </StaggerItem>
   );

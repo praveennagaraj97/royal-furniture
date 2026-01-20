@@ -35,12 +35,12 @@ const SpotLightCard: FC<{ item: SubCategoryItem }> = ({ item }) => {
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="flex flex-col w-full min-w-[200px] sm:min-w-[220px] md:min-w-[240px] lg:min-w-[260px]"
+      className="flex flex-col min-w-40 sm:min-w-48 md:min-w-56 lg:min-w-64 xl:min-w-80"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Card Image Container */}
-      <div className="relative w-full aspect-3/4 rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300">
+      <div className="relative w-full aspect-[5/6] rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300">
         <AppLink href={`/${item.category_slug}/${item.slug}`}>
           <Image
             src={item.image || ''}
@@ -56,8 +56,8 @@ const SpotLightCard: FC<{ item: SubCategoryItem }> = ({ item }) => {
       </div>
 
       {/* Label Text Below Card */}
-      <div className="mt-3 text-center">
-        <h3 className="text-black text-lg sm:text-xl font-semibold">
+      <div className="mt-2 text-center">
+        <h3 className="text-black text-base sm:text-lg font-semibold">
           {item.name || ''}
         </h3>
       </div>

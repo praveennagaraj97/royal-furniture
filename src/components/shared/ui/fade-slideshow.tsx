@@ -23,18 +23,17 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (banners.length <= 1) return;
     if (isHovered) return; // Pause when hovered
 
-    // Clear any existing interval
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
 
-    // Start the interval
     intervalRef.current = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
     }, autoplayDuration);
@@ -52,7 +51,8 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
 
   return (
     <div
-      className={`relative w-full h-full overflow-hidden ${className}`}
+      className={`relative w-full overflow-hidden ${className}`}
+      style={aspectRatio ? { aspectRatio: aspectRatio.toString() } : undefined}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -99,7 +99,12 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
                   fill
                   className="object-cover"
                   priority={index === 0 && imagePriority}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1200px"
+                  sizes="100vw"
+                  onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                    if (!aspectRatio) {
+                      setAspectRatio(naturalWidth / naturalHeight);
+                    }
+                  }}
                 />
               </Link>
             ) : (
@@ -110,7 +115,12 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
                   fill
                   className="object-cover"
                   priority={index === 0 && imagePriority}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1200px"
+                  sizes="100vw"
+                  onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                    if (!aspectRatio) {
+                      setAspectRatio(naturalWidth / naturalHeight);
+                    }
+                  }}
                 />
               </div>
             )}

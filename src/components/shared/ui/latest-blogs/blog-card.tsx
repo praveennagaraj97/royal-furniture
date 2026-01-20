@@ -20,7 +20,7 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="flex flex-col w-full min-w-70 sm:min-w-75 md:min-w-[320px]"
+      className="flex flex-col w-full min-w-56 sm:min-w-64 md:min-w-72 lg:min-w-[320px]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -39,24 +39,24 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
       </div>
 
       {/* Blog Content */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         {/* Title */}
-        <h3 className="text-indigo-slate text-lg sm:text-xl font-light leading-tight">
+        <h3 className="text-indigo-slate text-base sm:text-lg font-light leading-tight">
           {blog.title}
         </h3>
 
         {/* Description */}
-        <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
+        <p className="text-gray-500 text-xs sm:text-sm leading-relaxed line-clamp-2">
           {blog.short_description}
         </p>
 
         {/* Read More Link */}
         <AppLink
           href={`/blog/${blog.slug}`}
-          className="text-indigo-slate text-sm sm:text-base font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 w-fit group"
+          className="text-indigo-slate text-xs sm:text-sm font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 w-fit group"
         >
           <span>Read More</span>
-          <FiChevronRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+          <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:translate-x-1" />
         </AppLink>
       </div>
     </StaggerItem>

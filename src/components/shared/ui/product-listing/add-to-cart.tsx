@@ -36,10 +36,10 @@ const AddToCart: FC = () => {
             handleQuantityChange(-1);
           }}
           disabled={quantity <= 1}
-          className="w-8 h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shrink-0"
+          className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shrink-0"
           aria-label="Decrease quantity"
         >
-          <FiMinus className="w-3 h-3" />
+          <FiMinus className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
         </button>
         <span className="text-gray-900 font-bold text-base min-w-6 text-center">
           {quantity}
@@ -50,10 +50,10 @@ const AddToCart: FC = () => {
             e.stopPropagation();
             handleQuantityChange(1);
           }}
-          className="w-8 h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 transition-colors duration-200 shrink-0"
+          className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 transition-colors duration-200 shrink-0"
           aria-label="Increase quantity"
         >
-          <FiPlus className="w-3 h-3" />
+          <FiPlus className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
         </button>
       </div>
 
@@ -61,9 +61,9 @@ const AddToCart: FC = () => {
       <button
         type="button"
         onClick={handleAddToCart}
-        className="w-full flex items-center justify-center gap-2 border border-deep-maroon text-gray-900 py-2 px-4 rounded-lg font-medium hover:bg-deep-maroon/10 transition-colors duration-200"
+        className="w-full flex items-center justify-center gap-2 border border-deep-maroon text-gray-900 py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium hover:bg-deep-maroon/10 transition-colors duration-200"
       >
-        <FiShoppingCart className="text-xl text-deep-maroon" />
+        <FiShoppingCart className="text-lg sm:text-xl text-deep-maroon" />
         <span>{t('common.addToCart')}</span>
       </button>
     </SlideIn>

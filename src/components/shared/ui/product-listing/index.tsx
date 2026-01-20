@@ -55,7 +55,10 @@ const ProductListing: FC<ProductListingProps> = ({
       {/* Products Swiper */}
       <Swiper gap={4} showNavigation hideArrowOnMobile>
         {products.map((product) => (
-          <div key={product.id} className="shrink-0 w-80 max-w-80">
+          <div
+            key={product.id}
+            className="shrink-0 w-40 sm:w-48 md:w-56 lg:w-64 xl:w-80"
+          >
             <ProductCard product={product} isResponsive={isResponsive} />
           </div>
         ))}

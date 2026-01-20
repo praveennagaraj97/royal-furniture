@@ -33,15 +33,13 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
       type="slideUp"
       distance={30}
       duration={0.6}
-      className={`relative w-full bg-white rounded-lg overflow-hidden ${
-        isResponsive ? '' : 'min-w-70 sm:min-w-75'
-      } ${className || ''}`}
+      className={`relative w-full bg-white rounded-lg overflow-hidden ${className || ''}`}
     >
       <AppLink
         href={`/${product.category.slug}/${product.sub_category.slug}/${product.slug}`}
       >
         {/* Image Container */}
-        <div className="group/image relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100 mb-3">
+        <div className="group/image relative w-full aspect-square overflow-hidden bg-gray-100 mb-3">
           <Image
             src={product.thumbnail_image}
             alt={product.name}
@@ -55,7 +53,7 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
             <div className="absolute top-3 left-3 bg-deep-maroon text-white text-xs font-semibold px-2.5 py-1 rounded-md z-10">
               {t('common.off', {
                 percentage: parseFloat(
-                  product.pricing.offer_percentage || '0'
+                  product.pricing.offer_percentage || '0',
                 ).toFixed(0),
               })}
             </div>
@@ -71,26 +69,28 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
         <div className="space-y-2">
           {/* Price */}
           <div className="flex items-center gap-2">
-            <span className="text-red-600 font-semibold text-lg">
+            <span className="text-red-600 font-semibold text-xs sm:text-sm">
               {formatCurrency(
                 product.pricing.offer_price || 0,
                 countryCode,
-                locale
+                locale,
               )}
             </span>
             {product.pricing.base_price !== product.pricing.offer_price && (
-              <span className="text-gray-400 text-sm font-medium line-through">
+              <span className="text-gray-400 text-xs font-medium line-through">
                 {formatCurrency(
                   product.pricing.base_price || 0,
                   countryCode,
-                  locale
+                  locale,
                 )}
               </span>
             )}
           </div>
 
           {/* Product Name */}
-          <p className="text-gray-900 text-base">{product.name}</p>
+          <p className="text-gray-900 text-sm sm:text-base line-clamp-1">
+            {product.name}
+          </p>
 
           <AddToCart />
         </div>
