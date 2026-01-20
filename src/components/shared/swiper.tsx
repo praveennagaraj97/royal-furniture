@@ -27,6 +27,7 @@ const Swiper: FC<SwiperProps> = ({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isCentered, setIsCentered] = useState(false);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const isHorizontalScrollRef = useRef<boolean | null>(null);
 
@@ -38,6 +39,8 @@ const Swiper: FC<SwiperProps> = ({
     const threshold = 5; // Use a small threshold to account for rounding
     const isRTL =
       document.dir === 'rtl' || document.documentElement.dir === 'rtl';
+
+    setIsCentered(scrollWidth <= clientWidth);
 
     if (isRTL) {
       // Handle RTL scroll behavior
@@ -87,7 +90,7 @@ const Swiper: FC<SwiperProps> = ({
       touchStartRef.current = { x: touch.clientX, y: touch.clientY };
       isHorizontalScrollRef.current = null;
     },
-    []
+    [],
   );
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
@@ -187,7 +190,7 @@ const Swiper: FC<SwiperProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`flex overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden overscroll-x-contain `}
+        className={`flex overflow-x-auto overflow-y-hidden scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden overscroll-x-contain ${isCentered ? 'justify-center' : 'justify-start'}`}
         style={{
           gap: `${gap * 0.25}rem`,
           WebkitOverflowScrolling: 'touch',
