@@ -4,8 +4,8 @@ import { ViewOnce } from '@/components/shared/animations';
 import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
-import { startTransition, useEffect, useState, type FC } from 'react';
-import { FiChevronRight } from 'react-icons/fi';
+import { startTransition, useEffect, useRef, useState, type FC } from 'react';
+import { FiChevronRight, FiShoppingCart } from 'react-icons/fi';
 import { IoStorefront } from 'react-icons/io5';
 import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
@@ -40,6 +40,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const [quantity, setQuantity] = useState(1);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
+  const [isActionsVisible, setIsActionsVisible] = useState(true);
+  const actionsRef = useRef<HTMLDivElement>(null);
   const { removeFromWishlist } = useWishlistActions();
 
   // Get current selected color variant
@@ -59,6 +61,22 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       });
     }
   }, [currentColor]);
+
+  // Observe ProductActions visibility
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsActionsVisible(entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+
+    if (actionsRef.current) {
+      observer.observe(actionsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = Math.max(1, quantity + delta);
@@ -205,10 +223,12 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               />
             </div>
             <div className="space-y-4">
-              <ProductActions
-                onAddToCart={handleAddToCart}
-                onBuyNow={handleBuyNow}
-              />
+              <div ref={actionsRef}>
+                <ProductActions
+                  onAddToCart={handleAddToCart}
+                  onBuyNow={handleBuyNow}
+                />
+              </div>
 
               <ProductAdditionalInfo product={data} />
               <PaymentDeliveryInfo
@@ -249,6 +269,18 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
         isOpen={isStoreLocatorOpen}
         onClose={() => setIsStoreLocatorOpen(false)}
       />
+
+      {/* Floating Add to Cart Bubble */}
+      {!isActionsVisible && (
+        <button
+          type="button"
+          onClick={handleAddToCart}
+          className="fixed bottom-6 right-6 w-14 h-14 bg-deep-maroon text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 z-50"
+          aria-label="Add to Cart"
+        >
+          <FiShoppingCart className="w-6 h-6" />
+        </button>
+      )}
     </div>
   );
 };
