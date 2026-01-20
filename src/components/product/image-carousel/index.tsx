@@ -26,6 +26,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   isWishlisted = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
 
   const handleThumbnailClick = (index: number) => {
     setSelectedIndex(index);
@@ -33,8 +34,13 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
 
   return (
     <div className="relative w-full">
-      {/* Main Image Container */}
-      <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+      {/* Main Image Container (intrinsic height based on image) */}
+      <div
+        className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3"
+        style={
+          aspectRatio ? { aspectRatio: aspectRatio.toString() } : undefined
+        }
+      >
         <Image
           src={images[selectedIndex] || images[0]}
           alt={`${alt}`}
@@ -42,6 +48,11 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
+          onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+            if (!aspectRatio) {
+              setAspectRatio(naturalWidth / naturalHeight);
+            }
+          }}
         />
 
         {/* Discount Badge */}
@@ -151,7 +162,7 @@ export const ProductImages: FC<ProductImagesProps> = ({
     const variant = product.variants.find((v) => v.name === selectedVariant);
     const fabric = variant?.fabricsList.find((f) => f.name === selectedFabric);
     const color = fabric?.colorsList.find(
-      (c) => String(c.id) === selectedColor
+      (c) => String(c.id) === selectedColor,
     );
 
     if (color?.images && color.images.length > 0) {

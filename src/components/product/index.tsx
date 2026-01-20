@@ -28,14 +28,14 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const firstColor = firstFabric?.colorsList[0];
 
   const [isWishlisted, setIsWishlisted] = useState(
-    firstColor?.is_wishlist || false
+    firstColor?.is_wishlist || false,
   );
   const [selectedVariant, setSelectedVariant] = useState(
-    firstVariant?.name || ''
+    firstVariant?.name || '',
   );
   const [selectedFabric, setSelectedFabric] = useState(firstFabric?.name || '');
   const [selectedColor, setSelectedColor] = useState(
-    String(firstColor?.id || '')
+    String(firstColor?.id || ''),
   );
   const [quantity, setQuantity] = useState(1);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
@@ -45,10 +45,10 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   // Get current selected color variant
   const currentVariant = data.variants.find((v) => v.name === selectedVariant);
   const currentFabric = currentVariant?.fabricsList.find(
-    (f) => f.name === selectedFabric
+    (f) => f.name === selectedFabric,
   );
   const currentColor = currentFabric?.colorsList.find(
-    (c) => String(c.id) === selectedColor
+    (c) => String(c.id) === selectedColor,
   );
 
   // Update wishlist state when color changes
@@ -139,7 +139,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           amount={0.01}
           margin="-100px"
         >
-          <div className="min-w-0 w-full">
+          <div className="min-w-0 w-full sticky top-20">
             <ProductImages
               product={data}
               selectedVariant={selectedVariant}
@@ -216,8 +216,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                   currentColor?.region_prices.offer_price
                     ? parseFloat(currentColor.region_prices.offer_price)
                     : data.product_info.pricing.offer_price
-                    ? parseFloat(data.product_info.pricing.offer_price)
-                    : 0
+                      ? parseFloat(data.product_info.pricing.offer_price)
+                      : 0
                 }
                 deliveryInfo={data.delivery_info}
                 flexiPayment={data.flexi_payment}
