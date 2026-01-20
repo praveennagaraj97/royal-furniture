@@ -33,10 +33,10 @@ const SubCategoryCard: FC<SubCategoryCardProps> = ({
         />
       </div>
       <span
-        className={`text-xs sm:text-sm font-medium transition-colors ${
+        className={`text-xs sm:text-sm font-medium transition-colors line-clamp-1 text-center ${
           isActive
             ? 'text-deep-maroon'
-            : 'text-gray-800 text-center group-hover/card:text-deep-maroon'
+            : 'text-gray-800  group-hover/card:text-deep-maroon'
         }`}
       >
         {subcategory.name}
