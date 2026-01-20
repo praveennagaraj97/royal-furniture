@@ -23,7 +23,7 @@ const SubCategories: FC = () => {
   if (product) return null;
 
   const selectedCategory = categories.find(
-    (category) => category.slug === pathName.split('/')[1]
+    (category) => category.slug === pathName.split('/')[1],
   );
 
   if (!selectedCategory || !selectedCategory.subCategories) return null;
@@ -62,7 +62,7 @@ const SubCategories: FC = () => {
                   distance={20}
                   initialScale={0.9}
                   duration={0.6}
-                  className="min-w-72 aspect-video"
+                  className="min-w-40 aspect-video"
                 >
                   <SubCategoryCard
                     subcategory={subcategory}

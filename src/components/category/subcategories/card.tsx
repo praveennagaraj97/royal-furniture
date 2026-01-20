@@ -23,7 +23,7 @@ const SubCategoryCard: FC<SubCategoryCardProps> = ({
         isActive ? 'border border-deep-maroon shadow-lg' : ''
       }`}
     >
-      <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+      <div className="relative w-full aspect-square rounded-lg overflow-hidden">
         <Image
           src={subcategory.image}
           alt={subcategory.name}
