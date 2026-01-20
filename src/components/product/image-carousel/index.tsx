@@ -48,7 +48,8 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
-          onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+          onLoad={(e) => {
+            const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
             if (!aspectRatio) {
               setAspectRatio(naturalWidth / naturalHeight);
             }

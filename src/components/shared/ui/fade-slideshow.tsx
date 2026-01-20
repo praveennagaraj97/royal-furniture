@@ -100,7 +100,9 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
                   className="object-cover"
                   priority={index === 0 && imagePriority}
                   sizes="100vw"
-                  onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                  onLoad={(e) => {
+                    const { naturalWidth, naturalHeight } =
+                      e.currentTarget as HTMLImageElement;
                     if (!aspectRatio) {
                       setAspectRatio(naturalWidth / naturalHeight);
                     }
@@ -116,7 +118,9 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
                   className="object-cover"
                   priority={index === 0 && imagePriority}
                   sizes="100vw"
-                  onLoadingComplete={({ naturalWidth, naturalHeight }) => {
+                  onLoad={(e) => {
+                    const { naturalWidth, naturalHeight } =
+                      e.currentTarget as HTMLImageElement;
                     if (!aspectRatio) {
                       setAspectRatio(naturalWidth / naturalHeight);
                     }
