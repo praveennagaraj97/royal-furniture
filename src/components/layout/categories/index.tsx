@@ -16,9 +16,13 @@ const Categories = forwardRef<HTMLElement, CategoriesProps>(
     const pathName = useAppPathName();
     const t = useTranslations('header');
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
+    const isHome = pathName === '/';
 
     return (
-      <section ref={ref} className="w-full relative z-40">
+      <section
+        ref={ref}
+        className={`w-full relative z-40 ${!isHome ? 'hidden lg:block' : ''}`}
+      >
         <div className="shadow-md relative z-40">
           <nav className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 max-w-5xl flex justify-center relative">
             {/* Mobile: horizontal scroll, Desktop: centered wrap */}

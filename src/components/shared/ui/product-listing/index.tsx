@@ -53,7 +53,7 @@ const ProductListing: FC<ProductListingProps> = ({
       </div>
 
       {/* Products Swiper */}
-      <Swiper gap={4} showNavigation hideArrowOnMobile>
+      <Swiper gap={4} showNavigation hideArrowOnMobile alwaysAlignStart>
         {products.map((product) => (
           <div
             key={product.id}

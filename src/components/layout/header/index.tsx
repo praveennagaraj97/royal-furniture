@@ -6,7 +6,7 @@ import { forwardRef, useState } from 'react';
 import { FiHeart, FiMenu, FiShoppingCart, FiX } from 'react-icons/fi';
 
 import AuthModal from '@/components/auth/auth-modal';
-import { AppLink } from '@/hooks';
+import { AppLink, useAppPathName } from '@/hooks';
 import Image from 'next/image';
 import { AuthActionButton } from './auth-action-button';
 import LangSwitch from './lang-switch';
@@ -24,6 +24,8 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
   ({ isSticky = false }, ref) => {
     const [isSignupFormOpen, setIsSignupFormOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const pathName = useAppPathName();
+    const isHome = pathName === '/';
 
     return (
       <motion.header
@@ -115,16 +117,18 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
               />
             </div>
 
-            {/* Second row: full-width search bar */}
-            <SlideIn
-              direction="down"
-              distance={4}
-              duration={0.25}
-              delay={0.1}
-              triggerOnView={false}
-            >
-              <SearchBar />
-            </SlideIn>
+            {/* Second row: full-width search bar (home only on mobile) */}
+            {isHome && (
+              <SlideIn
+                direction="down"
+                distance={4}
+                duration={0.25}
+                delay={0.1}
+                triggerOnView={false}
+              >
+                <SearchBar />
+              </SlideIn>
+            )}
           </div>
 
           {/* Desktop: Single-row layout (original design) */}

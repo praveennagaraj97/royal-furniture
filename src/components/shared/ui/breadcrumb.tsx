@@ -38,9 +38,9 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items, onBackClick }) => {
       distance={10}
       duration={0.4}
       margin="-50px"
-      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6"
+      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6 "
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-x-auto">
         {/* Back Arrow */}
         <button
           type="button"
@@ -53,7 +53,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items, onBackClick }) => {
 
         {/* Breadcrumbs */}
         <nav aria-label="Breadcrumb">
-          <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
+          <ol className="flex items-center gap-2 text-sm text-gray-600  whitespace-nowrap">
             {items.map((item, index) => {
               const isLast = index === items.length - 1;
 

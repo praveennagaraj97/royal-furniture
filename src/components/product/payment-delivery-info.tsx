@@ -20,6 +20,7 @@ interface PaymentDeliveryInfoProps {
   paymentOptions?: ProductDetailData['payment_options'];
   freeAssembly?: ProductDetailData['free_assembly'];
   expressDeliveryTimer?: ProductDetailData['express_delivery_timer'];
+  showPaymentPlansOnly?: boolean;
 }
 
 const formatCountdown = (totalSeconds: number): string => {
@@ -40,6 +41,7 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
   paymentOptions,
   freeAssembly,
   expressDeliveryTimer,
+  showPaymentPlansOnly = false,
 }) => {
   // Calculate payment plan amounts (4 payments)
   const tabbyAmount = (productPrice / 4).toFixed(2);
@@ -134,117 +136,121 @@ export const PaymentDeliveryInfo: React.FC<PaymentDeliveryInfoProps> = ({
         </div>
       </ViewOnce>
 
-      {/* Ways of Payment Section */}
-      <ViewOnce
-        type="slideUp"
-        distance={15}
-        duration={0.4}
-        delay={0.25}
-        amount={0.01}
-        margin="-100px"
-      >
-        <div className="space-y-3">
-          <h3 className="font-medium text-sm md:text-base text-indigo-slate">
-            Ways of Payment
-          </h3>
-          <div className="flex flex-wrap items-center gap-3">
-            <Image
-              src={tamaraIcon}
-              alt="Tamara"
-              width={80}
-              height={40}
-              className="h-6 w-auto object-contain"
-            />
-            <Image
-              src={tabbyIcon}
-              alt="Tabby"
-              width={80}
-              height={40}
-              className="h-6 w-auto object-contain"
-            />
-
-            <Image
-              src={samsungPayIcon}
-              alt="Samsung Pay"
-              width={80}
-              height={40}
-              className="h-6 w-auto object-contain"
-            />
-            <Image
-              src={applePayIcon}
-              alt="Apple Pay"
-              width={80}
-              height={40}
-              className="h-6 w-auto object-contain"
-            />
-            <Image
-              src={paypalIcon}
-              alt="PayPal"
-              width={80}
-              height={40}
-              className="h-6 w-auto object-contain"
-            />
-          </div>
-        </div>
-      </ViewOnce>
-
-      {/* Free Assembly Available Card */}
-      {freeAssembly?.is_assemble && (
-        <ViewOnce
-          type="slideUp"
-          distance={15}
-          duration={0.4}
-          delay={0.3}
-          amount={0.01}
-          margin="-100px"
-        >
-          <div className="p-4 bg-white rounded-lg border border-gray-200">
-            <h4 className="text-xs md:text-sm font-bold mb-1.5">
-              <span className="text-green-600">Free</span>{' '}
-              <span className="text-gray-900">Assembly Available</span>
-            </h4>
-            <p className="text-xs md:text-sm text-gray-700">
-              {freeAssembly.description ||
-                'We will happily assemble your furniture for you at no additional cost'}
-            </p>
-          </div>
-        </ViewOnce>
-      )}
-
-      {/* Express Delivery Available Card */}
-      {expressDeliveryTimer?.available &&
-        deliveryInfo?.supports_express_delivery && (
+      {!showPaymentPlansOnly && (
+        <>
+          {/* Ways of Payment Section */}
           <ViewOnce
             type="slideUp"
             distance={15}
             duration={0.4}
-            delay={0.35}
+            delay={0.25}
             amount={0.01}
             margin="-100px"
           >
-            <div className="p-4 rounded-lg border border-gray-200 bg-gray-100">
-              <div className="flex items-center gap-2 mb-1.5">
-                <FaTruckFast className="text-deep-maroon text-base md:text-lg" />
-                <h4 className="text-xs md:text-sm font-bold">
-                  <span className="text-green-600">Express Delivery</span>{' '}
-                  <span className="text-gray-900">Available</span>
-                </h4>
+            <div className="space-y-3">
+              <h3 className="font-medium text-sm md:text-base text-indigo-slate">
+                Ways of Payment
+              </h3>
+              <div className="flex flex-wrap items-center gap-3">
+                <Image
+                  src={tamaraIcon}
+                  alt="Tamara"
+                  width={80}
+                  height={40}
+                  className="h-6 w-auto object-contain"
+                />
+                <Image
+                  src={tabbyIcon}
+                  alt="Tabby"
+                  width={80}
+                  height={40}
+                  className="h-6 w-auto object-contain"
+                />
+
+                <Image
+                  src={samsungPayIcon}
+                  alt="Samsung Pay"
+                  width={80}
+                  height={40}
+                  className="h-6 w-auto object-contain"
+                />
+                <Image
+                  src={applePayIcon}
+                  alt="Apple Pay"
+                  width={80}
+                  height={40}
+                  className="h-6 w-auto object-contain"
+                />
+                <Image
+                  src={paypalIcon}
+                  alt="PayPal"
+                  width={80}
+                  height={40}
+                  className="h-6 w-auto object-contain"
+                />
               </div>
-              <p className="text-xs md:text-sm text-gray-700 mb-1">
-                Get it by {deliveryInfo.express_delivery_duration || 'tomorrow'}{' '}
-                If ordered within{' '}
-                <span className="text-red-600 font-medium">
-                  {formatCountdown(countdown)}
-                </span>
-              </p>
-              {deliveryInfo.express_delivery_charge && (
-                <p className="text-xs text-gray-600">
-                  Extra Charges: {deliveryInfo.express_delivery_charge}
-                </p>
-              )}
             </div>
           </ViewOnce>
-        )}
+
+          {/* Free Assembly Available Card */}
+          {freeAssembly?.is_assemble && (
+            <ViewOnce
+              type="slideUp"
+              distance={15}
+              duration={0.4}
+              delay={0.3}
+              amount={0.01}
+              margin="-100px"
+            >
+              <div className="p-4 bg-white rounded-lg border border-gray-200">
+                <h4 className="text-xs md:text-sm font-bold mb-1.5">
+                  <span className="text-green-600">Free</span>{' '}
+                  <span className="text-gray-900">Assembly Available</span>
+                </h4>
+                <p className="text-xs md:text-sm text-gray-700">
+                  {freeAssembly.description ||
+                    'We will happily assemble your furniture for you at no additional cost'}
+                </p>
+              </div>
+            </ViewOnce>
+          )}
+
+          {/* Express Delivery Available Card */}
+          {expressDeliveryTimer?.available &&
+            deliveryInfo?.supports_express_delivery && (
+              <ViewOnce
+                type="slideUp"
+                distance={15}
+                duration={0.4}
+                delay={0.35}
+                amount={0.01}
+                margin="-100px"
+              >
+                <div className="p-4 rounded-lg border border-gray-200 bg-gray-100">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <FaTruckFast className="text-deep-maroon text-base md:text-lg" />
+                    <h4 className="text-xs md:text-sm font-bold">
+                      <span className="text-green-600">Express Delivery</span>{' '}
+                      <span className="text-gray-900">Available</span>
+                    </h4>
+                  </div>
+                  <p className="text-xs md:text-sm text-gray-700 mb-1">
+                    Get it by {deliveryInfo.express_delivery_duration || 'tomorrow'}{' '}
+                    If ordered within{' '}
+                    <span className="text-red-600 font-medium">
+                      {formatCountdown(countdown)}
+                    </span>
+                  </p>
+                  {deliveryInfo.express_delivery_charge && (
+                    <p className="text-xs text-gray-600">
+                      Extra Charges: {deliveryInfo.express_delivery_charge}
+                    </p>
+                  )}
+                </div>
+              </ViewOnce>
+            )}
+        </>
+      )}
     </div>
   );
 };
