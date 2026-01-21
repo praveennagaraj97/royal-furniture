@@ -133,16 +133,7 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
                 className="block w-full h-full relative"
               >
                 <ResponsiveImage
-                  images={
-                    banner.responsive_images ||
-                    (banner.image
-                      ? {
-                          web: { url: banner.image },
-                          ipad: { url: banner.image },
-                          mobile: { url: banner.image },
-                        }
-                      : undefined)
-                  }
+                  images={banner.responsive_images}
                   alt={banner.offer_text || 'Promotional Banner'}
                   className="w-full h-full"
                 />
@@ -150,16 +141,7 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
             ) : (
               <div className="block w-full h-full relative">
                 <ResponsiveImage
-                  images={
-                    banner.responsive_images ||
-                    (banner.image
-                      ? {
-                          web: { url: banner.image },
-                          ipad: { url: banner.image },
-                          mobile: { url: banner.image },
-                        }
-                      : undefined)
-                  }
+                  images={banner.responsive_images}
                   alt={banner.offer_text || 'Promotional Banner'}
                   className="w-full h-full"
                 />

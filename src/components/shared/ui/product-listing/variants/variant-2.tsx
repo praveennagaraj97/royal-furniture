@@ -1,7 +1,7 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import Image from 'next/image';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { FC } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
 
@@ -14,13 +14,11 @@ import { useParams } from 'next/navigation';
 export interface ProductCardVariant2Props {
   product: ProductItem;
   className?: string;
-  isResponsive?: boolean;
 }
 
 export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   product,
   className,
-  isResponsive = false,
 }) => {
   const params = useParams();
   const locale = useLocale();
@@ -45,14 +43,12 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
         href={`/${product.category.slug}/${product.sub_category.slug}/${product.slug}`}
       >
         {/* Image Container with Overlays */}
-        <div className="group/image relative w-full aspect-square overflow-visible bg-gray-100 mb-3">
-          <div className="relative w-full aspect-[4/4.5] overflow-hidden bg-gray-100">
-            <Image
-              src={product.thumbnail_image}
+        <div className="group/image relative w-full overflow-visible mb-3">
+          <div className="relative w-full aspect-[4/4.5] overflow-hidden ">
+            <ResponsiveImage
+              images={product.responsive_images}
               alt={product.name}
-              fill
-              className="object-cover transition-transform duration-300 group-hover/image:scale-105"
-              sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
+              className="object-cover transition-transform duration-300 group-hover/image:scale-105 aspect-[4/4.5]"
             />
 
             {/* Discount Badge - Top Left */}

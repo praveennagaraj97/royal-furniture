@@ -136,6 +136,7 @@ export interface ProductItem {
   sub_category: SubCategoryItem;
   pricing: ProductPricing;
   thumbnail_image: string;
+  responsive_images?: ResponsiveImages;
   label: ProductLabel[];
   is_offer: boolean;
   average_rating: number;

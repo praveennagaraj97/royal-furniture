@@ -20,13 +20,7 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ banners }) => {
       {banners.map((banner) => (
         <ResponsiveImage
           key={banner.id}
-          images={
-            banner.responsive_images || {
-              web: banner.image ? { url: banner.image } : undefined,
-              ipad: banner.image ? { url: banner.image } : undefined,
-              mobile: banner.image ? { url: banner.image } : undefined,
-            }
-          }
+          images={banner.responsive_images}
           alt={banner.offer_text || ''}
           className="w-full h-auto"
         />

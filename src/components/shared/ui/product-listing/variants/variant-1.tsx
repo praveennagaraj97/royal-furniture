@@ -1,7 +1,7 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import Image from 'next/image';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { FC } from 'react';
 
 import { AppLink } from '@/hooks';
@@ -14,13 +14,11 @@ import AddToCart from '../add-to-cart';
 export interface ProductCardVariant1Props {
   product: ProductItem;
   className?: string;
-  isResponsive?: boolean;
 }
 
 export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
   product,
   className,
-  isResponsive = false,
 }) => {
   const params = useParams();
   const locale = useLocale();
@@ -40,12 +38,10 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
       >
         {/* Image Container */}
         <div className="group/image relative w-full aspect-square overflow-hidden bg-gray-100 mb-3">
-          <Image
-            src={product.thumbnail_image}
+          <ResponsiveImage
+            images={product.responsive_images}
             alt={product.name}
-            fill
             className="object-cover transition-transform duration-300 group-hover/image:scale-105"
-            sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
           />
 
           {/* Discount Badge */}
