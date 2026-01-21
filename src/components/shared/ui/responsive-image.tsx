@@ -2,6 +2,7 @@
 
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { ResponsiveImages } from '@/types/response';
+import { computeAspectRatioFromResponsive } from '@/utils';
 import { FC, startTransition, useEffect, useRef, useState } from 'react';
 
 interface ResponsiveImageProps {
@@ -42,18 +43,9 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
 
   useEffect(() => {
     function computeRatio() {
-      if (!images) return;
-
       const vw = typeof window !== 'undefined' ? window.innerWidth : 0;
-      let variant = images.mobile;
-      if (vw >= 1024) variant = images.web || images.ipad || images.mobile;
-      else if (vw >= 768) variant = images.ipad || images.mobile || images.web;
-
-      if (variant && variant.width && variant.height) {
-        setAspectRatio(variant.width / variant.height);
-      } else {
-        setAspectRatio(null);
-      }
+      const ratio = computeAspectRatioFromResponsive(images, vw);
+      setAspectRatio(ratio);
     }
 
     computeRatio();

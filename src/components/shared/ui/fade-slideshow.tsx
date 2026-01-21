@@ -1,9 +1,10 @@
 'use client';
 
 import { BannerItem } from '@/types/response/home';
-import Image from 'next/image';
+import { computeAspectRatioFromResponsive } from '@/utils';
 import Link from 'next/link';
 import { FC, useEffect, useRef, useState } from 'react';
+import ResponsiveImage from './responsive-image';
 import VideoPlayer from './video-player';
 
 interface FadeSlideshowProps {
@@ -11,7 +12,6 @@ interface FadeSlideshowProps {
   showDots?: boolean;
   autoplayDuration?: number;
   className?: string;
-  imagePriority?: boolean;
 }
 
 const FadeSlideshow: FC<FadeSlideshowProps> = ({
@@ -19,11 +19,13 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
   showDots = false,
   autoplayDuration = 5000,
   className = '',
-  imagePriority = true,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
+  // compute an initial aspect ratio from responsive variants (if available)
+  const [containerAspectRatio, setContainerAspectRatio] = useState<
+    number | null
+  >(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -45,14 +47,51 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
     };
   }, [banners.length, autoplayDuration, isHovered]);
 
+  // compute container aspect ratio from the first banner that provides sizes
+  useEffect(() => {
+    if (!banners || banners.length === 0) return;
+
+    function compute() {
+      const vw = typeof window !== 'undefined' ? window.innerWidth : 0;
+
+      for (const banner of banners) {
+        const images =
+          banner.responsive_images ||
+          (banner.image
+            ? {
+                web: { url: banner.image },
+                ipad: { url: banner.image },
+                mobile: { url: banner.image },
+              }
+            : undefined);
+
+        const ratio = computeAspectRatioFromResponsive(images, vw);
+        if (ratio) {
+          setContainerAspectRatio(ratio);
+          return;
+        }
+      }
+
+      setContainerAspectRatio(null);
+    }
+
+    compute();
+    window.addEventListener('resize', compute);
+    return () => window.removeEventListener('resize', compute);
+  }, [banners]);
+
   if (!banners || banners.length === 0) {
     return null;
   }
 
   return (
     <div
-      className={`relative w-full overflow-hidden ${className}`}
-      style={aspectRatio ? { aspectRatio: aspectRatio.toString() } : undefined}
+      className={`relative w-full overflow-hidden ${className} ${containerAspectRatio ? '' : 'min-h-70 md:min-h-105 lg:min-h-130'}`}
+      style={
+        containerAspectRatio
+          ? { aspectRatio: containerAspectRatio.toString() }
+          : undefined
+      }
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -93,38 +132,36 @@ const FadeSlideshow: FC<FadeSlideshowProps> = ({
                 href={banner.link_url}
                 className="block w-full h-full relative"
               >
-                <Image
-                  src={banner.image || banner.video || ''}
+                <ResponsiveImage
+                  images={
+                    banner.responsive_images ||
+                    (banner.image
+                      ? {
+                          web: { url: banner.image },
+                          ipad: { url: banner.image },
+                          mobile: { url: banner.image },
+                        }
+                      : undefined)
+                  }
                   alt={banner.offer_text || 'Promotional Banner'}
-                  fill
-                  className="object-cover"
-                  priority={index === 0 && imagePriority}
-                  sizes="100vw"
-                  onLoad={(e) => {
-                    const { naturalWidth, naturalHeight } =
-                      e.currentTarget as HTMLImageElement;
-                    if (!aspectRatio) {
-                      setAspectRatio(naturalWidth / naturalHeight);
-                    }
-                  }}
+                  className="w-full h-full"
                 />
               </Link>
             ) : (
               <div className="block w-full h-full relative">
-                <Image
-                  src={banner.image || banner.video || ''}
+                <ResponsiveImage
+                  images={
+                    banner.responsive_images ||
+                    (banner.image
+                      ? {
+                          web: { url: banner.image },
+                          ipad: { url: banner.image },
+                          mobile: { url: banner.image },
+                        }
+                      : undefined)
+                  }
                   alt={banner.offer_text || 'Promotional Banner'}
-                  fill
-                  className="object-cover"
-                  priority={index === 0 && imagePriority}
-                  sizes="100vw"
-                  onLoad={(e) => {
-                    const { naturalWidth, naturalHeight } =
-                      e.currentTarget as HTMLImageElement;
-                    if (!aspectRatio) {
-                      setAspectRatio(naturalWidth / naturalHeight);
-                    }
-                  }}
+                  className="w-full h-full"
                 />
               </div>
             )}
