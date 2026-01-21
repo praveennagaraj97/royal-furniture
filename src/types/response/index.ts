@@ -115,6 +115,7 @@ export interface SubCategoryItem {
   name: string;
   slug: string | null;
   image: string;
+  responsive_images?: ResponsiveImages;
   category_name: string;
   category_id: number;
   category_slug: string;
