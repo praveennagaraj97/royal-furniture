@@ -1,7 +1,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { BannerItem } from '@/types/response/home';
-import Image from 'next/image';
 import { FC } from 'react';
+import ResponsiveImage from './responsive-image';
 
 type FullWidthBannerProps = {
   banners: BannerItem[];
@@ -18,13 +18,17 @@ const FullWidthBanner: FC<FullWidthBannerProps> = ({ banners }) => {
       className="relative w-full overflow-hidden"
     >
       {banners.map((banner) => (
-        <Image
+        <ResponsiveImage
           key={banner.id}
-          src={banner.image || ''}
+          images={
+            banner.responsive_images || {
+              web: banner.image ? { url: banner.image } : undefined,
+              ipad: banner.image ? { url: banner.image } : undefined,
+              mobile: banner.image ? { url: banner.image } : undefined,
+            }
+          }
           alt={banner.offer_text || ''}
-          width={1200}
-          height={600}
-          className="w-full h-auto object-cover"
+          className="w-full h-auto"
         />
       ))}
     </ViewOnce>

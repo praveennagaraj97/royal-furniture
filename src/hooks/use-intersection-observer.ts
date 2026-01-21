@@ -16,14 +16,9 @@ export const useIntersectionObserver = ({
   ref,
   options = {},
 }: UseIntersectionObserverProps) => {
-  const {
-    threshold = 0,
-    root = null,
-    rootMargin,
-    enabled = true,
-  } = options;
+  const { threshold = 0, root = null, rootMargin, enabled = true } = options;
 
-  const [isIntersecting, setIsIntersecting] = useState(true);
+  const [isIntersecting, setIsIntersecting] = useState(false);
 
   useEffect(() => {
     if (!enabled || !ref.current) return;

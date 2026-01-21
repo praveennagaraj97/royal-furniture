@@ -1,4 +1,10 @@
-import { BaseAPIResponse, BlogItem, ProductItem, SubCategoryItem } from '.';
+import {
+  BaseAPIResponse,
+  BlogItem,
+  ProductItem,
+  ResponsiveImages,
+  SubCategoryItem,
+} from '.';
 
 export type HomeSectionType =
   | 'hero'
@@ -31,6 +37,7 @@ export interface BannerItem {
   image: string | null;
   video: string | null;
   link_url: string;
+  responsive_images?: ResponsiveImages;
 }
 
 export interface HomeSection {

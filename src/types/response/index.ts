@@ -4,6 +4,19 @@ export interface BaseAPIResponse<T = unknown> {
   data: T;
 }
 
+export interface ResponsiveImageVariant {
+  url: string;
+  width?: number;
+  height?: number;
+  blur_url?: string;
+}
+
+export interface ResponsiveImages {
+  web?: ResponsiveImageVariant;
+  ipad?: ResponsiveImageVariant;
+  mobile?: ResponsiveImageVariant;
+}
+
 export interface RegisterResponseData {
   first_name: string;
   last_name: string;
