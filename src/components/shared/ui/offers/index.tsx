@@ -19,7 +19,7 @@ const Offers: FC<OffersProps> = ({ offers }) => {
       delayChildren={0.1}
       className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible"
     >
-      <Swiper gap={4} showNavigation hideArrowOnMobile>
+      <Swiper gap={2} showNavigation hideArrowOnMobile>
         {offers.map((offer) => (
           <OfferCard
             key={offer.id}

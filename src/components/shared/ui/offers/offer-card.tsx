@@ -7,7 +7,6 @@ import { FC, useState } from 'react';
 
 export interface OfferCardProps {
   images?: ResponsiveImages;
-  image?: string;
   imageAlt?: string;
   title: string;
   description: string;
@@ -15,7 +14,6 @@ export interface OfferCardProps {
 
 const OfferCard: FC<OfferCardProps> = ({
   images,
-  image,
   imageAlt = '',
   title,
   description,
@@ -34,16 +32,7 @@ const OfferCard: FC<OfferCardProps> = ({
       {/* Background Image */}
       <div className="absolute inset-0">
         <ResponsiveImage
-          images={
-            images ??
-            (image
-              ? {
-                  web: { url: image },
-                  ipad: { url: image },
-                  mobile: { url: image },
-                }
-              : undefined)
-          }
+          images={images}
           alt={imageAlt}
           className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`}
         />

@@ -9,12 +9,14 @@ interface ResponsiveImageProps {
   images?: ResponsiveImages;
   alt?: string;
   className?: string;
+  shouldFill?: boolean;
 }
 
 const ResponsiveImage: FC<ResponsiveImageProps> = ({
   images,
   alt = '',
   className = '',
+  shouldFill = false,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -105,7 +107,9 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
           loading="lazy"
           decoding="async"
           onLoad={handleLoad}
-          className={`w-full h-auto object-cover transition-opacity duration-700 ${
+          className={`${
+            shouldFill ? 'absolute inset-0 w-full h-full' : 'w-full h-auto'
+          } object-cover transition-opacity duration-700 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
         />
