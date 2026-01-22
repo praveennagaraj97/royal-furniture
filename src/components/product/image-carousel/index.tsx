@@ -5,9 +5,19 @@ import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
+// module-level type guard so both ImageCarousel and ProductImages can use it
+function isResponsiveImages(v: unknown): v is ResponsiveImages {
+  return (
+    typeof v === 'object' &&
+    v !== null &&
+    ('web' in (v as object) ||
+      'ipad' in (v as object) ||
+      'mobile' in (v as object))
+  );
+}
 
 export interface ImageCarouselProps {
-  images: Array<string | ResponsiveImages>;
+  images: ResponsiveImages[];
   alt?: string;
   discount?: number;
   showView3D?: boolean;
@@ -31,19 +41,10 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
     setSelectedIndex(index);
   };
 
-  function toResponsive(item?: string | ResponsiveImages) {
+  function toResponsive(item?: ResponsiveImages) {
     if (!item) return undefined;
-    // if already a ResponsiveImages object, return as-is
-    if (typeof item !== 'string' && (item as ResponsiveImages).web) {
-      return item as ResponsiveImages;
-    }
-    const url = typeof item === 'string' ? item : undefined;
-    if (!url) return undefined;
-    return {
-      web: { url },
-      ipad: { url },
-      mobile: { url },
-    } as ResponsiveImages;
+    if (isResponsiveImages(item)) return item;
+    return undefined;
   }
 
   return (
@@ -157,7 +158,7 @@ export const ProductImages: FC<ProductImagesProps> = ({
   onShareClick,
   isWishlisted = false,
 }) => {
-  // Extract images from selected variant/fabric/color
+  // Extract images from selected variant/fabric/color and normalize to ResponsiveImages[]
   const images = useMemo(() => {
     const variant = product.variants.find((v) => v.name === selectedVariant);
     const fabric = variant?.fabricsList.find((f) => f.name === selectedFabric);
@@ -165,16 +166,42 @@ export const ProductImages: FC<ProductImagesProps> = ({
       (c) => String(c.id) === selectedColor,
     );
 
-    if (color?.images && color.images.length > 0) {
-      return color.images;
+    // rawImages can be strings or API objects depending on backend
+    const rawImages: unknown[] = (color?.images as unknown[]) ||
+      (product.variants[0]?.fabricsList[0]?.colorsList[0]
+        ?.images as unknown[]) || [product.product_info.thumbnail_image];
+
+    function normalize(img: unknown): ResponsiveImages | undefined {
+      if (!img) return undefined;
+      if (isResponsiveImages(img)) return img;
+
+      const obj = img as Record<string, unknown>;
+      if ('responsive_images' in obj && obj.responsive_images) {
+        return obj.responsive_images as ResponsiveImages;
+      }
+
+      if ('image' in obj && typeof obj.image === 'string') {
+        const url = obj.image as string;
+        return {
+          web: { url },
+          ipad: { url },
+          mobile: { url },
+        } as ResponsiveImages;
+      }
+
+      if (typeof img === 'string') {
+        const url = img;
+        return {
+          web: { url },
+          ipad: { url },
+          mobile: { url },
+        } as ResponsiveImages;
+      }
+
+      return undefined;
     }
 
-    // Fallback to first available images
-    const firstVariant = product.variants[0];
-    const firstFabric = firstVariant?.fabricsList[0];
-    const firstColor = firstFabric?.colorsList[0];
-
-    return firstColor?.images || [product.product_info.thumbnail_image];
+    return rawImages.map(normalize).filter((i): i is ResponsiveImages => !!i);
   }, [product, selectedVariant, selectedFabric, selectedColor]);
 
   const discount = product.product_info.pricing.offer_percentage

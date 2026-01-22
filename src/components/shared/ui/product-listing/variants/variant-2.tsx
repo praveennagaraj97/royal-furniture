@@ -20,7 +20,6 @@ export interface ProductCardVariant2Props {
 export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   product,
   className,
-  isResponsive,
 }) => {
   const params = useParams();
   const locale = useLocale();
@@ -46,11 +45,11 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
       >
         {/* Image Container with Overlays */}
         <div className="group/image relative w-full overflow-visible mb-3">
-          <div className="relative w-full  overflow-hidden ">
+          <div className="relative w-full  overflow-hidden">
             <ResponsiveImage
               images={product.responsive_images}
               alt={product.name}
-              className="object-cover transition-transform duration-300 group-hover/image:scale-105"
+              className="transition-transform duration-300 group-hover/image:scale-105"
             />
 
             {/* Discount Badge - Top Left */}
