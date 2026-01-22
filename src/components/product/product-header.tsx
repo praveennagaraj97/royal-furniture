@@ -32,14 +32,14 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
           amount={0.01}
           margin="-100px"
         >
-          <h1 className="text-3xl lg:text-4xl font-medium">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-medium leading-tight">
             {product.product_info.name}
           </h1>
         </ViewOnce>
       </div>
 
       {/* Savings and Views */}
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-1">
         {savings > 0 && (
           <ViewOnce
             type="fade"
@@ -49,7 +49,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             margin="-100px"
           >
             {amountSaved > 0 && (
-              <span className="text-green-600 font-semibold text-base md:text-lg">
+              <span className="text-green-600 font-semibold text-sm sm:text-base lg:text-lg">
                 Save ฿ {amountSaved.toLocaleString()}
               </span>
             )}
@@ -63,7 +63,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             amount={0.01}
             margin="-100px"
           >
-            <span className="text-gray-600 text-xs md:text-sm">
+            <span className="text-gray-600 text-xs sm:text-sm">
               {product.product_info.view_count} views in 24 hrs
             </span>
           </ViewOnce>
@@ -84,7 +84,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             {[...Array(5)].map((_, i) => (
               <IoIosStarOutline
                 key={i}
-                className={`w-5 h-5 ${
+                className={`w-4 h-4 sm:w-5 sm:h-5 ${
                   i < Math.floor(product.reviews_summary.average_rating)
                     ? 'fill-deep-maroon text-deep-maroon'
                     : 'text-gray-300'
@@ -92,13 +92,13 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
               />
             ))}
           </div>
-          <span className="text-deep-maroon font-medium text-sm md:text-base">
+          <span className="text-deep-maroon font-medium text-xs sm:text-sm lg:text-base">
             {product.reviews_summary.average_rating} (
             {product.reviews_summary.total_reviews} Reviews)
           </span>
           <button
             type="button"
-            className="text-indigo-slate hover:underline text-xs md:text-sm font-semibold whitespace-nowrap shrink-0"
+            className="text-indigo-slate hover:underline text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0"
           >
             See Reviews
           </button>
@@ -114,12 +114,12 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         amount={0.01}
         margin="-100px"
       >
-        <div className="flex items-center gap-3">
-          <span className="text-2xl md:text-3xl font-bold text-red-600">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600">
             ฿ {offerPrice.toLocaleString()}
           </span>
           {basePrice > offerPrice && (
-            <span className="text-lg md:text-xl text-gray-400 line-through font-bold">
+            <span className="text-base sm:text-lg lg:text-xl text-gray-400 line-through font-bold">
               ฿ {basePrice.toLocaleString()}
             </span>
           )}

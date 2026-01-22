@@ -30,19 +30,19 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
             amount={0.01}
             margin="-100px"
           >
-            <div className="p-4 bg-deep-maroon/5 rounded-lg flex flex-col items-start gap-3">
-              <div className="flex items-center gap-2 text-xs md:text-sm text-deep-maroon min-w-0">
-                <HiMapPin className="text-deep-maroon text-lg md:text-xl min-w-5" />
-                <span>Delivery on</span>
-                <span className="font-semibold text-indigo-slate">
+            <div className="p-4 bg-deep-maroon/5 rounded-lg flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-xs md:text-sm text-deep-maroon min-w-0 flex-1">
+                <HiMapPin className="text-deep-maroon text-lg md:text-xl shrink-0" />
+                <span className="truncate">Delivery on</span>
+                <span className="font-semibold text-indigo-slate shrink-0">
                   {product.delivery_info.estimated_delivery}
                 </span>
               </div>
               <button
                 type="button"
-                className="text-indigo-slate hover:underline font-medium text-xs md:text-sm whitespace-nowrap"
+                className="text-indigo-slate hover:underline font-medium text-xs md:text-sm whitespace-nowrap shrink-0 ml-2"
               >
-                Update location
+                Update
               </button>
             </div>
           </ViewOnce>
