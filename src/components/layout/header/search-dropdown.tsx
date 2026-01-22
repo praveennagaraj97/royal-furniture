@@ -142,7 +142,8 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen, onItemClick }) => {
                         <ResponsiveImage
                           images={category.responsive_images}
                           alt={category.name}
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="object-cover aspect-square group-hover:scale-105 transition-transform duration-300"
+                          shouldFill
                         />
                         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-2">

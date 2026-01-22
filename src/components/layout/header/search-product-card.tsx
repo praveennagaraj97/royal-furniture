@@ -39,7 +39,8 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
           <ResponsiveImage
             images={product.responsive_images}
             alt={product.name}
-            className="object-cover transition-transform duration-300 group-hover/image:scale-105"
+            className="object-cover aspect-square transition-transform duration-300 group-hover/image:scale-105"
+            shouldFill
           />
 
           {/* Discount Badge */}
