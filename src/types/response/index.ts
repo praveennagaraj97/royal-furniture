@@ -203,13 +203,19 @@ export interface ProductInfoSection {
   assembly?: InfoItem[];
 }
 
+export interface ProductVariantImage {
+  id: number;
+  image: string;
+  responsive_images?: ResponsiveImages;
+}
+
 export interface ProductVariantColor {
   id: number;
   sku: string;
   name: string;
   hex: string;
   variant_id: number;
-  responsive_images?: ResponsiveImages;
+  images?: ProductVariantImage[];
   stock: number;
   is_wishlist: boolean;
   region_prices: ProductPricing;

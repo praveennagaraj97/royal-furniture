@@ -31,15 +31,27 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
     setSelectedIndex(index);
   };
 
+  // Handle empty images array
+  if (!images || images.length === 0) {
+    console.warn('ImageCarousel: No images available to display');
+    return (
+      <div className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3">
+        <div className="w-full h-96 flex items-center justify-center bg-gray-200">
+          <span className="text-gray-500">No images available</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full">
       {/* Main Image Container (intrinsic height based on image) */}
-      <div className="relative w-full rounded-lg overflow-hidden mb-3">
+      <div className="relative aspect-square w-full rounded-lg overflow-hidden mb-3">
         <ResponsiveImage
-          images={images[selectedIndex] || images[0]}
+          images={images[selectedIndex]}
           alt={alt}
-          className="w-full h-full"
-          shouldFill={false}
+          className="w-full h-full aspect-auto"
+          shouldFill
           objectFit="cover"
         />
 
@@ -154,25 +166,26 @@ export const ProductImages: FC<ProductImagesProps> = ({
       (c) => String(c.id) === selectedColor,
     );
 
-    if (color?.responsive_images) {
-      return [color.responsive_images];
+    // Extract responsive images from the images array within color
+    if (color?.images && color.images.length > 0) {
+      const responsiveImages = color.images
+        .map((img) => img.responsive_images)
+        .filter((img): img is ResponsiveImages => Boolean(img));
+      if (responsiveImages.length > 0) {
+        return responsiveImages;
+      }
+      // Log error if images exist but responsive_images is missing
+      console.error(
+        `responsive_images field is missing for color: ${color.name} (ID: ${color.id}) in product: ${product.product_info.name}`,
+      );
+    } else {
+      // Log error if color has no images at all
+      console.error(
+        `No images found for color: ${selectedColor} in product: ${product.product_info.name}`,
+      );
     }
 
-    // Fallback to first available responsive images
-    const firstVariant = product.variants[0];
-    const firstFabric = firstVariant?.fabricsList[0];
-    const firstColor = firstFabric?.colorsList[0];
-
-    if (firstColor?.responsive_images) {
-      return [firstColor.responsive_images];
-    }
-
-    // Final fallback to product thumbnail as responsive image
-    return [
-      {
-        web: { url: product.product_info.thumbnail_image },
-      },
-    ];
+    return [];
   }, [product, selectedVariant, selectedFabric, selectedColor]);
 
   const discount = product.product_info.pricing.offer_percentage

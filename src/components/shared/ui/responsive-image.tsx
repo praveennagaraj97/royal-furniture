@@ -55,8 +55,8 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {/* Blur Placeholder */}
-      {blurUrl && (
+      {/* Blur Placeholder or Loading Skeleton */}
+      {blurUrl ? (
         <img
           src={blurUrl}
           alt=""
@@ -65,6 +65,13 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             isLoaded ? 'opacity-0' : 'opacity-100'
           }`}
           style={{ filter: 'blur(20px)', transform: 'scale(1.1)', objectFit }}
+        />
+      ) : (
+        <div
+          className={`absolute inset-0 w-full h-full bg-linear-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse transition-opacity duration-700 ${
+            isLoaded ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{ objectFit }}
         />
       )}
 
