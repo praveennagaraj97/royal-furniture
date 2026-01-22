@@ -209,7 +209,7 @@ export interface ProductVariantColor {
   name: string;
   hex: string;
   variant_id: number;
-  images: string[];
+  responsive_images?: ResponsiveImages;
   stock: number;
   is_wishlist: boolean;
   region_prices: ProductPricing;

@@ -1,13 +1,13 @@
 'use client';
 
 import Swiper from '@/components/shared/swiper';
-import type { ProductDetailData } from '@/types/response';
-import Image from 'next/image';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
+import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
 
 export interface ImageCarouselProps {
-  images: string[];
+  images: ResponsiveImages[];
   alt?: string;
   discount?: number;
   showView3D?: boolean;
@@ -26,7 +26,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   isWishlisted = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
 
   const handleThumbnailClick = (index: number) => {
     setSelectedIndex(index);
@@ -35,26 +34,13 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   return (
     <div className="relative w-full">
       {/* Main Image Container (intrinsic height based on image) */}
-      <div
-        className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3"
-        style={
-          aspectRatio ? { aspectRatio: aspectRatio.toString() } : undefined
-        }
-      >
-        <Image
-          src={images[selectedIndex] || images[0]}
-          alt={`${alt}`}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority
-          onLoad={(e) => {
-            const { naturalWidth, naturalHeight } =
-              e.currentTarget as HTMLImageElement;
-            if (!aspectRatio) {
-              setAspectRatio(naturalWidth / naturalHeight);
-            }
-          }}
+      <div className="relative w-full rounded-lg overflow-hidden mb-3">
+        <ResponsiveImage
+          images={images[selectedIndex] || images[0]}
+          alt={alt}
+          className="w-full h-full"
+          shouldFill={false}
+          objectFit="cover"
         />
 
         {/* Discount Badge */}
@@ -126,12 +112,12 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               }`}
               aria-label={`View image ${index + 1}`}
             >
-              <Image
-                src={image}
+              <ResponsiveImage
+                images={image}
                 alt={`${alt} thumbnail ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="96px"
+                className="w-full h-full"
+                shouldFill={false}
+                objectFit="cover"
               />
             </button>
           ))}
@@ -160,7 +146,7 @@ export const ProductImages: FC<ProductImagesProps> = ({
   onShareClick,
   isWishlisted = false,
 }) => {
-  // Extract images from selected variant/fabric/color
+  // Extract responsive images from selected variant/fabric/color
   const images = useMemo(() => {
     const variant = product.variants.find((v) => v.name === selectedVariant);
     const fabric = variant?.fabricsList.find((f) => f.name === selectedFabric);
@@ -168,16 +154,25 @@ export const ProductImages: FC<ProductImagesProps> = ({
       (c) => String(c.id) === selectedColor,
     );
 
-    if (color?.images && color.images.length > 0) {
-      return color.images;
+    if (color?.responsive_images) {
+      return [color.responsive_images];
     }
 
-    // Fallback to first available images
+    // Fallback to first available responsive images
     const firstVariant = product.variants[0];
     const firstFabric = firstVariant?.fabricsList[0];
     const firstColor = firstFabric?.colorsList[0];
 
-    return firstColor?.images || [product.product_info.thumbnail_image];
+    if (firstColor?.responsive_images) {
+      return [firstColor.responsive_images];
+    }
+
+    // Final fallback to product thumbnail as responsive image
+    return [
+      {
+        web: { url: product.product_info.thumbnail_image },
+      },
+    ];
   }, [product, selectedVariant, selectedFabric, selectedColor]);
 
   const discount = product.product_info.pricing.offer_percentage
