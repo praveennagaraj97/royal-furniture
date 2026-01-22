@@ -34,7 +34,8 @@ const OfferCard: FC<OfferCardProps> = ({
         <ResponsiveImage
           images={images}
           alt={imageAlt}
-          className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`}
+          className={`transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`}
+          objectFit="cover"
         />
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-linear-to-r from-white/50 via-white/30 to-transparent" />

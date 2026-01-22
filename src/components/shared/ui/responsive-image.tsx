@@ -10,6 +10,7 @@ interface ResponsiveImageProps {
   alt?: string;
   className?: string;
   shouldFill?: boolean;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down' | 'initial';
 }
 
 const ResponsiveImage: FC<ResponsiveImageProps> = ({
@@ -17,6 +18,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   alt = '',
   className = '',
   shouldFill = false,
+  objectFit = 'initial',
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -59,14 +61,14 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
           src={blurUrl}
           alt=""
           aria-hidden="true"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+          className={`absolute inset-0 w-full h-full transition-opacity duration-700 ${
             isLoaded ? 'opacity-0' : 'opacity-100'
           }`}
-          style={{ filter: 'blur(20px)', transform: 'scale(1.1)' }}
+          style={{ filter: 'blur(20px)', transform: 'scale(1.1)', objectFit }}
         />
       )}
 
-      <picture>
+      <picture style={{ objectFit }}>
         {/* Desktop */}
         {web?.url && (
           <source
@@ -74,6 +76,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             media="(min-width: 1024px)"
             width={web.width}
             height={web.height}
+            style={{ objectFit }}
           />
         )}
 
@@ -84,6 +87,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             media="(min-width: 768px)"
             width={ipad.width}
             height={ipad.height}
+            style={{ objectFit }}
           />
         )}
 
@@ -94,6 +98,7 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             media="(max-width: 767px)"
             width={mobile.width}
             height={mobile.height}
+            style={{ objectFit }}
           />
         )}
 
@@ -107,9 +112,10 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
           loading="lazy"
           decoding="async"
           onLoad={handleLoad}
+          style={{ objectFit }}
           className={`${
-            shouldFill ? 'absolute inset-0 w-full h-full' : 'w-full h-auto'
-          } object-cover transition-opacity duration-700 ${
+            shouldFill ? 'absolute inset-0' : ''
+          } w-full h-full transition-opacity duration-700 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
         />
