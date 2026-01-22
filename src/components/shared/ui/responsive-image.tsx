@@ -2,6 +2,7 @@
 'use client';
 
 import { ResponsiveImages } from '@/types/response';
+import { motion } from 'framer-motion';
 import { FC, useCallback, useMemo, useState } from 'react';
 import NoImage from './no-image';
 
@@ -11,6 +12,8 @@ interface ResponsiveImageProps {
   className?: string;
   shouldFill?: boolean;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down' | 'initial';
+  enableFadeTransition?: boolean;
+  layoutId?: string;
 }
 
 const ResponsiveImage: FC<ResponsiveImageProps> = ({
@@ -19,6 +22,8 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   className = '',
   shouldFill = false,
   objectFit = 'initial',
+  enableFadeTransition = true,
+  layoutId,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -54,7 +59,10 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
   }
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <motion.div
+      className={`relative overflow-hidden ${className}`}
+      layoutId={layoutId}
+    >
       {/* Blur Placeholder or Loading Skeleton */}
       {blurUrl ? (
         <img
@@ -68,14 +76,24 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
         />
       ) : (
         <div
-          className={`absolute inset-0 w-full h-full bg-linear-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse transition-opacity duration-700 ${
+          className={`absolute inset-0 w-full h-full bg-linear-to-r from-gray-200 via-gray-100 to-gray-200 transition-opacity duration-700 ${
             isLoaded ? 'opacity-0' : 'opacity-100'
           }`}
           style={{ objectFit }}
         />
       )}
 
-      <picture style={{ objectFit }}>
+      <motion.picture
+        layoutId={layoutId ? `picture-${layoutId}` : undefined}
+        initial={{ opacity: enableFadeTransition ? 0 : 1 }}
+        animate={{
+          opacity:
+            isLoaded && enableFadeTransition ? 1 : enableFadeTransition ? 0 : 1,
+        }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.7, ease: 'easeInOut' }}
+        style={{ objectFit }}
+      >
         {/* Desktop */}
         {web?.url && (
           <source
@@ -126,8 +144,8 @@ const ResponsiveImage: FC<ResponsiveImageProps> = ({
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
         />
-      </picture>
-    </div>
+      </motion.picture>
+    </motion.div>
   );
 };
 

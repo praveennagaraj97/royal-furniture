@@ -3,7 +3,7 @@
 import Swiper from '@/components/shared/swiper';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
-import { useMemo, useState, type FC } from 'react';
+import { startTransition, useEffect, useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
 
 export interface ImageCarouselProps {
@@ -26,10 +26,20 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   isWishlisted = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [imageKey, setImageKey] = useState(0);
 
   const handleThumbnailClick = (index: number) => {
     setSelectedIndex(index);
   };
+
+  // Reset image key when images array changes to trigger fade effect
+  // Using startTransition to batch state updates and suppress the warning
+  useEffect(() => {
+    startTransition(() => {
+      setImageKey((prev) => prev + 1);
+      setSelectedIndex(0);
+    });
+  }, [images]);
 
   // Handle empty images array
   if (!images || images.length === 0) {
@@ -48,11 +58,14 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
       {/* Main Image Container (intrinsic height based on image) */}
       <div className="relative aspect-square w-full rounded-lg overflow-hidden mb-3">
         <ResponsiveImage
+          key={`${imageKey}-${selectedIndex}`}
           images={images[selectedIndex]}
           alt={alt}
           className="w-full h-full aspect-auto"
           shouldFill
           objectFit="cover"
+          layoutId="main-product-image"
+          enableFadeTransition={true}
         />
 
         {/* Discount Badge */}
@@ -130,6 +143,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
                 className="w-full h-full"
                 shouldFill={false}
                 objectFit="cover"
+                enableFadeTransition={false}
               />
             </button>
           ))}
