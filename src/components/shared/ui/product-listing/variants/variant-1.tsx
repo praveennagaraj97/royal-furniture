@@ -37,7 +37,7 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
         href={`/${product.category.slug}/${product.sub_category.slug}/${product.slug}`}
       >
         {/* Image Container */}
-        <div className="group/image relative w-full aspect-square overflow-hidden bg-gray-100 mb-3">
+        <div className="group/image relative w-full overflow-hidden bg-gray-100 mb-3">
           <ResponsiveImage
             images={product.responsive_images}
             alt={product.name}

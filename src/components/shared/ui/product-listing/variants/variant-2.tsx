@@ -44,11 +44,11 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
       >
         {/* Image Container with Overlays */}
         <div className="group/image relative w-full overflow-visible mb-3">
-          <div className="relative w-full aspect-[4/4.5] overflow-hidden ">
+          <div className="relative w-full  overflow-hidden ">
             <ResponsiveImage
               images={product.responsive_images}
               alt={product.name}
-              className="object-cover transition-transform duration-300 group-hover/image:scale-105 aspect-[4/4.5]"
+              className="object-cover transition-transform duration-300 group-hover/image:scale-105"
             />
 
             {/* Discount Badge - Top Left */}
