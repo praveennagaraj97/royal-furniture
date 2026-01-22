@@ -13,14 +13,12 @@ export interface ProductListingProps {
   title: ReactNode;
   seeAllHref?: string;
   products: ProductItem[];
-  isResponsive?: boolean;
 }
 
 const ProductListing: FC<ProductListingProps> = ({
   title,
   seeAllHref,
   products,
-  isResponsive = false,
 }) => {
   const t = useTranslations();
 
@@ -55,11 +53,8 @@ const ProductListing: FC<ProductListingProps> = ({
       {/* Products Swiper */}
       <Swiper gap={4} showNavigation hideArrowOnMobile alwaysAlignStart>
         {products.map((product) => (
-          <div
-            key={product.id}
-            className="shrink-0 w-40 sm:w-48 md:w-56 lg:w-64 xl:w-80"
-          >
-            <ProductCard product={product} isResponsive={isResponsive} />
+          <div key={product.id} className="shrink-0 w-52 sm:w-64 md:w-80">
+            <ProductCard product={product} />
           </div>
         ))}
       </Swiper>

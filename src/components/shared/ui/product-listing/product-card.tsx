@@ -11,33 +11,19 @@ export interface ProductCardProps {
   product: ProductItem;
   variant?: ProductCardVariant;
   className?: string;
-  isResponsive?: boolean;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
   product,
   variant = 'variant-2',
   className,
-  isResponsive = false,
 }) => {
   switch (variant) {
     case 'variant-2':
-      return (
-        <ProductCardVariant2
-          product={product}
-          className={className}
-          isResponsive={isResponsive}
-        />
-      );
+      return <ProductCardVariant2 product={product} className={className} />;
     case 'variant-1':
     default:
-      return (
-        <ProductCardVariant1
-          product={product}
-          className={className}
-          isResponsive={isResponsive}
-        />
-      );
+      return <ProductCardVariant1 product={product} className={className} />;
   }
 };
 

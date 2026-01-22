@@ -35,7 +35,7 @@ const SpotLightCard: FC<{ item: SubCategoryItem }> = ({ item }) => {
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="flex flex-col min-w-40 sm:min-w-64 md:min-w-80"
+      className="flex flex-col min-w-52 sm:min-w-64 md:min-w-80"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
