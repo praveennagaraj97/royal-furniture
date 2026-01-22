@@ -105,11 +105,7 @@ const SearchResults: FC = () => {
               className="grid gap-x-3 gap-y-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
             >
               {displayProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  isResponsive={true}
-                />
+                <ProductCard key={product.id} product={product} />
               ))}
             </StaggerContainer>
           </motion.div>

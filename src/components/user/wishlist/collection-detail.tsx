@@ -191,7 +191,7 @@ const WishlistCollectionPageContent: FC = () => {
             distance={20}
             duration={0.4}
           >
-            <ProductCard product={product} isResponsive={true} />
+            <ProductCard product={product} />
           </StaggerItem>
         ))}
       </div>

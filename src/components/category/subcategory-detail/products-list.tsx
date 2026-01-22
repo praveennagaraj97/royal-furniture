@@ -1,9 +1,9 @@
 'use client';
 
+import { ProductsEmptyState } from '@/components/category/subcategory-detail/empty-state';
 import { StaggerContainer } from '@/components/shared/animations';
 import ProductCard from '@/components/shared/ui/product-listing/product-card';
 import { ProductsListSkeleton } from '@/components/skeletons/products-list-skeleton';
-import { ProductsEmptyState } from '@/components/category/subcategory-detail/empty-state';
 import { ProductItem } from '@/types';
 import { motion } from 'framer-motion';
 import { FC } from 'react';
@@ -58,7 +58,7 @@ const ProductsList: FC<ProductsListProps> = ({
         }`}
       >
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} isResponsive={true} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </StaggerContainer>
     </motion.div>
