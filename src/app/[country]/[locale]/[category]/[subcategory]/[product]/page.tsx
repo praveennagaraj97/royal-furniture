@@ -28,8 +28,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const productData = response.data;
 
-  console.log(productData);
-
   return (
     <Fragment>
       <ProductDetail data={productData} />
