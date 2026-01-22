@@ -14,11 +14,13 @@ import { useParams } from 'next/navigation';
 export interface ProductCardVariant2Props {
   product: ProductItem;
   className?: string;
+  isResponsive?: boolean;
 }
 
 export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   product,
   className,
+  isResponsive,
 }) => {
   const params = useParams();
   const locale = useLocale();

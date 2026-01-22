@@ -1,10 +1,10 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { SearchDropdownSkeleton } from '@/components/skeletons/search-dropdown-skeleton';
 import { AppLink } from '@/hooks';
 import { useGetSearchSuggestions } from '@/hooks/api';
-import Image from 'next/image';
 import { FC } from 'react';
 import { FiChevronRight, FiZap } from 'react-icons/fi';
 import SearchProductCard from './search-product-card';
@@ -15,10 +15,7 @@ interface SearchDropdownProps {
   onItemClick?: () => void;
 }
 
-const SearchDropdown: FC<SearchDropdownProps> = ({
-  isOpen,
-  onItemClick,
-}) => {
+const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen, onItemClick }) => {
   const {
     popularSearches,
     mostSearchedProducts,
@@ -59,7 +56,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({
                   >
                     <AppLink
                       href={`/search?q=${encodeURIComponent(
-                        search.search_term
+                        search.search_term,
                       )}`}
                       onClick={onItemClick}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 transition-colors"
@@ -142,12 +139,10 @@ const SearchDropdown: FC<SearchDropdownProps> = ({
                         onClick={onItemClick}
                         className="group relative block w-full aspect-square rounded-lg overflow-hidden bg-gray-100 hover:shadow-md transition-shadow"
                       >
-                        <Image
-                          src={category.icon}
+                        <ResponsiveImage
+                          images={category.responsive_images}
                           alt={category.name}
-                          fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="(max-width: 640px) 33vw, 150px"
                         />
                         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-2">

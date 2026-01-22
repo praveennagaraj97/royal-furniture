@@ -1,11 +1,11 @@
 'use client';
 
 import WishlistAction from '@/components/shared/ui/product-listing/wishlist';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { AppLink } from '@/hooks';
 import { ProductItem } from '@/types';
 import { formatCurrency } from '@/utils/format-currency';
 import { useLocale, useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { FC } from 'react';
 
@@ -36,12 +36,10 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
       >
         {/* Image Container - Smaller */}
         <div className="group/image relative w-full aspect-square overflow-hidden bg-gray-100 mb-2">
-          <Image
-            src={product.thumbnail_image}
+          <ResponsiveImage
+            images={product.responsive_images}
             alt={product.name}
-            fill
             className="object-cover transition-transform duration-300 group-hover/image:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 200px"
           />
 
           {/* Discount Badge */}
@@ -49,7 +47,7 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
             <div className="absolute top-2 left-2 bg-deep-maroon text-white text-xs font-semibold px-2 py-0.5 rounded-md z-10">
               {t('common.off', {
                 percentage: parseFloat(
-                  product.pricing.offer_percentage || '0'
+                  product.pricing.offer_percentage || '0',
                 ).toFixed(0),
               })}
             </div>
@@ -69,7 +67,7 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
               {formatCurrency(
                 product.pricing.offer_price || 0,
                 countryCode,
-                locale
+                locale,
               )}
             </span>
             {product.pricing.base_price !== product.pricing.offer_price && (
@@ -77,7 +75,7 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
                 {formatCurrency(
                   product.pricing.base_price || 0,
                   countryCode,
-                  locale
+                  locale,
                 )}
               </span>
             )}

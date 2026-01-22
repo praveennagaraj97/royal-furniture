@@ -100,6 +100,7 @@ export interface BlogItem {
   author: string | null;
   category: CategoryItem;
   thumbnail: string;
+  responsive_images?: ResponsiveImages;
   short_description: string;
   published_at: string;
 }
@@ -339,6 +340,7 @@ export interface TrendingCategory {
   name: string;
   icon: string;
   banner_image: string | null;
+  responsive_images?: ResponsiveImages;
   product_count: number;
 }
 
@@ -378,6 +380,7 @@ export type ProductListingResponse = BaseAPIResponse<ProductListingData>;
 export interface WishlistPreviewItem {
   product_name: string;
   product_image: string;
+  responsive_images?: ResponsiveImages;
   is_extra: boolean;
 }
 

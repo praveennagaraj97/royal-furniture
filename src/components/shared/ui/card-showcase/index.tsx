@@ -2,13 +2,14 @@
 
 import { StaggerContainer } from '@/components/shared/animations';
 import Swiper from '@/components/shared/swiper';
+import { ResponsiveImages } from '@/types/response';
 import { FC } from 'react';
 import CardShowcaseCard from './card';
 
 export interface CardItem {
   id: string;
-  image: string;
-  imageAlt: string;
+  responsive_images?: ResponsiveImages;
+  imageAlt?: string;
   label: string;
 }
 
@@ -28,8 +29,8 @@ const CardShowcase: FC<CardShowcaseProps> = ({ items, className = '' }) => {
         {items.map((item) => (
           <CardShowcaseCard
             key={item.id}
-            image={item.image}
-            imageAlt={item.imageAlt}
+            images={item.responsive_images}
+            alt={item.imageAlt}
             label={item.label}
           />
         ))}

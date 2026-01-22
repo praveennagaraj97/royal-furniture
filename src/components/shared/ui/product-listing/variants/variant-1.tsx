@@ -14,11 +14,13 @@ import AddToCart from '../add-to-cart';
 export interface ProductCardVariant1Props {
   product: ProductItem;
   className?: string;
+  isResponsive?: boolean;
 }
 
 export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
   product,
   className,
+  isResponsive,
 }) => {
   const params = useParams();
   const locale = useLocale();

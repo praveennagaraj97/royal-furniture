@@ -23,7 +23,7 @@ const Offers: FC<OffersProps> = ({ offers }) => {
         {offers.map((offer) => (
           <OfferCard
             key={offer.id}
-            image={offer.image || ''}
+            images={offer.responsive_images}
             imageAlt={offer.offer_text || ''}
             title={offer.offer_text || ''}
             description={offer.offer_text || ''}

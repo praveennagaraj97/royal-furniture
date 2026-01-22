@@ -1,8 +1,8 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { AppLink } from '@/hooks';
-import Image from 'next/image';
 import { FC, useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
@@ -26,15 +26,10 @@ const BlogCard: FC<BlogCardProps> = ({ blog }) => {
     >
       {/* Image Container */}
       <div className="relative w-full aspect-[4/1.8] rounded-sm overflow-hidden mb-4 shadow-md hover:shadow-xl transition-all duration-300">
-        <Image
-          src={blog.thumbnail}
+        <ResponsiveImage
+          images={blog.responsive_images}
           alt={blog.title}
-          fill
-          className="object-cover transition-transform duration-300"
-          sizes="(max-width: 640px) 280px, (max-width: 768px) 300px, 320px"
-          style={{
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          }}
+          className={`transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`}
         />
       </div>
 

@@ -1,8 +1,8 @@
 'use client';
 
 import Swiper from '@/components/shared/swiper';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ProductDetailData } from '@/types/response';
-import Image from 'next/image';
 import { useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
 
@@ -26,35 +26,28 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   isWishlisted = false,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
 
   const handleThumbnailClick = (index: number) => {
     setSelectedIndex(index);
   };
 
+  function toResponsive(url?: string) {
+    if (!url) return undefined;
+    return {
+      web: { url },
+      ipad: { url },
+      mobile: { url },
+    };
+  }
+
   return (
     <div className="relative w-full">
       {/* Main Image Container (intrinsic height based on image) */}
-      <div
-        className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3"
-        style={
-          aspectRatio ? { aspectRatio: aspectRatio.toString() } : undefined
-        }
-      >
-        <Image
-          src={images[selectedIndex] || images[0]}
+      <div className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3 min-h-[280px] md:min-h-[420px] lg:min-h-[520px]">
+        <ResponsiveImage
+          images={toResponsive(images[selectedIndex] || images[0])}
           alt={`${alt}`}
-          fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority
-          onLoad={(e) => {
-            const { naturalWidth, naturalHeight } =
-              e.currentTarget as HTMLImageElement;
-            if (!aspectRatio) {
-              setAspectRatio(naturalWidth / naturalHeight);
-            }
-          }}
         />
 
         {/* Discount Badge */}
@@ -126,12 +119,10 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               }`}
               aria-label={`View image ${index + 1}`}
             >
-              <Image
-                src={image}
+              <ResponsiveImage
+                images={toResponsive(image)}
                 alt={`${alt} thumbnail ${index + 1}`}
-                fill
                 className="object-cover"
-                sizes="96px"
               />
             </button>
           ))}

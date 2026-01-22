@@ -1,19 +1,22 @@
 'use client';
 
 import { StaggerItem } from '@/components/shared/animations';
-import Image from 'next/image';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
+import { ResponsiveImages } from '@/types/response';
 import { FC, useState } from 'react';
 
 export interface OfferCardProps {
-  image: string;
-  imageAlt: string;
+  images?: ResponsiveImages;
+  image?: string;
+  imageAlt?: string;
   title: string;
   description: string;
 }
 
 const OfferCard: FC<OfferCardProps> = ({
+  images,
   image,
-  imageAlt,
+  imageAlt = '',
   title,
   description,
 }) => {
@@ -30,15 +33,19 @@ const OfferCard: FC<OfferCardProps> = ({
     >
       {/* Background Image */}
       <div className="absolute inset-0">
-        <Image
-          src={image}
+        <ResponsiveImage
+          images={
+            images ??
+            (image
+              ? {
+                  web: { url: image },
+                  ipad: { url: image },
+                  mobile: { url: image },
+                }
+              : undefined)
+          }
           alt={imageAlt}
-          fill
-          className="object-cover transition-transform duration-300"
-          sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, 380px"
-          style={{
-            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-          }}
+          className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'}`}
         />
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-linear-to-r from-white/50 via-white/30 to-transparent" />
