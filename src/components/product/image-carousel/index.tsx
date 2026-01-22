@@ -2,12 +2,12 @@
 
 import Swiper from '@/components/shared/swiper';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
-import type { ProductDetailData } from '@/types/response';
+import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
 
 export interface ImageCarouselProps {
-  images: string[];
+  images: Array<string | ResponsiveImages>;
   alt?: string;
   discount?: number;
   showView3D?: boolean;
@@ -31,19 +31,25 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
     setSelectedIndex(index);
   };
 
-  function toResponsive(url?: string) {
+  function toResponsive(item?: string | ResponsiveImages) {
+    if (!item) return undefined;
+    // if already a ResponsiveImages object, return as-is
+    if (typeof item !== 'string' && (item as ResponsiveImages).web) {
+      return item as ResponsiveImages;
+    }
+    const url = typeof item === 'string' ? item : undefined;
     if (!url) return undefined;
     return {
       web: { url },
       ipad: { url },
       mobile: { url },
-    };
+    } as ResponsiveImages;
   }
 
   return (
     <div className="relative w-full">
       {/* Main Image Container (intrinsic height based on image) */}
-      <div className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3 min-h-[280px] md:min-h-[420px] lg:min-h-[520px]">
+      <div className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3">
         <ResponsiveImage
           images={toResponsive(images[selectedIndex] || images[0])}
           alt={`${alt}`}
