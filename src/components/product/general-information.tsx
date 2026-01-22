@@ -14,7 +14,6 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
   description,
   infoSection,
 }) => {
-  const material = infoSection?.material || [];
   const dimensions = infoSection?.dimensions || [];
   const specifications = infoSection?.specs || [];
   const warrantyAndCare = infoSection?.warranty || [];
@@ -43,34 +42,28 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
 
   const accordionItems = [
     {
-      id: 'material',
-      title: 'Material',
-      children: renderDataRows(material),
-      defaultOpen: true, // Expanded by default on mobile
+      id: 'dimensions',
+      title: 'Dimension',
+      children: renderDataRows(dimensions),
+      defaultOpen: true,
     },
     {
       id: 'specifications',
       title: 'Specifications',
       children: renderDataRows(specifications),
-      defaultOpen: true, // Expanded by default on mobile
-    },
-    {
-      id: 'dimensions',
-      title: 'Dimension',
-      children: renderDataRows(dimensions),
-      defaultOpen: false, // Collapsed by default on mobile
+      defaultOpen: false,
     },
     {
       id: 'warranty',
       title: 'Warranty and care',
       children: renderDataRows(warrantyAndCare),
-      defaultOpen: false, // Collapsed by default on mobile
+      defaultOpen: false,
     },
     {
       id: 'assembly',
       title: 'Assembly',
       children: renderDataRows(assembly),
-      defaultOpen: false, // Collapsed by default on mobile
+      defaultOpen: false,
     },
   ];
 

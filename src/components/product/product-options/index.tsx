@@ -18,7 +18,6 @@ export interface ProductOptionsProps {
   onFabricChange: (fabricName: string) => void;
   onColorChange: (colorId: string) => void;
   onQuantityChange: (delta: number) => void;
-  hideQuantitySelector?: boolean;
 }
 
 export const ProductOptions: FC<ProductOptionsProps> = ({
@@ -31,7 +30,6 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
   onFabricChange,
   onColorChange,
   onQuantityChange,
-  hideQuantitySelector = false,
 }) => {
   // Get current variant, fabric, and color
   const currentVariant = product.variants.find(
@@ -109,13 +107,11 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
         onColorChange={onColorChange}
       />
       {product.customization_options.is_customizable && <CustomizeSection />}
-      {!hideQuantitySelector && (
-        <QuantitySelector
-          quantity={quantity}
-          stockCount={currentColor?.stock}
-          onQuantityChange={onQuantityChange}
-        />
-      )}
+      <QuantitySelector
+        quantity={quantity}
+        stockCount={currentColor?.stock}
+        onQuantityChange={onQuantityChange}
+      />
     </div>
   );
 };
@@ -134,4 +130,3 @@ export type { SizeSelectionProps } from './size-selection';
 
 export { QuantitySelector } from './quantity-selector';
 export type { QuantitySelectorProps } from './quantity-selector';
-

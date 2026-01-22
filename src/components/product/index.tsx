@@ -6,10 +6,8 @@ import { useIntersectionObserver } from '@/hooks';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
 import { startTransition, useEffect, useRef, useState, type FC } from 'react';
-import { FiChevronRight, FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
-import { IoIosStarOutline } from 'react-icons/io';
+import { FiChevronRight, FiShoppingCart } from 'react-icons/fi';
 import { IoStorefront } from 'react-icons/io5';
-import { AvailabilityBanner } from './availability-banner';
 import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
@@ -17,7 +15,6 @@ import { ProductActions } from './product-actions';
 import { ProductAdditionalInfo } from './product-additional-info';
 import { ProductHeader } from './product-header';
 import { ProductOptions } from './product-options';
-import { CustomizeSection } from './product-options/customize-section';
 import StoreLocatorModal from './store-locator-modal';
 import { UserReviews } from './user-reviews';
 
@@ -171,180 +168,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           margin="-100px"
         >
           <div className="min-w-0 w-full grid 2xl:grid-cols-2 gap-4">
-            {/* Mobile Layout - Single Column */}
-            <div className="space-y-4 lg:hidden">
-              {/* Availability Banner */}
-              <AvailabilityBanner stockCount={currentColor?.stock} />
-
-              {/* Product Title with Quantity Selector and Price */}
-              <div className="space-y-3">
-                {/* Title with Quantity Selector */}
-                <div className="flex items-start justify-between gap-4">
-                  <h1 className="text-3xl font-medium flex-1 min-w-0">
-                    {data.product_info.name}
-                  </h1>
-                  {/* Quantity Selector - Mobile Only */}
-                  <div className="shrink-0 mt-2">
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleQuantityChange(-1)}
-                        disabled={quantity <= 1}
-                        className="w-8 h-8 rounded border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                        aria-label="Decrease quantity"
-                      >
-                        <FiMinus className="w-4 h-4" />
-                      </button>
-                      <span className="px-2 text-lg font-bold min-w-8 text-center">
-                        {quantity}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleQuantityChange(1)}
-                        disabled={
-                          currentColor?.stock
-                            ? quantity >= currentColor.stock
-                            : false
-                        }
-                        className="w-8 h-8 rounded border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                        aria-label="Increase quantity"
-                      >
-                        <FiPlus className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Savings */}
-                {(() => {
-                  const basePrice = data.product_info.pricing.base_price
-                    ? parseFloat(data.product_info.pricing.base_price)
-                    : 0;
-                  const offerPrice = data.product_info.pricing.offer_price
-                    ? parseFloat(data.product_info.pricing.offer_price)
-                    : basePrice;
-                  const savings = basePrice - offerPrice;
-                  const amountSaved = data.product_info.pricing.amount_saved
-                    ? parseFloat(data.product_info.pricing.amount_saved)
-                    : savings;
-
-                  return (
-                    savings > 0 &&
-                    amountSaved > 0 && (
-                      <span className="text-green-600 font-semibold text-base">
-                        Save ฿{amountSaved.toLocaleString()}
-                      </span>
-                    )
-                  );
-                })()}
-
-                {/* Views */}
-                {data.product_info.view_count > 0 && (
-                  <span className="text-green-600 text-sm flex items-center gap-1">
-                    <span className="text-gray-600">
-                      {data.product_info.view_count} views in 24 hrs
-                    </span>
-                  </span>
-                )}
-
-                {/* Rating */}
-                <div className="flex flex-wrap items-center gap-2 min-w-0">
-                  <div className="flex items-center gap-1 shrink-0">
-                    {[...Array(5)].map((_, i) => (
-                      <IoIosStarOutline
-                        key={i}
-                        className={`w-5 h-5 ${
-                          i < Math.floor(data.reviews_summary.average_rating)
-                            ? 'fill-deep-maroon text-deep-maroon'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-deep-maroon font-medium text-sm">
-                    {data.reviews_summary.average_rating} (
-                    {data.reviews_summary.total_reviews} Reviews)
-                  </span>
-                  <button
-                    type="button"
-                    className="text-indigo-slate hover:underline text-xs font-semibold whitespace-nowrap shrink-0"
-                  >
-                    See Reviews
-                  </button>
-                </div>
-              </div>
-
-              {/* Payment Plans - Moved earlier for mobile */}
-              <PaymentDeliveryInfo
-                productPrice={
-                  currentColor?.region_prices.offer_price
-                    ? parseFloat(currentColor.region_prices.offer_price)
-                    : data.product_info.pricing.offer_price
-                      ? parseFloat(data.product_info.pricing.offer_price)
-                      : 0
-                }
-                deliveryInfo={data.delivery_info}
-                flexiPayment={data.flexi_payment}
-                paymentOptions={data.payment_options}
-                freeAssembly={data.free_assembly}
-                expressDeliveryTimer={data.express_delivery_timer}
-                showPaymentPlansOnly={true}
-              />
-
-              {/* Product Options (Color, Fabric, Size) */}
-              <ProductOptions
-                product={data}
-                selectedVariant={selectedVariant}
-                selectedFabric={selectedFabric}
-                selectedColor={selectedColor}
-                quantity={quantity}
-                onVariantChange={setSelectedVariant}
-                onFabricChange={setSelectedFabric}
-                onColorChange={setSelectedColor}
-                onQuantityChange={handleQuantityChange}
-                hideQuantitySelector={true}
-              />
-
-              {/* Delivery Details */}
-              <ProductAdditionalInfo product={data} />
-
-              {/* Try in Store */}
-              <button
-                type="button"
-                onClick={() => setIsStoreLocatorOpen(true)}
-                className="w-full flex items-center justify-between p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
-              >
-                <div className="flex items-center gap-2">
-                  <IoStorefront className="text-xl text-deep-maroon" />
-                  <span className="font-semibold text-xs md:text-sm text-gray-900">
-                    Try in store!
-                  </span>
-                </div>
-                <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
-              </button>
-
-              {/* Customize Section */}
-              {data.customization_options.is_customizable && (
-                <CustomizeSection />
-              )}
-
-              {/* General Information */}
-              <GeneralInformation
-                description={data.general_information}
-                infoSection={currentColor?.info_section}
-              />
-
-              {/* Product Actions */}
-              <div ref={actionsRef}>
-                <ProductActions
-                  onAddToCart={handleAddToCart}
-                  onBuyNow={handleBuyNow}
-                />
-              </div>
-            </div>
-
-            {/* Desktop Layout - Two Columns */}
-            <div className="hidden lg:block space-y-4">
+            <div className="space-y-4">
               <ProductHeader product={data} />
               <ProductOptions
                 product={data}
@@ -386,7 +210,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 infoSection={currentColor?.info_section}
               />
             </div>
-            <div className="hidden lg:block space-y-4">
+            <div className="space-y-4">
               <div ref={actionsRef}>
                 <ProductActions
                   onAddToCart={handleAddToCart}
