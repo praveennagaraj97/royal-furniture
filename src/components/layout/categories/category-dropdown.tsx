@@ -73,13 +73,15 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
                     }
                     className="group flex flex-col items-center gap-2 cursor-pointer"
                   >
-                    <ResponsiveImage
-                      images={subcategory.responsive_images}
-                      alt={subcategory.name}
-                      className="aspect-square group-hover:scale-105 transition-transform duration-300 rounded-lg overflow-hidden"
-                      objectFit="cover"
-                    />
-
+                    <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
+                      <ResponsiveImage
+                        images={subcategory.responsive_images}
+                        alt={subcategory.name}
+                        className="group-hover:scale-105 aspect-square transition-transform duration-300"
+                        shouldFill={true}
+                        objectFit="cover"
+                      />
+                    </div>
                     <span className="text-sm font-medium text-gray-800 text-center group-hover:text-deep-maroon transition-colors line-clamp-2">
                       {subcategory.name}
                     </span>

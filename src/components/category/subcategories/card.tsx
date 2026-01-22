@@ -27,7 +27,9 @@ const SubCategoryCard: FC<SubCategoryCardProps> = ({
         <ResponsiveImage
           images={subcategory.responsive_images}
           alt={subcategory.name}
-          className="object-cover group-hover/card:scale-105 transition-transform duration-300"
+          className="group-hover/card:scale-105 transition-transform duration-300 aspect-square"
+          shouldFill={true}
+          objectFit="cover"
         />
       </div>
       <span
