@@ -1,10 +1,10 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { AppLink } from '@/hooks';
 import { SubCategoryItem } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
-import Image from 'next/image';
 import { FC } from 'react';
 
 interface CategoryDropdownProps {
@@ -74,12 +74,10 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
                     className="group flex flex-col items-center gap-2 cursor-pointer"
                   >
                     <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
-                      <Image
-                        src={subcategory.image}
+                      <ResponsiveImage
+                        images={subcategory.responsive_images}
                         alt={subcategory.name}
-                        fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                       />
                     </div>
                     <span className="text-sm font-medium text-gray-800 text-center group-hover:text-deep-maroon transition-colors line-clamp-2">
