@@ -13,7 +13,9 @@ interface SubcategoryFiltersProps {
   isVisible: boolean;
   onHide: () => void;
   subcategoryId: number | null;
-  onFiltersChange: (filters: Record<string, string[]>) => void;
+  onFiltersChange: (
+    filters: Record<string, { ids: number[]; key: string }>,
+  ) => void;
 }
 
 const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
@@ -27,21 +29,29 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   });
 
   const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string[]>
+    Record<string, { ids: number[]; key: string }>
   >({});
 
   const handleFilterChange = useCallback(
-    (sectionId: string, value: string, isChecked: boolean) => {
+    (
+      sectionId: string,
+      optionId: number,
+      filterKey: string,
+      isChecked: boolean,
+    ) => {
       const updatedFilters = { ...selectedFilters };
       if (!updatedFilters[sectionId]) {
-        updatedFilters[sectionId] = [];
+        updatedFilters[sectionId] = { ids: [], key: filterKey };
       }
 
       if (isChecked) {
-        updatedFilters[sectionId] = [...updatedFilters[sectionId], value];
+        updatedFilters[sectionId].ids = [
+          ...updatedFilters[sectionId].ids,
+          optionId,
+        ];
       } else {
-        updatedFilters[sectionId] = updatedFilters[sectionId].filter(
-          (v) => v !== value,
+        updatedFilters[sectionId].ids = updatedFilters[sectionId].ids.filter(
+          (id) => id !== optionId,
         );
       }
 
@@ -52,9 +62,17 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   );
 
   const handleSelectAll = useCallback(
-    (sectionId: string, allValues: string[], isSelectingAll: boolean) => {
+    (
+      sectionId: string,
+      allIds: number[],
+      filterKey: string,
+      isSelectingAll: boolean,
+    ) => {
       const updatedFilters = { ...selectedFilters };
-      updatedFilters[sectionId] = isSelectingAll ? allValues : [];
+      updatedFilters[sectionId] = {
+        ids: isSelectingAll ? allIds : [],
+        key: filterKey,
+      };
       setSelectedFilters(updatedFilters);
       onFiltersChange(updatedFilters);
     },
@@ -62,11 +80,10 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   );
 
   // Filters that only allow single selection
-  const SINGLE_SELECT_FILTERS = [
-    'capacity',
-    'filter_capacity',
-    'filter_cpacity',
-  ];
+  const SINGLE_SELECT_FILTERS = useMemo(
+    () => ['capacity', 'filter_capacity', 'filter_cpacity'],
+    [],
+  );
 
   // Transform API data to filter sections
   const filterSections = useMemo(() => {
@@ -76,18 +93,34 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
         const isSingleSelect = SINGLE_SELECT_FILTERS.includes(
           filter.type.toLowerCase(),
         );
+        // Determine the API parameter key based on filter type
+        let apiKey = '';
+        if (filter.type.toLowerCase().includes('color')) {
+          apiKey = 'color_ids';
+        } else if (filter.type.toLowerCase().includes('size')) {
+          apiKey = 'size_ids';
+        } else if (filter.type.toLowerCase().includes('type')) {
+          apiKey = 'type_ids';
+        } else if (filter.type.toLowerCase().includes('capacity')) {
+          apiKey = 'capacity';
+        } else {
+          // For dynamic filters, use format: filter_<key>
+          apiKey = `filter_${filter.type.toLowerCase().replace(/\s+/g, '_')}`;
+        }
+
         return {
           id: `filter-${filter.type_id}`,
           title: filter.type,
           isSingleSelect,
+          apiKey,
           options: filter.filter_data.map((item) => ({
             id: `option-${item.id}`,
             label: item.label,
-            value: item.key,
+            optionId: item.id,
           })),
         };
       });
-  }, [filters]);
+  }, [filters, SINGLE_SELECT_FILTERS]);
 
   const filterContent = useMemo(() => {
     if (isLoading) {
@@ -125,13 +158,14 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                   <input
                     type="checkbox"
                     checked={
-                      selectedFilters[section.id]?.length ===
+                      selectedFilters[section.id]?.ids?.length ===
                       section.options.length
                     }
                     onChange={(e) =>
                       handleSelectAll(
                         section.id,
-                        section.options.map((opt) => opt.value),
+                        section.options.map((opt) => opt.optionId),
+                        section.apiKey,
                         e.target.checked,
                       )
                     }
@@ -152,29 +186,31 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                     <input
                       type={section.isSingleSelect ? 'radio' : 'checkbox'}
                       name={section.isSingleSelect ? section.id : undefined}
-                      value={option.value}
+                      value={option.optionId}
                       checked={
                         section.isSingleSelect
-                          ? selectedFilters[section.id]?.includes(
-                              option.value,
+                          ? selectedFilters[section.id]?.ids?.includes(
+                              option.optionId,
                             ) || false
-                          : selectedFilters[section.id]?.includes(
-                              option.value,
+                          : selectedFilters[section.id]?.ids?.includes(
+                              option.optionId,
                             ) || false
                       }
                       onChange={(e) =>
                         section.isSingleSelect
                           ? (() => {
                               const updatedFilters = { ...selectedFilters };
-                              updatedFilters[section.id] = e.target.checked
-                                ? [option.value]
-                                : [];
+                              updatedFilters[section.id] = {
+                                ids: e.target.checked ? [option.optionId] : [],
+                                key: section.apiKey,
+                              };
                               setSelectedFilters(updatedFilters);
                               onFiltersChange(updatedFilters);
                             })()
                           : handleFilterChange(
                               section.id,
-                              option.value,
+                              option.optionId,
+                              section.apiKey,
                               e.target.checked,
                             )
                       }
@@ -194,6 +230,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
     isLoading,
     handleFilterChange,
     handleSelectAll,
+    onFiltersChange,
   ]);
 
   if (!isVisible) return null;

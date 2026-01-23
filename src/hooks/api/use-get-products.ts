@@ -9,32 +9,32 @@ interface UseGetProductsProps {
   sub_category_id?: string | null;
   category_id?: string | null;
   q?: string;
-  color?: string;
+  color_ids?: string;
+  size_ids?: string;
+  type_ids?: string;
+  capacity?: string;
   price_min?: number | string;
   price_max?: number | string;
+  country_id?: number | string;
   sort?: string;
-  size_id?: string;
-  type_id?: string;
-  filter_cpacity?: string;
-  capacity?: string;
-  filter_capacity?: string;
   enabled?: boolean;
+  [key: string]: unknown;
 }
 
 export const useGetProducts = ({
   sub_category_id,
   category_id,
   q,
-  color,
+  color_ids,
+  size_ids,
+  type_ids,
+  capacity,
   price_min,
   price_max,
+  country_id,
   sort,
-  size_id,
-  type_id,
-  filter_cpacity,
-  capacity,
-  filter_capacity,
   enabled = true,
+  ...dynamicFilters
 }: UseGetProductsProps) => {
   const params = new URLSearchParams();
 
@@ -47,8 +47,17 @@ export const useGetProducts = ({
   if (q) {
     params.append('q', q);
   }
-  if (color) {
-    params.append('color', color);
+  if (color_ids) {
+    params.append('color_ids', color_ids);
+  }
+  if (size_ids) {
+    params.append('size_ids', size_ids);
+  }
+  if (type_ids) {
+    params.append('type_ids', type_ids);
+  }
+  if (capacity) {
+    params.append('capacity', capacity);
   }
   if (price_min !== undefined && price_min !== null) {
     params.append('price_min', String(price_min));
@@ -56,24 +65,19 @@ export const useGetProducts = ({
   if (price_max !== undefined && price_max !== null) {
     params.append('price_max', String(price_max));
   }
+  if (country_id !== undefined && country_id !== null) {
+    params.append('country_id', String(country_id));
+  }
   if (sort) {
     params.append('sort', sort);
   }
-  if (size_id) {
-    params.append('size_id', size_id);
-  }
-  if (type_id) {
-    params.append('type_id', type_id);
-  }
-  if (filter_cpacity) {
-    params.append('filter_cpacity', filter_cpacity);
-  }
-  if (capacity) {
-    params.append('capacity', capacity);
-  }
-  if (filter_capacity) {
-    params.append('filter_capacity', filter_capacity);
-  }
+
+  // Add dynamic filter parameters (filter_<key> format)
+  Object.entries(dynamicFilters).forEach(([key, value]) => {
+    if (key.startsWith('filter_') && value) {
+      params.append(key, String(value));
+    }
+  });
 
   const queryString = params.toString();
   const url =

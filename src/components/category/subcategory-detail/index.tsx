@@ -30,7 +30,7 @@ const SubcategoryDetail: FC = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState('relevant');
   const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string[]>
+    Record<string, { ids: number[]; key: string }>
   >({});
 
   // Get subcategory slug and ID from layout context
@@ -47,6 +47,17 @@ const SubcategoryDetail: FC = () => {
     return subcategory?.id || null;
   }, [categories, params.category, subcategorySlug]);
 
+  // Build API parameters from filters
+  const buildFilterParams = useMemo(() => {
+    const params: Record<string, string> = {};
+    Object.entries(selectedFilters).forEach(([, filter]) => {
+      if (filter.ids?.length) {
+        params[filter.key] = filter.ids.join(',');
+      }
+    });
+    return params;
+  }, [selectedFilters]);
+
   // Fetch products from API
   const {
     products: apiProducts,
@@ -55,21 +66,7 @@ const SubcategoryDetail: FC = () => {
   } = useGetProducts({
     sub_category_id: subcategorySlug,
     sort: selectedSort !== 'relevant' ? selectedSort : undefined,
-    ...(selectedFilters['filter-1']?.length && {
-      color: selectedFilters['filter-1'].join(','),
-    }),
-    ...(selectedFilters['filter-2']?.length && {
-      size_id: selectedFilters['filter-2'].join(','),
-    }),
-    ...(selectedFilters['filter-3']?.length && {
-      type_id: selectedFilters['filter-3'].join(','),
-    }),
-    ...(selectedFilters['filter-4']?.length && {
-      filter_capacity: selectedFilters['filter-4'].join(','),
-    }),
-    ...(selectedFilters['filter-5']?.length && {
-      capacity: selectedFilters['filter-5'].join(','),
-    }),
+    ...buildFilterParams,
     enabled: true,
   });
 
@@ -89,7 +86,9 @@ const SubcategoryDetail: FC = () => {
     setIsFilterVisible(!isFilterVisible);
   };
 
-  const handleFiltersChange = (filters: Record<string, string[]>) => {
+  const handleFiltersChange = (
+    filters: Record<string, { ids: number[]; key: string }>,
+  ) => {
     setSelectedFilters(filters);
   };
 
