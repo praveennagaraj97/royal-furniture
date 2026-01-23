@@ -65,7 +65,9 @@ export const PaymentDeliveryInfo: FC<
   return (
     <div className="space-y-4">
       {/* Plan Card */}
-      <div className={!showOnlyPlanCards ? 'sm:block hidden' : ''}>
+      <div
+        className={`space-y-1 ${!showOnlyPlanCards ? 'sm:block hidden' : ''}`}
+      >
         {/* Tabby Payment Plan Card */}
         <ViewOnce
           type="slideUp"
