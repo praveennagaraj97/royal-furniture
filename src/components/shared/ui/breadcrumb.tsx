@@ -40,7 +40,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items, onBackClick }) => {
       margin="-50px"
       className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6 "
     >
-      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pr-3">
         {/* Back Arrow */}
         <button
           type="button"

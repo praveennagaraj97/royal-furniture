@@ -79,48 +79,24 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
     [selectedFilters, onFiltersChange],
   );
 
-  // Filters that only allow single selection
-  const SINGLE_SELECT_FILTERS = useMemo(
-    () => ['capacity', 'filter_capacity', 'filter_cpacity'],
-    [],
-  );
-
   // Transform API data to filter sections
   const filterSections = useMemo(() => {
-    return filters
-      .sort((a, b) => a.display_order - b.display_order)
-      .map((filter) => {
-        const isSingleSelect = SINGLE_SELECT_FILTERS.includes(
-          filter.type.toLowerCase(),
-        );
-        // Determine the API parameter key based on filter type
-        let apiKey = '';
-        if (filter.type.toLowerCase().includes('color')) {
-          apiKey = 'color_ids';
-        } else if (filter.type.toLowerCase().includes('size')) {
-          apiKey = 'size_ids';
-        } else if (filter.type.toLowerCase().includes('type')) {
-          apiKey = 'type_ids';
-        } else if (filter.type.toLowerCase().includes('capacity')) {
-          apiKey = 'capacity';
-        } else {
-          // For dynamic filters, use format: filter_<key>
-          apiKey = `filter_${filter.type.toLowerCase().replace(/\s+/g, '_')}`;
-        }
+    return filters.map((filter) => {
+      // Use the 'key' field from API response as the parameter name
+      const apiKey = filter.key;
 
-        return {
-          id: `filter-${filter.type_id}`,
-          title: filter.type,
-          isSingleSelect,
-          apiKey,
-          options: filter.filter_data.map((item) => ({
-            id: `option-${item.id}`,
-            label: item.label,
-            optionId: item.id,
-          })),
-        };
-      });
-  }, [filters, SINGLE_SELECT_FILTERS]);
+      return {
+        id: filter.key,
+        title: filter.display_name,
+        apiKey,
+        options: filter.filter_data.map((item) => ({
+          id: item.id,
+          label: item.label,
+          optionId: item.id,
+        })),
+      };
+    });
+  }, [filters]);
 
   const filterContent = useMemo(() => {
     if (isLoading) {
@@ -144,35 +120,28 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
             className="border-b border-gray-200 pb-4 last:border-0 last:pb-0"
           >
             <div className="space-y-3">
-              {section.isSingleSelect ? (
-                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+              <label className="flex items-center gap-2.5 cursor-pointer group justify-between">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 flex-1 min-w-0">
                   <span className="text-deep-maroon">✓</span>
                   {section.title}
                 </h3>
-              ) : (
-                <label className="flex items-center gap-2.5 cursor-pointer group justify-between">
-                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 flex-1 min-w-0">
-                    <span className="text-deep-maroon">✓</span>
-                    {section.title}
-                  </h3>
-                  <input
-                    type="checkbox"
-                    checked={
-                      selectedFilters[section.id]?.ids?.length ===
-                      section.options.length
-                    }
-                    onChange={(e) =>
-                      handleSelectAll(
-                        section.id,
-                        section.options.map((opt) => opt.optionId),
-                        section.apiKey,
-                        e.target.checked,
-                      )
-                    }
-                    className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon shrink-0"
-                  />
-                </label>
-              )}
+                <input
+                  type="checkbox"
+                  checked={
+                    selectedFilters[section.id]?.ids?.length ===
+                    section.options.length
+                  }
+                  onChange={(e) =>
+                    handleSelectAll(
+                      section.id,
+                      section.options.map((opt) => opt.optionId),
+                      section.apiKey,
+                      e.target.checked,
+                    )
+                  }
+                  className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon shrink-0"
+                />
+              </label>
               <div className="space-y-2.5">
                 {section.options.map((option) => (
                   <label
@@ -184,35 +153,20 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                     </span>
 
                     <input
-                      type={section.isSingleSelect ? 'radio' : 'checkbox'}
-                      name={section.isSingleSelect ? section.id : undefined}
+                      type="checkbox"
                       value={option.optionId}
                       checked={
-                        section.isSingleSelect
-                          ? selectedFilters[section.id]?.ids?.includes(
-                              option.optionId,
-                            ) || false
-                          : selectedFilters[section.id]?.ids?.includes(
-                              option.optionId,
-                            ) || false
+                        selectedFilters[section.id]?.ids?.includes(
+                          option.optionId,
+                        ) || false
                       }
                       onChange={(e) =>
-                        section.isSingleSelect
-                          ? (() => {
-                              const updatedFilters = { ...selectedFilters };
-                              updatedFilters[section.id] = {
-                                ids: e.target.checked ? [option.optionId] : [],
-                                key: section.apiKey,
-                              };
-                              setSelectedFilters(updatedFilters);
-                              onFiltersChange(updatedFilters);
-                            })()
-                          : handleFilterChange(
-                              section.id,
-                              option.optionId,
-                              section.apiKey,
-                              e.target.checked,
-                            )
+                        handleFilterChange(
+                          section.id,
+                          option.optionId,
+                          section.apiKey,
+                          e.target.checked,
+                        )
                       }
                       className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon shrink-0"
                     />
@@ -230,7 +184,6 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
     isLoading,
     handleFilterChange,
     handleSelectAll,
-    onFiltersChange,
   ]);
 
   if (!isVisible) return null;

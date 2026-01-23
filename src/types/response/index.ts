@@ -314,14 +314,11 @@ export type ProductDetailResponse = BaseAPIResponse<ProductDetailData>;
 export interface FilterDataItem {
   id: number;
   label: string;
-  key: string;
-  filter_type: string;
 }
 
 export interface FilterViewItem {
-  type: string;
-  type_id: number;
-  display_order: number;
+  display_name: string;
+  key: string;
   filter_data: FilterDataItem[];
 }
 
