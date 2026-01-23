@@ -27,7 +27,9 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
         <div style={{ height: `${headerHeight}px` }} aria-hidden="true" />
       )}
       <hr className="text-gray-200 w-full container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3" />
-      <Categories ref={categoryRef} categories={categories} />
+      {categories && categories.length > 0 && (
+        <Categories ref={categoryRef} categories={categories} />
+      )}
       <main>{children}</main>
       <Footer />
     </>

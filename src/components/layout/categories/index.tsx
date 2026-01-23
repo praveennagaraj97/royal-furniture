@@ -18,6 +18,8 @@ const Categories = forwardRef<HTMLElement, CategoriesProps>(
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
     const isHome = pathName === '/';
 
+    if (!categories || categories.length === 0) return null;
+
     return (
       <section
         ref={ref}
@@ -67,7 +69,7 @@ const Categories = forwardRef<HTMLElement, CategoriesProps>(
         </div>
       </section>
     );
-  }
+  },
 );
 
 Categories.displayName = 'Categories';
