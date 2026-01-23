@@ -53,8 +53,8 @@ const ProductsList: FC<ProductsListProps> = ({
           // On mobile/tablet, always use 2 columns when filter is visible, 2 columns when hidden
           // On lg+, use 3 columns when filter visible, 4 columns when hidden
           isFilterVisible
-            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+            ? 'grid-cols-2 lg:grid-cols-3'
+            : 'grid-cols-2 lg:grid-cols-4'
         }`}
       >
         {products.map((product) => (

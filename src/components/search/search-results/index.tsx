@@ -102,7 +102,7 @@ const SearchResults: FC = () => {
             <StaggerContainer
               staggerChildren={0.05}
               delayChildren={0.1}
-              className="grid gap-x-3 gap-y-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+              className="grid gap-x-3 gap-y-6 grid-cols-2 lg:grid-cols-4"
             >
               {displayProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />

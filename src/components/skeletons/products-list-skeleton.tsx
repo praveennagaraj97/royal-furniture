@@ -16,8 +16,8 @@ export const ProductsListSkeleton: FC<ProductsListSkeletonProps> = ({
       <div
         className={`grid gap-x-3 gap-y-6 transition-all duration-300 ${
           isFilterVisible
-            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+            ? 'grid-cols-2 lg:grid-cols-3'
+            : 'grid-cols-2 lg:grid-cols-4'
         }`}
       >
         {Array.from({ length: 12 }).map((_, index) => (
