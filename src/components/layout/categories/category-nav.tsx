@@ -64,6 +64,9 @@ const CategoryNav: FC<CategoryNavProps> = ({
               categoryName={category.name}
               categorySlug={category.slug}
               subcategories={category.subCategories}
+              onClose={() => {
+                setActiveCategory(null);
+              }}
             />
           </div>
         ) : null}

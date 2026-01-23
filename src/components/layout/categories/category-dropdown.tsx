@@ -2,16 +2,17 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
-import { AppLink } from '@/hooks';
+import { AppLink, useClickOutside } from '@/hooks';
 import { SubCategoryItem } from '@/types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 
 interface CategoryDropdownProps {
   categoryName: string;
   categorySlug: string;
   subcategories: SubCategoryItem[];
   isOpen: boolean;
+  onClose: () => void;
 }
 
 const CategoryDropdown: FC<CategoryDropdownProps> = ({
@@ -19,7 +20,18 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
   categorySlug,
   subcategories,
   isOpen,
+  onClose,
 }) => {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside({
+    ref: dropdownRef,
+    handler() {
+      onClose();
+    },
+    enabled: isOpen,
+  });
+
   if (!subcategories || subcategories.length === 0) {
     return null;
   }
@@ -28,6 +40,7 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={dropdownRef}
           key="dropdown"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
