@@ -67,7 +67,9 @@ const SearchResults: FC = () => {
                 ? `Found ${totalCount} result${
                     totalCount !== 1 ? 's' : ''
                   } for "${displayQuery}"`
-                : `No results found for "${displayQuery}"`}
+                : isLoadingProducts
+                  ? ''
+                  : `No results found for "${displayQuery}"`}
             </p>
           )}
         </div>

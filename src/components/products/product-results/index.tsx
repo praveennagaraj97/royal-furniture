@@ -74,7 +74,9 @@ const ProductResults: FC = () => {
             <p className="text-sm text-gray-600">
               {totalCount > 0
                 ? `Found ${totalCount} product${totalCount !== 1 ? 's' : ''}`
-                : `No products found for "${displayType}"`}
+                : isLoadingProducts
+                  ? ''
+                  : `No products found for "${displayType}"`}
             </p>
           )}
         </div>
