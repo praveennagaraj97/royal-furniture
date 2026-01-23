@@ -48,7 +48,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
             <ResponsiveImage
               images={product.responsive_images}
               alt={product.name}
-              className="transition-transform duration-300 group-hover/image:scale-105 aspect-4/5"
+              className="transition-transform duration-300 group-hover/image:scale-105 aspect-[4/4.5]"
               shouldFill
             />
 

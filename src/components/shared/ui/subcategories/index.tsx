@@ -35,7 +35,7 @@ const SpotLightCard: FC<{ item: SubCategoryItem }> = ({ item }) => {
       type="slideUp"
       distance={30}
       duration={0.6}
-      className="flex flex-col min-w-52 sm:min-w-64 md:min-w-80"
+      className="flex flex-col min-w-44 sm:min-w-64 md:min-w-80"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -45,7 +45,7 @@ const SpotLightCard: FC<{ item: SubCategoryItem }> = ({ item }) => {
           <ResponsiveImage
             images={item.responsive_images}
             alt={item.name || ''}
-            className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'} aspect-4/5
+            className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-105' : 'scale-100'} aspect-[4/4.5]
             min-40 sm:min-h-48 md:min-h-56 lg:min-h-64 xl:min-h-80
             `}
             shouldFill

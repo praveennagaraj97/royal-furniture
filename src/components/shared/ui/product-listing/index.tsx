@@ -53,7 +53,7 @@ const ProductListing: FC<ProductListingProps> = ({
       {/* Products Swiper */}
       <Swiper gap={4} showNavigation hideArrowOnMobile alwaysAlignStart>
         {products.map((product) => (
-          <div key={product.id} className="shrink-0 w-52 sm:w-64 md:w-80">
+          <div key={product.id} className="shrink-0 w-44 sm:w-64 md:w-80">
             <ProductCard product={product} />
           </div>
         ))}
