@@ -3,26 +3,13 @@
 import ProductsList from '@/components/category/subcategory-detail/products-list';
 import SubcategoryFilters from '@/components/category/subcategory-detail/subcategory-filters';
 import SubcategoryTopBar from '@/components/category/subcategory-detail/subcategory-top-bar';
+import { SORT_OPTIONS } from '@/constants/sort-options';
 import { useLayoutData } from '@/contexts/layout-context';
 import { useGetProducts } from '@/hooks/api';
 import { useResizeWindow } from '@/hooks/use-resize-window';
 import { AnimatePresence } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
-
-export interface SortOption {
-  id: string;
-  label: string;
-}
-
-const sortOptions: SortOption[] = [
-  { id: 'relevant', label: 'Relevant Products' },
-  { id: 'best_seller', label: 'Best Seller' },
-  { id: 'new_arrival', label: 'New Arrival' },
-  { id: 'price_asc', label: 'Price: Low to High' },
-  { id: 'price_desc', label: 'Price: High to Low' },
-  { id: 'discount', label: 'Discount' },
-];
 
 const SubcategoryDetail: FC = () => {
   const params = useParams();
@@ -99,7 +86,7 @@ const SubcategoryDetail: FC = () => {
         productCount={productCount || displayProducts.length}
         isFilterVisible={isFilterVisible}
         onToggleFilter={handleToggleFilter}
-        sortOptions={sortOptions}
+        sortOptions={SORT_OPTIONS}
         selectedSort={selectedSort}
         onSortChange={setSelectedSort}
       />

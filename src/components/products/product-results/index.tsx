@@ -3,26 +3,13 @@
 import { StaggerContainer } from '@/components/shared/animations';
 import ProductCard from '@/components/shared/ui/product-listing/product-card';
 import { ProductsListSkeleton } from '@/components/skeletons/products-list-skeleton';
+import { SORT_OPTIONS } from '@/constants/sort-options';
 import { useGetProductsByType } from '@/hooks/api';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 import { ProductsEmptyState } from './empty-state';
 import SortBar from './sort-bar';
-
-export interface SortOption {
-  id: string;
-  label: string;
-}
-
-const sortOptions: SortOption[] = [
-  { id: 'relevant', label: 'Relevant Products' },
-  { id: 'best_seller', label: 'Best Seller' },
-  { id: 'new_arrival', label: 'New Arrival' },
-  { id: 'price_asc', label: 'Price: Low to High' },
-  { id: 'price_desc', label: 'Price: High to Low' },
-  { id: 'discount', label: 'Discount' },
-];
 
 const ProductResults: FC = () => {
   const [selectedSort, setSelectedSort] = useState('relevant');
@@ -84,7 +71,7 @@ const ProductResults: FC = () => {
         {productType && (
           <SortBar
             productCount={totalCount || displayProducts.length}
-            sortOptions={sortOptions}
+            sortOptions={SORT_OPTIONS}
             selectedSort={selectedSort}
             onSortChange={setSelectedSort}
           />
