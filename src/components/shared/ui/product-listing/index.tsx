@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { FC, ReactNode } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
+import { AppLink } from '@/hooks';
 import { ProductItem } from '@/types';
 import ProductCard from './product-card';
 
@@ -40,13 +41,13 @@ const ProductListing: FC<ProductListingProps> = ({
           )}
         </div>
         {seeAllHref ? (
-          <a
+          <AppLink
             href={seeAllHref}
             className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
           >
             <span>{t('common.seeAll')}</span>
             <FiChevronRight className="sm:w-4 sm:h-4 w-2 h-2 rtl:rotate-180" />
-          </a>
+          </AppLink>
         ) : null}
       </div>
 
