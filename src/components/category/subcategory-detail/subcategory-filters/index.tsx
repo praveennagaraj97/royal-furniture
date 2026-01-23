@@ -5,7 +5,7 @@ import Portal from '@/components/shared/portal';
 import { SubcategoryFiltersSkeleton } from '@/components/skeletons/subcategory-filters-skeleton';
 import { useGetFiltersBySubCategoryId } from '@/hooks/api';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FC, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { FiltersEmptyState } from './empty-state';
 
@@ -13,38 +13,76 @@ interface SubcategoryFiltersProps {
   isVisible: boolean;
   onHide: () => void;
   subcategoryId: number | null;
+  onFiltersChange: (filters: Record<string, string[]>) => void;
 }
 
 const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   isVisible,
   onHide,
   subcategoryId,
+  onFiltersChange,
 }) => {
   const { filters, isLoading } = useGetFiltersBySubCategoryId({
     subcategoryId,
   });
 
   const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string>
+    Record<string, string[]>
   >({});
 
-  const handleFilterChange = (sectionId: string, value: string) => {
-    setSelectedFilters((prev) => ({ ...prev, [sectionId]: value }));
-  };
+  const handleFilterChange = useCallback(
+    (sectionId: string, value: string, isChecked: boolean) => {
+      const updatedFilters = { ...selectedFilters };
+      if (!updatedFilters[sectionId]) {
+        updatedFilters[sectionId] = [];
+      }
+
+      if (isChecked) {
+        updatedFilters[sectionId] = [...updatedFilters[sectionId], value];
+      } else {
+        updatedFilters[sectionId] = updatedFilters[sectionId].filter(
+          (v) => v !== value,
+        );
+      }
+
+      setSelectedFilters(updatedFilters);
+      onFiltersChange(updatedFilters);
+    },
+    [selectedFilters, onFiltersChange],
+  );
+
+  const handleSelectAll = useCallback(
+    (sectionId: string, allValues: string[], isSelectingAll: boolean) => {
+      const updatedFilters = { ...selectedFilters };
+      updatedFilters[sectionId] = isSelectingAll ? allValues : [];
+      setSelectedFilters(updatedFilters);
+      onFiltersChange(updatedFilters);
+    },
+    [selectedFilters, onFiltersChange],
+  );
+
+  // Filters that only allow single selection
+  const SINGLE_SELECT_FILTERS = ['capacity', 'filter_capacity', 'filter_cpacity'];
 
   // Transform API data to filter sections
   const filterSections = useMemo(() => {
     return filters
       .sort((a, b) => a.display_order - b.display_order)
-      .map((filter) => ({
-        id: `filter-${filter.type_id}`,
-        title: filter.type,
-        options: filter.filter_data.map((item) => ({
-          id: `option-${item.id}`,
-          label: item.label,
-          value: item.key,
-        })),
-      }));
+      .map((filter) => {
+        const isSingleSelect = SINGLE_SELECT_FILTERS.includes(
+          filter.type.toLowerCase(),
+        );
+        return {
+          id: `filter-${filter.type_id}`,
+          title: filter.type,
+          isSingleSelect,
+          options: filter.filter_data.map((item) => ({
+            id: `option-${item.id}`,
+            label: item.label,
+            value: item.key,
+          })),
+        };
+      });
   }, [filters]);
 
   const filterContent = useMemo(() => {
@@ -69,10 +107,34 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
             className="border-b border-gray-200 pb-4 last:border-0 last:pb-0"
           >
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                <span className="text-deep-maroon">✓</span>
-                {section.title}
-              </h3>
+              {section.isSingleSelect ? (
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                  <span className="text-deep-maroon">✓</span>
+                  {section.title}
+                </h3>
+              ) : (
+                <label className="flex items-center gap-2.5 cursor-pointer group justify-between">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 flex-1 min-w-0">
+                    <span className="text-deep-maroon">✓</span>
+                    {section.title}
+                  </h3>
+                  <input
+                    type="checkbox"
+                    checked={
+                      selectedFilters[section.id]?.length ===
+                      section.options.length
+                    }
+                    onChange={(e) =>
+                      handleSelectAll(
+                        section.id,
+                        section.options.map((opt) => opt.value),
+                        e.target.checked,
+                      )
+                    }
+                    className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon shrink-0"
+                  />
+                </label>
+              )}
               <div className="space-y-2.5">
                 {section.options.map((option) => (
                   <label
@@ -84,12 +146,31 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                     </span>
 
                     <input
-                      type="radio"
-                      name={section.id}
+                      type={section.isSingleSelect ? 'radio' : 'checkbox'}
+                      name={section.isSingleSelect ? section.id : undefined}
                       value={option.value}
-                      checked={selectedFilters[section.id] === option.value}
-                      onChange={() =>
-                        handleFilterChange(section.id, option.value)
+                      checked={
+                        section.isSingleSelect
+                          ? selectedFilters[section.id]?.includes(option.value) ||
+                            false
+                          : selectedFilters[section.id]?.includes(option.value) ||
+                            false
+                      }
+                      onChange={(e) =>
+                        section.isSingleSelect
+                          ? (() => {
+                              const updatedFilters = { ...selectedFilters };
+                              updatedFilters[section.id] = e.target.checked
+                                ? [option.value]
+                                : [];
+                              setSelectedFilters(updatedFilters);
+                              onFiltersChange(updatedFilters);
+                            })()
+                          : handleFilterChange(
+                              section.id,
+                              option.value,
+                              e.target.checked,
+                            )
                       }
                       className="w-4 h-4 text-deep-maroon border-gray-300 focus:ring-deep-maroon focus:ring-2 cursor-pointer accent-deep-maroon shrink-0"
                     />
@@ -101,7 +182,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
         ))}
       </div>
     );
-  }, [selectedFilters, filterSections, isLoading]);
+  }, [selectedFilters, filterSections, isLoading, handleFilterChange, handleSelectAll]);
 
   if (!isVisible) return null;
 

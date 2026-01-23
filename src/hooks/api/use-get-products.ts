@@ -87,7 +87,9 @@ export const useGetProducts = ({
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    }
+      revalidateIfStale: true,
+      dedupingInterval: 0,
+    },
   );
 
   return {
