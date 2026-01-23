@@ -68,7 +68,7 @@ const SubCategories: FC = () => {
                   distance={20}
                   initialScale={0.9}
                   duration={0.6}
-                  className="min-w-40 w-40"
+                  className="w-24 min-w-24 sm:min-w-40 sm:w-40"
                 >
                   <SubCategoryCard
                     subcategory={subcategory}
