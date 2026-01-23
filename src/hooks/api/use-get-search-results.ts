@@ -42,7 +42,7 @@ export const useGetSearchResults = ({
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-    }
+    },
   );
 
   const products = data?.data?.results || [];
