@@ -62,7 +62,11 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   );
 
   // Filters that only allow single selection
-  const SINGLE_SELECT_FILTERS = ['capacity', 'filter_capacity', 'filter_cpacity'];
+  const SINGLE_SELECT_FILTERS = [
+    'capacity',
+    'filter_capacity',
+    'filter_cpacity',
+  ];
 
   // Transform API data to filter sections
   const filterSections = useMemo(() => {
@@ -151,10 +155,12 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                       value={option.value}
                       checked={
                         section.isSingleSelect
-                          ? selectedFilters[section.id]?.includes(option.value) ||
-                            false
-                          : selectedFilters[section.id]?.includes(option.value) ||
-                            false
+                          ? selectedFilters[section.id]?.includes(
+                              option.value,
+                            ) || false
+                          : selectedFilters[section.id]?.includes(
+                              option.value,
+                            ) || false
                       }
                       onChange={(e) =>
                         section.isSingleSelect
@@ -182,7 +188,13 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
         ))}
       </div>
     );
-  }, [selectedFilters, filterSections, isLoading, handleFilterChange, handleSelectAll]);
+  }, [
+    selectedFilters,
+    filterSections,
+    isLoading,
+    handleFilterChange,
+    handleSelectAll,
+  ]);
 
   if (!isVisible) return null;
 
