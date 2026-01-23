@@ -37,7 +37,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="py-6 mt-8 space-y-4">
           {productData.frequently_bought_together.length > 0 && (
             <ProductListing
-              title="Frequently Bought Together"
+              title="Complete the Collection"
               products={productData.frequently_bought_together || []}
             />
           )}
