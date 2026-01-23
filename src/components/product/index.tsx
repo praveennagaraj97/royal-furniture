@@ -173,6 +173,25 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               {/* Product Header */}
               <ProductHeader product={data} />
 
+              {/* Payment Plans Only (Tabby & Tamara) - Moved above options on mobile */}
+              <div className="sm:hidden">
+                <PaymentDeliveryInfo
+                  productPrice={
+                    currentColor?.region_prices.offer_price
+                      ? parseFloat(currentColor.region_prices.offer_price)
+                      : data.product_info.pricing.offer_price
+                        ? parseFloat(data.product_info.pricing.offer_price)
+                        : 0
+                  }
+                  deliveryInfo={data.delivery_info}
+                  flexiPayment={data.flexi_payment}
+                  paymentOptions={data.payment_options}
+                  freeAssembly={data.free_assembly}
+                  expressDeliveryTimer={data.express_delivery_timer}
+                  showOnlyPlanCards
+                />
+              </div>
+
               {/* Product Options (Variant, Fabric, Color, Quantity) */}
               <ProductOptions
                 product={data}
@@ -186,7 +205,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 onQuantityChange={handleQuantityChange}
               />
 
-              {/* Payment & Delivery Info */}
+              {/* Payment & Delivery Info (Ways of Payment section) */}
               <PaymentDeliveryInfo
                 productPrice={
                   currentColor?.region_prices.offer_price
@@ -238,7 +257,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               {/* Product Actions - Add to Cart */}
               <div
                 ref={actionsRef}
-                className="sticky bottom-0 bg-white py-4 -mx-3 -mb-4 px-3 sm:px-4 border-t border-gray-200 z-40"
+                className="sticky bottom-0 bg-white py-4 -mx-3 px-3 sm:px-4 border-t border-gray-200 z-40 shadow-lg shadow-gray-200"
               >
                 <ProductActions
                   onAddToCart={handleAddToCart}

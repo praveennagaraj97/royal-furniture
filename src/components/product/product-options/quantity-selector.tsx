@@ -33,22 +33,22 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               type="button"
               onClick={() => onQuantityChange(-1)}
               disabled={quantity <= 1}
-              className="w-10 h-10 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               aria-label="Decrease quantity"
             >
-              <FiMinus className="w-4 h-4" />
+              <FiMinus className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
-            <span className="px-2 py-2 text-xl md:text-2xl font-bold min-w-12 text-center">
+            <span className="px-2 py-2 text-lg sm:text-xl md:text-2xl font-bold min-w-10 sm:min-w-12 text-center">
               {quantity}
             </span>
             <button
               type="button"
               onClick={() => onQuantityChange(1)}
               disabled={stockCount ? quantity >= stockCount : false}
-              className="w-10 h-10 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               aria-label="Increase quantity"
             >
-              <FiPlus className="w-4 h-4" />
+              <FiPlus className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
           </div>
           <span className="text-green-600 font-medium text-xs md:text-sm">

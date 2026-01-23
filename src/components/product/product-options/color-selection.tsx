@@ -41,14 +41,17 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
         {colors.slice(0, 4).map((color) => {
           const imageUrl = color.imageUrl || color.value;
           const shouldUseImage = color.isImage || color.imageUrl;
-          const fallbackColor = color.value && color.value.startsWith('#') ? color.value : '#cccccc';
+          const fallbackColor =
+            color.value && color.value.startsWith('#')
+              ? color.value
+              : '#cccccc';
 
           return (
             <button
               key={color.id}
               type="button"
               onClick={() => onColorChange(color.id)}
-              className={`relative w-10 h-10 rounded-full border transition-all duration-200 flex items-center justify-center overflow-hidden ${
+              className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-full border transition-all duration-200 flex items-center justify-center overflow-hidden ${
                 selectedColor === color.id
                   ? 'border-deep-maroon ring ring-deep-maroon/20 scale-110'
                   : 'border-gray-300 hover:border-gray-400'
