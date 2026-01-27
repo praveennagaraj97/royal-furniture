@@ -2,11 +2,10 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
-import { useIntersectionObserver } from '@/hooks';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
-import { startTransition, useEffect, useRef, useState, type FC } from 'react';
-import { FiChevronRight, FiShoppingCart } from 'react-icons/fi';
+import { startTransition, useEffect, useState, type FC } from 'react';
+import { FiChevronRight } from 'react-icons/fi';
 import { IoStorefront } from 'react-icons/io5';
 import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
@@ -41,11 +40,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const [quantity, setQuantity] = useState(1);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
-  const actionsRef = useRef<HTMLDivElement>(null);
-  const isActionsVisible = useIntersectionObserver({
-    ref: actionsRef,
-    options: { threshold: 0 },
-  });
+
   const { removeFromWishlist } = useWishlistActions();
 
   // Get current selected color variant
@@ -255,10 +250,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               />
 
               {/* Product Actions - Add to Cart */}
-              <div
-                ref={actionsRef}
-                className="sticky bottom-0 bg-white py-4 -mx-3 px-3 sm:px-4 border-t border-gray-200 z-40 shadow-lg shadow-gray-200"
-              >
+              <div className="sticky bottom-0 bg-white py-4 -mx-3 px-3 sm:px-4 border-t border-gray-200 z-40 shadow-lg shadow-gray-200">
                 <ProductActions
                   onAddToCart={handleAddToCart}
                   onBuyNow={handleBuyNow}
@@ -346,7 +338,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 />
               </div>
               <div className="space-y-4">
-                <div ref={actionsRef}>
+                <div>
                   <ProductActions
                     onAddToCart={handleAddToCart}
                     onBuyNow={handleBuyNow}
@@ -395,18 +387,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
         isOpen={isStoreLocatorOpen}
         onClose={() => setIsStoreLocatorOpen(false)}
       />
-
-      {/* Floating Add to Cart Bubble - Desktop Only */}
-      {!isActionsVisible && (
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-deep-maroon text-white rounded-full flex-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 z-50 hidden lg:flex items-center justify-center"
-          aria-label="Add to Cart"
-        >
-          <FiShoppingCart className="w-6 h-6" />
-        </button>
-      )}
     </div>
   );
 };
