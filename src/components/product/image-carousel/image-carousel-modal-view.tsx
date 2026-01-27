@@ -47,6 +47,7 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
         {/* Main Image (left on desktop, top on mobile) */}
         <div className="lg:col-span-2">
           <ResponsiveImage
+            key={selectedIndex}
             images={images[selectedIndex]}
             alt={`Product image ${selectedIndex + 1}`}
             shouldFill={false}
