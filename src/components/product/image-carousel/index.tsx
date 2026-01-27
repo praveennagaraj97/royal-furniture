@@ -1,10 +1,12 @@
 'use client';
 
+import Modal from '@/components/shared/modal';
 import Swiper from '@/components/shared/swiper';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { startTransition, useEffect, useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
+import ImageCarouselModalView from './image-carousel-modal-view';
 
 export interface ImageCarouselProps {
   images: ResponsiveImages[];
@@ -14,6 +16,7 @@ export interface ImageCarouselProps {
   onWishlistClick?: () => void;
   onShareClick?: () => void;
   isWishlisted?: boolean;
+  productName: string;
 }
 
 export const ImageCarousel: FC<ImageCarouselProps> = ({
@@ -24,12 +27,20 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   onWishlistClick,
   onShareClick,
   isWishlisted = false,
+  productName,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [imageKey, setImageKey] = useState(0);
 
+  // Modal state for viewing image in larger view
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleThumbnailClick = (index: number) => {
     setSelectedIndex(index);
+  };
+
+  const handleMainImageClick = () => {
+    setIsModalOpen(true);
   };
 
   // Reset image key when images array changes to trigger fade effect
@@ -56,7 +67,16 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   return (
     <div className="relative w-full">
       {/* Main Image Container (intrinsic height based on image) */}
-      <div className="relative aspect-square w-full rounded-lg overflow-hidden mb-3">
+      <div
+        className="relative aspect-square w-full rounded-lg overflow-hidden mb-3 cursor-zoom-in"
+        onClick={handleMainImageClick}
+        tabIndex={0}
+        role="button"
+        aria-label="View image in modal"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') handleMainImageClick();
+        }}
+      >
         <ResponsiveImage
           key={`${imageKey}-${selectedIndex}`}
           images={images[selectedIndex]}
@@ -149,6 +169,22 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           ))}
         </Swiper>
       )}
+
+      {/* Modal for image view */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        variant="center"
+        size="xl"
+        className="p-0 bg-transparent shadow-none"
+      >
+        <ImageCarouselModalView
+          images={images}
+          initialIndex={selectedIndex}
+          onClose={() => setIsModalOpen(false)}
+          productName={productName}
+        />
+      </Modal>
     </div>
   );
 };
@@ -215,6 +251,7 @@ export const ProductImages: FC<ProductImagesProps> = ({
       onWishlistClick={onWishlistClick}
       onShareClick={onShareClick}
       isWishlisted={isWishlisted}
+      productName={product.product_info.name}
     />
   );
 };
