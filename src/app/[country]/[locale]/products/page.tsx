@@ -1,4 +1,4 @@
-import ProductResults from '@/components/products/product-results';
+import ProductResults from '@/components/products';
 
 interface ProductsPageProps {
   params: Promise<{
