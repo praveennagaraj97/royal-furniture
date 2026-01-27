@@ -74,12 +74,8 @@ export default async function LocaleLayout({
   const categories = await ecommerceService.getCategories(locale, country);
 
   return (
-    <html
-      style={{ overflowX: 'hidden' }}
-      lang={locale}
-      dir={locale === 'ar' ? 'rtl' : 'ltr'}
-    >
-      <body className={`${montserrat.variable} antialiased`}>
+    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+      <body className={`${montserrat.variable} antialiased overflow-x-hidden`}>
         <ProgressBar />
         {process.env.NODE_ENV !== 'development' ? (
           <VercelToolbarComponent />
