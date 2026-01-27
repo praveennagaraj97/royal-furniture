@@ -43,15 +43,15 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
       </div>
 
       {/* Desktop: horizontal layout, Mobile: vertical */}
-      <div className="grid lg:grid-cols-3">
+      <div className={`${images.length > 1 ? 'grid lg:grid-cols-3' : ''}`}>
         {/* Main Image (left on desktop, top on mobile) */}
         <div className="lg:col-span-2">
           <ResponsiveImage
             images={images[selectedIndex]}
             alt={`Product image ${selectedIndex + 1}`}
-            className="object-contain"
             shouldFill={false}
             objectFit="contain"
+            layoutId={`product-image-${selectedIndex}`}
             enableFadeTransition={true}
           />
         </div>
