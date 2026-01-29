@@ -32,7 +32,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
           amount={0.01}
           margin="-40px"
         >
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-medium leading-tight">
+          <h1 className="text-2xl lg:text-3xl font-medium leading-tight">
             {product.product_info.name}
           </h1>
         </ViewOnce>

@@ -209,31 +209,33 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
         </div>
       </div>
 
-      {/* Desktop Layout - Two Column | Hidden on Mobile */}
+      {/* Desktop Layout - Three Column | Hidden on Mobile */}
       <div className="hidden lg:block section-container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Side - Image Carousel */}
-          <ViewOnce
-            type="slideUp"
-            distance={30}
-            duration={0.6}
-            delay={0.1}
-            amount={0.01}
-            margin="-40px"
-          >
-            <div className="min-w-0 w-full lg:sticky top-20">
-              <ProductImages
-                product={data}
-                selectedVariant={selectedVariant}
-                selectedFabric={selectedFabric}
-                selectedColor={selectedColor}
-                onShareClick={handleShareClick}
-                isWishlisted={isWishlisted}
-              />
-            </div>
-          </ViewOnce>
+        <div className="grid grid-cols-1 lg:grid-cols-[4fr_3fr_2fr] gap-4 items-start">
+          {/* Left Side (40%) - Image Carousel (Sticky) */}
+          <div className="lg:sticky top-20">
+            <ViewOnce
+              type="slideUp"
+              distance={30}
+              duration={0.6}
+              delay={0.1}
+              amount={0.01}
+              margin="-40px"
+            >
+              <div className="min-w-0 w-full">
+                <ProductImages
+                  product={data}
+                  selectedVariant={selectedVariant}
+                  selectedFabric={selectedFabric}
+                  selectedColor={selectedColor}
+                  onShareClick={handleShareClick}
+                  isWishlisted={isWishlisted}
+                />
+              </div>
+            </ViewOnce>
+          </div>
 
-          {/* Right Side - Product Details */}
+          {/* Middle Side (30%) - Product Details */}
           <ViewOnce
             type="slideUp"
             distance={30}
@@ -242,50 +244,59 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             amount={0.01}
             margin="-40px"
           >
-            <div className="min-w-0 w-full grid 2xl:grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <ProductHeader product={data} />
-                <ProductOptions
-                  product={data}
-                  selectedVariant={selectedVariant}
-                  selectedFabric={selectedFabric}
-                  selectedColor={selectedColor}
-                  quantity={quantity}
-                  onVariantChange={setSelectedVariant}
-                  onFabricChange={setSelectedFabric}
-                  onColorChange={setSelectedColor}
-                  onQuantityChange={handleQuantityChange}
-                />
+            <div className="w-full space-y-4">
+              <ProductHeader product={data} />
+              <ProductOptions
+                product={data}
+                selectedVariant={selectedVariant}
+                selectedFabric={selectedFabric}
+                selectedColor={selectedColor}
+                quantity={quantity}
+                onVariantChange={setSelectedVariant}
+                onFabricChange={setSelectedFabric}
+                onColorChange={setSelectedColor}
+                onQuantityChange={handleQuantityChange}
+              />
 
-                <GeneralInformation
-                  description={data.general_information}
-                  infoSection={currentColor?.info_section}
+              <GeneralInformation
+                description={data.general_information}
+                infoSection={currentColor?.info_section}
+              />
+            </div>
+          </ViewOnce>
+
+          {/* Right Side (20%) - Actions & Info */}
+          <ViewOnce
+            type="slideUp"
+            distance={30}
+            duration={0.6}
+            delay={0.2}
+            amount={0.01}
+            margin="-40px"
+          >
+            <div className="w-full space-y-4">
+              <div>
+                <ProductActions
+                  onAddToCart={handleAddToCart}
+                  onBuyNow={handleBuyNow}
                 />
               </div>
-              <div className="space-y-4">
-                <div>
-                  <ProductActions
-                    onAddToCart={handleAddToCart}
-                    onBuyNow={handleBuyNow}
-                  />
-                </div>
 
-                <ProductAdditionalInfo product={data} />
-                <PaymentDeliveryInfo
-                  productPrice={
-                    currentColor?.region_prices.offer_price
-                      ? parseFloat(currentColor.region_prices.offer_price)
-                      : data.product_info.pricing.offer_price
-                        ? parseFloat(data.product_info.pricing.offer_price)
-                        : 0
-                  }
-                  deliveryInfo={data.delivery_info}
-                  flexiPayment={data.flexi_payment}
-                  paymentOptions={data.payment_options}
-                  freeAssembly={data.free_assembly}
-                  expressDeliveryTimer={data.express_delivery_timer}
-                />
-              </div>
+              <ProductAdditionalInfo product={data} />
+              <PaymentDeliveryInfo
+                productPrice={
+                  currentColor?.region_prices.offer_price
+                    ? parseFloat(currentColor.region_prices.offer_price)
+                    : data.product_info.pricing.offer_price
+                      ? parseFloat(data.product_info.pricing.offer_price)
+                      : 0
+                }
+                deliveryInfo={data.delivery_info}
+                flexiPayment={data.flexi_payment}
+                paymentOptions={data.payment_options}
+                freeAssembly={data.free_assembly}
+                expressDeliveryTimer={data.express_delivery_timer}
+              />
             </div>
           </ViewOnce>
         </div>
