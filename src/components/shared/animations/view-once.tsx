@@ -41,7 +41,7 @@ const getInitialValues = (
   type: ViewOnceAnimationType,
   distance: number,
   initialScale: number,
-  rtlAware: boolean
+  rtlAware: boolean,
 ) => {
   const isRTL =
     rtlAware &&
@@ -86,7 +86,7 @@ export const ViewOnce: FC<ViewOnceProps> = ({
   duration = 0.6,
   ease = 'easeOut',
   delay = 0,
-  margin = '-100px',
+  margin = '-40px',
   amount,
   rtlAware = false,
 }) => {

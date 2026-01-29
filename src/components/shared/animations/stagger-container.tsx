@@ -33,7 +33,7 @@ const defaultVariants = (
   delayChildren: number,
   exit?: boolean,
   exitStaggerDirection?: number,
-  duration?: number
+  duration?: number,
 ): Variants => ({
   hidden: { opacity: 0 },
   visible: {
@@ -59,7 +59,7 @@ export const StaggerContainer: FC<StaggerContainerProps> = ({
   children,
   className,
   mode = 'whileInView',
-  viewport = { once: true, margin: '-100px' },
+  viewport = { once: true, margin: '-40px' },
   staggerChildren = 0.08,
   delayChildren = 0.1,
   exit = false,
@@ -74,7 +74,7 @@ export const StaggerContainer: FC<StaggerContainerProps> = ({
       delayChildren,
       exit,
       exitStaggerDirection,
-      duration
+      duration,
     );
 
   if (mode === 'whileInView') {

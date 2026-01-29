@@ -28,7 +28,7 @@ const UserProfileHeader: FC = () => {
       type="slideUp"
       distance={20}
       duration={0.6}
-      margin="-100px"
+      margin="-40px"
       className="bg-deep-maroon rounded-sm p-4 mb-4"
     >
       <div className="flex items-center justify-between">

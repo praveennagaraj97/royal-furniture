@@ -75,7 +75,7 @@ export const PaymentDeliveryInfo: FC<
           duration={0.4}
           delay={0.4}
           amount={0.01}
-          margin="-100px"
+          margin="-40px"
         >
           <div className="p-4 bg-white rounded-lg border border-gray-200 flex items-center gap-2 md:gap-3">
             <Image
@@ -107,7 +107,7 @@ export const PaymentDeliveryInfo: FC<
           duration={0.4}
           delay={0.45}
           amount={0.01}
-          margin="-100px"
+          margin="-40px"
         >
           <div className="p-4 bg-white rounded-lg border border-gray-200 flex items-center gap-2 md:gap-3">
             <Image
@@ -142,7 +142,7 @@ export const PaymentDeliveryInfo: FC<
             duration={0.4}
             delay={0.25}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <div className="space-y-3">
               <h3 className="font-medium text-sm md:text-base text-indigo-slate">
@@ -196,7 +196,7 @@ export const PaymentDeliveryInfo: FC<
               duration={0.4}
               delay={0.3}
               amount={0.01}
-              margin="-100px"
+              margin="-40px"
             >
               <div className="p-4 bg-white rounded-lg border border-gray-200">
                 <h4 className="text-xs md:text-sm font-bold mb-1.5">
@@ -219,7 +219,7 @@ export const PaymentDeliveryInfo: FC<
                 duration={0.4}
                 delay={0.35}
                 amount={0.01}
-                margin="-100px"
+                margin="-40px"
               >
                 <div className="p-4 rounded-lg border border-gray-200 bg-gray-100">
                   <div className="flex items-center gap-2 mb-1.5">

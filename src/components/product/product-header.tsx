@@ -30,7 +30,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
           duration={0.5}
           delay={0.15}
           amount={0.01}
-          margin="-100px"
+          margin="-40px"
         >
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-medium leading-tight">
             {product.product_info.name}
@@ -46,7 +46,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             duration={0.4}
             delay={0.2}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             {amountSaved > 0 && (
               <span className="text-green-600 font-semibold text-sm sm:text-base lg:text-lg">
@@ -61,7 +61,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             duration={0.4}
             delay={0.25}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <span className="text-gray-600 text-xs sm:text-sm">
               {product.product_info.view_count} views in 24 hrs
@@ -77,7 +77,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         duration={0.4}
         delay={0.3}
         amount={0.01}
-        margin="-100px"
+        margin="-40px"
       >
         <div className="flex flex-wrap items-center gap-2 min-w-0">
           <div className="flex items-center gap-1 shrink-0">
@@ -112,7 +112,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         duration={0.4}
         delay={0.35}
         amount={0.01}
-        margin="-100px"
+        margin="-40px"
       >
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600">

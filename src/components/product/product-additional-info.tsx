@@ -31,7 +31,7 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
             duration={0.4}
             delay={0.1}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <div className="p-4 bg-deep-maroon/5 rounded-lg flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-xs md:text-sm text-deep-maroon min-w-0 flex-1">
@@ -58,7 +58,7 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
           duration={0.4}
           delay={0.15}
           amount={0.01}
-          margin="-100px"
+          margin="-40px"
         >
           <button
             type="button"
@@ -83,7 +83,7 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
             duration={0.4}
             delay={0.2}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <div className="p-2 pl-4 bg-deep-maroon/10 rounded-lg flex space-x-2 items-start">
               <GiWallet className="text-lg md:text-xl text-deep-maroon mt-1" />

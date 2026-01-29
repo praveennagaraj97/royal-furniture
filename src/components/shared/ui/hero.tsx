@@ -18,7 +18,7 @@ const Hero: FC<HeroProps> = ({ banners }) => {
         distance={30}
         initialScale={1.05}
         duration={0.8}
-        margin="-100px"
+        margin="-40px"
         className="relative w-full rounded-lg overflow-hidden"
       >
         <FadeSlideshow banners={banners} showDots={false} />

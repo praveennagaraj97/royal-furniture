@@ -29,7 +29,7 @@ const SectionTitleTag: FC<SectionTitleTagProps> = ({
       type="slideUp"
       distance={20}
       duration={0.6}
-      margin="-100px"
+      margin="-40px"
       className="relative"
     >
       {dimensions.width > 0 && dimensions.height > 0 && (

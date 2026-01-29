@@ -145,7 +145,7 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
     );
   };
 
-  return <div className="grid gap-8 mt-4">{renderBlocks()}</div>;
+  return <div className="grid gap-7 mt-4">{renderBlocks()}</div>;
 };
 
 export default Home;

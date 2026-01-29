@@ -11,7 +11,7 @@ export const CustomizeSection: React.FC = () => {
       duration={0.4}
       delay={0.1}
       amount={0.01}
-      margin="-100px"
+      margin="-40px"
     >
       <button
         type="button"

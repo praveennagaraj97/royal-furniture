@@ -114,7 +114,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             duration={0.6}
             delay={0.1}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <div className="w-full px-3 sm:px-4">
               <ProductImages
@@ -135,7 +135,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             duration={0.6}
             delay={0.2}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <div className="w-full space-y-4 px-3 sm:px-4 py-4">
               {/* Product Header */}
@@ -219,7 +219,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             duration={0.6}
             delay={0.1}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <div className="min-w-0 w-full lg:sticky top-20">
               <ProductImages
@@ -240,7 +240,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             duration={0.6}
             delay={0.2}
             amount={0.01}
-            margin="-100px"
+            margin="-40px"
           >
             <div className="min-w-0 w-full grid 2xl:grid-cols-2 gap-4">
               <div className="space-y-4">

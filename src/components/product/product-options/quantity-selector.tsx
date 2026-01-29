@@ -21,7 +21,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
       duration={0.4}
       delay={0.1}
       amount={0.01}
-      margin="-100px"
+      margin="-40px"
     >
       <div>
         <span className="text-sm md:text-base font-semibold text-gray-900">

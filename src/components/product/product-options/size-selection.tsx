@@ -23,7 +23,7 @@ export const SizeSelection: React.FC<SizeSelectionProps> = ({
       duration={0.4}
       delay={0.1}
       amount={0.01}
-      margin="-100px"
+      margin="-40px"
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">

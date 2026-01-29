@@ -95,7 +95,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
       duration={0.4}
       delay={0.55}
       amount={0.01}
-      margin="-100px"
+      margin="-40px"
     >
       <div className="space-y-6">
         {/* Header */}

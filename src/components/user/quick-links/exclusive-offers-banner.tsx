@@ -14,7 +14,7 @@ const ExclusiveOffersBanner: FC = () => {
       type="slideUp"
       distance={20}
       duration={0.6}
-      margin="-100px"
+      margin="-40px"
       className="bg-soft-pink rounded-sm p-4 mb-6"
     >
       <AppLink href="#" className="flex items-center justify-between group">

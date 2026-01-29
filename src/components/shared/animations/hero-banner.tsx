@@ -23,7 +23,7 @@ export const HeroBanner: FC<HeroBannerProps> = ({
   className,
   duration = 0.8,
   ease = 'easeOut',
-  margin = '-100px',
+  margin = '-40px',
 }) => {
   return (
     <motion.div

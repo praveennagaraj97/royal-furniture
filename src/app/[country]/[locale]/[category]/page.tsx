@@ -148,5 +148,5 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     );
   };
 
-  return <div className="grid gap-6">{renderBlocks()}</div>;
+  return <div className="grid gap-7">{renderBlocks()}</div>;
 }
