@@ -211,7 +211,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
 
       {/* Desktop Layout - Three Column | Hidden on Mobile */}
       <div className="hidden lg:block section-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[4fr_3fr_2fr] gap-4 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2.5fr_2fr] gap-4 items-start">
           {/* Left Side (40%) - Image Carousel (Sticky) */}
           <div className="lg:sticky top-20">
             <ViewOnce
