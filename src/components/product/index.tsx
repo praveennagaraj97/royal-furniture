@@ -210,7 +210,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       </div>
 
       {/* Desktop Layout - Two Column | Hidden on Mobile */}
-      <div className="hidden lg:block container mx-auto xl:px-12 lg:px-10 md:px-6">
+      <div className="hidden lg:block section-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Side - Image Carousel */}
           <ViewOnce
@@ -292,7 +292,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       </div>
 
       {/* Reviews Section */}
-      <div className="mt-4 lg:container lg:mx-auto xl:px-12 lg:px-10 md:px-6 px-3 sm:px-4">
+      <div className="mt-4 section-container">
         <UserReviews />
       </div>
     </div>
