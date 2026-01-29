@@ -4,7 +4,7 @@ import { ViewOnce } from '@/components/shared/animations';
 import SortDropdown, { SortOption } from '@/components/shared/sort-dropdown';
 import { motion } from 'framer-motion';
 import { FC } from 'react';
-import { FiChevronDown, FiFilter } from 'react-icons/fi';
+import { FiChevronDown, FiFilter, FiGrid } from 'react-icons/fi';
 
 interface SubcategoryTopBarProps {
   productCount: number;
@@ -55,12 +55,12 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
           </div>
 
           {/* Grid View Icon - Desktop only */}
-          {/* <button
+          <button
             className="hidden lg:flex p-2 text-deep-maroon hover:bg-gray-100 rounded-lg transition-colors duration-200"
             aria-label="Grid view"
           >
             <FiGrid className="w-5 h-5" />
-          </button> */}
+          </button>
 
           {/* Sort Dropdown */}
           <SortDropdown

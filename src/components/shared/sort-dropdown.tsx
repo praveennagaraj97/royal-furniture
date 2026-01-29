@@ -35,7 +35,7 @@ const SortDropdown: FC<SortDropdownProps> = ({
             <BiSortAlt2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
           <span className="text-xs sm:text-sm font-medium text-gray-900 whitespace-nowrap">
-            <span className="hidden sm:inline">Sort by: </span>
+            <span className="hidden sm:inline font-semibold">Sort by: </span>
             {selectedSortLabel}
           </span>
           <FiChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-deep-maroon transition-colors shrink-0" />
