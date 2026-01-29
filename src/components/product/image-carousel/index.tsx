@@ -1,5 +1,6 @@
 'use client';
 
+import ImageSwipeCarousel from '@/components/shared/image-carousel-slideshow';
 import Modal from '@/components/shared/modal';
 import Swiper from '@/components/shared/swiper';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
@@ -67,108 +68,198 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   return (
     <div className="relative w-full">
       {/* Main Image Container (intrinsic height based on image) */}
-      <div
-        className="relative aspect-square w-full rounded-lg overflow-hidden mb-3 cursor-zoom-in"
-        onClick={handleMainImageClick}
-        tabIndex={0}
-        role="button"
-        aria-label="View image in modal"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') handleMainImageClick();
-        }}
-      >
-        <ResponsiveImage
-          key={`${imageKey}-${selectedIndex}`}
-          images={images[selectedIndex]}
-          alt={alt}
-          className="w-full h-full aspect-auto"
-          shouldFill
-          objectFit="cover"
-          layoutId="main-product-image"
-          enableFadeTransition={true}
-        />
-
-        {/* Discount Badge */}
-        {discount && discount > 0 ? (
-          <div className="absolute top-4 left-4 bg-deep-maroon text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-md z-10">
-            {discount}% OFF
-          </div>
-        ) : null}
-
-        {/* Action Icons - Top Right */}
-        <div className="absolute top-4 right-4 flex gap-2 z-10">
-          <button
-            type="button"
-            onClick={onWishlistClick}
-            className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110"
-            aria-label="Add to wishlist"
-          >
-            <FiHeart
-              className={`w-5 h-5 transition-colors duration-200 ${
-                isWishlisted
-                  ? 'fill-deep-maroon text-deep-maroon'
-                  : 'text-gray-700'
-              }`}
-            />
-          </button>
-          <button
-            type="button"
-            onClick={onShareClick}
-            className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110"
-            aria-label="Share product"
-          >
-            <FiShare2 className="w-5 h-5 text-gray-700" />
-          </button>
-        </div>
-
-        {/* View in 3D Button */}
-        {showView3D ? (
-          <div className="absolute bottom-4 left-4 z-10">
-            <button
-              type="button"
-              className="flex items-center gap-2 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-lg font-medium text-xs md:text-sm hover:bg-white transition-all duration-200 shadow-md hover:shadow-lg"
-              aria-label="View in 3D"
-            >
-              <FiBox className="w-4 h-4" />
-              <span>View in 3D</span>
-            </button>
-          </div>
-        ) : null}
-      </div>
-
-      {/* Thumbnail Images */}
-      {images.length > 1 && (
-        <Swiper
-          gap={3}
-          showNavigation={images.length > 4}
-          hideArrowOnMobile={true}
-          className="mt-2"
-          alwaysAlignStart
-        >
-          {images.map((image, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => handleThumbnailClick(index)}
-              className={`relative shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                selectedIndex === index
-                  ? 'border-deep-maroon ring-2 ring-deep-maroon/20'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-              aria-label={`View image ${index + 1}`}
+      {/* Mobile: Swipable main image carousel */}
+      <div className="block md:hidden">
+        <ImageSwipeCarousel
+          images={images.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative aspect-square w-full rounded-lg overflow-hidden mb-3 cursor-zoom-in"
+              onClick={handleMainImageClick}
+              tabIndex={0}
+              role="button"
+              aria-label="View image in modal"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleMainImageClick();
+              }}
             >
               <ResponsiveImage
-                images={image}
-                alt={`${alt} thumbnail ${index + 1}`}
-                className="w-full h-full"
-                shouldFill={false}
+                key={`${imageKey}-${idx}`}
+                images={img}
+                alt={alt}
+                className="w-full h-full aspect-auto"
+                shouldFill
                 objectFit="cover"
-                enableFadeTransition={false}
+                layoutId="main-product-image"
+                enableFadeTransition={true}
+              />
+
+              {/* Discount Badge */}
+              {discount && discount > 0 ? (
+                <div className="absolute top-4 left-4 bg-deep-maroon text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-md z-10">
+                  {discount}% OFF
+                </div>
+              ) : null}
+
+              {/* Action Icons - Top Right */}
+              <div className="absolute top-4 right-4 flex gap-2 z-10">
+                <button
+                  type="button"
+                  onClick={onWishlistClick}
+                  className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110"
+                  aria-label="Add to wishlist"
+                >
+                  <FiHeart
+                    className={`w-5 h-5 transition-colors duration-200 ${
+                      isWishlisted
+                        ? 'fill-deep-maroon text-deep-maroon'
+                        : 'text-gray-700'
+                    }`}
+                  />
+                </button>
+                <button
+                  type="button"
+                  onClick={onShareClick}
+                  className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110"
+                  aria-label="Share product"
+                >
+                  <FiShare2 className="w-5 h-5 text-gray-700" />
+                </button>
+              </div>
+
+              {/* View in 3D Button */}
+              {showView3D ? (
+                <div className="absolute bottom-4 left-4 z-10">
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-lg font-medium text-xs md:text-sm hover:bg-white transition-all duration-200 shadow-md hover:shadow-lg"
+                    aria-label="View in 3D"
+                  >
+                    <FiBox className="w-4 h-4" />
+                    <span>View in 3D</span>
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ))}
+          initialIndex={selectedIndex}
+          onChange={setSelectedIndex}
+        />
+        {/* Image count pill at bottom center */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex justify-center w-full pointer-events-none">
+            <span className="px-3 py-1 rounded-full bg-black/70 text-white text-xs font-medium shadow-md">
+              {selectedIndex + 1}/{images.length}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: Main image and thumbnails as before */}
+      <div className="hidden md:block">
+        <div
+          className="relative aspect-square w-full rounded-lg overflow-hidden mb-3 cursor-zoom-in"
+          onClick={handleMainImageClick}
+          tabIndex={0}
+          role="button"
+          aria-label="View image in modal"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') handleMainImageClick();
+          }}
+        >
+          <ResponsiveImage
+            key={`${imageKey}-${selectedIndex}`}
+            images={images[selectedIndex]}
+            alt={alt}
+            className="w-full h-full aspect-auto"
+            shouldFill
+            objectFit="cover"
+            layoutId="main-product-image"
+            enableFadeTransition={true}
+          />
+
+          {/* Discount Badge */}
+          {discount && discount > 0 ? (
+            <div className="absolute top-4 left-4 bg-deep-maroon text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-md z-10">
+              {discount}% OFF
+            </div>
+          ) : null}
+
+          {/* Action Icons - Top Right */}
+          <div className="absolute top-4 right-4 flex gap-2 z-10">
+            <button
+              type="button"
+              onClick={onWishlistClick}
+              className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110"
+              aria-label="Add to wishlist"
+            >
+              <FiHeart
+                className={`w-5 h-5 transition-colors duration-200 ${
+                  isWishlisted
+                    ? 'fill-deep-maroon text-deep-maroon'
+                    : 'text-gray-700'
+                }`}
               />
             </button>
-          ))}
-        </Swiper>
-      )}
+            <button
+              type="button"
+              onClick={onShareClick}
+              className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110"
+              aria-label="Share product"
+            >
+              <FiShare2 className="w-5 h-5 text-gray-700" />
+            </button>
+          </div>
+
+          {/* View in 3D Button */}
+          {showView3D ? (
+            <div className="absolute bottom-4 left-4 z-10">
+              <button
+                type="button"
+                className="flex items-center gap-2 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-lg font-medium text-xs md:text-sm hover:bg-white transition-all duration-200 shadow-md hover:shadow-lg"
+                aria-label="View in 3D"
+              >
+                <FiBox className="w-4 h-4" />
+                <span>View in 3D</span>
+              </button>
+            </div>
+          ) : null}
+        </div>
+
+        {/* Thumbnail Images (desktop only) */}
+        {images.length > 1 && (
+          <Swiper
+            gap={3}
+            showNavigation={images.length > 4}
+            hideArrowOnMobile={true}
+            className="mt-2"
+            alwaysAlignStart
+          >
+            {images.map((image, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleThumbnailClick(index)}
+                className={`relative shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                  selectedIndex === index
+                    ? 'border-deep-maroon ring-2 ring-deep-maroon/20'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+                aria-label={`View image ${index + 1}`}
+              >
+                <ResponsiveImage
+                  images={image}
+                  alt={`${alt} thumbnail ${index + 1}`}
+                  className="w-full h-full"
+                  shouldFill={false}
+                  objectFit="cover"
+                  enableFadeTransition={false}
+                />
+              </button>
+            ))}
+          </Swiper>
+        )}
+      </div>
 
       {/* Modal for image view */}
       <Modal
