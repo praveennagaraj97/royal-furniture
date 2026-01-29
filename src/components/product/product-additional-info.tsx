@@ -4,9 +4,11 @@ import { ViewOnce } from '@/components/shared/animations';
 import Modal from '@/components/shared/modal';
 import type { ProductDetailData } from '@/types/response';
 import { useState } from 'react';
-import { FiX } from 'react-icons/fi';
+import { FiChevronRight, FiX } from 'react-icons/fi';
 import { GiWallet } from 'react-icons/gi';
 import { HiMapPin } from 'react-icons/hi2';
+import { IoStorefront } from 'react-icons/io5';
+import StoreLocatorModal from './store-locator-modal';
 
 export interface ProductAdditionalInfoProps {
   product: ProductDetailData;
@@ -16,6 +18,7 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
   product,
 }) => {
   const [isFlexiPaymentModalOpen, setIsFlexiPaymentModalOpen] = useState(false);
+  const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
 
   return (
     <>
@@ -47,6 +50,30 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
             </div>
           </ViewOnce>
         )}
+
+        {/* Try in Store Button */}
+        <ViewOnce
+          type="slideUp"
+          distance={15}
+          duration={0.4}
+          delay={0.15}
+          amount={0.01}
+          margin="-100px"
+        >
+          <button
+            type="button"
+            onClick={() => setIsStoreLocatorOpen(true)}
+            className="w-full flex items-center justify-between p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
+          >
+            <div className="flex items-center gap-2">
+              <IoStorefront className="text-xl text-deep-maroon" />
+              <span className="font-semibold text-sm text-gray-900">
+                Try in store!
+              </span>
+            </div>
+            <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
+          </button>
+        </ViewOnce>
 
         {/* Flexi Payment */}
         {product.flexi_payment.available && (
@@ -82,6 +109,12 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
           </ViewOnce>
         )}
       </div>
+
+      {/* Store Locator Modal */}
+      <StoreLocatorModal
+        isOpen={isStoreLocatorOpen}
+        onClose={() => setIsStoreLocatorOpen(false)}
+      />
 
       {/* Flexi Payment Info Modal */}
       <Modal

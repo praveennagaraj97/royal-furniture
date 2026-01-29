@@ -5,8 +5,6 @@ import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
 import { startTransition, useEffect, useState, type FC } from 'react';
-import { FiChevronRight } from 'react-icons/fi';
-import { IoStorefront } from 'react-icons/io5';
 import { GeneralInformation } from './general-information';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
@@ -14,7 +12,6 @@ import { ProductActions } from './product-actions';
 import { ProductAdditionalInfo } from './product-additional-info';
 import { ProductHeader } from './product-header';
 import { ProductOptions } from './product-options';
-import StoreLocatorModal from './store-locator-modal';
 import { UserReviews } from './user-reviews';
 
 export interface ProductDetailProps {
@@ -39,7 +36,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
-  const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
 
   const { removeFromWishlist } = useWishlistActions();
 
@@ -200,6 +196,15 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 onQuantityChange={handleQuantityChange}
               />
 
+              {/* Customize Yours */}
+              <ProductAdditionalInfo product={data} />
+
+              {/* General Information */}
+              <GeneralInformation
+                description={data.general_information}
+                infoSection={currentColor?.info_section}
+              />
+
               {/* Payment & Delivery Info (Ways of Payment section) */}
               <PaymentDeliveryInfo
                 productPrice={
@@ -214,39 +219,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 paymentOptions={data.payment_options}
                 freeAssembly={data.free_assembly}
                 expressDeliveryTimer={data.express_delivery_timer}
-              />
-
-              {/* Try in Store Button */}
-              <ViewOnce
-                type="slideUp"
-                distance={15}
-                duration={0.4}
-                delay={0.15}
-                amount={0.01}
-                margin="-100px"
-              >
-                <button
-                  type="button"
-                  onClick={() => setIsStoreLocatorOpen(true)}
-                  className="w-full flex items-center justify-between p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
-                >
-                  <div className="flex items-center gap-2">
-                    <IoStorefront className="text-xl text-deep-maroon" />
-                    <span className="font-semibold text-sm text-gray-900">
-                      Try in store!
-                    </span>
-                  </div>
-                  <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
-                </button>
-              </ViewOnce>
-
-              {/* Customize Yours */}
-              <ProductAdditionalInfo product={data} />
-
-              {/* General Information */}
-              <GeneralInformation
-                description={data.general_information}
-                infoSection={currentColor?.info_section}
               />
 
               {/* Product Actions - Add to Cart */}
@@ -309,28 +281,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                   onColorChange={setSelectedColor}
                   onQuantityChange={handleQuantityChange}
                 />
-                <ViewOnce
-                  type="slideUp"
-                  distance={15}
-                  duration={0.4}
-                  delay={0.15}
-                  amount={0.01}
-                  margin="-100px"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setIsStoreLocatorOpen(true)}
-                    className="w-full flex items-center justify-between p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
-                  >
-                    <div className="flex items-center gap-2">
-                      <IoStorefront className="text-xl text-deep-maroon" />
-                      <span className="font-semibold text-sm text-gray-900">
-                        Try in store!
-                      </span>
-                    </div>
-                    <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
-                  </button>
-                </ViewOnce>
 
                 <GeneralInformation
                   description={data.general_information}
@@ -381,12 +331,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           onSuccess={() => setIsWishlisted(true)}
         />
       )}
-
-      {/* Store Locator Modal */}
-      <StoreLocatorModal
-        isOpen={isStoreLocatorOpen}
-        onClose={() => setIsStoreLocatorOpen(false)}
-      />
     </div>
   );
 };
