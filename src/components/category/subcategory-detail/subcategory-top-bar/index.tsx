@@ -25,7 +25,7 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
 }) => {
   return (
     <ViewOnce type="slideDown" distance={10} duration={0.3} delay={0.1}>
-      <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
+      <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap mt-3">
         {/* Left Side - Toggle Filter Button */}
         <motion.button
           initial={{ opacity: 0, x: -10 }}
@@ -35,7 +35,7 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
           className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 group shrink-0"
         >
           <FiFilter className="w-4 h-4 text-deep-maroon shrink-0" />
-          <span className="text-xs sm:text-sm font-medium text-gray-900 whitespace-nowrap">
+          <span className="text-xs sm:text-sm font-semibold text-indigo-slate whitespace-nowrap">
             {isFilterVisible ? 'Hide Filter' : 'Show Filter'}
           </span>
           <FiChevronDown
@@ -48,10 +48,9 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
         {/* Right Side - Product Count, Grid Icon, Sort Dropdown */}
         <div className="flex items-center gap-2 sm:gap-4 ml-auto">
           {/* Product Count - Desktop only */}
-          <div className="hidden lg:block px-3 py-1.5 bg-gray-100 rounded-lg">
-            <span className="text-sm font-medium text-gray-900">
-              {productCount} {productCount === 1 ? 'Product' : 'Products'}
-            </span>
+          <div className="hidden lg:flex px-3 py-1.5 bg-gray-100 rounded-lg text-sm font-medium text-indigo-slate space-x-1">
+            <span className=" font-semibold">{productCount}</span>
+            <span>{productCount === 1 ? 'Product' : 'Products'}</span>
           </div>
 
           {/* Grid View Icon - Desktop only */}

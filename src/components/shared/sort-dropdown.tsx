@@ -34,7 +34,7 @@ const SortDropdown: FC<SortDropdownProps> = ({
           <div className="flex items-center gap-1 sm:gap-1.5 text-deep-maroon shrink-0">
             <BiSortAlt2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
-          <span className="text-xs sm:text-sm font-medium text-gray-900 whitespace-nowrap">
+          <span className="text-xs sm:text-sm font-medium text-indigo-slate whitespace-nowrap">
             <span className="hidden sm:inline font-semibold">Sort by: </span>
             {selectedSortLabel}
           </span>

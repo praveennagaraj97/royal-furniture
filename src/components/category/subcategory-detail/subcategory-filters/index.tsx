@@ -121,7 +121,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
           >
             <div className="space-y-3">
               <label className="flex items-center gap-2.5 cursor-pointer group justify-between">
-                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 flex-1 min-w-0">
+                <h3 className="text-sm font-semibold text-indigo-slate flex items-center gap-2 flex-1 min-w-0">
                   <span className="text-deep-maroon">✓</span>
                   {section.title}
                 </h3>
