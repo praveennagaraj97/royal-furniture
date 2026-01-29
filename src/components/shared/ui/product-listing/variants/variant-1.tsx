@@ -54,11 +54,6 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
               })}
             </div>
           )}
-
-          {/* <WishlistAction
-            isInWishlist={product.is_in_wishlist}
-            productId={product.id}
-          /> */}
         </div>
 
         {/* Product Info Section */}

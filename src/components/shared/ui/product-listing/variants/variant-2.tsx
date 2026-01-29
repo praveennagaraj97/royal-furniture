@@ -58,12 +58,6 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
                 {offerPercentage.toFixed(0)}% OFF
               </div>
             )}
-
-            {/* Wishlist Action - Top Right */}
-            {/* <WishlistAction
-              isInWishlist={product.is_in_wishlist}
-              productId={product.id}
-            /> */}
           </div>
 
           {/* Add to Cart Button - Positioned between image and content (half on top, half on bottom) */}
