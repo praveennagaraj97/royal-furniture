@@ -27,7 +27,7 @@ const ProductListing: FC<ProductListingProps> = ({
     <StaggerContainer
       staggerChildren={0.1}
       delayChildren={0.1}
-      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible"
+      className="section-container overflow-hidden md:overflow-visible"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">

@@ -80,7 +80,7 @@ const SubcategoryDetail: FC = () => {
   };
 
   return (
-    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
+    <div className="section-container">
       {/* Top Bar */}
       <SubcategoryTopBar
         productCount={productCount || displayProducts.length}

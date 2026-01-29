@@ -23,7 +23,7 @@ const CardShowcase: FC<CardShowcaseProps> = ({ items, className = '' }) => {
     <StaggerContainer
       staggerChildren={0.15}
       delayChildren={0.1}
-      className={`container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible ${className}`}
+      className={`section-container overflow-hidden md:overflow-visible ${className}`}
     >
       <Swiper gap={4} showNavigation hideArrowOnMobile>
         {items.map((item) => (

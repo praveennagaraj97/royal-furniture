@@ -50,7 +50,7 @@ const ProductResults: FC = () => {
   }, [displayType]);
 
   return (
-    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 mt-4">
+    <div className="section-container mt-4">
       {/* Header with type */}
       <div className="mb-2 flex space-x-2 justify-between items-center">
         <div>

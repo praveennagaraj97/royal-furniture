@@ -18,7 +18,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 pb-2">
+    <div className="section-container pb-2">
       {/* Mobile Toggle Button */}
       <ViewOnce
         type="slideDown"

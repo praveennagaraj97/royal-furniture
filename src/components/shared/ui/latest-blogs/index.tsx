@@ -17,7 +17,7 @@ const LatestBlogs: FC<{ blogs: BlogItem[] }> = ({ blogs }) => {
     <StaggerContainer
       staggerChildren={0.1}
       delayChildren={0.1}
-      className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 overflow-hidden md:overflow-visible pb-4"
+      className="section-container overflow-hidden md:overflow-visible pb-4"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">

@@ -32,6 +32,10 @@
 
 /* Reusable Ui */
 @layer components {
+  .section-container {
+    @apply max-w-screen mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 w-full;
+  }
+
   .modal-size-sm {
     @apply max-w-md;
   }
@@ -157,7 +161,9 @@
   right: 0px;
   width: 100px;
   height: 100%;
-  box-shadow: 0 0 10px var(--color-deep-maroon), 0 0 5px var(--color-deep-maroon);
+  box-shadow:
+    0 0 10px var(--color-deep-maroon),
+    0 0 5px var(--color-deep-maroon);
   opacity: 1;
   transform: rotate(3deg) translate(0px, -4px);
 }

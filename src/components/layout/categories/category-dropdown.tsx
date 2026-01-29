@@ -50,7 +50,7 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
         >
           {/* Invisible bridge area to prevent gap when moving mouse */}
           <div className="h-2 -mt-2 bg-transparent" />
-          <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 pt-6 pb-8">
+          <div className="section-container pt-6 pb-8">
             {/* Category Header */}
             <div className="mb-6">
               <AppLink

@@ -12,7 +12,7 @@ interface HeroProps {
 
 const Hero: FC<HeroProps> = ({ banners }) => {
   return (
-    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
+    <div className="section-container">
       <ViewOnce
         type="scaleUp"
         distance={30}

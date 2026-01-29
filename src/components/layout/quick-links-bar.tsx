@@ -25,7 +25,7 @@ const QuickLinksBar: FC = () => {
 
   return (
     <div className="bg-soft-pink text-indigo-slate">
-      <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-2.5 md:py-2">
+      <div className="section-container py-2.5 md:py-2">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:gap-x-6">
           {/* Primary Links */}
           <StaggerContainer

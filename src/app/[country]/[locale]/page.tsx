@@ -105,7 +105,7 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
               return (
                 <Fragment key={section_type + sort_order + idx}>
                   {title ? (
-                    <div className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3">
+                    <div className="section-container">
                       <SectionTitleTag
                         title={title}
                         className="text-xl font-semibold"

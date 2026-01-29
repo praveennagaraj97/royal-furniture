@@ -26,7 +26,7 @@ const Categories = forwardRef<HTMLElement, CategoriesProps>(
         className={`w-full relative z-40 ${!isHome ? 'hidden lg:block' : ''}`}
       >
         <div className="shadow-md relative z-40">
-          <nav className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 max-w-5xl flex justify-center relative">
+          <nav className="section-container max-w-5xl flex justify-center relative">
             {/* Mobile: horizontal scroll, Desktop: centered wrap */}
             <StaggerContainer
               mode="animate"

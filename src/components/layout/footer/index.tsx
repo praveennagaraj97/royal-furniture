@@ -68,7 +68,7 @@ const Footer: FC = () => {
       <StaggerContainer
         staggerChildren={0.1}
         delayChildren={0.1}
-        className="container mx-auto xl:px-12 lg:px-10 md:px-6 sm:px-4 px-3 py-6 md:py-8"
+        className="section-container py-6 md:py-8"
       >
         {/* Top Section */}
         <StaggerItem
