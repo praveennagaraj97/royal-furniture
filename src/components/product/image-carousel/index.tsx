@@ -7,7 +7,7 @@ import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { startTransition, useEffect, useMemo, useState, type FC } from 'react';
 import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
-import ImageCarouselModalView from './image-carousel-modal-view';
+import ImageCarouselModalView from './modal-view';
 
 export interface ImageCarouselProps {
   images: ResponsiveImages[];
@@ -57,7 +57,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   if (!images || images.length === 0) {
     console.warn('ImageCarousel: No images available to display');
     return (
-      <div className="relative w-full rounded-lg overflow-hidden bg-gray-100 mb-3">
+      <div className="relative w-full rounded-lg overflow-hidden bg-gray-100 md:mb-3">
         <div className="w-full h-96 flex items-center justify-center bg-gray-200">
           <span className="text-gray-500">No images available</span>
         </div>

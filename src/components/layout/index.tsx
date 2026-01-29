@@ -30,7 +30,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
       {categories && categories.length > 0 && (
         <Categories ref={categoryRef} categories={categories} />
       )}
-      <main>{children}</main>
+      <main className="overflow-x-hidden">{children}</main>
       <Footer />
     </>
   );
