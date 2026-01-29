@@ -1,6 +1,5 @@
 'use client';
 
-import WishlistAction from '@/components/shared/ui/product-listing/wishlist';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { AppLink } from '@/hooks';
 import { ProductItem } from '@/types';
@@ -53,11 +52,6 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
               })}
             </div>
           )}
-
-          <WishlistAction
-            isInWishlist={product.is_in_wishlist}
-            productId={product.id}
-          />
         </div>
 
         {/* Product Info Section - Compact */}

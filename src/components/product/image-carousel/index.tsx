@@ -6,7 +6,8 @@ import Swiper from '@/components/shared/swiper';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { startTransition, useEffect, useMemo, useState, type FC } from 'react';
-import { FiBox, FiHeart, FiShare2 } from 'react-icons/fi';
+import { FiBox, FiShare2 } from 'react-icons/fi';
+import AddToWishList from '../add-to-wishlist';
 import ImageCarouselModalView from './modal-view';
 
 interface ImageCardProps {
@@ -56,22 +57,7 @@ const ImageCard: FC<ImageCardProps> = ({
       ) : null}
 
       <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onWishlistClick?.();
-          }}
-          className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md"
-        >
-          <FiHeart
-            className={`w-5 h-5 ${
-              isWishlisted
-                ? 'fill-deep-maroon text-deep-maroon'
-                : 'text-gray-700'
-            }`}
-          />
-        </button>
+        <AddToWishList />
 
         <button
           type="button"
@@ -108,7 +94,6 @@ export interface ImageCarouselProps {
   alt?: string;
   discount?: number;
   showView3D?: boolean;
-  onWishlistClick?: () => void;
   onShareClick?: () => void;
   isWishlisted?: boolean;
   productName: string;
@@ -119,7 +104,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   alt = 'Product image',
   discount,
   showView3D = true,
-  onWishlistClick,
   onShareClick,
   isWishlisted = false,
   productName,
@@ -169,7 +153,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               alt={alt}
               discount={discount}
               showView3D={showView3D}
-              onWishlistClick={onWishlistClick}
               onShareClick={onShareClick}
               isWishlisted={isWishlisted}
             />
@@ -186,7 +169,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           alt={alt}
           discount={discount}
           showView3D={showView3D}
-          onWishlistClick={onWishlistClick}
           onShareClick={onShareClick}
           isWishlisted={isWishlisted}
         />
@@ -247,7 +229,6 @@ export interface ProductImagesProps {
   selectedVariant: string;
   selectedFabric: string;
   selectedColor: string;
-  onWishlistClick?: () => void;
   onShareClick?: () => void;
   isWishlisted?: boolean;
 }
@@ -257,7 +238,6 @@ export const ProductImages: FC<ProductImagesProps> = ({
   selectedVariant,
   selectedFabric,
   selectedColor,
-  onWishlistClick,
   onShareClick,
   isWishlisted = false,
 }) => {
@@ -287,7 +267,6 @@ export const ProductImages: FC<ProductImagesProps> = ({
       alt={product.product_info.name}
       discount={discount}
       showView3D
-      onWishlistClick={onWishlistClick}
       onShareClick={onShareClick}
       isWishlisted={isWishlisted}
       productName={product.product_info.name}

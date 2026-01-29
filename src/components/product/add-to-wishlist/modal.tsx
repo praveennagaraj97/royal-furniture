@@ -1,10 +1,10 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
-import { FC, useEffect, useState } from 'react';
-import { FiArrowLeft, FiCheck, FiHeart, FiPlus } from 'react-icons/fi';
-import CreateCollectionModal from './create-collection-modal';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
+import { FC, startTransition, useEffect, useState } from 'react';
+import { FiArrowLeft, FiHeart, FiPlus } from 'react-icons/fi';
+import CreateCollectionModal from '../../user/wishlist/create-collection-modal';
 
 interface AddToWishlistModalProps {
   isOpen: boolean;
@@ -18,23 +18,24 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
   isOpen,
   onClose,
   variantId,
-  productId,
   onSuccess,
 }) => {
   const { collections, addToWishlist, isAdding } = useWishlistActions();
-  const [selectedCollectionId, setSelectedCollectionId] = useState<number | null>(
-    null
-  );
+  const [selectedCollectionId, setSelectedCollectionId] = useState<
+    number | null
+  >(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // Set default collection as selected when collections load
   useEffect(() => {
-    if (collections.length > 0 && selectedCollectionId === null) {
-      const defaultCollection = collections.find((c) => c.is_default);
-      if (defaultCollection) {
-        setSelectedCollectionId(defaultCollection.id);
+    startTransition(() => {
+      if (collections.length > 0 && selectedCollectionId === null) {
+        const defaultCollection = collections.find((c) => c.is_default);
+        if (defaultCollection) {
+          setSelectedCollectionId(defaultCollection.id);
+        }
       }
-    }
+    });
   }, [collections, selectedCollectionId]);
 
   const handleCollectionToggle = (collectionId: number) => {
@@ -54,7 +55,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
       await addToWishlist(variantId, collectionIdToUse);
       onSuccess?.();
       onClose();
-    } catch (error) {
+    } catch {
       // Error is handled in the hook with toast
     }
   };
@@ -116,7 +117,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
                         {collection.is_default ? (
                           <FiHeart className="w-6 h-6 text-deep-maroon fill-deep-maroon" />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300" />
+                          <div className="w-full h-full bg-linear-to-br from-gray-200 to-gray-300" />
                         )}
                       </div>
 

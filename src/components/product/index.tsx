@@ -1,8 +1,6 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import AddToWishlistModal from '@/components/user/wishlist/add-to-wishlist-modal';
-import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import type { ProductDetailData } from '@/types/response';
 import { startTransition, useEffect, useState, type FC } from 'react';
 import { GeneralInformation } from './general-information';
@@ -35,9 +33,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     String(firstColor?.id || ''),
   );
   const [quantity, setQuantity] = useState(1);
-  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
-
-  const { removeFromWishlist } = useWishlistActions();
 
   // Get current selected color variant
   const currentVariant = data.variants.find((v) => v.name === selectedVariant);
@@ -88,23 +83,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     });
   };
 
-  const handleWishlistClick = async () => {
-    if (!currentColor?.variant_id) return;
-
-    if (isWishlisted) {
-      // Remove from wishlist
-      try {
-        await removeFromWishlist(currentColor.variant_id);
-        setIsWishlisted(false);
-      } catch {
-        // Error is handled in the hook with toast
-      }
-    } else {
-      // Show modal to select collection
-      setIsWishlistModalOpen(true);
-    }
-  };
-
   const handleShareClick = () => {
     // Handle share logic
     if (navigator.share) {
@@ -144,7 +122,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 selectedVariant={selectedVariant}
                 selectedFabric={selectedFabric}
                 selectedColor={selectedColor}
-                onWishlistClick={handleWishlistClick}
                 onShareClick={handleShareClick}
                 isWishlisted={isWishlisted}
               />
@@ -250,7 +227,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 selectedVariant={selectedVariant}
                 selectedFabric={selectedFabric}
                 selectedColor={selectedColor}
-                onWishlistClick={handleWishlistClick}
                 onShareClick={handleShareClick}
                 isWishlisted={isWishlisted}
               />
@@ -319,17 +295,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       <div className="mt-4 lg:container lg:mx-auto xl:px-12 lg:px-10 md:px-6 px-3 sm:px-4">
         <UserReviews />
       </div>
-
-      {/* Add to Wishlist Modal */}
-      {currentColor?.variant_id && (
-        <AddToWishlistModal
-          isOpen={isWishlistModalOpen}
-          onClose={() => setIsWishlistModalOpen(false)}
-          variantId={currentColor.variant_id}
-          productId={data.product_info.id}
-          onSuccess={() => setIsWishlisted(true)}
-        />
-      )}
     </div>
   );
 };
