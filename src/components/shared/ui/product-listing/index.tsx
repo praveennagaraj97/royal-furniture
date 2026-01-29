@@ -33,7 +33,7 @@ const ProductListing: FC<ProductListingProps> = ({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-end gap-3 flex-wrap">
           {typeof title === 'string' ? (
-            <span className="lg:text-2xl md:text-xl text-lg text-indigo-slate font-medium">
+            <span className="lg:text-2xl md:text-xl text-lg font-medium">
               {title}
             </span>
           ) : (
@@ -43,7 +43,7 @@ const ProductListing: FC<ProductListingProps> = ({
         {seeAllHref ? (
           <AppLink
             href={seeAllHref}
-            className="text-indigo-slate sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
+            className="sm:text-sm text-xs font-medium hover:text-gray-700 transition-all duration-200 flex items-center gap-1 hover:scale-105"
           >
             <span>{t('common.seeAll')}</span>
             <FiChevronRight className="sm:w-4 sm:h-4 w-2 h-2 rtl:rotate-180" />

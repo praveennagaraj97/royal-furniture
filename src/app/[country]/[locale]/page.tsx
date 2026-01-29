@@ -79,7 +79,7 @@ const Home: NextPage<CountryAndLocaleParams> = async ({ params }) => {
                 <ProductListing
                   title={
                     <div className="flex gap-1.5 flex-wrap">
-                      <span className="lg:text-2xl md:text-xl text-lg text-indigo-slate">
+                      <span className="lg:text-2xl md:text-xl text-lg font-medium">
                         {title}
                       </span>
                       {deal_ends_at ? (
