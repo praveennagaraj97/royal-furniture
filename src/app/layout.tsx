@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   },
 };
 
+
+import GoToTopButton from '../components/shared/go-to-top-button';
+
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return children;
+  return (
+    <>
+      {children}
+      <GoToTopButton />
+    </>
+  );
 }
