@@ -94,9 +94,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
           </div>
 
           {/* Product Name */}
-          <p className="text-gray-900 text-sm sm:text-base line-clamp-1">
-            {product.name}
-          </p>
+          <p className="text-sm sm:text-base line-clamp-1">{product.name}</p>
 
           {/* Color Options */}
           {product.available_colors && product.available_colors.length > 0 && (
