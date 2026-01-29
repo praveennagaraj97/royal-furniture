@@ -1,6 +1,7 @@
 'use client';
 
-import authBanner from '@/assets/auth_banner.png';
+import authBanner from '@/assets/auth_bg_1.png';
+import authBanner2 from '@/assets/auth_bg_2.png';
 import verticalLogo from '@/assets/vertical-logo.svg';
 import {
   FadeIn,
@@ -11,9 +12,10 @@ import { ConfirmationModal } from '@/components/shared/confirmation-modal';
 import Modal from '@/components/shared/modal';
 import AppleIcon from '@/components/shared/svgs/apple-icon';
 import GoogleIcon from '@/components/shared/svgs/google-icon';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { useState, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { FaFacebook } from 'react-icons/fa';
 import ForgotPasswordForm from './forgot-password-form';
 import LoginForm from './login-form';
@@ -31,6 +33,48 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [hasFormValues, setHasFormValues] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const t = useTranslations('auth');
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      id: 1,
+      image: authBanner,
+      title: (
+        <>
+          DESIGN & FURNISH YOUR <br /> DREAM SPACE
+        </>
+      ),
+      description: (
+        <>
+          Timeless designs, and unbeatable <br /> comfort all at your
+          fingertips!
+        </>
+      ),
+    },
+    {
+      id: 2,
+      image: authBanner2,
+      title: (
+        <>
+          TRANSFORM YOUR LIVING <br /> EXPERIENCE
+        </>
+      ),
+      description: (
+        <>
+          Discover the perfect blend of style <br /> and functionality for your
+          home.
+        </>
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSocialLogin = (provider: 'facebook' | 'google' | 'apple') => {
     console.log(`Social login with ${provider}`);
@@ -60,41 +104,70 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
         onClose={onClose}
         variant="center"
         size="xl"
-        className="w-full overflow-hidden rounded-3xl"
+        className="w-full overflow-hidden rounded-3xl p-3"
         preventClose={hasFormValues}
         onCloseAttempt={handleCloseAttempt}
       >
-        <div className="flex flex-col md:flex-row h-full md:h-162 max-h-[90vh] pl-3">
+        <div className="flex flex-col md:flex-row h-full md:h-162 max-h-[90vh]">
           {/* Left Side - Image & Banner */}
-          <div className="hidden md:flex relative w-1/2 flex-col bg-gray-50">
+          <div className="hidden md:flex relative w-1/2 flex-col bg-gray-50 overflow-hidden">
             <div className="absolute inset-0">
-              <Image
-                src={authBanner}
-                alt="Auth Banner"
-                fill
-                className="object-cover"
-                priority
-              />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={slides[currentSlide].image}
+                    alt="Auth Banner"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </motion.div>
+              </AnimatePresence>
             </div>
             {/* Curved White Bottom Overlay */}
             <div className="relative mt-auto">
               <div className="relative h-16 w-full overflow-hidden translate-y-1">
-                <div className="absolute -left-[10%] -right-[10%] top-0 h-[200%] rounded-[100%] bg-white" />
+                <div className="absolute -left-[10%] -right-[10%] top-0 h-[150%] rounded-[100%] bg-white" />
               </div>
               <div className="bg-white pb-10 px-8 text-center relative z-10">
                 {/* Slider Indicator */}
                 <div className="flex justify-center gap-1.5 mb-5">
-                  <div className="w-10 h-1.5 bg-deep-maroon rounded-full" />
-                  <div className="w-10 h-1.5 bg-gray-200 rounded-full" />
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        currentSlide === index
+                          ? 'w-10 bg-deep-maroon'
+                          : 'w-2 bg-gray-200 hover:bg-gray-300'
+                      }`}
+                    />
+                  ))}
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2 tracking-tight">
-                  DESIGN & FURNISH YOUR <br /> DREAM SPACE
-                </h3>
-                <p className="text-sm text-gray-500 font-medium leading-relaxed">
-                  Timeless designs, and unbeatable <br /> comfort all at your
-                  fingertips!
-                </p>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentSlide}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 tracking-tight">
+                      {slides[currentSlide].title}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-medium leading-relaxed">
+                      {slides[currentSlide].description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -102,7 +175,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
           {/* Right Side - Form */}
           <div className="flex-1 flex flex-col h-full overflow-y-auto pb-safe custom-scrollbar">
             {/* Logo */}
-            <div className="flex justify-center pt-8 px-6 pb-2">
+            <div className="flex justify-center pt-8 md:px-6 px-3 pb-2">
               <Image
                 src={verticalLogo}
                 alt="Royal Furniture"
@@ -115,7 +188,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
             {/* Tabs */}
             {activeTab !== 'forgot-password' && (
-              <div className="px-6 pt-6">
+              <div className="md:px-6 px-3 pt-6">
                 <div className="flex bg-gray-100 rounded-lg p-1">
                   <button
                     type="button"
@@ -144,7 +217,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
             )}
 
             {/* Form Content */}
-            <div className="flex-1 px-6 pt-6 pb-6">
+            <div className="flex-1 md:px-6 px-3 pt-6 pb-6">
               {activeTab === 'forgot-password' ? (
                 <ForgotPasswordForm
                   onFormStateChange={setHasFormValues}
