@@ -71,10 +71,10 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
         </div>
 
         {/* Product Info Section */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           {/* Price */}
           <div className="flex items-center gap-2">
-            <span className="text-red-600 font-semibold text-xs sm:text-sm">
+            <span className="text-red-600 font-semibold text-xs sm:text-base">
               {formatCurrency(
                 product.pricing.offer_price || 0,
                 countryCode,
