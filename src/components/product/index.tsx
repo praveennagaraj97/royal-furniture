@@ -222,18 +222,17 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               />
 
               {/* Product Actions - Add to Cart */}
-              <div className="sticky bottom-0 bg-white py-4 -mx-3 px-3 sm:px-4 border-t border-gray-200 z-40 shadow-lg shadow-gray-200">
-                <ProductActions
-                  onAddToCart={handleAddToCart}
-                  onBuyNow={handleBuyNow}
-                />
-              </div>
+
+              <ProductActions
+                onAddToCart={handleAddToCart}
+                onBuyNow={handleBuyNow}
+              />
             </div>
           </ViewOnce>
         </div>
       </div>
 
-      {/* Desktop Layout - Two Column */}
+      {/* Desktop Layout - Two Column | Hidden on Mobile */}
       <div className="hidden lg:block container mx-auto xl:px-12 lg:px-10 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Side - Image Carousel */}
