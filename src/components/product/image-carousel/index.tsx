@@ -47,7 +47,7 @@ const ImageCard: FC<ImageCardProps> = ({
         objectFit="cover"
         layoutId="main-product-image"
         enableFadeTransition
-        key={idx}
+        key={`${idx}-${img.web?.url || img.mobile?.url || img.ipad?.url || 'default'}`}
       />
 
       {discount ? (
