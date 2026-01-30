@@ -29,9 +29,8 @@ const ImageCard: FC<ImageCardProps> = ({
   alt,
   discount,
   showView3D,
-  onWishlistClick,
   onShareClick,
-  isWishlisted,
+  idx,
 }) => {
   return (
     <div
@@ -48,6 +47,7 @@ const ImageCard: FC<ImageCardProps> = ({
         objectFit="cover"
         layoutId="main-product-image"
         enableFadeTransition
+        key={idx}
       />
 
       {discount ? (

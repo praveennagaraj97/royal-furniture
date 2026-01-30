@@ -38,6 +38,27 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         </ViewOnce>
       </div>
 
+      {/* Price */}
+      <ViewOnce
+        type="slideUp"
+        distance={15}
+        duration={0.4}
+        delay={0.35}
+        amount={0.01}
+        margin="-40px"
+      >
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600">
+            ฿ {offerPrice.toLocaleString()}
+          </span>
+          {basePrice > offerPrice && (
+            <span className="text-base sm:text-lg lg:text-xl text-gray-400 line-through font-bold">
+              ฿ {basePrice.toLocaleString()}
+            </span>
+          )}
+        </div>
+      </ViewOnce>
+
       {/* Savings and Views */}
       <div className="flex flex-col gap-1">
         {savings > 0 && (
@@ -49,7 +70,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             margin="-40px"
           >
             {amountSaved > 0 && (
-              <span className="text-green-600 font-semibold text-sm sm:text-base lg:text-lg">
+              <span className="text-green-600 font-medium text-sm sm:text-base lg:text-lg">
                 Save ฿ {amountSaved.toLocaleString()}
               </span>
             )}
@@ -102,27 +123,6 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
           >
             See Reviews
           </button>
-        </div>
-      </ViewOnce>
-
-      {/* Price */}
-      <ViewOnce
-        type="slideUp"
-        distance={15}
-        duration={0.4}
-        delay={0.35}
-        amount={0.01}
-        margin="-40px"
-      >
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-          <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600">
-            ฿ {offerPrice.toLocaleString()}
-          </span>
-          {basePrice > offerPrice && (
-            <span className="text-base sm:text-lg lg:text-xl text-gray-400 line-through font-bold">
-              ฿ {basePrice.toLocaleString()}
-            </span>
-          )}
         </div>
       </ViewOnce>
     </div>
