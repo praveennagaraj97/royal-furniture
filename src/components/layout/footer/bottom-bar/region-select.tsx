@@ -17,12 +17,18 @@ const RegionSelect: FC = () => {
 
   // Memoize options to prevent unnecessary re-renders
   const regionOptions = useMemo(() => {
-    return countries.map((item) => {
+    type Country = (typeof countries)[number];
+    let filteredCountries: Country[] = Array.from(countries);
+
+    filteredCountries = filteredCountries.filter(
+      (item) => item.language_code === locale,
+    );
+
+    return filteredCountries.map((item) => {
       const countryCode = item.country_code;
       const languageCode = item.language_code;
 
       // Construct the href to preserve the current path after the country/locale segments
-
       const href = `/${countryCode}/${languageCode}${pathname}`;
 
       return {
@@ -45,13 +51,14 @@ const RegionSelect: FC = () => {
         href,
       };
     });
-  }, [pathname]);
+  }, [pathname, locale]);
 
   // Determine the currently selected item based on both country code and active locale
   const selectedItem = useMemo(() => {
     return (
       countries.find(
-        (item) => item.country_code === country && item.language_code === locale
+        (item) =>
+          item.country_code === country && item.language_code === locale,
       ) ||
       countries.find((item) => item.language_code === locale) ||
       countries[0]
