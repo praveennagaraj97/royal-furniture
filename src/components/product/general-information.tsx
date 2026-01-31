@@ -36,7 +36,7 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
   // Dynamically build accordion items from infoSection
   const dynamicAccordionItems = infoSection
     ? Object.entries(infoSection)
-        .filter(([_key, value]) => Array.isArray(value) && value.length > 0)
+        .filter(([, value]) => Array.isArray(value) && value.length > 0)
         .map(([key, value], idx) => ({
           id: key,
           title:
