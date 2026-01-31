@@ -2,6 +2,10 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import { FiMinus, FiPlus } from 'react-icons/fi';
+import {
+  IoIosCheckmarkCircleOutline,
+  IoIosCloseCircleOutline,
+} from 'react-icons/io';
 
 export interface QuantitySelectorProps {
   quantity: number;
@@ -51,9 +55,17 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
               <FiPlus className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
           </div>
-          <span className="text-green-600 font-medium text-xs md:text-sm">
-            In Stock
-          </span>
+          {typeof stockCount === 'number' && stockCount <= 0 ? (
+            <span className="text-red-600 font-medium text-xs md:text-sm flex items-center gap-1">
+              <IoIosCloseCircleOutline className="inline-block text-2xl text-red-600" />
+              Out of Stock
+            </span>
+          ) : (
+            <span className="text-green-600 font-medium text-xs md:text-sm flex items-center gap-1">
+              <IoIosCheckmarkCircleOutline className="inline-block text-2xl text-green-600" />
+              In Stock
+            </span>
+          )}
         </div>
       </div>
     </ViewOnce>
