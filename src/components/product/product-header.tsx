@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { useFormatCurrency } from '@/hooks/use-format-currency';
 import type { ProductDetailData } from '@/types/response';
 import { IoIosStarOutline } from 'react-icons/io';
 
@@ -9,6 +10,8 @@ export interface ProductHeaderProps {
 }
 
 export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
+  const formatCurrency = useFormatCurrency();
+
   const basePrice = product.product_info.pricing.base_price
     ? parseFloat(product.product_info.pricing.base_price)
     : 0;
@@ -49,11 +52,11 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
       >
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600">
-            ฿ {offerPrice.toLocaleString()}
+            {formatCurrency(offerPrice)}
           </span>
           {basePrice > offerPrice && (
             <span className="text-base sm:text-lg lg:text-xl text-gray-400 line-through font-bold">
-              ฿ {basePrice.toLocaleString()}
+              {formatCurrency(basePrice)}
             </span>
           )}
         </div>
@@ -72,7 +75,7 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             >
               {amountSaved > 0 && (
                 <span className="text-green-600 font-medium text-sm sm:text-base lg:text-lg">
-                  Save ฿ {amountSaved.toLocaleString()}
+                  Save {formatCurrency(amountSaved)}
                 </span>
               )}
             </ViewOnce>

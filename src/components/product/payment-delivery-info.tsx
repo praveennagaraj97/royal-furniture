@@ -11,6 +11,7 @@ import tabbyIcon from '@/assets/payments/tabby.png';
 import tamaraIcon from '@/assets/payments/tamara.png';
 import { FaTruckFast } from 'react-icons/fa6';
 
+import { useFormatCurrency } from '@/hooks/use-format-currency';
 import type { ProductDetailData } from '@/types/response';
 
 interface PaymentDeliveryInfoProps {
@@ -42,6 +43,8 @@ export const PaymentDeliveryInfo: FC<
   expressDeliveryTimer,
   showOnlyPlanCards = false,
 }) => {
+  const formatCurrency = useFormatCurrency();
+
   // Calculate payment plan amounts (4 payments)
   const tabbyAmount = (productPrice / 4).toFixed(2);
   const tamaraAmount = (productPrice / 4).toLocaleString('en-US', {
@@ -88,7 +91,9 @@ export const PaymentDeliveryInfo: FC<
             <div className="flex-1 min-w-0">
               <p className="text-xs md:text-sm text-gray-700 line-clamp-2">
                 4 interest-free payments of{' '}
-                <span className="text-red-600 font-bold">฿{tabbyAmount}</span>
+                <span className="text-red-600 font-bold">
+                  {formatCurrency(tabbyAmount)}
+                </span>
               </p>
             </div>
             <button
@@ -120,7 +125,9 @@ export const PaymentDeliveryInfo: FC<
             <div className="flex-1 min-w-0">
               <p className="text-xs md:text-sm text-gray-700 line-clamp-2">
                 Split in 4 of{' '}
-                <span className="text-red-600 font-bold">฿{tamaraAmount}</span>
+                <span className="text-red-600 font-bold">
+                  {formatCurrency(tamaraAmount)}
+                </span>
               </p>
             </div>
             <button
