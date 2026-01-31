@@ -35,7 +35,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {(productData.frequently_bought_together.length > 0 ||
         productData.similar_products.length > 0 ||
         productData.you_may_also_like.length > 0) && (
-        <div className="py-6 mt-8 space-y-6">
+        <div className="py-6 space-y-6">
           {productData.frequently_bought_together.length > 0 && (
             <ProductListing
               title="Complete the Collection"
