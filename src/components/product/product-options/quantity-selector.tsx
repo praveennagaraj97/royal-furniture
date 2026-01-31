@@ -24,7 +24,7 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
       margin="-40px"
     >
       <div>
-        <span className="text-sm md:text-base font-semibold text-gray-900">
+        <span className="text-sm md:text-base font-medium text-gray-900">
           Quantity:
         </span>
         <div className="flex gap-3 items-center mt-3">

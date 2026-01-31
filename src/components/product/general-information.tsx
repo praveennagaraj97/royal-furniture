@@ -65,7 +65,7 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
     >
       <div className="space-y-3">
         <div>
-          <h2 className="text-base md:text-xl font-semibold text-indigo-slate mb-2">
+          <h2 className="text-base md:text-xl font-medium text-indigo-slate mb-2">
             General Information
           </h2>
           <p className="leading-relaxed">{description}</p>

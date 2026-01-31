@@ -27,7 +27,7 @@ export const SizeSelection: React.FC<SizeSelectionProps> = ({
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm md:text-base font-semibold text-gray-900">
+          <h3 className="text-sm md:text-base font-medium text-gray-900">
             Select Size and Dimensions
           </h3>
           {selectedSizeObj?.dimensions && (
