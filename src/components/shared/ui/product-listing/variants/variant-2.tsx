@@ -60,10 +60,10 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
             )}
           </div>
 
-          {/* Add to Cart Button - Positioned between image and content (half on top, half on bottom) */}
+          {/* Add to Cart Button - Show only on group hover */}
           <button
             onClick={handleAddToCart}
-            className="absolute bottom-0 right-2 sm:right-3 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 z-10 shadow-sm translate-y-1/2"
+            className="absolute bottom-0 right-2 sm:right-3 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center border border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 z-10 shadow-sm translate-y-1/2 opacity-0 group-hover/image:opacity-100 pointer-events-none group-hover/image:pointer-events-auto"
             aria-label="Add to cart"
           >
             <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
