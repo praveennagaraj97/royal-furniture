@@ -3,12 +3,9 @@ import fs from 'fs';
 import path from 'path';
 
 async function run() {
-  console.log('Running pre-run script...');
   try {
     const response = await configService.getCountryLanguageOptions();
     const data = response.data;
-
-    console.log('--- Country & Language Options Fetched ---');
 
     // Ensure the generated directory exists
     const dir = path.join(process.cwd(), 'src', 'generated');
@@ -27,13 +24,10 @@ export type Country = (typeof countries)[number];
 `;
 
     fs.writeFileSync(filePath, fileContent);
-    console.log(`Successfully generated ${filePath}`);
-    console.log('---------------------------------');
-    console.log('Pre-run script executed successfully!');
   } catch (error) {
     console.error(
       'Failed to fetch country language options or write file:',
-      error
+      error,
     );
     process.exit(1);
   }

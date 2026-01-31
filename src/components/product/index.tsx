@@ -22,8 +22,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const firstFabric = firstVariant?.fabricsList[0];
   const firstColor = firstFabric?.colorsList[0];
 
-  console.log('Product Detail Data:', data);
-
   const [isWishlisted, setIsWishlisted] = useState(
     firstColor?.is_wishlist || false,
   );
