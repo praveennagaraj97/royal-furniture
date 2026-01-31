@@ -6,10 +6,8 @@ import { FC } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
 
 import { AppLink } from '@/hooks';
+import { useFormatCurrency } from '@/hooks/use-format-currency';
 import { ProductItem } from '@/types';
-import { formatCurrency } from '@/utils/format-currency';
-import { useLocale } from 'next-intl';
-import { useParams } from 'next/navigation';
 
 export interface ProductCardVariant2Props {
   product: ProductItem;
@@ -20,10 +18,8 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   product,
   className,
 }) => {
-  const params = useParams();
-  const locale = useLocale();
+  const formatCurrency = useFormatCurrency();
 
-  const countryCode = params.country as string;
   const offerPercentage = parseFloat(product.pricing.offer_percentage || '0');
   const hasDiscount = offerPercentage > 0;
 
@@ -75,20 +71,12 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
           {/* Price */}
           <div className="flex items-center gap-2">
             <span className="text-red-600 font-semibold text-xs sm:text-base">
-              {formatCurrency(
-                product.pricing.offer_price || 0,
-                countryCode,
-                locale,
-              )}
+              {formatCurrency(product.pricing.offer_price || 0)}
             </span>
             {product.pricing.base_price &&
               product.pricing.base_price !== product.pricing.offer_price && (
                 <span className="text-gray-400 text-xs font-medium line-through">
-                  {formatCurrency(
-                    product.pricing.base_price || 0,
-                    countryCode,
-                    locale,
-                  )}
+                  {formatCurrency(product.pricing.base_price || 0)}
                 </span>
               )}
           </div>

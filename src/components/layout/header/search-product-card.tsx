@@ -2,10 +2,9 @@
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { AppLink } from '@/hooks';
+import { useFormatCurrency } from '@/hooks/use-format-currency';
 import { ProductItem } from '@/types';
-import { formatCurrency } from '@/utils/format-currency';
-import { useLocale, useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 
 interface SearchProductCardProps {
@@ -17,10 +16,8 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
   product,
   className = '',
 }) => {
-  const params = useParams();
-  const locale = useLocale();
   const t = useTranslations();
-  const countryCode = params.country as string;
+  const formatCurrency = useFormatCurrency();
 
   return (
     <div
@@ -59,19 +56,11 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
           {/* Price */}
           <div className="flex items-center gap-2">
             <span className="text-red-600 font-semibold text-sm">
-              {formatCurrency(
-                product.pricing.offer_price || 0,
-                countryCode,
-                locale,
-              )}
+              {formatCurrency(product.pricing.offer_price || 0)}
             </span>
             {product.pricing.base_price !== product.pricing.offer_price && (
               <span className="text-gray-400 text-xs font-medium line-through">
-                {formatCurrency(
-                  product.pricing.base_price || 0,
-                  countryCode,
-                  locale,
-                )}
+                {formatCurrency(product.pricing.base_price || 0)}
               </span>
             )}
           </div>
