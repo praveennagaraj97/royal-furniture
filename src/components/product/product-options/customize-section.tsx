@@ -1,7 +1,8 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import { FiChevronRight, FiSettings } from 'react-icons/fi';
+import { FiChevronRight } from 'react-icons/fi';
+import { MdOutlineSettingsSuggest } from 'react-icons/md';
 
 export const CustomizeSection: React.FC = () => {
   return (
@@ -18,12 +19,14 @@ export const CustomizeSection: React.FC = () => {
         className="w-full flex items-center justify-between p-2 bg-deep-maroon/10 hover:bg-deep-maroon/20 rounded-lg transition-colors duration-200 group"
       >
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-deep-maroon/10 rounded-lg group-hover:bg-deep-maroon/20 transition-colors">
-            <FiSettings className="w-5 h-5 text-deep-maroon" />
+          <div>
+            <MdOutlineSettingsSuggest className="text-3xl text-deep-maroon" />
           </div>
           <div className="text-left">
-            <div className="font-semibold text-gray-900">Customize Yours</div>
-            <div className="text-xs md:text-sm text-gray-600">
+            <div className="font-semibold text-deep-maroon">
+              Customize Yours
+            </div>
+            <div className="text-xs font-medium text-indigo-slate">
               Any Color, Any Size!
             </div>
           </div>

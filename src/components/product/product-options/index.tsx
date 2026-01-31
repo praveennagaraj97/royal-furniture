@@ -33,13 +33,13 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
 }) => {
   // Get current variant, fabric, and color
   const currentVariant = product.variants.find(
-    (v) => v.name === selectedVariant
+    (v) => v.name === selectedVariant,
   );
   const currentFabric = currentVariant?.fabricsList.find(
-    (f) => f.name === selectedFabric
+    (f) => f.name === selectedFabric,
   );
   const currentColor = currentFabric?.colorsList.find(
-    (c) => String(c.id) === selectedColor
+    (c) => String(c.id) === selectedColor,
   );
 
   // Extract colors from current fabric
@@ -69,7 +69,7 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
         selectedSize={selectedVariant.toLowerCase().replace(/\s+/g, '-')}
         onSizeChange={(sizeId) => {
           const variant = product.variants.find(
-            (v) => v.name.toLowerCase().replace(/\s+/g, '-') === sizeId
+            (v) => v.name.toLowerCase().replace(/\s+/g, '-') === sizeId,
           );
           if (variant) {
             onVariantChange(variant.name);
@@ -93,7 +93,7 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
             onFabricChange(fabricName);
             // Reset color when fabric changes
             const fabric = currentVariant.fabricsList.find(
-              (f) => f.name === fabricName
+              (f) => f.name === fabricName,
             );
             if (fabric && fabric.colorsList[0]) {
               onColorChange(String(fabric.colorsList[0].id));
@@ -106,7 +106,8 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
         selectedColor={selectedColor}
         onColorChange={onColorChange}
       />
-      {product.customization_options.is_customizable && <CustomizeSection />}
+      {!product.customization_options.is_customizable && <CustomizeSection />}
+
       <QuantitySelector
         quantity={quantity}
         stockCount={currentColor?.stock}
