@@ -3,6 +3,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { useFormatCurrency } from '@/hooks/use-format-currency';
 import type { ProductDetailData } from '@/types/response';
+import { FiEye } from 'react-icons/fi';
 import { IoIosStarOutline } from 'react-icons/io';
 
 export interface ProductHeaderProps {
@@ -114,9 +115,12 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
             amount={0.01}
             margin="-40px"
           >
-            <span className="text-gray-600 text-xs sm:text-sm">
-              {product.product_info.view_count} views in 24 hrs
-            </span>
+            <div className="flex space-x-2 items-center w-fit p-2 bg-gray-50 rounded-md">
+              <FiEye className="w-4 h-4 text-green-600 shrink-0" />
+              <span className=" text-xs">
+                {product.product_info.view_count} views in 24 hrs
+              </span>
+            </div>
           </ViewOnce>
         )}
       </div>
