@@ -4,6 +4,7 @@ import { ViewOnce } from '@/components/shared/animations';
 import type { ProductDetailData } from '@/types/response';
 import { startTransition, useEffect, useState, type FC } from 'react';
 import { GeneralInformation } from './general-information';
+import { ProductHelpCards } from './help-cards';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
 import { ProductActions } from './product-actions';
@@ -181,6 +182,9 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 infoSection={currentColor?.info_section}
               />
 
+              {/* Help & Note Cards */}
+              <ProductHelpCards className="mt-4" />
+
               {/* Payment & Delivery Info (Ways of Payment section) */}
               <PaymentDeliveryInfo
                 productPrice={
@@ -261,6 +265,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 description={data.general_information}
                 infoSection={currentColor?.info_section}
               />
+              <ProductHelpCards className="mt-4" />
             </div>
           </ViewOnce>
 
