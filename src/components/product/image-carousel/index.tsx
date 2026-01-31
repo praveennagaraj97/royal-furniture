@@ -209,7 +209,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
         onClose={() => setIsModalOpen(false)}
         variant="center"
         size="xl"
-        className="p-0 bg-transparent shadow-none"
+        className="p-0 bg-transparent shadow-none "
       >
         <ImageCarouselModalView
           images={images}

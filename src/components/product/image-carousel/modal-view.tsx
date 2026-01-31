@@ -1,7 +1,8 @@
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ResponsiveImages } from '@/types/response';
 import { FC, useEffect, useState } from 'react';
-import { FiX } from 'react-icons/fi';
+
+import { FiImage, FiX } from 'react-icons/fi';
 
 interface ImageCarouselModalViewProps {
   images: ResponsiveImages[];
@@ -25,7 +26,7 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
 
   // Show 4 thumbnails in a row on desktop, all in a row on mobile
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full ">
       {/* Modal Header (matches store-locator-modal) */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200 bg-white/90 sticky top-0 z-20">
         <h2 className="text-md sm:text-xl text-gray-900 truncate">
@@ -43,7 +44,7 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
       </div>
 
       {/* Desktop: horizontal layout, Mobile: vertical */}
-      <div className={`p-3 ${images.length > 1 ? 'grid lg:grid-cols-3' : ''}`}>
+      <div className={`p-3 grid lg:grid-cols-3 gap-4`}>
         {/* Main Image (left on desktop, top on mobile) */}
         <div className="lg:col-span-2 rounded-md overflow-hidden">
           <ResponsiveImage
@@ -52,20 +53,21 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
             alt={`Product image ${selectedIndex + 1}`}
             shouldFill={false}
             objectFit="contain"
+            className="max-h-[80vh]"
             layoutId={`product-image-${selectedIndex}`}
             enableFadeTransition={true}
           />
         </div>
 
         {/* Thumbnails: right on desktop, bottom on mobile */}
-        {images.length > 1 && (
-          <div className="flex overflow-x-auto flex-wrap gap-2 p-4 bg-white/80">
+        {images.length > 1 ? (
+          <div className="lg:grid lg:grid-cols-3 flex lg:overscroll-x-none overflow-x-auto lg:flex-wrap gap-2 bg-white/80">
             {images.map((img, idx) => {
               return (
                 <button
                   key={idx}
                   onClick={() => setSelectedIndex(idx)}
-                  className={`border-2 rounded-lg overflow-hidden transition-all duration-200 focus:outline-none h-fit max-w-20 ${
+                  className={`border-2 rounded-lg overflow-hidden transition-all duration-200 focus:outline-none h-fit lg:w-full w-20 ${
                     selectedIndex === idx
                       ? 'border-deep-maroon ring-2 ring-deep-maroon/20'
                       : 'border-gray-200 hover:border-gray-300'
@@ -82,6 +84,11 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
                 </button>
               );
             })}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-2 p-8 text-gray-500 bg-white/80">
+            <FiImage className="h-8 w-8 mb-1 text-gray-400" />
+            <span className="text-sm">No additional images</span>
           </div>
         )}
       </div>
