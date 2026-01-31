@@ -39,18 +39,9 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
         .filter(([, value]) => Array.isArray(value) && value.length > 0)
         .map(([key, value], idx) => ({
           id: key,
-          title:
-            key === 'dimensions'
-              ? 'Dimension'
-              : key === 'specs'
-                ? 'Specifications'
-                : key === 'warranty'
-                  ? 'Warranty and care'
-                  : key === 'assembly'
-                    ? 'Assembly'
-                    : key
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^./, (str) => str.toUpperCase()),
+          title: key
+            .replace(/([A-Z])/g, ' $1')
+            .replace(/^./, (str) => str.toUpperCase()),
           children: renderDataRows(
             value as Array<{ label: string; value: string }>,
           ),
