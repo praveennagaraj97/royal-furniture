@@ -43,9 +43,9 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
       </div>
 
       {/* Desktop: horizontal layout, Mobile: vertical */}
-      <div className={`${images.length > 1 ? 'grid lg:grid-cols-3' : ''}`}>
+      <div className={`p-3 ${images.length > 1 ? 'grid lg:grid-cols-3' : ''}`}>
         {/* Main Image (left on desktop, top on mobile) */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 rounded-md overflow-hidden">
           <ResponsiveImage
             key={selectedIndex}
             images={images[selectedIndex]}
