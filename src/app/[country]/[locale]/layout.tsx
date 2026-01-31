@@ -1,6 +1,5 @@
 import AppLayout from '@/components/layout';
 import ProgressBar from '@/components/shared/ui/progress-bar';
-import { VercelToolbarComponent } from '@/components/vercel-toolbar';
 import { AuthProvider } from '@/contexts/auth-context';
 import { LayoutProvider } from '@/contexts/layout-context';
 import { ToastProvider } from '@/contexts/toast-context';
@@ -77,9 +76,6 @@ export default async function LocaleLayout({
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body className={`${montserrat.variable} antialiased overflow-x-hidden`}>
         <ProgressBar />
-        {process.env.NODE_ENV !== 'development' ? (
-          <VercelToolbarComponent />
-        ) : null}
         <NextIntlClientProvider messages={messages}>
           <ToastProvider>
             <AuthProvider>
