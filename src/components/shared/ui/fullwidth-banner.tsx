@@ -9,23 +9,25 @@ type FullWidthBannerProps = {
 
 const FullWidthBanner: FC<FullWidthBannerProps> = ({ banners }) => {
   return (
-    <ViewOnce
-      type="scaleUp"
-      distance={30}
-      initialScale={1.05}
-      duration={0.8}
-      margin="-40px"
-      className="relative w-full overflow-hidden"
-    >
-      {banners.map((banner) => (
-        <ResponsiveImage
-          key={banner.id}
-          images={banner.responsive_images}
-          alt={banner.offer_text || ''}
-          className="w-full h-auto"
-        />
-      ))}
-    </ViewOnce>
+    <div className="overflow-hidden max-w-screen">
+      <ViewOnce
+        type="scaleUp"
+        distance={30}
+        initialScale={1.05}
+        duration={0.8}
+        margin="-40px"
+        className="relative w-full "
+      >
+        {banners.map((banner) => (
+          <ResponsiveImage
+            key={banner.id}
+            images={banner.responsive_images}
+            alt={banner.offer_text || ''}
+            className="w-full h-auto"
+          />
+        ))}
+      </ViewOnce>
+    </div>
   );
 };
 
