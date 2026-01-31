@@ -108,7 +108,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
     }
 
     return (
-      <div className="space-y-6 min-w-0 w-full lg:pr-4">
+      <div className="space-y-6 min-w-0 w-full lg:pr-4 border p-3 border-gray-200 rounded-lg">
         {/* Filter Sections */}
         {filterSections.map((section, index) => (
           <ViewOnce

@@ -10,7 +10,6 @@ import { ProductActions } from './product-actions';
 import { ProductAdditionalInfo } from './product-additional-info';
 import { ProductHeader } from './product-header';
 import { ProductOptions } from './product-options';
-import { UserReviews } from './user-reviews';
 
 export interface ProductDetailProps {
   data: ProductDetailData;
@@ -300,11 +299,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             </div>
           </ViewOnce>
         </div>
-      </div>
-
-      {/* Reviews Section */}
-      <div className="mt-4 section-container">
-        <UserReviews />
       </div>
     </div>
   );
