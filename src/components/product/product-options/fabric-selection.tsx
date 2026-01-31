@@ -35,7 +35,7 @@ export const FabricSelection: React.FC<FabricSelectionProps> = ({
               key={fabric.name}
               type="button"
               onClick={() => onFabricChange(fabric.name)}
-              className={`relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg border-2 transition-all duration-200 overflow-hidden ${
+              className={`relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg border-2 transition-all duration-200 overflow-hidden p-px ${
                 selectedFabric === fabric.name
                   ? 'border-deep-maroon ring ring-deep-maroon/20 scale-110'
                   : 'border-gray-300 hover:border-gray-400'
@@ -46,7 +46,7 @@ export const FabricSelection: React.FC<FabricSelectionProps> = ({
               <img
                 src={fabric.image}
                 alt={fabric.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-lg"
               />
             </button>
           ))}

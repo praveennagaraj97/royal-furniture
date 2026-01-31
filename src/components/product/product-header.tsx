@@ -59,23 +59,50 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
         </div>
       </ViewOnce>
 
-      {/* Savings and Views */}
+      {/* Savings, Ratings and Views */}
       <div className="flex flex-col gap-1">
-        {savings > 0 && (
+        <div className="flex space-x-3 items-center">
+          {savings > 0 && (
+            <ViewOnce
+              type="fade"
+              duration={0.4}
+              delay={0.2}
+              amount={0.01}
+              margin="-40px"
+            >
+              {amountSaved > 0 && (
+                <span className="text-green-600 font-medium text-sm sm:text-base lg:text-lg">
+                  Save ฿ {amountSaved.toLocaleString()}
+                </span>
+              )}
+            </ViewOnce>
+          )}
+          {/* Rating */}
           <ViewOnce
-            type="fade"
+            type="slideUp"
+            distance={15}
             duration={0.4}
-            delay={0.2}
+            delay={0.3}
             amount={0.01}
             margin="-40px"
           >
-            {amountSaved > 0 && (
-              <span className="text-green-600 font-medium text-sm sm:text-base lg:text-lg">
-                Save ฿ {amountSaved.toLocaleString()}
-              </span>
-            )}
+            <div className="flex flex-wrap items-center gap-2 min-w-0">
+              <div className="flex items-center gap-1 shrink-0">
+                {[...Array(5)].map((_, i) => (
+                  <IoIosStarOutline
+                    key={i}
+                    className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                      i < Math.floor(product.reviews_summary.average_rating)
+                        ? 'fill-deep-maroon text-deep-maroon'
+                        : 'text-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
           </ViewOnce>
-        )}
+        </div>
+
         {product.product_info.view_count > 0 && (
           <ViewOnce
             type="fade"
@@ -90,41 +117,6 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
           </ViewOnce>
         )}
       </div>
-
-      {/* Rating */}
-      <ViewOnce
-        type="slideUp"
-        distance={15}
-        duration={0.4}
-        delay={0.3}
-        amount={0.01}
-        margin="-40px"
-      >
-        <div className="flex flex-wrap items-center gap-2 min-w-0">
-          <div className="flex items-center gap-1 shrink-0">
-            {[...Array(5)].map((_, i) => (
-              <IoIosStarOutline
-                key={i}
-                className={`w-4 h-4 sm:w-5 sm:h-5 ${
-                  i < Math.floor(product.reviews_summary.average_rating)
-                    ? 'fill-deep-maroon text-deep-maroon'
-                    : 'text-gray-300'
-                }`}
-              />
-            ))}
-          </div>
-          <span className="text-deep-maroon font-medium text-xs sm:text-sm lg:text-base">
-            {product.reviews_summary.average_rating} (
-            {product.reviews_summary.total_reviews} Reviews)
-          </span>
-          <button
-            type="button"
-            className="text-indigo-slate hover:underline text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0"
-          >
-            See Reviews
-          </button>
-        </div>
-      </ViewOnce>
     </div>
   );
 };

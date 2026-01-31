@@ -51,7 +51,7 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
               key={color.id}
               type="button"
               onClick={() => onColorChange(color.id)}
-              className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-full border transition-all duration-200 flex items-center justify-center overflow-hidden ${
+              className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-full p-px border transition-all duration-200 flex items-center justify-center overflow-hidden ${
                 selectedColor === color.id
                   ? 'border-deep-maroon ring ring-deep-maroon/20 scale-110'
                   : 'border-gray-300 hover:border-gray-400'
