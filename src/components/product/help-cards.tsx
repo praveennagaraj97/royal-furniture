@@ -6,17 +6,21 @@ import { PiStorefrontFill } from 'react-icons/pi';
 
 interface HelpCardProps {
   className?: string;
+  productName: string;
 }
 
-export const ProductHelpCards: FC<HelpCardProps> = ({ className }) => {
+export const ProductHelpCards: FC<HelpCardProps> = ({
+  className,
+  productName,
+}) => {
   return (
     <div className={className}>
       {/* Note Card */}
       <div className="mb-4 rounded-lg bg-gray-50 border border-gray-200 p-3 text-sm text-gray-600">
         <span className="font-medium mr-1">Note:</span>
-        The product Terry 4-Seater Outdoor Sofa Set - Grey images have props
-        used for illustrative purposes. Product Color may vary slightly due to
-        photographic lighting or your screen settings.
+        The product {productName} images have props used for illustrative
+        purposes. Product Color may vary slightly due to photographic lighting
+        or your screen settings.
       </div>
       {/* Help Card */}
       <div className="rounded-xl border border-gray-200 bg-white p-3 space-y-4">

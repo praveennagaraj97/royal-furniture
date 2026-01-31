@@ -22,6 +22,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const firstFabric = firstVariant?.fabricsList[0];
   const firstColor = firstFabric?.colorsList[0];
 
+  console.log('Product Detail Data:', data);
+
   const [isWishlisted, setIsWishlisted] = useState(
     firstColor?.is_wishlist || false,
   );
@@ -183,7 +185,10 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               />
 
               {/* Help & Note Cards */}
-              <ProductHelpCards className="mt-4" />
+              <ProductHelpCards
+                className="mt-4"
+                productName={data.product_info.name}
+              />
 
               {/* Payment & Delivery Info (Ways of Payment section) */}
               <PaymentDeliveryInfo
@@ -265,7 +270,10 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 description={data.general_information}
                 infoSection={currentColor?.info_section}
               />
-              <ProductHelpCards className="mt-4" />
+              <ProductHelpCards
+                className="mt-4"
+                productName={data.product_info.name}
+              />
             </div>
           </ViewOnce>
 
