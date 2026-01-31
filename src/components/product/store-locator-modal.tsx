@@ -71,7 +71,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
   const filteredStores = STORES.filter(
     (store) =>
       store.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.address.toLowerCase().includes(searchQuery.toLowerCase())
+      store.address.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const getStockStatus = (stock: number) => {
@@ -98,7 +98,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
             onClick={onClose}
             className="p-1.5 bg-deep-maroon hover:bg-[#6b0000] rounded-full transition-colors ml-4 shrink-0"
           >
-            <IoClose className="w-3 h-3 text-white" />
+            <IoClose className="w-5 h-5 text-white" />
           </button>
         </div>
 
