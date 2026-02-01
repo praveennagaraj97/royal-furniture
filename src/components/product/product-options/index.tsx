@@ -3,7 +3,7 @@
 import type { ProductDetailData } from '@/types/response';
 import { type FC, useMemo } from 'react';
 import { ColorSelection } from './color-selection';
-import { CustomizeSection } from './customize-section';
+import { CustomizeSection } from './customize';
 import { FabricSelection } from './fabric-selection';
 import { QuantitySelector } from './quantity-selector';
 import { SizeSelection } from './size-selection';
@@ -121,7 +121,7 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
 export { ColorSelection } from './color-selection';
 export type { ColorSelectionProps } from './color-selection';
 
-export { CustomizeSection } from './customize-section';
+export { CustomizeSection } from './customize';
 
 export { FabricSelection } from './fabric-selection';
 export type { FabricSelectionProps } from './fabric-selection';
