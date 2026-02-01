@@ -44,7 +44,9 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
       </div>
 
       {/* Desktop: horizontal layout, Mobile: vertical */}
-      <div className={`p-3 grid lg:grid-cols-3 gap-4`}>
+      <div
+        className={`p-3 grid lg:grid-cols-3 gap-4 max-h-[80vh] overflow-y-auto`}
+      >
         {/* Main Image (left on desktop, top on mobile) */}
         <div className="lg:col-span-2 rounded-md overflow-hidden">
           <ResponsiveImage

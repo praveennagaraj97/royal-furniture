@@ -106,7 +106,15 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
         selectedColor={selectedColor}
         onColorChange={onColorChange}
       />
-      {!product.customization_options.is_customizable && <CustomizeSection />}
+      {!product.customization_options.is_customizable && (
+        <CustomizeSection
+          productName={product.product_info.name}
+          currentImage={
+            currentColor?.images?.[0]?.responsive_images ||
+            product.product_info.responsive_images
+          }
+        />
+      )}
 
       <QuantitySelector
         quantity={quantity}
