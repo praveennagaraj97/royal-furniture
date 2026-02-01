@@ -56,7 +56,7 @@ export const CustomizeSection: React.FC<CustomizeSectionProps> = ({
         onClose={() => setIsModalOpen(false)}
         variant="center"
         size="xl"
-        className="p-0 bg-transparent shadow-none overflow-hidden h-[90vh] w-[95vw] max-w-[1200px]"
+        className="p-0 bg-transparent shadow-none"
       >
         <CustomizeModalView
           productName={productName}
