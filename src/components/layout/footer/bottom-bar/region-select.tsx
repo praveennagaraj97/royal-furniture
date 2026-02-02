@@ -70,14 +70,16 @@ const RegionSelect: FC = () => {
   }
 
   return (
-    <Select
-      value={selectedItem?.id.toString()}
-      onChange={() => {}}
-      options={regionOptions}
-      customBaseClassName="flex items-center gap-2 text-gray-700 text-sm hover:text-deep-maroon transition-colors duration-200"
-      className="w-auto border-none! bg-transparent! p-0!"
-      customPanelWidth={200}
-    />
+    <div className="bg-[#FFE8E8] rounded-md px-2 py-2">
+      <Select
+        value={selectedItem?.id.toString()}
+        onChange={() => {}}
+        options={regionOptions}
+        customBaseClassName="flex items-center gap-2 text-gray-700 text-sm hover:text-deep-maroon transition-colors duration-200"
+        className="w-auto border-none! bg-transparent! p-0!"
+        customPanelWidth={200}
+      />
+    </div>
   );
 };
 

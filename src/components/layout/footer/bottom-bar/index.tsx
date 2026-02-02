@@ -37,19 +37,21 @@ const BottomBar: FC = () => {
         {/* Region Selector */}
         <RegionSelect />
         {/* Language Selector */}
-        <div className="flex items-center gap-2">
-          <FiGlobe className="w-4 h-4 text-gray-700" />
-          <div className="relative">
-            <select
-              value={locale}
-              onChange={(e) => handleLanguageChange(e.target.value)}
-              className="text-gray-700 text-sm bg-transparent border-none outline-none cursor-pointer hover:text-deep-maroon transition-colors duration-200 appearance-none pr-6 pl-2 py-1"
-              aria-label="Select language"
-            >
-              <option value="en">{tCommon('english')}</option>
-              <option value="ar">{tCommon('arabic')}</option>
-            </select>
-            <FiChevronDown className="w-4 h-4 text-gray-700 pointer-events-none absolute right-0 top-1/2 -translate-y-1/2" />
+        <div className="bg-[#FFE8E8] rounded-md px-2 py-1">
+          <div className="flex items-center gap-1">
+            <FiGlobe className="w-4 h-4 text-gray-700" />
+            <div className="relative">
+              <select
+                value={locale}
+                onChange={(e) => handleLanguageChange(e.target.value)}
+                className="text-gray-700 text-sm bg-transparent border-none outline-none cursor-pointer hover:text-deep-maroon transition-colors duration-200 appearance-none pr-6 pl-2 py-1"
+                aria-label="Select language"
+              >
+                <option value="en">{tCommon('english')}</option>
+                <option value="ar">{tCommon('arabic')}</option>
+              </select>
+              <FiChevronDown className="w-4 h-4 text-gray-700 pointer-events-none absolute right-0 top-1/2 -translate-y-1/2" />
+            </div>
           </div>
         </div>
       </div>
