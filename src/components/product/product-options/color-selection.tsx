@@ -33,7 +33,7 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
       >
         <div className="flex items-center justify-between">
           <h3 className="text-sm md:text-base font-medium text-gray-900">
-            Select Colour and Fabric
+            Select Colour
           </h3>
         </div>
       </ViewOnce>

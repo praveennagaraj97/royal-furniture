@@ -103,6 +103,11 @@ export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
                   />
                 ))}
               </div>
+              {product.reviews_summary.average_rating > 0 && (
+                <span className="text-deep-maroon">
+                  {product.reviews_summary.average_rating.toFixed(1)}
+                </span>
+              )}
             </div>
           </ViewOnce>
         </div>
