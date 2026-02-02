@@ -67,7 +67,7 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
               staggerChildren={0.05}
               delayChildren={0}
               duration={0.3}
-              className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4"
+              className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4"
             >
               {subcategories.map((subcategory) => (
                 <StaggerItem
@@ -79,6 +79,7 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
                   className="shrink-0"
                 >
                   <AppLink
+                    title={subcategory.name}
                     href={
                       subcategory.slug
                         ? `/${categorySlug}/${subcategory.slug}`
@@ -95,7 +96,7 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
                         objectFit="cover"
                       />
                     </div>
-                    <span className="text-sm font-medium text-gray-800 text-center group-hover:text-deep-maroon transition-colors line-clamp-2">
+                    <span className="text-sm font-medium text-gray-800 text-center group-hover:text-deep-maroon transition-colors line-clamp-1">
                       {subcategory.name}
                     </span>
                   </AppLink>

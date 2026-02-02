@@ -1,8 +1,11 @@
+'use client';
+
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ResponsiveImages } from '@/types/response';
 import { FC, useEffect, useState } from 'react';
 
-import { FiImage, FiX } from 'react-icons/fi';
+import { FiImage, FiRotateCcw, FiX, FiZoomIn, FiZoomOut } from 'react-icons/fi';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 interface ImageCarouselModalViewProps {
   images: ResponsiveImages[];
@@ -29,14 +32,14 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
     <div className="w-full h-full ">
       {/* Modal Header (matches store-locator-modal) */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200 bg-white/90 sticky top-0 z-20">
-        <h2 className="text-md sm:text-xl text-gray-900 truncate">
+        <h2 className="text-md sm:text-xl text-gray-900 truncate pr-4">
           {productName}
         </h2>
 
         <button
           type="button"
           aria-label="Close"
-          className="p-1.5 bg-deep-maroon hover:bg-[#6b0000] rounded-full transition-colors ml-4 shrink-0"
+          className="p-1.5 bg-deep-maroon hover:bg-[#6b0000] rounded-full transition-colors shrink-0"
           onClick={onClose}
         >
           <FiX className="w-3 h-3 text-white" />
@@ -48,17 +51,59 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
         className={`p-3 grid lg:grid-cols-3 gap-4 max-h-[80vh] overflow-y-auto`}
       >
         {/* Main Image (left on desktop, top on mobile) */}
-        <div className="lg:col-span-2 rounded-md overflow-hidden">
-          <ResponsiveImage
+        <div className="lg:col-span-2 rounded-md overflow-hidden relative bg-gray-50 flex items-center justify-center min-h-[300px]">
+          <TransformWrapper
+            initialScale={1}
+            minScale={1}
+            maxScale={4}
+            centerOnInit
             key={selectedIndex}
-            images={images[selectedIndex]}
-            alt={`Product image ${selectedIndex + 1}`}
-            shouldFill={false}
-            objectFit="contain"
-            className="max-h-[80vh]"
-            layoutId={`product-image-${selectedIndex}`}
-            enableFadeTransition={true}
-          />
+          >
+            {({ zoomIn, zoomOut, resetTransform }) => (
+              <>
+                <div className="absolute top-2 right-2 z-10 flex gap-2">
+                  <button
+                    onClick={() => zoomIn()}
+                    className="p-2 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-700 hover:text-deep-maroon transition-colors"
+                    title="Zoom In"
+                  >
+                    <FiZoomIn className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => zoomOut()}
+                    className="p-2 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-700 hover:text-deep-maroon transition-colors"
+                    title="Zoom Out"
+                  >
+                    <FiZoomOut className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => resetTransform()}
+                    className="p-2 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-700 hover:text-deep-maroon transition-colors"
+                    title="Reset"
+                  >
+                    <FiRotateCcw className="w-4 h-4" />
+                  </button>
+                </div>
+                <TransformComponent
+                  wrapperClass="!w-full !h-full"
+                  contentClass="!w-full !h-full flex items-center justify-center"
+                >
+                  <div className="w-full h-full flex items-center justify-center">
+                    <ResponsiveImage
+                      key={selectedIndex}
+                      images={images[selectedIndex]}
+                      alt={`Product image ${selectedIndex + 1}`}
+                      shouldFill={false}
+                      objectFit="contain"
+                      className="max-h-[80vh] w-auto h-auto"
+                      layoutId={`product-image-${selectedIndex}`}
+                      enableFadeTransition={true}
+                    />
+                  </div>
+                </TransformComponent>
+              </>
+            )}
+          </TransformWrapper>
         </div>
 
         {/* Thumbnails: right on desktop, bottom on mobile */}
@@ -69,7 +114,7 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
                 <button
                   key={idx}
                   onClick={() => setSelectedIndex(idx)}
-                  className={`border-2 rounded-lg overflow-hidden transition-all duration-200 focus:outline-none h-fit lg:w-full w-20 ${
+                  className={`border-2 rounded-lg overflow-hidden transition-all duration-200 focus:outline-none h-fit lg:w-full w-20 shrink-0 ${
                     selectedIndex === idx
                       ? 'border-deep-maroon ring-2 ring-deep-maroon/20'
                       : 'border-gray-200 hover:border-gray-300'
