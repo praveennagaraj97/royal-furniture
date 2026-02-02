@@ -4,7 +4,7 @@ import { ViewOnce } from '@/components/shared/animations';
 import type { ProductDetailData } from '@/types/response';
 import { startTransition, useEffect, useState, type FC } from 'react';
 import { GeneralInformation } from './general-information';
-import { ProductHelpCards } from './help-cards';
+import { ProductHelpCard, ProductNoteCard } from './help-cards';
 import { ProductImages } from './image-carousel';
 import { PaymentDeliveryInfo } from './payment-delivery-info';
 import { ProductActions } from './product-actions';
@@ -183,10 +183,18 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               />
 
               {/* Help & Note Cards */}
-              <ProductHelpCards
+              <ProductNoteCard
                 className="mt-4"
                 productName={data.product_info.name}
               />
+
+              {/* Product Actions - Add to Cart */}
+              <ProductActions
+                onAddToCart={handleAddToCart}
+                onBuyNow={handleBuyNow}
+              />
+
+              <ProductHelpCard />
 
               {/* Payment & Delivery Info (Ways of Payment section) */}
               <PaymentDeliveryInfo
@@ -203,13 +211,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 freeAssembly={data.free_assembly}
                 expressDeliveryTimer={data.express_delivery_timer}
               />
-
-              {/* Product Actions - Add to Cart */}
-
-              <ProductActions
-                onAddToCart={handleAddToCart}
-                onBuyNow={handleBuyNow}
-              />
             </div>
           </ViewOnce>
         </div>
@@ -217,7 +218,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
 
       {/* Desktop Layout - Three Column | Hidden on Mobile */}
       <div className="hidden lg:block section-container">
-        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2.5fr_2fr] gap-4 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_0.5fr] gap-4 items-start">
           {/* Left Side (40%) - Image Carousel (Sticky) */}
           <div className="lg:sticky top-20">
             <ViewOnce
@@ -268,10 +269,11 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 description={data.general_information}
                 infoSection={currentColor?.info_section}
               />
-              <ProductHelpCards
+              <ProductNoteCard
                 className="mt-4"
                 productName={data.product_info.name}
               />
+              <ProductHelpCard />
             </div>
           </ViewOnce>
 

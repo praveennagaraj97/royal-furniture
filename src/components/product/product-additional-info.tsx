@@ -85,27 +85,25 @@ export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
             amount={0.01}
             margin="-40px"
           >
-            <div className="p-2 pl-4 bg-deep-maroon/10 rounded-lg flex space-x-2 items-start">
-              <GiWallet className="text-lg md:text-xl text-deep-maroon mt-1" />
-              <div>
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium">Flexi Payment Available</div>
-                    <div className="text-xs md:text-sm text-deep-maroon font-medium">
-                      {product.flexi_payment.description ||
-                        `Pay ${product.flexi_payment.upfront_percentage}% now, the rest before delivery.`}
-                    </div>
-                  </div>
+            <button
+              type="button"
+              onClick={() => setIsFlexiPaymentModalOpen(true)}
+              className=" p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
+            >
+              <div className="w-full flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <GiWallet className="text-xl text-deep-maroon" />
+                  <span className="font-semibold text-sm text-gray-900">
+                    Flexi Payment Available
+                  </span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsFlexiPaymentModalOpen(true)}
-                  className="text-indigo-slate hover:underline text-xs md:text-sm font-medium whitespace-nowrap shrink-0"
-                >
-                  See More
-                </button>
+                <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
               </div>
-            </div>
+              <p className="text-deep-maroon text-left text-xs mt-2">
+                Pay 20% upfront to confirm booking, remaining amount before
+                delivery
+              </p>
+            </button>
           </ViewOnce>
         )}
       </div>
