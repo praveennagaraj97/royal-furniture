@@ -19,8 +19,8 @@ const CustomizeModalView: FC<CustomizeModalViewProps> = ({
     <div className="w-full h-full flex flex-col bg-white">
       {/* Modal Header */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200 bg-white sticky top-0 z-20">
-        <h2 className="text-md sm:text-xl text-gray-900 truncate font-semibold">
-          Select Your Size | Select Colours and Fabrics
+        <h2 className="text-md sm:text-xl text-gray-900 truncate font-medium">
+          Select Your Size
         </h2>
 
         <button

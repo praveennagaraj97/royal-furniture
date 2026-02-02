@@ -51,7 +51,7 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
         className={`p-3 grid lg:grid-cols-3 gap-4 max-h-[80vh] overflow-y-auto`}
       >
         {/* Main Image (left on desktop, top on mobile) */}
-        <div className="lg:col-span-2 rounded-md overflow-hidden relative bg-gray-50 flex items-center justify-center min-h-[300px]">
+        <div className="lg:col-span-2 rounded-md overflow-hidden relative bg-gray-50 flex items-center justify-center max-h-[calc(80vh-26px)]">
           <TransformWrapper
             initialScale={1}
             minScale={1}
