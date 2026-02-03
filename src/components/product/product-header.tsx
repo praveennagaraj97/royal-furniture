@@ -3,6 +3,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { useFormatCurrency } from '@/hooks/use-format-currency';
 import type { ProductDetailData } from '@/types/response';
+import { FC } from 'react';
 import { FiEye } from 'react-icons/fi';
 import { IoIosStarOutline } from 'react-icons/io';
 
@@ -10,7 +11,7 @@ export interface ProductHeaderProps {
   product: ProductDetailData;
 }
 
-export const ProductHeader: React.FC<ProductHeaderProps> = ({ product }) => {
+export const ProductHeader: FC<ProductHeaderProps> = ({ product }) => {
   const formatCurrency = useFormatCurrency();
 
   const basePrice = product.product_info.pricing.base_price

@@ -3,7 +3,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import Modal from '@/components/shared/modal';
 import type { ProductDetailData } from '@/types/response';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { FiChevronRight, FiX } from 'react-icons/fi';
 import { GiWallet } from 'react-icons/gi';
 import { HiMapPin } from 'react-icons/hi2';
@@ -14,7 +14,7 @@ export interface ProductAdditionalInfoProps {
   product: ProductDetailData;
 }
 
-export const ProductAdditionalInfo: React.FC<ProductAdditionalInfoProps> = ({
+export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
   product,
 }) => {
   const [isFlexiPaymentModalOpen, setIsFlexiPaymentModalOpen] = useState(false);

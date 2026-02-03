@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { FC } from 'react';
 import type { SizeOption } from '../types';
 
 export interface SizeSelectionProps {
@@ -9,7 +10,7 @@ export interface SizeSelectionProps {
   onSizeChange: (sizeId: string) => void;
 }
 
-export const SizeSelection: React.FC<SizeSelectionProps> = ({
+export const SizeSelection: FC<SizeSelectionProps> = ({
   sizes,
   selectedSize,
   onSizeChange,

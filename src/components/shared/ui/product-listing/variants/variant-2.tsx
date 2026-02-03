@@ -2,7 +2,7 @@
 
 import { StaggerItem } from '@/components/shared/animations';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
 
 import { AppLink } from '@/hooks';
@@ -23,7 +23,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   const offerPercentage = parseFloat(product.pricing.offer_percentage || '0');
   const hasDiscount = offerPercentage > 0;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: MouseEvent) => {
     e.stopPropagation();
     // TODO: Implement add to cart functionality
   };

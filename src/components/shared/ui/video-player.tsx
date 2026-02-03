@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { FiPause, FiPlay } from 'react-icons/fi';
 
 interface VideoPlayerProps {
@@ -61,7 +61,7 @@ const VideoPlayer: FC<VideoPlayerProps> = ({
     }
   };
 
-  const handlePlayButtonClick = (e: React.MouseEvent) => {
+  const handlePlayButtonClick = (e: MouseEvent) => {
     e.stopPropagation();
     togglePlay();
   };

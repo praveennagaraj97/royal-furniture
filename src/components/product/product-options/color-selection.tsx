@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { FC } from 'react';
 
 export interface ColorOption {
   id: string;
@@ -16,7 +17,7 @@ export interface ColorSelectionProps {
   onColorChange: (colorId: string) => void;
 }
 
-export const ColorSelection: React.FC<ColorSelectionProps> = ({
+export const ColorSelection: FC<ColorSelectionProps> = ({
   colors,
   selectedColor,
   onColorChange,

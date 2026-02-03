@@ -1,7 +1,15 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  FC,
+  ReactNode,
+  TouchEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface SwiperProps {
@@ -85,16 +93,13 @@ const Swiper: FC<SwiperProps> = ({
     checkScrollPosition();
   }, [isScrolling, checkScrollPosition]);
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      const touch = e.touches[0];
-      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-      isHorizontalScrollRef.current = null;
-    },
-    [],
-  );
+  const handleTouchStart = useCallback((e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    isHorizontalScrollRef.current = null;
+  }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+  const handleTouchMove = useCallback((e: TouchEvent<HTMLDivElement>) => {
     if (!touchStartRef.current || !containerRef.current) return;
 
     const touch = e.touches[0];

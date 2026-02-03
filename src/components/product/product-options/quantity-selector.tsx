@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { FC } from 'react';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 import {
   IoIosCheckmarkCircleOutline,
@@ -13,7 +14,7 @@ export interface QuantitySelectorProps {
   onQuantityChange: (delta: number) => void;
 }
 
-export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
+export const QuantitySelector: FC<QuantitySelectorProps> = ({
   quantity,
   stockCount,
   onQuantityChange,

@@ -2,6 +2,7 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import type { ProductFabric } from '@/types/response';
+import { FC } from 'react';
 
 export interface FabricSelectionProps {
   fabrics: ProductFabric[];
@@ -9,7 +10,7 @@ export interface FabricSelectionProps {
   onFabricChange: (fabricName: string) => void;
 }
 
-export const FabricSelection: React.FC<FabricSelectionProps> = ({
+export const FabricSelection: FC<FabricSelectionProps> = ({
   fabrics,
   selectedFabric,
   onFabricChange,

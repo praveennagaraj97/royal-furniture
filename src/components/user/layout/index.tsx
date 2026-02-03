@@ -3,7 +3,7 @@
 import { StaggerContainer, ViewOnce } from '@/components/shared/animations';
 import Portal from '@/components/shared/portal';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState, type ReactNode } from 'react';
+import { FC, useState, type ReactNode } from 'react';
 import { FiChevronRight, FiMenu, FiX } from 'react-icons/fi';
 import AccountManagement from './account-management';
 import FeedbackInfoSection from './feedback-info-section';
@@ -14,7 +14,7 @@ interface UserLayoutProps {
   children: ReactNode;
 }
 
-const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
+const UserLayout: FC<UserLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (

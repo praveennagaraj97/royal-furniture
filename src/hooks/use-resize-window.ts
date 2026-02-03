@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { DependencyList, useEffect } from 'react';
 
 /**
  * Hook to handle window resize events
@@ -7,7 +7,7 @@ import { useEffect } from 'react';
  */
 export const useResizeWindow = (
   callback: () => void,
-  deps: React.DependencyList = []
+  deps: DependencyList = [],
 ) => {
   useEffect(() => {
     window.addEventListener('resize', callback);

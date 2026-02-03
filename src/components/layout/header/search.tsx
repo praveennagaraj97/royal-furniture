@@ -1,13 +1,13 @@
 'use client';
 
 import { SearchResultsSkeleton } from '@/components/skeletons/search-results-skeleton';
+import { useAppRouter } from '@/hooks';
 import { useGetSearchResults } from '@/hooks/api';
 import { useClickOutside } from '@/hooks/use-click-outside';
 import { useDebounce } from '@/hooks/use-debounce';
-import { useAppRouter } from '@/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import SearchDropdown from './search-dropdown';
 import SearchProductCard from './search-product-card';
@@ -39,7 +39,7 @@ const SearchBar: FC = () => {
     },
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
     setIsDropdownOpen(true);
@@ -50,7 +50,7 @@ const SearchBar: FC = () => {
     setIsDropdownOpen(true);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setIsDropdownOpen(false);

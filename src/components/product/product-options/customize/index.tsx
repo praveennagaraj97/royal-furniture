@@ -3,7 +3,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import Modal from '@/components/shared/modal';
 import { ResponsiveImages } from '@/types/response';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import { MdOutlineSettingsSuggest } from 'react-icons/md';
 import CustomizeModalView from './customize-modal-view';
@@ -13,7 +13,7 @@ interface CustomizeSectionProps {
   currentImage?: ResponsiveImages;
 }
 
-export const CustomizeSection: React.FC<CustomizeSectionProps> = ({
+export const CustomizeSection: FC<CustomizeSectionProps> = ({
   productName,
   currentImage,
 }) => {

@@ -9,7 +9,14 @@ import {
   useParams,
 } from 'next/navigation';
 import NProgress from 'nprogress';
-import { ReactNode, forwardRef, useCallback, useMemo } from 'react';
+import {
+  CSSProperties,
+  MouseEvent,
+  ReactNode,
+  forwardRef,
+  useCallback,
+  useMemo,
+} from 'react';
 
 /**
  * Custom hook to handle navigation with country and locale prefixing
@@ -39,7 +46,7 @@ export function useAppRouter() {
       const secondSegment = segments[1];
 
       const isCountry = (SUPPORTED_COUNTRIES as string[]).includes(
-        firstSegment
+        firstSegment,
       );
       const isLocale = (LOCALES as string[]).includes(secondSegment);
 
@@ -51,7 +58,7 @@ export function useAppRouter() {
       const cleanHref = href === '/' ? '' : href;
       return `/${country}/${locale}${cleanHref}`;
     },
-    [country, locale]
+    [country, locale],
   );
 
   const handlePush = useCallback(
@@ -60,7 +67,7 @@ export function useAppRouter() {
       NProgress.start();
       return router.push(formatHref(href), options);
     },
-    [router, formatHref]
+    [router, formatHref],
   );
 
   const handleReplace = useCallback(
@@ -69,7 +76,7 @@ export function useAppRouter() {
       NProgress.start();
       return router.replace(formatHref(href), options);
     },
-    [router, formatHref]
+    [router, formatHref],
   );
 
   return {
@@ -120,11 +127,11 @@ export interface AppLinkProps extends Omit<LinkProps, 'href'> {
   children: ReactNode;
   className?: string;
   id?: string;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onClick?: (e: MouseEvent<HTMLAnchorElement>) => void;
   target?: string;
   rel?: string;
   title?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 /**
@@ -136,7 +143,7 @@ export const AppLink = forwardRef<HTMLAnchorElement, AppLinkProps>(
     const finalHref = formatHref(href);
 
     const handleClick = useCallback(
-      (e: React.MouseEvent<HTMLAnchorElement>) => {
+      (e: MouseEvent<HTMLAnchorElement>) => {
         // Start progress bar immediately for AppLink navigation
         // Only for internal links without target="_blank"
         if (
@@ -152,15 +159,21 @@ export const AppLink = forwardRef<HTMLAnchorElement, AppLinkProps>(
         // Call user's onClick handler if provided
         onClick?.(e);
       },
-      [finalHref, target, onClick]
+      [finalHref, target, onClick],
     );
 
     return (
-      <Link ref={ref} href={finalHref} onClick={handleClick} target={target} {...props}>
+      <Link
+        ref={ref}
+        href={finalHref}
+        onClick={handleClick}
+        target={target}
+        {...props}
+      >
         {children}
       </Link>
     );
-  }
+  },
 );
 
 AppLink.displayName = 'AppLink';

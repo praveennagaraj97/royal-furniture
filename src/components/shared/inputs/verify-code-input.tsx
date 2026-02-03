@@ -2,11 +2,12 @@
 
 import {
   type ChangeEvent,
+  ClipboardEvent,
   type FC,
   type KeyboardEvent,
+  useEffect,
   useRef,
   useState,
-  useEffect,
 } from 'react';
 
 interface VerifyCodeInputProps {
@@ -37,7 +38,9 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   disabled = false,
 }) => {
   const [codes, setCodes] = useState<string[]>(
-    Array(maxLength).fill('').map((_, i) => (value[i] || ''))
+    Array(maxLength)
+      .fill('')
+      .map((_, i) => value[i] || ''),
   );
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -45,7 +48,9 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   useEffect(() => {
     const currentValue = codes.join('');
     if (value !== currentValue) {
-      const newCodes = Array(maxLength).fill('').map((_, i) => (value[i] || ''));
+      const newCodes = Array(maxLength)
+        .fill('')
+        .map((_, i) => value[i] || '');
       setCodes(newCodes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,10 +130,10 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
     }
   };
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').trim();
-    
+
     // Filter based on input type
     let filteredData = pastedData;
     if (inputType === 'number') {
@@ -159,7 +164,9 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
     onChange?.(codeString);
 
     // Focus the next empty input or the last input
-    const nextEmptyIndex = newCodes.findIndex((code, i) => i >= startIndex && !code);
+    const nextEmptyIndex = newCodes.findIndex(
+      (code, i) => i >= startIndex && !code,
+    );
     const focusIndex = nextEmptyIndex === -1 ? maxLength - 1 : nextEmptyIndex;
     inputRefs.current[focusIndex]?.focus();
 
@@ -174,9 +181,10 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
     inputRefs.current[index]?.select();
   };
 
-  const borderClasses = showError && error
-    ? 'form-input-border-error'
-    : 'form-input-border-default';
+  const borderClasses =
+    showError && error
+      ? 'form-input-border-error'
+      : 'form-input-border-default';
 
   return (
     <div className={containerClassName}>
@@ -209,4 +217,3 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
     </div>
   );
 };
-

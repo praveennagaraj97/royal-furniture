@@ -2,7 +2,7 @@
 
 import { useUser } from '@/contexts/user-context';
 import { useTranslations } from 'next-intl';
-import { FC, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 import { FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
 import { SlideIn } from '../../animations';
 
@@ -17,7 +17,7 @@ const AddToCart: FC = () => {
     setQuantity(newQuantity);
   };
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: MouseEvent) => {
     e.stopPropagation();
   };
 

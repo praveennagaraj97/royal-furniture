@@ -3,7 +3,7 @@
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { startTransition, useEffect, useRef, useState } from 'react';
+import { FC, startTransition, useEffect, useRef, useState } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
 import AddToCartWrapper from '../shared/ui/add-to-cart-modal';
 
@@ -12,7 +12,7 @@ export interface ProductActionsProps {
   onBuyNow?: () => void;
 }
 
-export const ProductActions: React.FC<ProductActionsProps> = ({ onBuyNow }) => {
+export const ProductActions: FC<ProductActionsProps> = ({ onBuyNow }) => {
   const t = useTranslations();
   const actionsRef = useRef<HTMLDivElement | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
