@@ -1,18 +1,23 @@
 'use client';
 
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import type { ProductDetailData } from '@/types/response';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC, startTransition, useEffect, useRef, useState } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
-import AddToCartWrapper from '../shared/ui/add-to-cart-modal';
+import AddToCartWrapper from '../shared/ui/add-to-cart';
 
 export interface ProductActionsProps {
+  product: ProductDetailData;
   onAddToCart?: () => void;
   onBuyNow?: () => void;
 }
 
-export const ProductActions: FC<ProductActionsProps> = ({ onBuyNow }) => {
+export const ProductActions: FC<ProductActionsProps> = ({
+  product,
+  onBuyNow,
+}) => {
   const t = useTranslations();
   const actionsRef = useRef<HTMLDivElement | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
@@ -27,7 +32,7 @@ export const ProductActions: FC<ProductActionsProps> = ({ onBuyNow }) => {
   return (
     <>
       <div ref={actionsRef} className="flex flex-col gap-2 sm:gap-3">
-        <AddToCartWrapper>
+        <AddToCartWrapper product={product}>
           <button
             type="button"
             className="whitespace-nowrap flex items-center justify-center w-full gap-2 bg-deep-maroon text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#6b0000] transition-colors duration-200 shadow-md hover:shadow-lg"
@@ -57,7 +62,7 @@ export const ProductActions: FC<ProductActionsProps> = ({ onBuyNow }) => {
           >
             <div className="max-w-6xl mx-auto flex items-center gap-2 sm:gap-3">
               <div className="flex-1">
-                <AddToCartWrapper>
+                <AddToCartWrapper product={product}>
                   <button
                     type="button"
                     className="whitespace-nowrap flex items-center justify-center w-full gap-2 bg-deep-maroon text-white py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#6b0000] transition-colors duration-200 shadow-md hover:shadow-lg"

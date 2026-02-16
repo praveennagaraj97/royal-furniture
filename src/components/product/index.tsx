@@ -190,6 +190,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
 
               {/* Product Actions - Add to Cart */}
               <ProductActions
+                product={data}
                 onAddToCart={handleAddToCart}
                 onBuyNow={handleBuyNow}
               />
@@ -289,6 +290,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             <div className="w-full space-y-4">
               <div>
                 <ProductActions
+                  product={data}
                   onAddToCart={handleAddToCart}
                   onBuyNow={handleBuyNow}
                 />
