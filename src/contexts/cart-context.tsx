@@ -39,6 +39,7 @@ interface CartContextValue {
 }
 
 const STORAGE_KEY = 'rf-cart-state-v1';
+const CART_CURRENCY = 'AED ';
 
 const SAMPLE_PRODUCT_IMAGE = {
   web: {
@@ -54,37 +55,37 @@ const SAMPLE_CART_ITEMS: CartItem[] = [
     id: 'kids-bed-black-1',
     name: 'Kids Bed',
     slug: 'kids-bed',
-    description: 'Save ฿200',
+    description: 'Save AED 200',
     color: 'Black',
     image: SAMPLE_PRODUCT_IMAGE,
     price: 799,
     basePrice: 1299,
     quantity: 1,
-    attributes: ['Save ฿200', 'Colour: Black'],
+    attributes: ['Save AED 200', 'Colour: Black'],
   },
   {
     id: 'kids-bed-black-2',
     name: 'Kids Bed',
     slug: 'kids-bed',
-    description: 'Save ฿200',
+    description: 'Save AED 200',
     color: 'Black',
     image: SAMPLE_PRODUCT_IMAGE,
     price: 799,
     basePrice: 1299,
     quantity: 1,
-    attributes: ['Save ฿200', 'Colour: Black'],
+    attributes: ['Save AED 200', 'Colour: Black'],
   },
   {
     id: 'kids-bed-black-3',
     name: 'Kids Bed',
     slug: 'kids-bed',
-    description: 'Save ฿200',
+    description: 'Save AED 200',
     color: 'Black',
     image: SAMPLE_PRODUCT_IMAGE,
     price: 799,
     basePrice: 1299,
     quantity: 1,
-    attributes: ['Save ฿200', 'Colour: Black'],
+    attributes: ['Save AED 200', 'Colour: Black'],
   },
 ];
 
@@ -128,7 +129,7 @@ const SAMPLE_FREQUENTLY_BOUGHT: ProductItem[] = [1, 2, 3, 4].map((index) => ({
 
 const DEFAULT_CART_STATE: CartState = {
   items: SAMPLE_CART_ITEMS,
-  currency: '฿',
+  currency: CART_CURRENCY,
   shippingFee: 0,
   couponAmount: 15,
   discountAmount: 41,
@@ -148,7 +149,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as CartState;
-        setState((prev) => ({ ...prev, ...parsed }));
+        setState((prev) => ({ ...prev, ...parsed, currency: CART_CURRENCY }));
       } else {
         window.localStorage.setItem(
           STORAGE_KEY,
@@ -261,7 +262,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     () => ({
       items: state.items,
       frequentlyBought: state.frequentlyBought,
-      currency: state.currency,
+      currency: CART_CURRENCY,
       totals,
       freeShippingThreshold: state.freeShippingThreshold,
       amountToFreeShipping,
@@ -278,7 +279,6 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     [
       state.items,
       state.frequentlyBought,
-      state.currency,
       state.freeShippingThreshold,
       totals,
       amountToFreeShipping,

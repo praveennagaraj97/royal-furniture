@@ -16,16 +16,24 @@ export const CartFreeShippingBanner: FC = () => {
     );
   }, [totals.subtotal, freeShippingThreshold]);
 
-  const message =
-    amountToFreeShipping > 0
-      ? `Add ${currency}${amountToFreeShipping.toFixed(0)} more for Free Shipping!`
-      : 'You have unlocked Free Shipping!';
-
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2 text-sm sm:text-base font-medium">
         <FaTruckFast className="h-5 w-5 text-deep-maroon" />
-        <span>{message}</span>
+        <span>
+          {amountToFreeShipping > 0 ? (
+            <>
+              Add{' '}
+              <span className="text-[#007B35]">
+                {currency}
+                {amountToFreeShipping.toFixed(0)}
+              </span>{' '}
+              more for Free Shipping!
+            </>
+          ) : (
+            'You have unlocked Free Shipping!'
+          )}
+        </span>
       </div>
       <div className="mt-1 flex flex-col gap-1">
         <div className="w-full h-2 rounded-full bg-gray-200 overflow-hidden">

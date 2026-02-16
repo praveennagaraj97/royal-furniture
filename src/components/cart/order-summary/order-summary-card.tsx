@@ -47,7 +47,7 @@ export const OrderSummaryCard: FC = () => {
   );
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 lg:p-7 space-y-6">
+    <div className="rounded-2xl border border-gray-200 bg-white p-4 space-y-6">
       <h2 className="text-lg font-medium  ">Order Summary</h2>
 
       <div className="space-y-4">
@@ -56,7 +56,15 @@ export const OrderSummaryCard: FC = () => {
             key={row.label}
             className="flex items-center justify-between text-sm text-gray-700"
           >
-            <span>{row.label}</span>
+            <span
+              className={
+                row.label === 'Delivery Charges' && totals.shipping === 0
+                  ? 'line-through text-gray-400'
+                  : ''
+              }
+            >
+              {row.label}
+            </span>
             <span
               className={`font-semibold ${
                 row.emphasis === 'positive'
@@ -70,7 +78,7 @@ export const OrderSummaryCard: FC = () => {
             </span>
           </div>
         ))}
-        <div className="border-t border-gray-200 pt-4 flex items-center justify-between text-base font-semibold  ">
+        <div className="bg-deep-maroon/5 p-2 rounded-lg border-gray-200 flex items-center justify-between font-medium">
           <span>Total Amount</span>
           <span className="text-deep-maroon">
             {formatCurrency(currency, totals.total)}
