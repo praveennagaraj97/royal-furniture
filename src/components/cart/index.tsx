@@ -25,7 +25,7 @@ const CartPageContent: FC = () => {
             <CartItemsSection />
             <CartInfoSections />
           </div>
-          <div className="hidden lg:block lg:sticky lg:top-28 lg:self-start">
+          <div className="hidden lg:block lg:sticky lg:top-28 lg:self-start z-30">
             <OrderSummarySection />
           </div>
           <div className="lg:hidden">
