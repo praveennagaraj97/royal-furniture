@@ -31,11 +31,12 @@ export const CartItemsSection: FC = () => {
         </div>
       </div>
 
-      <div className="hidden sm:grid sm:grid-cols-[1.5fr_1fr_1fr_1fr] text-xs font-semibold uppercase tracking-wide text-gray-400">
+      <div className="hidden sm:grid sm:grid-cols-[0.9fr_1.6fr_1fr_1fr_1fr] text-xs font-semibold uppercase tracking-wide text-gray-400">
         <span>Item</span>
+        <span>Description</span>
         <span>Price</span>
         <span>Quantity</span>
-        <span className="text-right sm:text-left">Total Price</span>
+        <span className="text-right">Total Price</span>
       </div>
 
       <div className="space-y-6">
