@@ -1,15 +1,15 @@
 'use client';
 
-import { FC } from 'react';
-import { FiCreditCard, FiShoppingCart, FiTruck } from 'react-icons/fi';
+import { FC, useMemo } from 'react';
+import { FiCheck, FiCreditCard, FiShoppingCart, FiTruck } from 'react-icons/fi';
 
 type StepStatus = 'completed' | 'current' | 'upcoming';
 
-type Step = {
+interface Step {
   label: string;
   icon: FC<{ className?: string }>;
   status: StepStatus;
-};
+}
 
 const steps: Step[] = [
   { label: 'Cart', icon: FiShoppingCart, status: 'current' },
@@ -17,51 +17,72 @@ const steps: Step[] = [
   { label: 'Payment', icon: FiCreditCard, status: 'upcoming' },
 ];
 
-const statusStyles: Record<StepStatus, string> = {
-  current: 'bg-deep-maroon text-white border-deep-maroon shadow-md',
-  completed: 'bg-deep-maroon text-white border-deep-maroon',
-  upcoming: 'bg-white text-gray-500 border-gray-200',
+const indicatorStyles: Record<StepStatus, string> = {
+  current: 'bg-[#f8c6c8] text-deep-maroon border border-[#f3aeb3]',
+  completed: 'bg-deep-maroon text-white border border-deep-maroon',
+  upcoming: 'bg-white text-gray-400 border border-[#d7d8e0]',
+};
+
+const labelStyles: Record<StepStatus, string> = {
+  current: 'text-deep-maroon',
+  completed: 'text-deep-maroon',
+  upcoming: 'text-gray-400',
 };
 
 export const CartProgress: FC = () => {
-  return (
-    <div className="flex items-center gap-3 sm:gap-4">
-      {steps.map((step, index) => {
-        const Icon = step.icon;
-        const isLast = index === steps.length - 1;
-        const previousCompleted =
-          index > 0 && steps[index - 1].status !== 'upcoming';
+  const currentIndex = useMemo(
+    () => steps.findIndex((step) => step.status === 'current'),
+    [],
+  );
 
-        return (
-          <div key={step.label} className="flex items-center flex-1 min-w-0">
-            <div className="flex flex-col items-center gap-2 flex-shrink-0">
+  const progressPercent = useMemo(() => {
+    if (steps.length <= 1) {
+      return 100;
+    }
+    if (currentIndex <= 0) {
+      return 100 / steps.length;
+    }
+    return (currentIndex / (steps.length - 1)) * 100;
+  }, [currentIndex]);
+
+  return (
+    <div className="w-full">
+      <div className="relative flex items-center justify-between">
+        <div className="absolute left-0 top-[40%] h-1.5 w-full -translate-y-1/2 rounded-full bg-[#d6d7df]" />
+        <div
+          className="absolute left-0 top-[40%] h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8] transition-all duration-300"
+          style={{ width: `${progressPercent}%` }}
+        />
+
+        {steps.map((step) => {
+          const Icon = step.icon;
+          const showCheck =
+            step.status === 'current' || step.status === 'completed';
+
+          return (
+            <div
+              key={step.label}
+              className="relative z-10 flex flex-1 flex-col items-center gap-2"
+            >
               <div
-                className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 transition-all duration-200 ${statusStyles[step.status]}`}
+                className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 ${indicatorStyles[step.status]}`}
               >
-                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Icon className="h-5 w-5" />
+                {showCheck && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-white text-deep-maroon">
+                    <FiCheck className="h-3 w-3" />
+                  </span>
+                )}
               </div>
               <span
-                className={`text-xs sm:text-sm font-medium ${
-                  step.status === 'current'
-                    ? 'text-deep-maroon'
-                    : 'text-gray-500'
-                }`}
+                className={`text-xs font-semibold uppercase tracking-wide ${labelStyles[step.status]}`}
               >
                 {step.label}
               </span>
             </div>
-            {!isLast && (
-              <div className="hidden sm:flex flex-1 h-0.5 mx-2">
-                <div
-                  className={`w-full rounded-full transition-all duration-300 ${
-                    previousCompleted ? 'bg-deep-maroon' : 'bg-gray-200'
-                  }`}
-                />
-              </div>
-            )}
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

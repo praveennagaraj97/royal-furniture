@@ -1,14 +1,25 @@
 'use client';
 
+import {
+  Breadcrumb,
+  type BreadcrumbItem,
+} from '@/components/shared/ui/breadcrumb';
 import { FC } from 'react';
-import { CartBreadcrumbs } from './cart-breadcrumbs';
 import { CartProgress } from './cart-progress';
+
+const breadcrumbItems: BreadcrumbItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Sofas', href: '#' },
+  { label: 'Royal Wooden Sofa' },
+];
 
 export const CartHeader: FC = () => {
   return (
-    <div className="space-y-4">
-      <CartBreadcrumbs />
-      <CartProgress />
-    </div>
+    <>
+      <Breadcrumb items={breadcrumbItems} />
+      <div className="section-container pb-6">
+        <CartProgress />
+      </div>
+    </>
   );
 };
