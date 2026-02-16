@@ -1,7 +1,7 @@
 'use client';
 
 import type { FC } from 'react';
-import { FiShoppingCart } from 'react-icons/fi';
+import { IoMdCart } from 'react-icons/io';
 
 interface AddToCartSuccessFooterProps {
   onContinue: () => void;
@@ -19,15 +19,22 @@ export const AddToCartSuccessFooter: FC<AddToCartSuccessFooterProps> = ({
   };
 
   return (
-    <div className="border-t border-gray-200 bg-[#fff4f1] px-4 sm:px-6 py-3 sm:py-4">
+    <div
+      className="border-t border-gray-200 bg-white px-4 sm:px-6 pt-3 sm:pt-4 pb-3"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)' }}
+    >
       <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-center">
-        <div className="flex items-center gap-3 flex-1">
-          <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-deep-maroon/10 text-deep-maroon">
-            <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+        <div className="flex-1 flex justify-center md:justify-start">
+          <div className="w-full max-w-md flex items-center justify-center gap-3 rounded-xl bg-[#fff4f1] px-3 py-2">
+            <div className="p-px rounded-full border border-deep-maroon">
+              <div className="flex items-center justify-center p-2 rounded-full bg-deep-maroon text-white">
+                <IoMdCart className="w-4 h-4" />
+              </div>
+            </div>
+            <p className="text-sm font-semibold text-deep-maroon">
+              Successfully added to your cart
+            </p>
           </div>
-          <p className="text-sm sm:text-base font-medium text-deep-maroon">
-            Successfully added to your cart
-          </p>
         </div>
 
         <div className="flex flex-col-reverse gap-2 w-full md:flex-row md:w-auto md:ml-auto">

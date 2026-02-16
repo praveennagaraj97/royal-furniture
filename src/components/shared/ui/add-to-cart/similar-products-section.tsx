@@ -16,13 +16,11 @@ export const SimilarProductsSection: FC<SimilarProductsSectionProps> = ({
   return (
     <section className="w-full flex flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-          Similar Products
-        </h2>
+        <h2 className="text-lg sm:text-xl font-medium">Similar Products</h2>
         {hasProducts && (
           <button
             type="button"
-            className="text-xs sm:text-sm font-semibold text-deep-maroon hover:text-[#6b0000] transition-colors duration-200"
+            className="text-xs sm:text-sm font-medium text-indigo-slate hover:underline transition-colors duration-200"
           >
             See all
           </button>

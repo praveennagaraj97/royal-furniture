@@ -42,6 +42,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const currentColor = currentFabric?.colorsList.find(
     (c) => String(c.id) === selectedColor,
   );
+  const mainVariantImage = currentColor?.images?.[0]?.responsive_images;
 
   // Update wishlist state when color changes
   useEffect(() => {
@@ -191,6 +192,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               {/* Product Actions - Add to Cart */}
               <ProductActions
                 product={data}
+                mainVariantImage={mainVariantImage}
                 onAddToCart={handleAddToCart}
                 onBuyNow={handleBuyNow}
               />
@@ -291,6 +293,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
               <div>
                 <ProductActions
                   product={data}
+                  mainVariantImage={mainVariantImage}
                   onAddToCart={handleAddToCart}
                   onBuyNow={handleBuyNow}
                 />
