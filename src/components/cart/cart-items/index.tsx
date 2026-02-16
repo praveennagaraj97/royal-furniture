@@ -25,7 +25,7 @@ export const CartItemsSection: FC = () => {
     <div className="rounded-2xl space-y-6">
       <div className="space-y-4">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-medium">
             Your cart ({items.reduce((sum, item) => sum + item.quantity, 0)}{' '}
             items)
           </h1>

@@ -19,7 +19,7 @@ const CartPageContent: FC = () => {
   return (
     <Fragment>
       <CartHeader />
-      <div className="section-container pt-4">
+      <div className="section-container">
         <div className="grid gap-6 lg:gap-8 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,0.9fr)]">
           <div className="space-y-6">
             <CartItemsSection />
@@ -28,7 +28,7 @@ const CartPageContent: FC = () => {
           <OrderSummarySection />
         </div>
       </div>
-      <div className="pb-16">
+      <div className="mt-6">
         <FrequentlyBoughtSection />
       </div>
     </Fragment>

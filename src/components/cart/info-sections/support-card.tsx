@@ -1,46 +1,47 @@
 'use client';
 
 import { FC } from 'react';
-import { FiHeadphones, FiMail, FiRefreshCcw } from 'react-icons/fi';
+import { BsChatDots } from 'react-icons/bs';
+import { FaPhoneAlt } from 'react-icons/fa';
+import { PiStorefrontFill } from 'react-icons/pi';
 
 const supportOptions = [
   {
     id: 'call',
     label: 'Call Customer Support',
-    icon: FiHeadphones,
+    icon: FaPhoneAlt,
   },
   {
     id: 'write',
     label: 'Write to us',
-    icon: FiMail,
+    icon: BsChatDots,
   },
   {
     id: 'return',
     label: 'Return Policy',
-    icon: FiRefreshCcw,
+    icon: PiStorefrontFill,
   },
 ];
 
 export const SupportCard: FC = () => {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-4 py-5">
-      <p className="text-sm font-semibold text-gray-900 mb-3">
+    <div className="rounded-xl border border-gray-200 bg-white p-3 space-y-4">
+      <p className="text-lg font-medium mb-2">
         Need help? We&apos;re here for you.
       </p>
-      <div className="flex flex-col gap-3 text-sm text-deep-maroon font-semibold">
+      <ul className="space-y-3">
         {supportOptions.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            type="button"
-            className="flex items-center gap-3 text-left hover:text-[#6b0000] transition-colors duration-200"
-          >
-            <span className="flex items-center justify-center w-10 h-10 rounded-full bg-deep-maroon/10 text-deep-maroon">
-              <Icon className="w-4 h-4" />
-            </span>
-            {label}
-          </button>
+          <li key={id} className="flex items-center gap-3">
+            <Icon className="text-deep-maroon w-5 h-5" />
+            <button
+              type="button"
+              className="text-gray-600 hover:underline text-left"
+            >
+              {label}
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

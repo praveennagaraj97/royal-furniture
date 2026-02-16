@@ -2,7 +2,7 @@
 
 import { useCart } from '@/contexts/cart-context';
 import { FC, useMemo } from 'react';
-import { FiGift } from 'react-icons/fi';
+import { FaTruckFast } from 'react-icons/fa6';
 
 export const CartFreeShippingBanner: FC = () => {
   const { currency, amountToFreeShipping, freeShippingThreshold, totals } =
@@ -22,25 +22,18 @@ export const CartFreeShippingBanner: FC = () => {
       : 'You have unlocked Free Shipping!';
 
   return (
-    <div className="rounded-xl border border-[#ffe1e1] bg-[#fff5f5] px-4 py-3 flex flex-col gap-3">
-      <div className="flex items-center gap-3 text-sm sm:text-base text-deep-maroon font-semibold">
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-deep-maroon shadow-sm">
-          <FiGift className="w-4 h-4" />
-        </div>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2 text-sm sm:text-base font-medium">
+        <FaTruckFast className="h-5 w-5 text-deep-maroon" />
         <span>{message}</span>
       </div>
-      <div className="flex flex-col gap-1">
-        <div className="w-full h-2 rounded-full bg-white/80 overflow-hidden">
+      <div className="mt-1 flex flex-col gap-1">
+        <div className="w-full h-2 rounded-full bg-gray-200 overflow-hidden">
           <div
-            className="h-full bg-deep-maroon rounded-full transition-all duration-300"
+            className="h-full rounded-full bg-[#007B35] transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <span className="text-xs text-gray-500">
-          Cart total: {currency}
-          {totals.subtotal.toFixed(0)} / Free shipping at {currency}
-          {freeShippingThreshold.toFixed(0)}
-        </span>
       </div>
     </div>
   );
