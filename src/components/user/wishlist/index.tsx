@@ -25,7 +25,7 @@ const WishlistPageContent: FC = () => {
       >
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-gray-900">Wishlist</h1>
+          <h1 className="text-2xl font-semibold  ">Wishlist</h1>
 
           {/* Create New Collection Button */}
           <StaggerItem type="slideUp" distance={20} duration={0.4}>
@@ -71,7 +71,7 @@ const WishlistPageContent: FC = () => {
                   <FiHeart className="w-10 h-10 text-gray-400" />
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold   mb-2">
                 No collections yet
               </h3>
               <p className="text-sm text-gray-500 text-center max-w-sm mb-6">

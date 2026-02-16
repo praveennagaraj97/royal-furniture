@@ -22,9 +22,7 @@ const SortBar: FC<SortBarProps> = ({
       <div className="flex items-center justify-end gap-2 sm:gap-4">
         {/* Product Count - Desktop only */}
         <div className="hidden lg:block px-3 py-1.5 bg-gray-100 rounded-lg">
-          <span className="text-sm font-medium text-gray-900">
-            {productCount} Products
-          </span>
+          <span className="text-sm font-medium  ">{productCount} Products</span>
         </div>
 
         {/* Sort Dropdown */}

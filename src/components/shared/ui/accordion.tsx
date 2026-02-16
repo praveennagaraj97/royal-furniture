@@ -24,7 +24,7 @@ export const Accordion: FC<AccordionProps> = ({
   className = '',
 }) => {
   const [openItems, setOpenItems] = useState<Set<string>>(
-    new Set(items.filter((item) => item.defaultOpen).map((item) => item.id))
+    new Set(items.filter((item) => item.defaultOpen).map((item) => item.id)),
   );
 
   const toggleItem = (itemId: string) => {
@@ -64,9 +64,7 @@ export const Accordion: FC<AccordionProps> = ({
                 onClick={() => toggleItem(item.id)}
                 className="flex items-center justify-between w-full py-2.5 text-left"
               >
-                <h3 className="text-gray-900 font-bold text-sm">
-                  {item.title}
-                </h3>
+                <h3 className="  font-bold text-sm">{item.title}</h3>
                 <motion.div
                   animate={{ rotate: isOpen ? 180 : 0 }}
                   transition={{ duration: 0.2, ease: 'easeInOut' }}

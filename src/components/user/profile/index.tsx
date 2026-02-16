@@ -89,7 +89,7 @@ const ProfilePage: FC = () => {
 
   const validators = useMemo(
     () => createSignupFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   // Update form data when user data loads (only once)
@@ -123,7 +123,7 @@ const ProfilePage: FC = () => {
     const emailError = validators.email(formData.email);
     const phoneNumberError = validators.mobileNumber(
       formData.phoneNumber,
-      formData.countryCode
+      formData.countryCode,
     );
 
     if (firstNameError) newErrors.firstName = firstNameError;
@@ -186,7 +186,7 @@ const ProfilePage: FC = () => {
         type="slideUp"
         distance={20}
         duration={0.4}
-        className="text-2xl font-semibold text-gray-900 mb-6"
+        className="text-2xl font-semibold   mb-6"
       >
         <h1>{t('title')}</h1>
       </StaggerItem>

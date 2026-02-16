@@ -45,9 +45,7 @@ const SearchResults: FC = () => {
       {/* Header with search query */}
       <div className="mb-2 flex space-x-2 justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-            Search Results
-          </h1>
+          <h1 className="text-2xl font-semibold   mb-2">Search Results</h1>
           {displayQuery && (
             <p className="text-sm text-gray-600">
               {totalCount > 0

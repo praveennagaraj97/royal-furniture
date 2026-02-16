@@ -1,10 +1,10 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
+import { useToast } from '@/contexts/toast-context';
 import { wishlistService } from '@/services/api/wishlist-service';
 import { FC, useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
-import { useToast } from '@/contexts/toast-context';
 
 interface CreateCollectionModalProps {
   isOpen: boolean;
@@ -32,7 +32,10 @@ const CreateCollectionModal: FC<CreateCollectionModalProps> = ({
       onSuccess?.();
       onClose();
     } catch (error) {
-      const parsedError = error as { generalError?: string; fieldErrors?: Record<string, string> };
+      const parsedError = error as {
+        generalError?: string;
+        fieldErrors?: Record<string, string>;
+      };
       const errorMessage =
         parsedError?.generalError ||
         parsedError?.fieldErrors?.title ||
@@ -44,12 +47,7 @@ const CreateCollectionModal: FC<CreateCollectionModalProps> = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      variant="bottom"
-      size="md"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} variant="bottom" size="md">
       <div className="flex flex-col h-full max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center gap-4 p-4 border-b border-gray-200">
@@ -60,9 +58,7 @@ const CreateCollectionModal: FC<CreateCollectionModalProps> = ({
           >
             <FiArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
-          <h2 className="text-lg font-semibold text-gray-900">
-            Create new collection
-          </h2>
+          <h2 className="text-lg font-semibold  ">Create new collection</h2>
         </div>
 
         {/* Content */}

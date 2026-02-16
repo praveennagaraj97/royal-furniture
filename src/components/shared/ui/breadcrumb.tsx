@@ -62,7 +62,7 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items, onBackClick }) => {
                   {index > 0 && <span className="text-gray-400">/</span>}
 
                   {isLast || !item.href ? (
-                    <span className="font-medium text-gray-900 capitalize">
+                    <span className="font-medium   capitalize">
                       {item.label}
                     </span>
                   ) : (

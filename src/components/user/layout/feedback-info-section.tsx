@@ -61,7 +61,7 @@ const FeedbackInfoSection: FC = () => {
         direction="left"
         distance={20}
         duration={0.4}
-        className="text-lg font-semibold text-gray-900 mb-3"
+        className="text-lg font-semibold   mb-3"
       >
         <h3>{t('title')}</h3>
       </StaggerItem>

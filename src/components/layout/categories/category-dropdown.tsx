@@ -55,7 +55,7 @@ const CategoryDropdown: FC<CategoryDropdownProps> = ({
             <div className="mb-6">
               <AppLink
                 href={`/${categorySlug}`}
-                className="text-xl font-bold text-gray-900 hover:text-deep-maroon transition-colors inline-block"
+                className="text-xl font-bold   hover:text-deep-maroon transition-colors inline-block"
               >
                 {categoryName}
               </AppLink>

@@ -76,7 +76,7 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
           {
             expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -87,7 +87,7 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
           {
             expires: accessExpiry ? new Date(accessExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -168,7 +168,7 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
     >
       <div className="p-6">
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold   mb-2">
             {t('forms.verifyPhoneNumber')}
           </h3>
           <p className="text-sm text-gray-600">
@@ -198,8 +198,8 @@ export const VerifyPhone: FC<VerifyPhoneProps> = ({
               {isResending
                 ? t('forms.resending')
                 : isExpired
-                ? t('forms.resendCode')
-                : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
+                  ? t('forms.resendCode')
+                  : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
             </button>
           </div>
 

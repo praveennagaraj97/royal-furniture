@@ -148,7 +148,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
                     key={option.id}
                     className="flex items-center gap-2.5 cursor-pointer group justify-between min-w-0"
                   >
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors truncate flex-1 min-w-0">
+                    <span className="text-sm text-gray-700 group-hover:  transition-colors truncate flex-1 min-w-0">
                       {option.label}
                     </span>
 
@@ -229,9 +229,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
               >
                 {/* Header */}
                 <div className="flex justify-between items-center p-4 border-b border-gray-200 shrink-0">
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    Filters
-                  </h2>
+                  <h2 className="text-lg font-semibold  ">Filters</h2>
                   <button
                     type="button"
                     onClick={onHide}

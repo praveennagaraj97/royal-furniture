@@ -160,7 +160,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 tracking-tight">
+                    <h3 className="text-xl font-bold   mb-2 tracking-tight">
                       {slides[currentSlide].title}
                     </h3>
                     <p className="text-sm text-gray-500 font-medium leading-relaxed">
@@ -195,8 +195,8 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     onClick={() => setActiveTab('signup')}
                     className={`flex-1 py-2.5 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${
                       activeTab === 'signup'
-                        ? 'bg-soft-pink text-gray-900'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-soft-pink  '
+                        : 'text-gray-600 hover: '
                     }`}
                   >
                     {t('forms.signUp').toUpperCase()}
@@ -206,8 +206,8 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     onClick={() => setActiveTab('login')}
                     className={`flex-1 py-2.5 px-4 rounded-md text-sm font-medium transition-colors duration-200 ${
                       activeTab === 'login'
-                        ? 'bg-soft-pink text-gray-900'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-soft-pink  '
+                        : 'text-gray-600 hover: '
                     }`}
                   >
                     {t('forms.login').toUpperCase()}

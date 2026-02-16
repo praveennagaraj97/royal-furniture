@@ -26,9 +26,7 @@ export const FabricSelection: FC<FabricSelectionProps> = ({
     >
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm md:text-base font-medium text-gray-900">
-            Select Fabric
-          </h3>
+          <h3 className="text-sm md:text-base font-medium  ">Select Fabric</h3>
         </div>
         <div className="flex gap-3 flex-wrap">
           {fabrics.map((fabric) => (

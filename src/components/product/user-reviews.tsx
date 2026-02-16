@@ -114,7 +114,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
               <IoIosStar className="w-7 h-7 text-yellow-500 fill-yellow-500" />
             </div>
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-xs md:text-sm text-gray-900">
+              <span className="text-xs md:text-sm  ">
                 {reviewCount} Reviews
               </span>
               <button
@@ -143,7 +143,7 @@ export const UserReviews: FC<UserReviewsProps> = ({
 
               return (
                 <div key={stars} className="flex items-center gap-2">
-                  <span className="text-xs md:text-sm text-gray-900 w-4 shrink-0">
+                  <span className="text-xs md:text-sm   w-4 shrink-0">
                     {stars}
                   </span>
                   <div className="flex-1 min-w-0 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -176,11 +176,11 @@ export const UserReviews: FC<UserReviewsProps> = ({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-xs md:text-sm text-gray-900">
+                      <span className="font-bold text-xs md:text-sm  ">
                         {review.userName}
                       </span>
                       <div className="flex items-center gap-1">
-                        <span className="text-xs md:text-sm text-gray-900">
+                        <span className="text-xs md:text-sm  ">
                           {review.rating}
                         </span>
                         <IoIosStar className="w-4 h-4 text-yellow-500 fill-yellow-500" />

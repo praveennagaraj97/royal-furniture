@@ -18,7 +18,7 @@ const LinkColumn: FC<LinkColumnProps> = ({ title, links }) => {
       duration={0.3}
       className="flex flex-col gap-2"
     >
-      <h3 className="text-gray-900 font-bold text-base">{title}</h3>
+      <h3 className="  font-bold text-base">{title}</h3>
       <StaggerContainer
         staggerChildren={0.05}
         delayChildren={0.1}

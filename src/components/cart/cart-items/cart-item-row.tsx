@@ -35,7 +35,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
             />
           </div>
           <div className="flex flex-col gap-1 text-sm text-gray-700">
-            <span className="text-base font-medium text-gray-900 line-clamp-1">
+            <span className="text-base font-medium   line-clamp-1">
               {item.name}
             </span>
             {item.attributes?.map((attribute) => (
@@ -54,7 +54,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
         </div>
 
         {/* Price */}
-        <div className="text-sm sm:text-base text-gray-900 font-semibold">
+        <div className="text-sm sm:text-base   font-semibold">
           <div className="flex items-center gap-2">
             <span>
               {currency}
@@ -78,7 +78,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
           >
             <FiMinus className="w-4 h-4" />
           </button>
-          <span className="w-8 text-center font-semibold text-gray-900">
+          <span className="w-8 text-center font-semibold  ">
             {item.quantity}
           </span>
           <button
@@ -91,7 +91,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
         </div>
 
         {/* Total */}
-        <div className="text-sm sm:text-base font-semibold text-gray-900">
+        <div className="text-sm sm:text-base font-semibold  ">
           {currency}
           {itemTotal.toFixed(0)}
         </div>

@@ -55,7 +55,7 @@ const MobileFooterLinks: FC<MobileFooterLinksProps> = ({ categories }) => {
               onClick={() => toggleCategory(category.id)}
               className="flex items-center justify-between w-full py-2 text-left group"
             >
-              <h3 className="text-gray-900 font-bold text-base group-hover:text-deep-maroon transition-colors">
+              <h3 className="  font-bold text-base group-hover:text-deep-maroon transition-colors">
                 {category.title}
               </h3>
               <ChevronIcon className="h-5 w-5 text-gray-600 transition-colors duration-200" />

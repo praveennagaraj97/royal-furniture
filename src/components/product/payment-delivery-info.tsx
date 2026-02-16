@@ -208,7 +208,7 @@ export const PaymentDeliveryInfo: FC<
               <div className="p-4 bg-white rounded-lg border border-gray-200">
                 <h4 className="text-xs md:text-sm font-bold mb-1.5">
                   <span className="text-green-600">Free</span>{' '}
-                  <span className="text-gray-900">Assembly Available</span>
+                  <span className=" ">Assembly Available</span>
                 </h4>
                 <p className="text-xs md:text-sm text-gray-700">
                   {freeAssembly.description ||
@@ -233,7 +233,7 @@ export const PaymentDeliveryInfo: FC<
                     <FaTruckFast className="text-deep-maroon text-base md:text-lg" />
                     <h4 className="text-xs md:text-sm font-bold">
                       <span className="text-green-600">Express Delivery</span>{' '}
-                      <span className="text-gray-900">Available</span>
+                      <span className=" ">Available</span>
                     </h4>
                   </div>
                   <p className="text-xs md:text-sm text-gray-700 mb-1">

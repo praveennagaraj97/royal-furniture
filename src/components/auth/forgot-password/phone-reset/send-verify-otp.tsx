@@ -30,7 +30,7 @@ interface SendVerifyOtpProps {
   onOtpVerified: (
     phoneNumber: string,
     countryCode: string,
-    resetToken: string
+    resetToken: string,
   ) => void;
   onFormStateChange?: (hasValues: boolean) => void;
 }
@@ -63,7 +63,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
 
   const signupFormValidators = useMemo(
     () => createSignupFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   const {
@@ -136,7 +136,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
   const validatePhone = (): boolean => {
     const phoneError = signupFormValidators.mobileNumber(
       phoneNumber,
-      countryCode
+      countryCode,
     );
     if (phoneError) {
       setErrors((prev) => ({ ...prev, phone: phoneError }));
@@ -294,7 +294,7 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
                   error={errors.phone}
                   showError={!!touched.phone || isSubmitted}
                   containerClassName="w-full"
-                  className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+                  className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
                   disabled={isOtpSent}
                 />
               </div>
@@ -338,8 +338,8 @@ const SendVerifyOtp: FC<SendVerifyOtpProps> = ({
                 {isResending
                   ? t('forms.resending')
                   : isExpired
-                  ? t('forms.resendCode')
-                  : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
+                    ? t('forms.resendCode')
+                    : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
               </button>
             </StaggerItem>
           </div>

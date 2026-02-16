@@ -68,9 +68,7 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
           </div>
 
           {/* Product Name */}
-          <p className="text-gray-900 text-sm sm:text-base line-clamp-1">
-            {product.name}
-          </p>
+          <p className="  text-sm sm:text-base line-clamp-1">{product.name}</p>
 
           <AddToCart />
         </div>

@@ -49,11 +49,11 @@ const NewPassword: FC<NewPasswordProps> = ({
 
   const signupFormValidators = useMemo(
     () => createSignupFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
   const validatePassword = useMemo(
     () => createValidatePassword(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   // Notify parent when form state changes
@@ -117,7 +117,7 @@ const NewPassword: FC<NewPasswordProps> = ({
 
     const confirmPasswordError = signupFormValidators.confirmPassword(
       confirmPassword,
-      password
+      password,
     );
     if (confirmPasswordError) {
       newErrors.confirmPassword = confirmPasswordError;
@@ -206,7 +206,7 @@ const NewPassword: FC<NewPasswordProps> = ({
             error={errors.password}
             showError={!!touched.password || isSubmitted}
             containerClassName="w-full"
-            className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
 
@@ -224,7 +224,7 @@ const NewPassword: FC<NewPasswordProps> = ({
             error={errors.confirmPassword}
             showError={!!touched.confirmPassword || isSubmitted}
             containerClassName="w-full"
-            className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
 

@@ -33,9 +33,7 @@ export const ColorSelection: FC<ColorSelectionProps> = ({
         margin="0px"
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-sm md:text-base font-medium text-gray-900">
-            Select Colour
-          </h3>
+          <h3 className="text-sm md:text-base font-medium  ">Select Colour</h3>
         </div>
       </ViewOnce>
       <div className="flex gap-3 flex-wrap">

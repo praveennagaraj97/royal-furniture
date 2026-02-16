@@ -10,9 +10,7 @@ export const FiltersEmptyState: FC = () => {
           <FiFilter className="w-8 h-8 text-gray-400" />
         </div>
       </div>
-      <h3 className="text-sm font-semibold text-gray-900 mb-1">
-        No Filters Available
-      </h3>
+      <h3 className="text-sm font-semibold   mb-1">No Filters Available</h3>
       <p className="text-xs text-gray-500 text-center max-w-xs">
         There are no filter options available for this category at the moment.
       </p>

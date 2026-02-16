@@ -10,9 +10,7 @@ export const ProductsEmptyState: FC = () => {
           <FiPackage className="w-12 h-12 text-gray-400" />
         </div>
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-        No Products Found
-      </h3>
+      <h3 className="text-lg font-semibold   mb-2">No Products Found</h3>
       <p className="text-sm text-gray-500 text-center max-w-md">
         We couldn&apos;t find any products in this category. Try adjusting your
         filters or browse other categories.

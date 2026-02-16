@@ -11,7 +11,7 @@ export const PromosCard: FC = () => {
           <FiTag className="w-5 h-5" />
         </div>
         <div>
-          <p className="font-semibold text-gray-900">Promos & Vouchers</p>
+          <p className="font-semibold  ">Promos & Vouchers</p>
           <p className="text-xs text-gray-500 mt-1">
             Apply your coupon codes or vouchers to get additional discounts.
           </p>

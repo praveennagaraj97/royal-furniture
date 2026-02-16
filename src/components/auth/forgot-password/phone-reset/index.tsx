@@ -23,7 +23,7 @@ const PhoneReset: FC<PhoneResetProps> = ({
   const handleOtpVerified = (
     _verifiedPhoneNumber: string,
     _verifiedCountryCode: string,
-    verifiedResetToken: string
+    verifiedResetToken: string,
   ) => {
     setResetToken(verifiedResetToken);
     setIsOtpVerified(true);
@@ -43,7 +43,7 @@ const PhoneReset: FC<PhoneResetProps> = ({
     >
       {/* Title */}
       <StaggerItem type="slideUp" distance={20} duration={0.4}>
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">
+        <h2 className="text-lg font-semibold   mb-2">
           Reset password using phone
         </h2>
       </StaggerItem>
@@ -67,7 +67,7 @@ const PhoneReset: FC<PhoneResetProps> = ({
           <button
             type="button"
             onClick={() => onModeChange('email-reset')}
-            className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
+            className="w-full bg-white border border-gray-300   py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
             Reset password using email
           </button>

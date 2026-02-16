@@ -136,7 +136,7 @@ export const CountryPicker: FC<CountryPickerProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-1.5 px-3 bg-[#f8f8f8] border 
           rounded-lg focus:outline-none transition-colors 
-           w-fit text-gray-900 form-input-border-default ${className}`}
+           w-fit   form-input-border-default ${className}`}
       >
         <span>{selectedCountry.dialCode}</span>
         <FiChevronDown
@@ -197,7 +197,7 @@ export const CountryPicker: FC<CountryPickerProps> = ({
                       })()}
                     </div>
                     <div className="flex-1 text-start">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium  ">
                         {tCountries(country.code)}
                       </p>
                       <p className="text-xs text-gray-500">

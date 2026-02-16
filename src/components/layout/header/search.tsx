@@ -102,7 +102,7 @@ const SearchBar: FC = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="p-4">
-                  <h3 className="text-base font-semibold text-gray-900 mb-4">
+                  <h3 className="text-base font-semibold   mb-4">
                     Search Results
                   </h3>
                   <motion.div
@@ -119,7 +119,7 @@ const SearchBar: FC = () => {
                         <span className="text-xs text-gray-500">?</span>
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold   mb-2">
                       No results found
                     </h3>
                     <p className="text-sm text-gray-500 text-center max-w-sm mb-4">
@@ -150,7 +150,7 @@ const SearchBar: FC = () => {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="p-4">
-                      <h3 className="text-base font-semibold text-gray-900 mb-4">
+                      <h3 className="text-base font-semibold   mb-4">
                         Search Results
                       </h3>
                       {results && results.length > 0 ? (

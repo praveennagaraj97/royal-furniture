@@ -44,7 +44,7 @@ const EmailReset: FC<EmailResetProps> = ({
 
   const loginFormValidators = useMemo(
     () => createLoginFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   // Notify parent when form state changes
@@ -131,7 +131,7 @@ const EmailReset: FC<EmailResetProps> = ({
         <>
           {/* Title */}
           <StaggerItem type="slideUp" distance={20} duration={0.4}>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+            <h2 className="text-lg font-semibold   mb-2">
               {t('forms.resetPasswordUsingEmail')}
             </h2>
           </StaggerItem>
@@ -155,7 +155,7 @@ const EmailReset: FC<EmailResetProps> = ({
                 error={errors.email}
                 showError={!!touched.email || isSubmitted}
                 containerClassName="w-full"
-                className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+                className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
               />
             </StaggerItem>
 
@@ -183,7 +183,7 @@ const EmailReset: FC<EmailResetProps> = ({
               <button
                 type="button"
                 onClick={() => onModeChange('phone-reset')}
-                className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
+                className="w-full bg-white border border-gray-300   py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
               >
                 {t('forms.resetPasswordUsingPhone')}
               </button>

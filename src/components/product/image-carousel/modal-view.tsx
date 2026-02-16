@@ -32,9 +32,7 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
     <div className="w-full h-full ">
       {/* Modal Header (matches store-locator-modal) */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200 bg-white/90 sticky top-0 z-20">
-        <h2 className="text-md sm:text-xl text-gray-900 truncate pr-4">
-          {productName}
-        </h2>
+        <h2 className="text-md sm:text-xl   truncate pr-4">{productName}</h2>
 
         <button
           type="button"

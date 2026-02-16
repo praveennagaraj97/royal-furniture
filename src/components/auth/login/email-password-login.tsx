@@ -53,7 +53,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
 
   const loginFormValidators = useMemo(
     () => createLoginFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   const handleFieldChange =
@@ -125,7 +125,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           {
             expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -136,7 +136,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           {
             expires: accessExpiry ? new Date(accessExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -176,7 +176,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
     >
       {/* Title */}
       <StaggerItem type="slideUp" distance={20} duration={0.4}>
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">
+        <h2 className="text-lg font-semibold   mb-2">
           {t('forms.loginWithRegisteredEmail')}
         </h2>
       </StaggerItem>
@@ -194,7 +194,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             error={errors.email}
             showError={!!touched.email || isSubmitted}
             containerClassName="w-full"
-            className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
 
@@ -210,7 +210,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
             error={errors.password}
             showError={!!touched.password || isSubmitted}
             containerClassName="w-full"
-            className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
 
@@ -258,7 +258,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           <button
             type="button"
             onClick={() => onModeChange('phone-otp')}
-            className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
+            className="w-full bg-white border border-gray-300   py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
             {t('forms.loginWithPhoneOtp')}
           </button>
@@ -266,7 +266,7 @@ const EmailPasswordLogin: FC<EmailPasswordLoginProps> = ({
           <button
             type="button"
             onClick={() => onModeChange('email-otp')}
-            className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
+            className="w-full bg-white border border-gray-300   py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
             {t('forms.loginWithEmailOtp')}
           </button>

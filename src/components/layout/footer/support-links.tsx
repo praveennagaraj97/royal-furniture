@@ -22,7 +22,7 @@ const SupportLinks: FC = () => {
       delayChildren={0.1}
       className="flex flex-col gap-3"
     >
-      <h3 className="text-gray-900 font-bold text-base">{t('title')}</h3>
+      <h3 className="  font-bold text-base">{t('title')}</h3>
       <div className="flex flex-col gap-3">
         {/* Call Customer Support */}
         <StaggerItem
@@ -36,7 +36,7 @@ const SupportLinks: FC = () => {
             <FiPhone className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
-            <span className="text-gray-900 font-semibold text-sm">
+            <span className="  font-semibold text-sm">
               {t('callCustomerSupport')}
             </span>
             <span className="text-gray-600 text-sm">2942 87687 989</span>
@@ -55,9 +55,7 @@ const SupportLinks: FC = () => {
             <FiMail className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
-            <span className="text-gray-900 font-semibold text-sm">
-              {t('writeToUs')}
-            </span>
+            <span className="  font-semibold text-sm">{t('writeToUs')}</span>
             <span className="text-gray-600 text-sm">
               www.furniture@g.ail.com
             </span>
@@ -76,9 +74,7 @@ const SupportLinks: FC = () => {
             <FiHelpCircle className="w-5 h-5 text-gray-700" />
           </div>
           <div className="flex flex-col">
-            <span className="text-gray-900 font-semibold text-sm">
-              {t('helpCenter')}
-            </span>
+            <span className="  font-semibold text-sm">{t('helpCenter')}</span>
             <span className="text-gray-600 text-sm">
               www.furniture@g.ail.com
             </span>

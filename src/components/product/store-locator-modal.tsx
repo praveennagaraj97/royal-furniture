@@ -90,7 +90,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200">
           <div className="flex items-center gap-2 min-w-0">
             <IoLocationSharp className="w-5 h-5 sm:w-6 sm:h-6 text-deep-maroon shrink-0" />
-            <h2 className="text-lg sm:text-2xl text-gray-900 truncate">
+            <h2 className="text-lg sm:text-2xl   truncate">
               Store Availability
             </h2>
           </div>
@@ -195,7 +195,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-gray-900 text-sm">
+                          <h4 className="font-semibold   text-sm">
                             {store.city}
                           </h4>
                           <p className="text-xs text-gray-600 mt-0.5 truncate">

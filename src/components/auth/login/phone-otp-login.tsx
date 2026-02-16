@@ -65,7 +65,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
 
   const signupFormValidators = useMemo(
     () => createSignupFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   const {
@@ -138,7 +138,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
   const validatePhone = (): boolean => {
     const phoneError = signupFormValidators.mobileNumber(
       phoneNumber,
-      countryCode
+      countryCode,
     );
     if (phoneError) {
       setErrors((prev) => ({ ...prev, phone: phoneError }));
@@ -203,7 +203,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
           {
             expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -214,7 +214,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
           {
             expires: accessExpiry ? new Date(accessExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -302,7 +302,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
                   error={errors.phone}
                   showError={!!touched.phone || isSubmitted}
                   containerClassName="w-full"
-                  className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+                  className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
                   disabled={isOtpSent}
                 />
               </div>
@@ -346,8 +346,8 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
                 {isResending
                   ? t('forms.resending')
                   : isExpired
-                  ? t('forms.resendCode')
-                  : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
+                    ? t('forms.resendCode')
+                    : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
               </button>
             </StaggerItem>
           </div>
@@ -395,7 +395,7 @@ const PhoneOtpLogin: FC<PhoneOtpLoginProps> = ({
           <button
             type="button"
             onClick={() => onModeChange('email-password')}
-            className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
+            className="w-full bg-white border border-gray-300   py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
             {t('forms.backToEmailPasswordLogin')}
           </button>

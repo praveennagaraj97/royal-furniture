@@ -160,8 +160,8 @@ export const Select: FC<SelectProps> = ({
           hasError
             ? 'form-input-border-error'
             : !customBaseClassName
-            ? 'form-input-border-default'
-            : ''
+              ? 'form-input-border-default'
+              : ''
         } ${
           disabled
             ? 'opacity-50 cursor-not-allowed bg-gray-50'
@@ -169,9 +169,7 @@ export const Select: FC<SelectProps> = ({
         } ${className}`}
       >
         <span
-          className={`block truncate ${
-            selectedOption ? 'text-gray-900' : 'text-gray-400'
-          }`}
+          className={`block truncate ${selectedOption ? ' ' : 'text-gray-400'}`}
         >
           {selectedOption ? selectedOption.label : placeholder}
         </span>

@@ -44,9 +44,7 @@ const SizeForm: FC = () => {
               key={metric.label}
               className="flex items-center justify-between"
             >
-              <span className="text-gray-900 font-medium w-32 text-sm">
-                {metric.label}
-              </span>
+              <span className="  font-medium w-32 text-sm">{metric.label}</span>
               <div className="flex gap-1">
                 {Array.from({ length: metric.total }).map((_, i) => (
                   <div
@@ -65,7 +63,7 @@ const SizeForm: FC = () => {
       {/* Dimensions */}
       <section>
         <h3 className="text-gray-800 text-lg mb-2 font-light">Dimensions</h3>
-        <div className="flex flex-wrap gap-x-8 gap-y-2 text-gray-900 text-sm">
+        <div className="flex flex-wrap gap-x-8 gap-y-2   text-sm">
           <div className="flex gap-2">
             <span className="text-gray-600">Length :</span>
             <span className="font-semibold">100 inch</span>

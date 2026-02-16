@@ -40,7 +40,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
 
   const signupFormValidators = useMemo(
     () => createSignupFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   // Notify parent when form state changes
@@ -77,22 +77,22 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
   const validateForm = (): boolean => {
     const newErrors: SignupFormErrors = {};
     const firstNameError = signupFormValidators.firstName(
-      state.formData.firstName
+      state.formData.firstName,
     );
     const lastNameError = signupFormValidators.lastName(
-      state.formData.lastName
+      state.formData.lastName,
     );
     const emailError = signupFormValidators.email(state.formData.email);
     const mobileNumberError = signupFormValidators.mobileNumber(
       state.formData.mobileNumber,
-      state.countryCode
+      state.countryCode,
     );
     const passwordError = signupFormValidators.password(
-      state.formData.password
+      state.formData.password,
     );
     const confirmPasswordError = signupFormValidators.confirmPassword(
       state.formData.confirmPassword,
-      state.formData.password
+      state.formData.password,
     );
 
     if (firstNameError) newErrors.firstName = firstNameError;
@@ -107,7 +107,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
   };
 
   const mapAPIErrorToFormField = (
-    apiField: string
+    apiField: string,
   ): keyof SignupFormErrors | null => {
     const fieldMap: Record<string, keyof SignupFormErrors> = {
       first_name: 'firstName',
@@ -134,7 +134,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           enableHighAccuracy: true,
           timeout: 10000,
           maximumAge: 0,
-        }
+        },
       );
     });
   };
@@ -204,7 +204,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
           if (formField) {
             newErrors[formField] = errorMessage;
           }
-        }
+        },
       );
 
       dispatch({ type: 'SET_ERRORS', errors: newErrors });
@@ -233,7 +233,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             error={state.errors.firstName}
             showError={!!state.touched.firstName || state.isSubmitted}
             containerClassName="w-full"
-            className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-[#f8f8f8] border-0 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
         <StaggerItem type="slideUp" distance={20} duration={0.4}>
@@ -248,7 +248,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             error={state.errors.lastName}
             showError={!!state.touched.lastName || state.isSubmitted}
             containerClassName="w-full"
-            className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-[#f8f8f8] border-0 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
         <StaggerItem type="slideUp" distance={20} duration={0.4}>
@@ -263,7 +263,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             error={state.errors.email}
             showError={!!state.touched.email || state.isSubmitted}
             containerClassName="w-full"
-            className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-[#f8f8f8] border-0 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
         <StaggerItem type="slideUp" distance={20} duration={0.4}>
@@ -293,7 +293,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
                   error={state.errors.mobileNumber}
                   showError={!!state.touched.mobileNumber || state.isSubmitted}
                   containerClassName="w-full"
-                  className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
+                  className="bg-[#f8f8f8] border-0 rounded-lg   placeholder:text-gray-400"
                 />
               </div>
             </div>
@@ -311,7 +311,7 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             error={state.errors.password}
             showError={!!state.touched.password || state.isSubmitted}
             containerClassName="w-full"
-            className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-[#f8f8f8] border-0 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
         <StaggerItem type="slideUp" distance={20} duration={0.4}>
@@ -325,13 +325,13 @@ const SignupForm: FC<SignupFormProps> = ({ onFormStateChange, onClose }) => {
             validator={(value) =>
               signupFormValidators.confirmPassword(
                 value,
-                state.formData.password
+                state.formData.password,
               )
             }
             error={state.errors.confirmPassword}
             showError={!!state.touched.confirmPassword || state.isSubmitted}
             containerClassName="w-full"
-            className="bg-[#f8f8f8] border-0 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-[#f8f8f8] border-0 rounded-lg   placeholder:text-gray-400"
           />
         </StaggerItem>
 

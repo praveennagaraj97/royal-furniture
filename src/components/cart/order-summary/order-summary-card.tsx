@@ -48,7 +48,7 @@ export const OrderSummaryCard: FC = () => {
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 lg:p-7 space-y-6">
-      <h2 className="text-lg font-medium text-gray-900">Order Summary</h2>
+      <h2 className="text-lg font-medium  ">Order Summary</h2>
 
       <div className="space-y-4">
         {summaryRows.map((row) => (
@@ -63,14 +63,14 @@ export const OrderSummaryCard: FC = () => {
                   ? 'text-[#007B35]'
                   : row.emphasis === 'accent'
                     ? 'text-[#5c2ea5]'
-                    : 'text-gray-900'
+                    : ' '
               }`}
             >
               {row.value}
             </span>
           </div>
         ))}
-        <div className="border-t border-gray-200 pt-4 flex items-center justify-between text-base font-semibold text-gray-900">
+        <div className="border-t border-gray-200 pt-4 flex items-center justify-between text-base font-semibold  ">
           <span>Total Amount</span>
           <span className="text-deep-maroon">
             {formatCurrency(currency, totals.total)}

@@ -20,7 +20,7 @@ const ExclusiveOffersBanner: FC = () => {
       <AppLink href="#" className="flex items-center justify-between group">
         <div className="flex items-center gap-3">
           <FiPercent className="h-6 w-6 text-deep-maroon" />
-          <span className="text-gray-900 font-semibold">{t('title')}</span>
+          <span className="  font-semibold">{t('title')}</span>
         </div>
         <FiChevronRight className="h-5 w-5 text-gray-600 group-hover:text-deep-maroon transition-colors" />
       </AppLink>

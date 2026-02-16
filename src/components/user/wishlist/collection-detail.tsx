@@ -173,9 +173,7 @@ const WishlistCollectionPageContent: FC = () => {
           {collection.name === 'My Wishlist' ? (
             <FiHeart className="w-6 h-6 text-deep-maroon fill-deep-maroon" />
           ) : null}
-          <h1 className="text-2xl font-semibold text-gray-900">
-            {collection.name}
-          </h1>
+          <h1 className="text-2xl font-semibold  ">{collection.name}</h1>
         </div>
         <span className="text-sm text-gray-500 ml-auto">
           {collection.itemCount} Items

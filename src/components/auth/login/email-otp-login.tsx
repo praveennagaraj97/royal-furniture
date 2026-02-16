@@ -62,7 +62,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
 
   const loginFormValidators = useMemo(
     () => createLoginFormValidators(tValidation),
-    [tValidation]
+    [tValidation],
   );
 
   const {
@@ -187,7 +187,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
           {
             expires: refreshExpiry ? new Date(refreshExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -198,7 +198,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
           {
             expires: accessExpiry ? new Date(accessExpiry) : undefined,
           },
-          false
+          false,
         );
       }
 
@@ -272,7 +272,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
             error={errors.email}
             showError={!!touched.email || isSubmitted}
             containerClassName="w-full"
-            className="bg-white border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400"
+            className="bg-white border border-gray-300 rounded-lg   placeholder:text-gray-400"
             disabled={isOtpSent}
           />
         </StaggerItem>
@@ -313,8 +313,8 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
                 {isResending
                   ? t('forms.resending')
                   : isExpired
-                  ? t('forms.resendCode')
-                  : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
+                    ? t('forms.resendCode')
+                    : `${t('forms.resendCodeIn')} ${secondsLeft}s`}
               </button>
             </StaggerItem>
           </div>
@@ -362,7 +362,7 @@ const EmailOtpLogin: FC<EmailOtpLoginProps> = ({
           <button
             type="button"
             onClick={() => onModeChange('email-password')}
-            className="w-full bg-white border border-gray-300 text-gray-900 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
+            className="w-full bg-white border border-gray-300   py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors duration-200"
           >
             {t('forms.backToEmailPasswordLogin')}
           </button>

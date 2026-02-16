@@ -67,9 +67,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
           >
             <div className="flex items-center gap-2">
               <IoStorefront className="text-xl text-deep-maroon" />
-              <span className="font-semibold text-sm text-gray-900">
-                Try in store!
-              </span>
+              <span className="font-semibold text-sm  ">Try in store!</span>
             </div>
             <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
           </button>
@@ -93,7 +91,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
               <div className="w-full flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <GiWallet className="text-xl text-deep-maroon" />
-                  <span className="font-semibold text-sm text-gray-900">
+                  <span className="font-semibold text-sm  ">
                     Flexi Payment Available
                   </span>
                 </div>
@@ -125,9 +123,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
         <div className="flex flex-col h-full p-6">
           {/* Header */}
           <div className="flex items-start justify-between  pb-4">
-            <h2 className="text-lg md:text-xl font-medium text-gray-900">
-              Info
-            </h2>
+            <h2 className="text-lg md:text-xl font-medium  ">Info</h2>
             <button
               type="button"
               onClick={() => setIsFlexiPaymentModalOpen(false)}
@@ -143,7 +139,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
             <div className="space-y-6">
               {/* What is Flexi Payment? */}
               <div>
-                <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-base md:text-lg font-semibold   mb-2">
                   {product.flexi_payment.modal_content.title ||
                     'What is Flexi Payment?'}
                 </h3>
@@ -156,7 +152,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
               {/* How does it work? */}
               {product.flexi_payment.modal_content.benefits.length > 0 && (
                 <div>
-                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3">
+                  <h3 className="text-base md:text-lg font-semibold   mb-3">
                     Benefits
                   </h3>
                   <ol className="space-y-2 text-xs md:text-sm text-gray-600">

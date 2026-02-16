@@ -37,7 +37,7 @@ const UserLayout: FC<UserLayoutProps> = ({ children }) => {
             <div className="p-2 bg-deep-maroon/10 rounded-sm group-hover:bg-deep-maroon/20 transition-colors">
               <FiMenu className="h-5 w-5 text-deep-maroon" />
             </div>
-            <span className="text-base font-semibold text-gray-900">Menu</span>
+            <span className="text-base font-semibold  ">Menu</span>
           </div>
           <FiChevronRight className="h-5 w-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
         </motion.button>

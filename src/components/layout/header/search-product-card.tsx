@@ -66,7 +66,7 @@ const SearchProductCard: FC<SearchProductCardProps> = ({
           </div>
 
           {/* Product Name */}
-          <p className="text-gray-900 text-xs line-clamp-2">{product.name}</p>
+          <p className="  text-xs line-clamp-2">{product.name}</p>
         </div>
       </AppLink>
     </div>

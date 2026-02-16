@@ -41,7 +41,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen, onItemClick }) => {
         {popularSearches.length > 0 && (
           <StaggerItem type="slideUp" distance={10} duration={0.3}>
             <div>
-              <h3 className="text-base font-semibold text-gray-900 mb-3">
+              <h3 className="text-base font-semibold   mb-3">
                 Popular Searches
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -78,7 +78,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen, onItemClick }) => {
           <StaggerItem type="slideUp" distance={10} duration={0.3}>
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-base font-semibold text-gray-900">
+                <h3 className="text-base font-semibold  ">
                   Most searched products
                 </h3>
                 <AppLink
@@ -113,9 +113,7 @@ const SearchDropdown: FC<SearchDropdownProps> = ({ isOpen, onItemClick }) => {
           <StaggerItem type="slideUp" distance={10} duration={0.3}>
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-base font-semibold text-gray-900">
-                  Trending Products
-                </h3>
+                <h3 className="text-base font-semibold  ">Trending Products</h3>
                 <AppLink
                   href="/categories"
                   onClick={onItemClick}

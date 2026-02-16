@@ -54,9 +54,7 @@ const ProductResults: FC = () => {
       {/* Header with type */}
       <div className="mb-2 flex space-x-2 justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-            {formattedTypeName}
-          </h1>
+          <h1 className="text-2xl font-semibold   mb-2">{formattedTypeName}</h1>
           {displayType && (
             <p className="text-sm text-gray-600">
               {totalCount > 0

@@ -41,7 +41,7 @@ const AddToCart: FC = () => {
         >
           <FiMinus className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
         </button>
-        <span className="text-gray-900 font-bold text-base min-w-6 text-center">
+        <span className="  font-bold text-base min-w-6 text-center">
           {quantity}
         </span>
         <button
@@ -61,7 +61,7 @@ const AddToCart: FC = () => {
       <button
         type="button"
         onClick={handleAddToCart}
-        className="w-full flex items-center justify-center gap-2 border border-deep-maroon text-gray-900 py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium hover:bg-deep-maroon/10 transition-colors duration-200"
+        className="w-full flex items-center justify-center gap-2 border border-deep-maroon   py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium hover:bg-deep-maroon/10 transition-colors duration-200"
       >
         <FiShoppingCart className="text-lg sm:text-xl text-deep-maroon" />
         <span>{t('common.addToCart')}</span>

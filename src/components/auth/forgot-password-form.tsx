@@ -56,7 +56,7 @@ const ForgotPasswordForm: FC<ForgotPasswordFormProps> = ({
           <button
             type="button"
             onClick={onBackToLogin}
-            className="w-full text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200"
+            className="w-full text-sm text-gray-600 hover:  font-medium transition-colors duration-200"
           >
             {t('forms.backToLogin')}
           </button>

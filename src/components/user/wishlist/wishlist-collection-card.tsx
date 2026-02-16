@@ -40,9 +40,7 @@ const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
             <div className="w-5 h-5 rounded bg-gray-200" />
           )}
 
-          <h3 className="text-lg font-semibold text-gray-900">
-            {collection.title}
-          </h3>
+          <h3 className="text-lg font-semibold  ">{collection.title}</h3>
         </div>
 
         <p className="text-sm text-gray-500">
@@ -59,7 +57,7 @@ const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
                 <FiHeart className="w-6 h-6 text-gray-400" />
               </div>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold   mb-2">
               No Items in this collection
             </h3>
           </div>

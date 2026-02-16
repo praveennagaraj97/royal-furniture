@@ -78,9 +78,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
             >
               <FiArrowLeft className="w-5 h-5 text-gray-700" />
             </button>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Add to Wishlist
-            </h2>
+            <h2 className="text-lg font-semibold  ">Add to Wishlist</h2>
           </div>
 
           {/* Content */}
@@ -123,7 +121,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
 
                       {/* Collection Info */}
                       <div className="flex-1 text-left">
-                        <h3 className="text-base font-medium text-gray-900">
+                        <h3 className="text-base font-medium  ">
                           {collection.title}
                         </h3>
                       </div>
