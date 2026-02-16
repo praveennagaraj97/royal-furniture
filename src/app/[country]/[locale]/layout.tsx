@@ -1,6 +1,7 @@
 import AppLayout from '@/components/layout';
 import ProgressBar from '@/components/shared/ui/progress-bar';
 import { AuthProvider } from '@/contexts/auth-context';
+import { CartProvider } from '@/contexts/cart-context';
 import { LayoutProvider } from '@/contexts/layout-context';
 import { ToastProvider } from '@/contexts/toast-context';
 import { UserProvider } from '@/contexts/user-context';
@@ -80,9 +81,11 @@ export default async function LocaleLayout({
           <ToastProvider>
             <AuthProvider>
               <UserProvider>
-                <LayoutProvider categories={categories}>
-                  <AppLayout>{children}</AppLayout>
-                </LayoutProvider>
+                <CartProvider>
+                  <LayoutProvider categories={categories}>
+                    <AppLayout>{children}</AppLayout>
+                  </LayoutProvider>
+                </CartProvider>
               </UserProvider>
             </AuthProvider>
           </ToastProvider>
