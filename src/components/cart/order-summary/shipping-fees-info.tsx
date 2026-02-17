@@ -1,8 +1,8 @@
 'use client';
 
 import { FC } from 'react';
-import { FiX } from 'react-icons/fi';
 import { HiMiniMapPin } from 'react-icons/hi2';
+import { IoClose } from 'react-icons/io5';
 
 interface ShippingFeesInfoProps {
   onClose?: () => void;
@@ -15,12 +15,10 @@ export const ShippingFeesInfo: FC<ShippingFeesInfoProps> = ({ onClose }) => {
         <h3 className="text-base font-semibold text-gray-900">Shipping Fees</h3>
         {onClose && (
           <button
-            type="button"
             onClick={onClose}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-            aria-label="Close shipping fees info"
+            className="p-1 bg-deep-maroon hover:bg-[#6b0000] rounded-full transition-colors ml-4 shrink-0"
           >
-            <FiX className="h-4 w-4" />
+            <IoClose className="w-4 h-4 text-white" />
           </button>
         )}
       </div>
