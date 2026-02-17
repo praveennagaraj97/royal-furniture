@@ -1,9 +1,10 @@
 'use client';
 
 import { useClickOutside } from '@/hooks/use-click-outside';
+import { buildIso, formatDisplay, todayIso } from '@/utils/date';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FC, useRef, useState } from 'react';
-import { FiCalendar, FiChevronDown } from 'react-icons/fi';
+import { FiCalendar } from 'react-icons/fi';
 import Calendar from './calendar';
 
 export interface DatePickerProps {
@@ -14,16 +15,6 @@ export interface DatePickerProps {
   minDate?: string;
   maxDate?: string;
 }
-
-const formatDisplay = (iso?: string) => {
-  if (!iso) return '';
-  try {
-    const d = new Date(iso + 'T00:00:00');
-    return d.toLocaleDateString();
-  } catch {
-    return iso;
-  }
-};
 
 const DatePicker: FC<DatePickerProps> = ({
   value,
@@ -39,17 +30,13 @@ const DatePicker: FC<DatePickerProps> = ({
   useClickOutside({ ref, handler: () => setOpen(false), enabled: open });
 
   const handleSelect = (date: Date) => {
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const iso = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-      date.getDate(),
-    )}`;
+    const iso = buildIso(date);
     onChange?.(iso);
     setOpen(false);
   };
 
   // Ensure min is at least today when not provided
-  const todayIso = new Date().toISOString().slice(0, 10);
-  const effectiveMin = minDate ?? todayIso;
+  const effectiveMin = minDate ?? todayIso();
   const effectiveMax = maxDate ?? undefined;
 
   return (
@@ -67,9 +54,6 @@ const DatePicker: FC<DatePickerProps> = ({
             <span className="text-gray-400">{placeholder}</span>
           )}
         </span>
-        <FiChevronDown
-          className={`w-4 h-4 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`}
-        />
       </button>
 
       <AnimatePresence>

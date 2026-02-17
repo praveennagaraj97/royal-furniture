@@ -1,5 +1,12 @@
 'use client';
 
+import {
+  addMonths,
+  getMonthMatrix,
+  isSameDay,
+  monthNames,
+  startOfMonth,
+} from '@/utils/date';
 import { FC, useMemo, useState } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
@@ -9,44 +16,6 @@ interface CalendarProps {
   minDate?: Date;
   maxDate?: Date;
 }
-
-const monthNames = (d: Date) =>
-  d.toLocaleString(undefined, { month: 'long', year: 'numeric' });
-
-const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
-const addMonths = (d: Date, n: number) =>
-  new Date(d.getFullYear(), d.getMonth() + n, 1);
-
-const getMonthMatrix = (d: Date) => {
-  const start = startOfMonth(d);
-  const startDay = start.getDay(); // 0..6 (Sun..Sat)
-  const daysInMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
-
-  const matrix: (Date | null)[] = [];
-  // previous month's tail
-  for (let i = 0; i < startDay; i++) matrix.push(null);
-  for (let day = 1; day <= daysInMonth; day++)
-    matrix.push(new Date(d.getFullYear(), d.getMonth(), day));
-
-  // pad to complete weeks
-  while (matrix.length % 7 !== 0) matrix.push(null);
-
-  const weeks: (Date | null)[][] = [];
-  for (let i = 0; i < matrix.length; i += 7) {
-    weeks.push(matrix.slice(i, i + 7));
-  }
-
-  return weeks;
-};
-
-const isSameDay = (a?: Date | null, b?: Date | null) => {
-  if (!a || !b) return false;
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-};
 
 const Calendar: FC<CalendarProps> = ({
   selected,
