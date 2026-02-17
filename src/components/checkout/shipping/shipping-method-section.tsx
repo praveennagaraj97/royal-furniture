@@ -8,7 +8,7 @@ export const ShippingMethodSection: FC = () => {
 
   return (
     <section className="space-y-3">
-      <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+      <h2 className="text-base sm:text-lg font-medium text-gray-900">
         Shipping Method
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

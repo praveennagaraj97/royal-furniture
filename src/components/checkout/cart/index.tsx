@@ -30,12 +30,12 @@ const CartPageContent: FC = () => {
           </div>
           <StaggerItem type="slideUp" distance={30}>
             <div className="hidden lg:block lg:sticky lg:top-28 lg:self-start z-30">
-              <OrderSummarySection />
+              <OrderSummarySection step="cart" />
             </div>
           </StaggerItem>
           <StaggerItem type="slideUp" distance={30}>
             <div className="lg:hidden">
-              <OrderSummarySection />
+              <OrderSummarySection step="cart" />
             </div>
           </StaggerItem>
         </StaggerContainer>

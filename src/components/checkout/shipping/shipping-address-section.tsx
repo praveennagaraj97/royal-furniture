@@ -6,7 +6,7 @@ export const ShippingAddressSection: FC = () => {
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+        <h2 className="text-base sm:text-lg font-medium text-gray-900">
           Shipping address
         </h2>
         <button

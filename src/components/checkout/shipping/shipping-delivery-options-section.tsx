@@ -6,7 +6,7 @@ import { FiCalendar, FiClock } from 'react-icons/fi';
 export const DeliveryOptionsSection: FC = () => {
   return (
     <section className="space-y-4">
-      <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+      <h2 className="text-base sm:text-lg font-medium text-gray-900">
         Pick a convenient Date &amp; Time
       </h2>
 
