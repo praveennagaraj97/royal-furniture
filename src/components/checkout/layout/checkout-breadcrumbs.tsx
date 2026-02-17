@@ -4,11 +4,11 @@ import { AppLink } from '@/hooks';
 import { FC } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 
-interface CartBreadcrumbsProps {
+interface CheckoutBreadcrumbsProps {
   paths?: { label: string; href?: string }[];
 }
 
-export const CartBreadcrumbs: FC<CartBreadcrumbsProps> = ({
+export const CheckoutBreadcrumbs: FC<CheckoutBreadcrumbsProps> = ({
   paths = [
     { label: 'Home', href: '/' },
     { label: 'Sofas', href: '#' },

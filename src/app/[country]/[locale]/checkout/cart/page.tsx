@@ -1,4 +1,4 @@
-import CartPageContent from '@/components/cart';
+import CartPageContent from '@/components/checkout/cart';
 
 export const dynamic = 'force-dynamic';
 

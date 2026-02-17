@@ -1,8 +1,8 @@
 'use client';
 
-import { CartFreeShippingBanner } from '@/components/cart/free-shipping';
 import { useCart } from '@/contexts/cart-context';
 import { FC } from 'react';
+import { CartFreeShippingBanner } from '../free-shipping';
 import { CartItemRow } from './cart-item-row';
 
 export const CartItemsSection: FC = () => {

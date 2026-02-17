@@ -1,0 +1,135 @@
+'use client';
+
+import { useParams, useRouter } from 'next/navigation';
+import { FC, useMemo } from 'react';
+import { FiCheck, FiCreditCard, FiShoppingCart, FiTruck } from 'react-icons/fi';
+
+type StepStatus = 'completed' | 'current' | 'upcoming';
+
+export type CheckoutStepId = 'cart' | 'shipping' | 'payment';
+
+interface Step {
+  id: CheckoutStepId;
+  label: string;
+  icon: FC<{ className?: string }>;
+}
+
+const baseSteps: Step[] = [
+  { id: 'cart', label: 'Cart', icon: FiShoppingCart },
+  { id: 'shipping', label: 'Shipping', icon: FiTruck },
+  { id: 'payment', label: 'Payment', icon: FiCreditCard },
+];
+
+export const checkoutSteps = baseSteps.map(({ id, label }) => ({ id, label }));
+
+const indicatorStyles: Record<StepStatus, string> = {
+  current: 'bg-[#f8c6c8] text-deep-maroon border border-[#f3aeb3]',
+  completed: 'bg-deep-maroon text-white border border-deep-maroon',
+  upcoming: 'bg-white text-gray-400 border border-[#d7d8e0]',
+};
+
+const labelStyles: Record<StepStatus, string> = {
+  current: 'text-deep-maroon',
+  completed: 'text-deep-maroon',
+  upcoming: 'text-gray-400',
+};
+
+interface CheckoutProgressProps {
+  currentStep: CheckoutStepId;
+}
+
+export const CheckoutProgress: FC<CheckoutProgressProps> = ({
+  currentStep,
+}) => {
+  const router = useRouter();
+  const params = useParams<{ country?: string; locale?: string }>();
+
+  const resolveHref = (stepId: CheckoutStepId) => {
+    const segments = [
+      params?.country ?? '',
+      params?.locale ?? '',
+      'checkout',
+      stepId,
+    ].filter(Boolean);
+
+    return `/${segments.join('/')}`;
+  };
+
+  const currentIndex = useMemo(() => {
+    const index = baseSteps.findIndex((step) => step.id === currentStep);
+    return index === -1 ? 0 : index;
+  }, [currentStep]);
+
+  const stepsWithStatus = useMemo(() => {
+    return baseSteps.map((step, index) => {
+      let status: StepStatus = 'upcoming';
+      if (index < currentIndex) status = 'completed';
+      else if (index === currentIndex) status = 'current';
+      return { ...step, status };
+    });
+  }, [currentIndex]);
+
+  const progressPercent = useMemo(() => {
+    const totalSteps = baseSteps.length;
+    if (totalSteps <= 1) {
+      return 100;
+    }
+    const minimumPercent = 100 / (totalSteps * 2);
+    if (currentIndex <= 0) {
+      return minimumPercent;
+    }
+    return (currentIndex / (totalSteps - 1)) * 100;
+  }, [currentIndex]);
+
+  return (
+    <div className="w-full">
+      <div className="relative flex items-center justify-between">
+        <div className="absolute left-0 top-[40%] h-1.5 w-full -translate-y-1/2 rounded-full bg-[#d6d7df]" />
+        <div
+          className="absolute left-0 top-[40%] h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8] transition-all duration-300"
+          style={{ width: `${progressPercent}%` }}
+        />
+
+        {stepsWithStatus.map((step) => {
+          const Icon = step.icon;
+          const showCheck =
+            step.status === 'current' || step.status === 'completed';
+          const isClickable = step.status === 'completed';
+          const handleClick = () => {
+            if (!isClickable) return;
+            router.push(resolveHref(step.id));
+          };
+
+          return (
+            <button
+              type="button"
+              key={step.label}
+              onClick={handleClick}
+              disabled={!isClickable}
+              aria-current={step.status === 'current' ? 'step' : undefined}
+              className={`relative z-10 flex flex-1 flex-col items-center gap-2 focus-visible:outline-none ${
+                isClickable ? 'cursor-pointer' : 'cursor-default'
+              }`}
+            >
+              <div
+                className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 ${indicatorStyles[step.status]}`}
+              >
+                <Icon className="h-5 w-5" />
+                {showCheck && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-white text-deep-maroon">
+                    <FiCheck className="h-3 w-3" />
+                  </span>
+                )}
+              </div>
+              <span
+                className={`text-xs font-semibold uppercase tracking-wide ${labelStyles[step.status]}`}
+              >
+                {step.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
