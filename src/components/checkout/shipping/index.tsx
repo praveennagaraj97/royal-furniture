@@ -30,7 +30,7 @@ const ShippingPageContent: FC = () => {
           </div>
 
           {/* Right column: full sticky area (desktop) with inner animated sections */}
-          <div className="space-y-6 lg:self-start z-30 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+          <div className="space-y-6 lg:self-start z-30 lg:sticky lg:top-28">
             <StaggerItem type="slideUp" distance={30}>
               <OrderSummarySection step="shipping" showPaymentPlans={false} />
             </StaggerItem>

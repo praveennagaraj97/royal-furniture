@@ -1,9 +1,14 @@
 'use client';
 
-import { FC } from 'react';
+import DatePicker from '@/components/shared/inputs/date-picker';
+import { FC, useState } from 'react';
 import { FiCalendar, FiClock } from 'react-icons/fi';
 
 export const DeliveryOptionsSection: FC = () => {
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    undefined,
+  );
+
   return (
     <section className="space-y-4">
       <h2 className="text-base sm:text-lg font-medium text-gray-900">
@@ -16,9 +21,10 @@ export const DeliveryOptionsSection: FC = () => {
             Select Date
           </label>
           <div className="relative">
-            <input
-              type="date"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 pr-10 text-sm text-gray-700 focus:border-deep-maroon focus:outline-none focus:ring-1 focus:ring-deep-maroon"
+            <DatePicker
+              value={selectedDate}
+              onChange={(val) => setSelectedDate(val)}
+              className=""
             />
             <FiCalendar className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           </div>
