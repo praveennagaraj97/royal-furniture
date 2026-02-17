@@ -1,6 +1,7 @@
 'use client';
 
 import { useCart } from '@/contexts/cart-context';
+import { motion } from 'framer-motion';
 import { FC, useMemo } from 'react';
 import { FaTruckFast } from 'react-icons/fa6';
 
@@ -37,9 +38,11 @@ export const CartFreeShippingBanner: FC = () => {
       </div>
       <div className="mt-1 flex flex-col gap-1">
         <div className="w-full h-2 rounded-full bg-gray-200 overflow-hidden">
-          <div
-            className="h-full rounded-full bg-[#007B35] transition-all duration-300"
-            style={{ width: `${progress}%` }}
+          <motion.div
+            className="h-full rounded-full bg-[#007B35]"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
           />
         </div>
       </div>

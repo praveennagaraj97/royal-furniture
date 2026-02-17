@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { FiCheck, FiCreditCard, FiShoppingCart, FiTruck } from 'react-icons/fi';
@@ -85,9 +86,11 @@ export const CheckoutProgress: FC<CheckoutProgressProps> = ({
     <div className="w-full">
       <div className="relative flex items-center justify-between">
         <div className="absolute left-0 top-[40%] h-1.5 w-full -translate-y-1/2 rounded-full bg-[#d6d7df]" />
-        <div
-          className="absolute left-0 top-[40%] h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8] transition-all duration-300"
-          style={{ width: `${progressPercent}%` }}
+        <motion.div
+          className="absolute left-0 top-[40%] h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8]"
+          initial={{ width: 0 }}
+          animate={{ width: `${progressPercent}%` }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
         />
 
         {stepsWithStatus.map((step) => {
