@@ -1,4 +1,4 @@
-import CheckoutLayoutShell from '@/components/checkout/layout/checkout-layout-shell';
+import CheckoutLayoutShell from '@/components/checkout/layout';
 import type { ReactNode } from 'react';
 
 interface CheckoutLayoutProps {

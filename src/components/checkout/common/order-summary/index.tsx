@@ -1,6 +1,6 @@
 'use client';
 
-import type { CheckoutStepId } from '@/components/checkout/layout/checkout-progress';
+import type { CheckoutStepId } from '@/components/checkout/layout/progress';
 import { FC } from 'react';
 import { OrderSummaryCard } from './order-summary-card';
 import { PaymentOptions } from './payment-options';

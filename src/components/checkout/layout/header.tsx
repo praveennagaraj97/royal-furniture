@@ -10,7 +10,7 @@ import {
   CheckoutProgress,
   checkoutSteps,
   type CheckoutStepId,
-} from './checkout-progress';
+} from './progress';
 
 interface CheckoutHeaderProps {
   currentStep: CheckoutStepId;

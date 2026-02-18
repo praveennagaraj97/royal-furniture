@@ -2,8 +2,8 @@
 
 import { useSelectedLayoutSegment } from 'next/navigation';
 import { type ReactNode, useMemo } from 'react';
-import { CheckoutHeader } from './checkout-header';
-import type { CheckoutStepId } from './checkout-progress';
+import { CheckoutHeader } from './header';
+import type { CheckoutStepId } from './progress';
 
 interface CheckoutLayoutShellProps {
   children: ReactNode;
