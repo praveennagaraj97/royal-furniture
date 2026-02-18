@@ -1,12 +1,18 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
-import { FormInput } from '@/components/shared/inputs/form-input';
+import { TextAreaFormInput } from '@/components/shared/inputs/text-area-input';
+import {
+  createAddressFormValidators,
+  validateAddressForm,
+} from '@/validators/address-form';
+import { useTranslations } from 'next-intl';
 import {
   FC,
   FormEvent,
   useMemo,
   useReducer,
+  useState,
   type ChangeEvent,
   type ReactElement,
 } from 'react';
@@ -17,6 +23,12 @@ import {
   FiMapPin,
   FiMoreHorizontal,
 } from 'react-icons/fi';
+import { BuildingField } from './fields/building-field';
+import { CityField } from './fields/city-field';
+import { EmailField } from './fields/email-field';
+import { NameField } from './fields/name-field';
+import { PhoneField } from './fields/phone-field';
+import { StreetField } from './fields/street-field';
 import {
   AddressFormErrors,
   addressFormReducer,
@@ -29,21 +41,6 @@ interface CreateOrEditAddressFormProps {
   onAddressSaved?: (data: AddressFormData) => void;
   onCancel?: () => void;
 }
-
-const REQUIRED_MESSAGE = 'This field is required';
-
-const validateAddressForm = (formData: AddressFormData): AddressFormErrors => {
-  const errors: AddressFormErrors = {};
-
-  if (!formData.name.trim()) errors.name = REQUIRED_MESSAGE;
-  if (!formData.phone.trim()) errors.phone = REQUIRED_MESSAGE;
-  if (!formData.email.trim()) errors.email = REQUIRED_MESSAGE;
-  if (!formData.streetAddress.trim()) errors.streetAddress = REQUIRED_MESSAGE;
-  if (!formData.building.trim()) errors.building = REQUIRED_MESSAGE;
-  if (!formData.city.trim()) errors.city = REQUIRED_MESSAGE;
-
-  return errors;
-};
 
 const addressTypeLabel: Record<AddressType, string> = {
   home: 'Home',
@@ -64,6 +61,12 @@ export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
     addressFormReducer,
     initialAddressFormState,
   );
+  const [countryCode, setCountryCode] = useState('+971');
+  const tValidation = useTranslations('auth.validation');
+  const addressFormValidators = useMemo(
+    () => createAddressFormValidators(tValidation),
+    [tValidation],
+  );
 
   const hasErrors = useMemo(
     () => Object.keys(state.errors).length > 0,
@@ -74,6 +77,17 @@ export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
     (field: keyof AddressFormData) =>
     (event: ChangeEvent<HTMLInputElement>) => {
       dispatch({ type: 'SET_FIELD_VALUE', field, value: event.target.value });
+      // Validate on change for phone
+      if (field === 'phone') {
+        const error = addressFormValidators.phone(
+          event.target.value,
+          countryCode,
+        );
+        dispatch({
+          type: 'SET_ERRORS',
+          errors: { ...state.errors, phone: error },
+        });
+      }
     };
 
   const handleTextareaChange =
@@ -84,13 +98,46 @@ export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
 
   const handleBlur = (field: keyof AddressFormErrors) => () => {
     dispatch({ type: 'SET_TOUCHED', field });
+    // Validate the field on blur and update error state for that field
+    let error: string | undefined = undefined;
+    switch (field) {
+      case 'name':
+        error = addressFormValidators.name(state.formData.name);
+        break;
+      case 'phone':
+        error = addressFormValidators.phone(state.formData.phone, countryCode);
+        break;
+      case 'email':
+        error = addressFormValidators.email(state.formData.email);
+        break;
+      case 'streetAddress':
+        error = addressFormValidators.streetAddress(
+          state.formData.streetAddress,
+        );
+        break;
+      case 'building':
+        error = addressFormValidators.building(state.formData.building);
+        break;
+      case 'city':
+        error = addressFormValidators.city(state.formData.city);
+        break;
+    }
+    dispatch({
+      type: 'SET_ERRORS',
+      errors: { ...state.errors, [field]: error },
+    });
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch({ type: 'SET_IS_SUBMITTED', value: true });
+    dispatch({ type: 'SET_ALL_TOUCHED' });
 
-    const errors = validateAddressForm(state.formData);
+    const errors = validateAddressForm(
+      state.formData,
+      countryCode,
+      tValidation,
+    );
     dispatch({ type: 'SET_ERRORS', errors });
 
     if (Object.keys(errors).length > 0) {
@@ -99,8 +146,6 @@ export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
 
     dispatch({ type: 'SET_IS_SUBMITTING', value: true });
 
-    // In a real implementation, this is where an API call would go.
-    // For now, we simply notify the parent and reset the form.
     if (onAddressSaved) {
       onAddressSaved(state.formData);
     }
@@ -131,12 +176,12 @@ export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
     !!state.errors[field] && (!!state.touched[field] || state.isSubmitted);
 
   return (
-    <section className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
+    <section className="flex flex-col gap-4">
       <StaggerContainer
         mode="animate"
         staggerChildren={0.08}
         delayChildren={0.05}
-        className="space-y-4"
+        className="flex flex-col gap-4"
       >
         <StaggerItem type="slideUp" distance={20} duration={0.35}>
           <div className="flex items-center justify-between">
@@ -175,128 +220,101 @@ export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
           </div>
         </StaggerItem>
 
-        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <FormInput
-              id="address-name"
-              label="Name*"
-              type="text"
-              placeholder="Full Name"
+            <NameField
               value={state.formData.name}
               onChange={handleInputChange('name')}
               onBlur={handleBlur('name')}
               error={state.errors.name}
               showError={showFieldError('name')}
-              containerClassName="w-full"
-              className="bg-[#f8f8f8] border-0 rounded-lg placeholder:text-gray-400"
             />
           </StaggerItem>
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <FormInput
-              id="address-phone"
-              label="Phone*"
-              type="tel"
-              inputMode="tel"
-              placeholder="Enter your number"
+            <PhoneField
               value={state.formData.phone}
+              countryCode={countryCode}
+              onCountryCodeChange={setCountryCode}
               onChange={handleInputChange('phone')}
               onBlur={handleBlur('phone')}
+              validator={(value) =>
+                addressFormValidators.phone(value, countryCode)
+              }
               error={state.errors.phone}
-              showError={showFieldError('phone')}
-              containerClassName="w-full"
-              className="bg-[#f8f8f8] border-0 rounded-lg placeholder:text-gray-400"
+              showError={
+                !!state.errors.phone &&
+                (!!state.touched.phone || state.isSubmitted)
+              }
             />
           </StaggerItem>
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <FormInput
-              id="address-email"
-              label="Email Address*"
-              type="email"
-              placeholder="Email Address"
+            <EmailField
               value={state.formData.email}
               onChange={handleInputChange('email')}
               onBlur={handleBlur('email')}
               error={state.errors.email}
               showError={showFieldError('email')}
-              containerClassName="w-full"
-              className="bg-[#f8f8f8] border-0 rounded-lg placeholder:text-gray-400"
             />
           </StaggerItem>
 
+          <div className="my-2 w-full">
+            <button
+              type="button"
+              onClick={handleUseMyLocation}
+              className="w-full flex items-center justify-center gap-2 rounded-lg border border-deep-maroon px-4 h-12 text-xs sm:text-sm font-semibold text-deep-maroon hover:bg-deep-maroon hover:text-white transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              disabled={state.isUsingLocation}
+            >
+              <FiMapPin className="h-4 w-4" />
+              {state.isUsingLocation
+                ? 'Detecting location...'
+                : 'Use my location'}
+            </button>
+          </div>
+
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <FormInput
-              id="address-street"
-              label="Street Address*"
-              type="text"
-              placeholder="House number and Street name"
+            <StreetField
               value={state.formData.streetAddress}
               onChange={handleInputChange('streetAddress')}
               onBlur={handleBlur('streetAddress')}
               error={state.errors.streetAddress}
               showError={showFieldError('streetAddress')}
-              containerClassName="w-full"
-              className="bg-[#f8f8f8] border-0 rounded-lg placeholder:text-gray-400"
             />
           </StaggerItem>
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <FormInput
-              id="address-building"
-              label="Building Name/Villa No*"
-              type="text"
-              placeholder="e.g bay central west tower"
+            <BuildingField
               value={state.formData.building}
               onChange={handleInputChange('building')}
               onBlur={handleBlur('building')}
               error={state.errors.building}
               showError={showFieldError('building')}
-              containerClassName="w-full"
-              className="bg-[#f8f8f8] border-0 rounded-lg placeholder:text-gray-400"
             />
           </StaggerItem>
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <FormInput
-                id="address-city"
-                label="Town / City*"
-                type="text"
-                placeholder="Town or City"
-                value={state.formData.city}
-                onChange={handleInputChange('city')}
-                onBlur={handleBlur('city')}
-                error={state.errors.city}
-                showError={showFieldError('city')}
-                containerClassName="flex-1"
-                className="bg-[#f8f8f8] border-0 rounded-lg placeholder:text-gray-400"
-              />
-              <button
-                type="button"
-                onClick={handleUseMyLocation}
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-deep-maroon px-4 py-2 text-xs sm:text-sm font-semibold text-deep-maroon hover:bg-deep-maroon hover:text-white transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-                disabled={state.isUsingLocation}
-              >
-                <FiMapPin className="h-4 w-4" />
-                {state.isUsingLocation
-                  ? 'Detecting location...'
-                  : 'Use my location'}
-              </button>
-            </div>
+            <CityField
+              value={state.formData.city}
+              onChange={handleInputChange('city')}
+              onBlur={handleBlur('city')}
+              error={state.errors.city}
+              showError={showFieldError('city')}
+            />
           </StaggerItem>
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <div className="space-y-1">
-              <label htmlFor="address-notes" className="form-input-label">
-                Order Notes (Optional)
-              </label>
-              <textarea
+              <TextAreaFormInput
+                label={
+                  <label htmlFor="address-notes" className="form-input-label">
+                    Order Notes (Optional)
+                  </label>
+                }
                 id="address-notes"
                 placeholder="Any additional information for delivery"
                 value={state.formData.notes}
                 onChange={handleTextareaChange('notes')}
-                className="w-full min-h-24 rounded-lg bg-[#f8f8f8] border-0 px-3 py-2 text-xs sm:text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-maroon"
               />
             </div>
           </StaggerItem>

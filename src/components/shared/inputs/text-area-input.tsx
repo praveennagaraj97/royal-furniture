@@ -4,14 +4,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   type ChangeEvent,
   type FC,
-  type InputHTMLAttributes,
   type ReactNode,
+  type TextareaHTMLAttributes,
   useMemo,
-  useState,
 } from 'react';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface TextAreaFormInputProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: ReactNode;
   error?: string;
   showError?: boolean;
@@ -21,7 +19,7 @@ interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelClassName?: string;
 }
 
-export const FormInput: FC<FormInputProps> = ({
+export const TextAreaFormInput: FC<TextAreaFormInputProps> = ({
   label,
   error,
   showError = false,
@@ -30,17 +28,11 @@ export const FormInput: FC<FormInputProps> = ({
   containerClassName = '',
   labelClassName = '',
   className = '',
-  type,
   id,
   value,
   onChange,
   ...inputProps
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const isPasswordType = type === 'password';
-  const inputType = isPasswordType && showPassword ? 'text' : type;
-
   const { validationError, isValid } = useMemo(() => {
     if (validator && value !== undefined && value !== null) {
       const error = validator(String(value));
@@ -67,38 +59,16 @@ export const FormInput: FC<FormInputProps> = ({
     borderClasses = 'form-input-border-valid';
   }
 
-  const isNumericType =
-    type === 'number' || type === 'tel' || inputProps.inputMode === 'numeric';
-  const paddingClasses =
-    rightElement || isPasswordType
-      ? isNumericType && rightElement
-        ? 'pr-12'
-        : 'pe-12'
-      : '';
+  const isNumericType = inputProps.inputMode === 'numeric';
+  const paddingClasses = rightElement
+    ? isNumericType
+      ? 'pr-12'
+      : 'pe-12'
+    : '';
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Handle numeric-only input
-    if (type === 'number' || inputProps.inputMode === 'numeric') {
-      const value = e.target.value;
-      // Allow empty string, numbers, and decimal point for number type
-      if (type === 'number') {
-        if (value === '' || /^-?\d*\.?\d*$/.test(value)) {
-          if (onChange) {
-            onChange(e);
-          }
-        }
-      } else {
-        // For numeric inputMode, only allow digits
-        if (value === '' || /^\d+$/.test(value)) {
-          if (onChange) {
-            onChange(e);
-          }
-        }
-      }
-    } else {
-      if (onChange) {
-        onChange(e);
-      }
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (onChange) {
+      onChange(e);
     }
   };
 
@@ -110,28 +80,15 @@ export const FormInput: FC<FormInputProps> = ({
         </label>
       )}
       <div className="relative">
-        <input
+        <textarea
           id={id}
-          type={inputType}
           value={value}
           onChange={handleChange}
           {...inputProps}
           className={`form-input-base ${borderClasses} ${paddingClasses} ${className}`}
         />
-        {isPasswordType && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute end-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-          >
-            {showPassword ? (
-              <FiEyeOff className="w-5 h-5" />
-            ) : (
-              <FiEye className="w-5 h-5" />
-            )}
-          </button>
-        )}
-        {rightElement && !isPasswordType && (
+        {/* No password toggle for textarea */}
+        {rightElement && (
           <div
             className={`absolute top-1/2 -translate-y-1/2 ${
               isNumericType ? 'right-3' : 'end-3'

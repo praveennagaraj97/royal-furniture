@@ -61,6 +61,7 @@ export const initialAddressFormState: AddressFormState = {
 export type AddressFormAction =
   | { type: 'SET_FIELD_VALUE'; field: keyof AddressFormData; value: string }
   | { type: 'SET_TOUCHED'; field: keyof AddressFormTouched }
+  | { type: 'SET_ALL_TOUCHED' }
   | { type: 'SET_ERRORS'; errors: AddressFormErrors }
   | { type: 'SET_ADDRESS_TYPE'; value: AddressType }
   | { type: 'SET_IS_SUBMITTED'; value: boolean }
@@ -93,6 +94,14 @@ export const addressFormReducer = (
       return {
         ...state,
         errors: action.errors,
+      };
+    case 'SET_ALL_TOUCHED':
+      return {
+        ...state,
+        touched: Object.keys(state.formData).reduce((acc, key) => {
+          acc[key as keyof AddressFormTouched] = true;
+          return acc;
+        }, {} as AddressFormTouched),
       };
     case 'SET_ADDRESS_TYPE':
       return {
