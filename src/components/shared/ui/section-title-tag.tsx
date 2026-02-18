@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { useLocale } from 'next-intl';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import SectionTitleBackground from '../svgs/section-title-background';
@@ -16,6 +17,8 @@ const SectionTitleTag: FC<SectionTitleTagProps> = ({
 }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
 
   useEffect(() => {
     if (textRef.current) {
@@ -34,7 +37,7 @@ const SectionTitleTag: FC<SectionTitleTagProps> = ({
     >
       {dimensions.width > 0 && dimensions.height > 0 && (
         <SectionTitleBackground
-          className="absolute top-0 left-0 -z-10"
+          className={`absolute top-0 ${isRTL ? 'right-0' : 'left-0'} -z-10`}
           style={{
             width: `${dimensions.width}px`,
             height: `${dimensions.height}px`,
