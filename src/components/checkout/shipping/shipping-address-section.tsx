@@ -11,7 +11,7 @@ export const ShippingAddressSection: FC = () => {
         </h2>
         <button
           type="button"
-          className="text-xs sm:text-sm font-semibold text-deep-maroon hover:underline"
+          className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
         >
           Change
         </button>

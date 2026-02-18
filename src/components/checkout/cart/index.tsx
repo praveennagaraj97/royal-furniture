@@ -3,10 +3,10 @@
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useCart } from '@/contexts/cart-context';
 import { FC, Fragment } from 'react';
+import { FrequentlyBoughtSection } from '../common/frequently-bought';
+import { OrderSummarySection } from '../common/order-summary';
 import { CartItemsSection } from './cart-items';
-import { FrequentlyBoughtSection } from './frequently-bought';
 import { CartInfoSections } from './info-sections';
-import { OrderSummarySection } from './order-summary';
 
 const CartPageContent: FC = () => {
   const { isHydrated } = useCart();

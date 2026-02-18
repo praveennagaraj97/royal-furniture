@@ -3,7 +3,7 @@
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useCart } from '@/contexts/cart-context';
 import { FC, Fragment } from 'react';
-import { OrderSummarySection } from '../cart/order-summary';
+import { OrderSummarySection } from '../common/order-summary';
 import { ShippingAddressSection } from './shipping-address-section';
 import { DeliveryOptionsSection } from './shipping-delivery-options-section';
 import { ShippingMethodSection } from './shipping-method-section';
