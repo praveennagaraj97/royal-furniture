@@ -1,6 +1,6 @@
 'use client';
 
-import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { ViewOnce } from '@/components/shared/animations';
 import { WishlistCollectionsSkeleton } from '@/components/skeletons/wishlist-collections-skeleton';
 import { useGetWishlistCollections } from '@/hooks/api';
 import { FC, useState } from 'react';
@@ -20,10 +20,13 @@ const WishlistPageContent: FC = () => {
 
   return (
     <>
-      <StaggerContainer
-        mode="animate"
-        staggerChildren={0.1}
-        delayChildren={0.1}
+      <ViewOnce
+        type="slideUp"
+        distance={20}
+        duration={0.4}
+        delay={0.05}
+        amount={0.01}
+        margin="-40px"
         className="space-y-6"
       >
         {/* Header */}
@@ -31,16 +34,14 @@ const WishlistPageContent: FC = () => {
           <h1 className="text-2xl font-semibold  ">Wishlist</h1>
 
           {/* Create New Collection Button */}
-          <StaggerItem type="slideUp" distance={20} duration={0.4}>
-            <button
-              type="button"
-              onClick={() => setIsCreateModalOpen(true)}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-all duration-200 shadow-sm hover:shadow-md"
-            >
-              <FiPlus className="w-5 h-5" />
-              <span>Create new collection</span>
-            </button>
-          </StaggerItem>
+          <button
+            type="button"
+            onClick={() => setIsCreateModalOpen(true)}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-all duration-200 shadow-sm hover:shadow-md"
+          >
+            <FiPlus className="w-5 h-5" />
+            <span>Create new collection</span>
+          </button>
         </div>
 
         {/* Loading State */}
@@ -54,14 +55,10 @@ const WishlistPageContent: FC = () => {
               className="grid grid-cols-1 gap-6"
             >
               {collections.map((collection) => (
-                <StaggerItem
+                <WishlistCollectionCard
                   key={collection.id}
-                  type="slideUp"
-                  distance={20}
-                  duration={0.4}
-                >
-                  <WishlistCollectionCard collection={collection} />
-                </StaggerItem>
+                  collection={collection}
+                />
               ))}
             </div>
           </>
@@ -92,7 +89,7 @@ const WishlistPageContent: FC = () => {
             </div>
           </>
         )}
-      </StaggerContainer>
+      </ViewOnce>
 
       {/* Create Collection Modal */}
       <CreateCollectionModal

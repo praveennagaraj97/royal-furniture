@@ -1,6 +1,5 @@
-'use client';
+"use client";
 
-import { StaggerItem } from '@/components/shared/animations';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { FC, MouseEvent } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
@@ -29,10 +28,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   };
 
   return (
-    <StaggerItem
-      type="slideUp"
-      distance={30}
-      duration={0.6}
+    <div
       className={`relative w-full bg-white rounded-lg overflow-hidden ${className || ''}`}
     >
       <AppLink
@@ -110,6 +106,6 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
           </div> */}
         </div>
       </AppLink>
-    </StaggerItem>
+    </div>
   );
 };

@@ -1,6 +1,5 @@
 'use client';
 
-import { StaggerItem } from '@/components/shared/animations';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { FC } from 'react';
 
@@ -24,12 +23,7 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
   const formatCurrency = useFormatCurrency();
 
   return (
-    <StaggerItem
-      type="slideUp"
-      distance={30}
-      duration={0.6}
-      className={`relative w-full bg-white rounded-lg overflow-hidden ${className || ''}`}
-    >
+    <div className={`relative w-full bg-white rounded-lg overflow-hidden ${className || ''}`}>
       <AppLink
         href={`/${product.category.slug}/${product.sub_category.slug}/${product.slug}`}
       >
@@ -73,6 +67,6 @@ export const ProductCardVariant1: FC<ProductCardVariant1Props> = ({
           <AddToCart />
         </div>
       </AppLink>
-    </StaggerItem>
+    </div>
   );
 };
