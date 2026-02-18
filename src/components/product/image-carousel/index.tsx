@@ -21,6 +21,7 @@ interface ImageCardProps {
   onWishlistClick?: () => void;
   onShareClick?: () => void;
   isWishlisted?: boolean;
+  variantId?: number | null;
 }
 
 const ImageCard: FC<ImageCardProps> = ({
@@ -31,6 +32,7 @@ const ImageCard: FC<ImageCardProps> = ({
   showView3D,
   onShareClick,
   idx,
+  variantId,
 }) => {
   return (
     <div
@@ -57,7 +59,7 @@ const ImageCard: FC<ImageCardProps> = ({
       ) : null}
 
       <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <AddToWishList />
+        <AddToWishList variantId={variantId} />
 
         <button
           type="button"
@@ -97,6 +99,7 @@ export interface ImageCarouselProps {
   onShareClick?: () => void;
   isWishlisted?: boolean;
   productName: string;
+  variantId?: number | null;
 }
 
 export const ImageCarousel: FC<ImageCarouselProps> = ({
@@ -107,6 +110,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   onShareClick,
   isWishlisted = false,
   productName,
+  variantId = null,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -155,6 +159,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               showView3D={showView3D}
               onShareClick={onShareClick}
               isWishlisted={isWishlisted}
+              variantId={variantId}
             />
           ))}
         />
@@ -171,6 +176,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           showView3D={showView3D}
           onShareClick={onShareClick}
           isWishlisted={isWishlisted}
+          variantId={variantId}
         />
 
         {images.length > 1 && (
@@ -257,6 +263,15 @@ export const ProductImages: FC<ProductImagesProps> = ({
     return [];
   }, [product, selectedVariant, selectedFabric, selectedColor]);
 
+  const variantId = useMemo(() => {
+    const variant = product.variants.find((v) => v.name === selectedVariant);
+    const fabric = variant?.fabricsList.find((f) => f.name === selectedFabric);
+    const color = fabric?.colorsList.find(
+      (c) => String(c.id) === selectedColor,
+    );
+    return color?.variant_id ?? null;
+  }, [product, selectedVariant, selectedFabric, selectedColor]);
+
   const discount = product.product_info.pricing.offer_percentage
     ? Math.round(parseFloat(product.product_info.pricing.offer_percentage))
     : 0;
@@ -270,6 +285,7 @@ export const ProductImages: FC<ProductImagesProps> = ({
       onShareClick={onShareClick}
       isWishlisted={isWishlisted}
       productName={product.product_info.name}
+      variantId={variantId}
     />
   );
 };

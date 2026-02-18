@@ -1,21 +1,35 @@
 'use client';
 
-import { FC, Fragment, useState } from 'react';
+import { useAuth } from '@/contexts/auth-context';
+import { FC, Fragment, useState, type MouseEvent } from 'react';
 import { FiHeart } from 'react-icons/fi';
 import AddToWishlistModal from './modal';
 
-const AddToWishList: FC = () => {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+interface AddToWishListProps {
+  variantId?: number | null;
+  isWishlisted?: boolean;
+}
+
+const AddToWishList: FC<AddToWishListProps> = ({
+  variantId,
+  isWishlisted = false,
+}) => {
+  const { isAuthenticated } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
+
+  const handleClick = (e: MouseEvent) => {
+    e.stopPropagation();
+    setShowAddModal(true);
+  };
+
+  // Do not render icon if there's no variantId or user is not authenticated
+  if (!variantId || !isAuthenticated) return null;
 
   return (
     <Fragment>
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          setShowAddModal(true);
-        }}
+        onClick={handleClick}
         className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md"
       >
         <FiHeart
@@ -26,10 +40,8 @@ const AddToWishList: FC = () => {
       </button>
       <AddToWishlistModal
         isOpen={showAddModal}
-        onClose={() => {
-          setShowAddModal(false);
-        }}
-        variantId={1}
+        onClose={() => setShowAddModal(false)}
+        variantId={variantId}
       />
     </Fragment>
   );

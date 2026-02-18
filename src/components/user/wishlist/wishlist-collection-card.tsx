@@ -28,12 +28,12 @@ const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
         <div className="flex items-center gap-2 mb-1">
           <FiHeart className="w-5 h-5 text-deep-maroon fill-deep-maroon" />
           <h3 className="text-lg font-semibold  ">{collection.title}</h3>
-        </div>
 
-        <p className="text-sm text-gray-500">
-          {collection.total_items}{' '}
-          {collection.total_items === 1 ? 'Item' : 'Items'}
-        </p>
+          <p className="text-sm text-gray-500">
+            {collection.total_items}{' '}
+            {collection.total_items === 1 ? 'Item' : 'Items'}
+          </p>
+        </div>
       </div>
 
       <div className="p-4">
@@ -49,17 +49,29 @@ const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
             </h3>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 justify-start">
             {displayItems.map((item, index) => (
               <div
                 key={`${item.product_name}-${index}`}
-                className="relative aspect-square rounded overflow-hidden bg-gray-100"
+                className="relative rounded overflow-hidden bg-gray-100 aspect-square w-40"
               >
-                <ResponsiveImage
-                  images={item.responsive_images}
-                  alt={item.product_name || ''}
-                  className="w-full h-full object-cover"
-                />
+                {item.responsive_images ? (
+                  <ResponsiveImage
+                    images={item.responsive_images}
+                    alt={item.product_name || ''}
+                    className="w-full h-full object-cover"
+                  />
+                ) : item.product_image ? (
+                  // Fallback to raw image URL when responsive images are not provided by API
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={item.product_image}
+                    alt={item.product_name || ''}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200" />
+                )}
 
                 {index === displayItems.length - 1 && remainingCount > 0 && (
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-lg font-semibold">

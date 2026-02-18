@@ -51,7 +51,7 @@ const WishlistPageContent: FC = () => {
             {/* Collections Grid */}
             <div
               key={`${isLoading}-${collections.length}`}
-              className="grid grid-cols-1 gap-4"
+              className="grid grid-cols-1 gap-6"
             >
               {collections.map((collection) => (
                 <StaggerItem
