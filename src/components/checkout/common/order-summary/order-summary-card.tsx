@@ -162,6 +162,18 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
             </div>
           ))}
 
+          {/* Saved Badge */}
+
+          {totals.discount + totals.coupon > 0 && (
+            <div className="font-medium bg-[#91E809] px-2 py-2 rounded-md text-sm text-center">
+              You Saved{' '}
+              <span className="font-semibold">
+                {formatCurrency(currency, totals.discount + totals.coupon)}
+              </span>{' '}
+              on this order
+            </div>
+          )}
+
           <hr className="opacity-20 my-3" />
 
           <div className="bg-deep-maroon/5 p-2 rounded-lg border-gray-200 flex items-center justify-between font-medium">
