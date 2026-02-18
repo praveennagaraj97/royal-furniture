@@ -16,9 +16,12 @@ const WishlistPageContent: FC = () => {
     mutate(); // Refresh collections after creating
   };
 
+  console.log('Wishlist Collections:', collections);
+
   return (
     <>
       <StaggerContainer
+        mode="animate"
         staggerChildren={0.1}
         delayChildren={0.1}
         className="space-y-6"
