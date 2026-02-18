@@ -7,7 +7,32 @@ export const formatDisplay = (iso?: string) => {
   if (!iso) return '';
   try {
     const d = new Date(iso + 'T00:00:00');
-    return d.toLocaleDateString();
+    // Format as DD/MM/YYYY
+    return d.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  } catch {
+    return iso;
+  }
+};
+
+export const formatDateWithOrdinal = (iso?: string) => {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso + 'T00:00:00');
+    const day = d.getDate();
+    const month = d.toLocaleString('en-GB', { month: 'short' });
+    const year = d.getFullYear();
+    // Get ordinal suffix
+    const j = day % 10,
+      k = day % 100;
+    let suffix = 'th';
+    if (j === 1 && k !== 11) suffix = 'st';
+    else if (j === 2 && k !== 12) suffix = 'nd';
+    else if (j === 3 && k !== 13) suffix = 'rd';
+    return `${day}${suffix} ${month} ${year}`;
   } catch {
     return iso;
   }

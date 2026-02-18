@@ -5,8 +5,8 @@ import { useCart } from '@/contexts/cart-context';
 import { FC, Fragment } from 'react';
 import { DeliveryInfoCard } from '../common/info-sections/delivery-card';
 import { OrderSummarySection } from '../common/order-summary';
+import DeliveryOptionsSection from './delivery-options';
 import { ShippingAddressSection } from './shipping-address-section';
-import { DeliveryOptionsSection } from './shipping-delivery-options-section';
 import { ShippingMethodSection } from './shipping-method-section';
 
 const ShippingPageContent: FC = () => {
