@@ -17,7 +17,7 @@ const DeliveryOptionsSection: FC = () => {
       </h2>
 
       <div className="space-y-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-        <div className="flex items-center justify-between rounded-lg bg-[#fff5f5] px-3 py-2">
+        <div className="flex items-center justify-between space-x-2 rounded-lg bg-[#fff5f5] px-3 py-2">
           <div className="flex items-center gap-2">
             <FiClock className="h-4 w-4 text-deep-maroon" />
             <div className="text-xs sm:text-sm text-gray-700">
