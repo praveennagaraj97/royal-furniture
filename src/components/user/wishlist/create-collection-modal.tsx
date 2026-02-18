@@ -50,7 +50,7 @@ const CreateCollectionModal: FC<CreateCollectionModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose} variant="bottom" size="md">
       <div className="flex flex-col h-full max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center gap-4 p-4 border-b border-gray-200">
+        <div className="flex items-center gap-4 p-3 border-b border-gray-200">
           <button
             type="button"
             onClick={onClose}

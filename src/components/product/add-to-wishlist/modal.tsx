@@ -3,7 +3,8 @@
 import Modal from '@/components/shared/modal';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import { FC, startTransition, useEffect, useState } from 'react';
-import { FiArrowLeft, FiHeart, FiPlus } from 'react-icons/fi';
+import { FiHeart, FiPlus } from 'react-icons/fi';
+import { IoClose } from 'react-icons/io5';
 import CreateCollectionModal from '../../user/wishlist/create-collection-modal';
 
 interface AddToWishlistModalProps {
@@ -70,29 +71,29 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
       >
         <div className="flex flex-col h-full max-h-[90vh]">
           {/* Header */}
-          <div className="flex items-center gap-4 p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between gap-4 p-3 border-b border-gray-200">
+            <h2 className="text-lg font-semibold  ">Add to Wishlist</h2>
             <button
               type="button"
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-1 bg-deep-maroon hover:bg-deep-maroon/90 rounded-full transition-colors"
             >
-              <FiArrowLeft className="w-5 h-5 text-gray-700" />
+              <IoClose className="w-4 h-4 text-white" />
             </button>
-            <h2 className="text-lg font-semibold  ">Add to Wishlist</h2>
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-3 space-y-4">
             {/* Create New Collection */}
             <button
               type="button"
               onClick={() => setIsCreateModalOpen(true)}
-              className="w-full flex items-center gap-3 p-4 border-2 border-dashed border-deep-maroon rounded-lg hover:bg-pale-blush transition-colors"
+              className="w-full flex items-center gap-3 p-2"
             >
-              <div className="w-12 h-12 flex items-center justify-center border-2 border-deep-maroon rounded-lg">
+              <div className="w-10 h-10 flex items-center justify-center border-2 border-dashed border-deep-maroon rounded-lg">
                 <FiPlus className="w-6 h-6 text-deep-maroon" />
               </div>
-              <span className="text-base font-medium text-deep-maroon">
+              <span className="font-semibold text-indigo-slate">
                 Create new collection
               </span>
             </button>
@@ -108,7 +109,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
                       key={collection.id}
                       type="button"
                       onClick={() => handleCollectionToggle(collection.id)}
-                      className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      className={`${isSelected ? 'bg-gray-100' : 'hover:bg-gray-50'} w-full flex items-center gap-3 p-3 rounded-lg transition-colors`}
                     >
                       {/* Icon/Thumbnail */}
                       <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center shrink-0">
