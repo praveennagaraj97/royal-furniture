@@ -40,13 +40,12 @@ const CartPageContent: FC = () => {
           </StaggerItem>
         </StaggerContainer>
       </div>
-      <div className="mt-6">
-        <StaggerContainer>
-          <StaggerItem type="slideUp" distance={30}>
-            <FrequentlyBoughtSection />
-          </StaggerItem>
-        </StaggerContainer>
-      </div>
+
+      <StaggerContainer>
+        <StaggerItem type="slideUp" distance={30}>
+          <FrequentlyBoughtSection />
+        </StaggerItem>
+      </StaggerContainer>
     </Fragment>
   );
 };

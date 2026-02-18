@@ -161,15 +161,9 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
               </span>
             </div>
           ))}
-          <Modal
-            isOpen={isShippingInfoOpen}
-            onClose={() => setIsShippingInfoOpen(false)}
-            variant="bottom"
-            size="sm"
-            className="sm:max-w-md"
-          >
-            <ShippingFeesInfo onClose={() => setIsShippingInfoOpen(false)} />
-          </Modal>
+
+          <hr className="opacity-20 my-3" />
+
           <div className="bg-deep-maroon/5 p-2 rounded-lg border-gray-200 flex items-center justify-between font-medium">
             <span>Total Amount</span>
             <span className="text-deep-maroon">
@@ -181,7 +175,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         {ctaConfig && (
           <>
             {/* Inline CTA inside card (all breakpoints) */}
-            <div className="mt-4">
+            <div className="">
               <button
                 type="button"
                 onClick={handleProceed}
@@ -205,7 +199,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="sm:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 px-4 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]"
+              className="sm:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 px-4 py-2.5 shadow-sm"
             >
               <button
                 type="button"
@@ -219,6 +213,16 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
           )}
         </AnimatePresence>
       )}
+
+      <Modal
+        isOpen={isShippingInfoOpen}
+        onClose={() => setIsShippingInfoOpen(false)}
+        variant="bottom"
+        size="sm"
+        className="sm:max-w-md"
+      >
+        <ShippingFeesInfo onClose={() => setIsShippingInfoOpen(false)} />
+      </Modal>
     </Fragment>
   );
 };
