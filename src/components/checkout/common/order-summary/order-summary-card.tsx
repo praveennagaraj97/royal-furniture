@@ -176,9 +176,9 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
           <hr className="opacity-20 my-3" />
 
-          <div className="bg-deep-maroon/5 p-2 rounded-lg border-gray-200 flex items-center justify-between font-medium">
+          <div className="bg-deep-maroon/5 p-2 text-indigo-slate rounded-lg border-gray-200 flex items-center justify-between font-medium">
             <span>Total Amount</span>
-            <span className="text-deep-maroon">
+            <span className="font-semibold">
               {formatCurrency(currency, totals.total)}
             </span>
           </div>
