@@ -1,8 +1,11 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { CreateOrEditAddressForm } from './create-or-edit-address';
 
 export const ShippingAddressSection: FC = () => {
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between">
@@ -11,17 +14,26 @@ export const ShippingAddressSection: FC = () => {
         </h2>
         <button
           type="button"
+          onClick={() => setIsEditing((prev) => !prev)}
           className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
         >
-          Change
+          {isEditing ? 'Back' : 'Change'}
         </button>
       </div>
-      <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-xs sm:text-sm text-gray-700 shadow-sm">
-        <p className="font-semibold text-gray-900">Jhon Doe</p>
-        <p>Flat 203, Karama Centre Building</p>
-        <p>Al Karama, Dubai, UAE</p>
-        <p>Phone: +971 50 987 6543</p>
-      </div>
+
+      {isEditing ? (
+        <CreateOrEditAddressForm
+          onCancel={() => setIsEditing(false)}
+          onAddressSaved={() => setIsEditing(false)}
+        />
+      ) : (
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-xs sm:text-sm text-gray-700 shadow-sm">
+          <p className="font-semibold text-gray-900">Jhon Doe</p>
+          <p>Flat 203, Karama Centre Building</p>
+          <p>Al Karama, Dubai, UAE</p>
+          <p>Phone: +971 50 987 6543</p>
+        </div>
+      )}
     </section>
   );
 };

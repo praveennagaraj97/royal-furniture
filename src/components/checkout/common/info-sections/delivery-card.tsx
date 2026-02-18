@@ -13,12 +13,12 @@ export const DeliveryInfoCard: FC = () => {
           Fri, 28 Feb 2025
         </span>
       </div>
-      <button
+      {/* <button
         type="button"
         className="inline-flex items-center gap-1 self-start text-xs sm:text-sm font-semibold text-indigo-slate hover:underline whitespace-nowrap"
       >
         Update Location
-      </button>
+      </button> */}
     </div>
   );
 };

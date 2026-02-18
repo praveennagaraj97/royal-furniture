@@ -4,9 +4,9 @@ import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useCart } from '@/contexts/cart-context';
 import { FC, Fragment } from 'react';
 import { FrequentlyBoughtSection } from '../common/frequently-bought';
+import { CartInfoSections } from '../common/info-sections';
 import { OrderSummarySection } from '../common/order-summary';
 import { CartItemsSection } from './cart-items';
-import { CartInfoSections } from './info-sections';
 
 const CartPageContent: FC = () => {
   const { isHydrated } = useCart();
