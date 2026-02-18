@@ -30,25 +30,22 @@ export const CheckoutHeader: FC<CheckoutHeaderProps> = ({
   };
 
   const defaultBreadcrumbItems = useMemo(() => {
-    const currentIndex = checkoutSteps.findIndex(
-      (step) => step.id === currentStep,
-    );
     const homeHref = buildPath(params?.country, params?.locale);
+    const stepHref = buildPath(
+      params?.country,
+      params?.locale,
+      'checkout',
+      currentStep,
+    );
 
+    // Simplified breadcrumb: Home / <Current Step>
     return [
       { label: 'Home', href: homeHref },
-      ...checkoutSteps.map((step, index): BreadcrumbItem => {
-        const isPast = index < currentIndex;
-        const href = isPast
-          ? buildPath(params?.country, params?.locale, 'checkout', step.id)
-          : undefined;
-
-        if (isPast && href) {
-          return { label: step.label, href };
-        }
-
-        return { label: step.label };
-      }),
+      {
+        label:
+          checkoutSteps.find((s) => s.id === currentStep)?.label ?? 'Checkout',
+        href: stepHref,
+      },
     ];
   }, [currentStep, params?.country, params?.locale]);
 
