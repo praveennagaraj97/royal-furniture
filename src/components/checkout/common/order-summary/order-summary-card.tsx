@@ -1,8 +1,10 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
+import Portal from '@/components/shared/portal';
 import { useCart } from '@/contexts/cart-context';
 import { useIntersectionObserver } from '@/hooks';
+import { formatCurrency } from '@/utils/format-currency';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -18,13 +20,6 @@ import { FiCreditCard, FiInfo, FiTruck } from 'react-icons/fi';
 import type { CheckoutStepId } from '../../layout/progress';
 import ShippingFeesInfo from './shipping-fees-info';
 
-/* ---------------- utils ---------------- */
-
-const formatCurrency = (currency: string, amount: number) =>
-  `${currency}${amount.toFixed(0)}`;
-
-/* ---------------- sticky cta ---------------- */
-
 interface StickyCtaProps {
   show: boolean;
   label: string;
@@ -35,38 +30,32 @@ interface StickyCtaProps {
 
 const StickyCta: FC<StickyCtaProps> = ({ show, label, Icon, onClick, id }) => {
   return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          key={id ?? label}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="
-            sm:hidden
-            fixed inset-x-0 bottom-0 z-40
-            bg-white border-t border-gray-200
-            px-4 py-2.5 shadow-sm
-            pb-safe
-          "
-        >
-          <button
-            type="button"
-            onClick={onClick}
-            aria-label={label}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-deep-maroon text-white py-3 text-sm font-medium hover:bg-[#6b0000] transition-colors shadow-md"
+    <Portal>
+      <AnimatePresence>
+        {show && (
+          <motion.div
+            key={id ?? label}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="sm:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 px-4 py-2.5 shadow-sm pb-safe rounded-t-lg"
           >
-            {Icon && <Icon className="w-4 h-4" />}
-            <span>{label}</span>
-          </button>
-        </motion.div>
-      )}
-    </AnimatePresence>
+            <button
+              type="button"
+              onClick={onClick}
+              aria-label={label}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-deep-maroon text-white py-3 text-sm font-medium hover:bg-[#6b0000] transition-colors shadow-md"
+            >
+              {Icon && <Icon className="w-4 h-4" />}
+              <span>{label}</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Portal>
   );
 };
-
-/* ---------------- order summary ---------------- */
 
 interface OrderSummaryCardProps {
   step: CheckoutStepId;
@@ -76,13 +65,15 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
   const { currency, totals } = useCart();
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
+  const locale = params?.locale ?? 'en';
+  const countryCode = params?.country ?? 'ae';
 
-  const cardRef = useRef<HTMLDivElement | null>(null);
+  const actionBtnRef = useRef<HTMLButtonElement | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
   const [isShippingInfoOpen, setIsShippingInfoOpen] = useState(false);
 
   const isVisible = useIntersectionObserver({
-    ref: cardRef,
+    ref: actionBtnRef,
     options: { rootMargin: '0px 0px -120px 0px' },
   });
 
@@ -90,19 +81,17 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     startTransition(() => setHasMounted(true));
   }, []);
 
-  /* ---------- summary rows ---------- */
-
   const summaryRows = useMemo(
     () => [
       {
         label: 'Item Price',
-        value: formatCurrency(currency, totals.subtotal),
+        value: formatCurrency(totals.subtotal, countryCode, locale),
       },
       {
         label: 'Discount Applied',
         value:
           totals.discount > 0
-            ? `-${formatCurrency(currency, totals.discount)}`
+            ? `-${formatCurrency(totals.discount, countryCode, locale)}`
             : `${currency}0`,
         className: 'text-[#007B35]',
       },
@@ -110,7 +99,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         label: 'Coupon Applied',
         value:
           totals.coupon > 0
-            ? `-${formatCurrency(currency, totals.coupon)}`
+            ? `-${formatCurrency(totals.coupon, countryCode, locale)}`
             : `${currency}0`,
         className: 'text-[#5c2ea5]',
       },
@@ -119,14 +108,12 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         value:
           totals.shipping === 0
             ? 'Free'
-            : formatCurrency(currency, totals.shipping),
+            : formatCurrency(totals.shipping, countryCode, locale),
         strike: totals.shipping === 0,
       },
     ],
-    [currency, totals],
+    [currency, totals, countryCode, locale],
   );
-
-  /* ---------- CTA config ---------- */
 
   const cta = useMemo(() => {
     const buildPath = (...segments: (string | undefined)[]) =>
@@ -166,14 +153,9 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
   if (!cta) return null;
 
-  /* ---------- render ---------- */
-
   return (
     <Fragment>
-      <div
-        ref={cardRef}
-        className="rounded-2xl border border-gray-200 bg-white p-4 space-y-6"
-      >
+      <div className="rounded-2xl border border-gray-200 bg-white p-4 space-y-6">
         <h2 className="text-lg font-medium">Order Summary</h2>
 
         <div className="space-y-4 text-sm text-gray-700">
@@ -206,7 +188,11 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
             <div className="bg-[#91E809] rounded-md px-2 py-2 text-center font-medium">
               You Saved{' '}
               <span className="font-semibold">
-                {formatCurrency(currency, totals.discount + totals.coupon)}
+                {formatCurrency(
+                  totals.discount + totals.coupon,
+                  countryCode,
+                  locale,
+                )}
               </span>
             </div>
           )}
@@ -215,30 +201,19 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
           <div className="flex justify-between bg-deep-maroon/5 p-2 rounded-lg font-medium">
             <span>Total Amount</span>
-            <span>{formatCurrency(currency, totals.total)}</span>
+            <span>{formatCurrency(totals.total, countryCode, locale)}</span>
           </div>
         </div>
 
-        {/* inline CTA */}
         <button
           onClick={cta.onClick}
+          ref={actionBtnRef}
           className="w-full flex items-center justify-center gap-2 rounded-xl bg-deep-maroon text-white py-3 text-sm font-medium hover:bg-[#6b0000] transition-colors shadow-md"
         >
           <cta.Icon className="w-4 h-4" />
           {cta.label}
         </button>
       </div>
-
-      {/* sticky CTA */}
-      {hasMounted && !isVisible && (
-        <StickyCta
-          show
-          label={cta.label}
-          Icon={cta.Icon}
-          onClick={cta.onClick}
-          id={`cta-${step}`}
-        />
-      )}
 
       <Modal
         isOpen={isShippingInfoOpen}
@@ -248,6 +223,16 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
       >
         <ShippingFeesInfo onClose={() => setIsShippingInfoOpen(false)} />
       </Modal>
+
+      {hasMounted && !isVisible && (
+        <StickyCta
+          show
+          label={cta.label}
+          Icon={cta.Icon}
+          onClick={cta.onClick}
+          id={`cta-${step}`}
+        />
+      )}
     </Fragment>
   );
 };
