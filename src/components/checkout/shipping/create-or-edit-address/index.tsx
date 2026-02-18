@@ -40,6 +40,8 @@ import {
 interface CreateOrEditAddressFormProps {
   onAddressSaved?: (data: AddressFormData) => void;
   onCancel?: () => void;
+  initialData?: AddressFormData;
+  editMode?: boolean;
 }
 
 const addressTypeLabel: Record<AddressType, string> = {
@@ -54,12 +56,22 @@ const addressTypeIcon: Record<AddressType, ReactElement> = {
   other: <FiMoreHorizontal className="h-4 w-4" />,
 };
 
-export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
+type Props = CreateOrEditAddressFormProps;
+
+const CreateOrEditAddressForm: FC<Props> = ({
   onAddressSaved,
+  onCancel,
+  initialData,
+  editMode,
 }) => {
   const [state, dispatch] = useReducer(
     addressFormReducer,
-    initialAddressFormState,
+    initialData
+      ? {
+          ...initialAddressFormState,
+          formData: { ...initialAddressFormState.formData, ...initialData },
+        }
+      : initialAddressFormState,
   );
   const [countryCode, setCountryCode] = useState('+971');
   const tValidation = useTranslations('auth.validation');
@@ -186,8 +198,15 @@ export const CreateOrEditAddressForm: FC<CreateOrEditAddressFormProps> = ({
         <StaggerItem type="slideUp" distance={20} duration={0.35}>
           <div className="flex items-center justify-between">
             <h2 className="text-base sm:text-lg font-medium text-gray-900">
-              Add New Address
+              {editMode ? 'Edit Address' : 'Add New Address'}
             </h2>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
+            >
+              Cancel
+            </button>
           </div>
         </StaggerItem>
 
