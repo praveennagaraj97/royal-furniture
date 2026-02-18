@@ -4,6 +4,7 @@ import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useCart } from '@/contexts/cart-context';
 import { FC, Fragment } from 'react';
 import { OrderSummarySection } from '../common/order-summary';
+import { DeliveryInfoCard } from '../common/info-sections/delivery-card';
 import { ShippingAddressSection } from './shipping-address-section';
 import { DeliveryOptionsSection } from './shipping-delivery-options-section';
 import { ShippingMethodSection } from './shipping-method-section';
@@ -33,6 +34,9 @@ const ShippingPageContent: FC = () => {
           <div className="space-y-6 lg:self-start z-30 lg:sticky lg:top-28">
             <StaggerItem type="slideUp" distance={30}>
               <OrderSummarySection step="shipping" showPaymentPlans={false} />
+            </StaggerItem>
+            <StaggerItem type="slideUp" distance={30}>
+              <DeliveryInfoCard />
             </StaggerItem>
             <StaggerItem type="slideUp" distance={30}>
               <DeliveryOptionsSection />
