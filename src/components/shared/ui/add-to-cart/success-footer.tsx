@@ -41,7 +41,7 @@ export const AddToCartSuccessFooter: FC<AddToCartSuccessFooterProps> = ({
           <button
             type="button"
             onClick={onContinue}
-            className="w-full md:w-auto px-4 py-2.5 text-sm font-semibold text-deep-maroon bg-white border border-deep-maroon rounded-lg hover:bg-deep-maroon/5 transition-colors duration-200"
+            className="w-full md:w-auto px-4 py-2.5 text-sm font-semibold text-deep-maroon bg-white border border-deep-maroon rounded-lg hover:bg-[#FFF4F4] transition-colors duration-200"
           >
             Continue Shopping
           </button>

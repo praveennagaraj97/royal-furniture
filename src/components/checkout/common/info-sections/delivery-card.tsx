@@ -5,7 +5,7 @@ import { HiMapPin } from 'react-icons/hi2';
 
 export const DeliveryInfoCard: FC = () => {
   return (
-    <div className="rounded-xl bg-deep-maroon/5 px-4 py-4 flex items-center justify-between gap-3">
+    <div className="rounded-xl bg-[#FFF4F4] px-4 py-4 flex items-center justify-between gap-3">
       <div className="flex items-center gap-2 text-sm text-deep-maroon min-w-0 flex-1">
         <HiMapPin className="text-lg shrink-0" />
         <span className="truncate">Delivery on</span>

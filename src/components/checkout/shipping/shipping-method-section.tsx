@@ -17,7 +17,7 @@ export const ShippingMethodSection: FC = () => {
           onClick={() => setMethod('home')}
           className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors duration-200 shadow-sm ${method === 'home' ? 'border-deep-maroon bg-[#fff5f5]' : 'border-gray-200 bg-white hover:border-gray-300'}`}
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-deep-maroon/5 text-deep-maroon">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF4F4] text-deep-maroon">
             <FiHome className="h-4 w-4" />
           </span>
           <div className="flex flex-col">
@@ -35,7 +35,7 @@ export const ShippingMethodSection: FC = () => {
           onClick={() => setMethod('store')}
           className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors duration-200 shadow-sm ${method === 'store' ? 'border-deep-maroon bg-[#fff5f5]' : 'border-gray-200 bg-white hover:border-gray-300'}`}
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-deep-maroon/5 text-deep-maroon">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF4F4] text-deep-maroon">
             <FiMapPin className="h-4 w-4" />
           </span>
           <div className="flex flex-col">

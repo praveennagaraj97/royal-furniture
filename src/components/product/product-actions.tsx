@@ -108,7 +108,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
                     type="button"
                     className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 ${
                       isInCart
-                        ? 'bg-white text-deep-maroon border border-deep-maroon hover:bg-deep-maroon/5'
+                        ? 'bg-white text-deep-maroon border border-deep-maroon hover:bg-[#FFF4F4]'
                         : 'bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg'
                     }`}
                     disabled={isOutOfStock && !isInCart}

@@ -10,7 +10,7 @@ export const PromosCard: FC = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-[#FFF4F4] px-4 py-4">
         <div className="flex items-start gap-3 text-sm text-gray-700">
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 text-deep-maroon">
             <FiTag className="w-5 h-5" />

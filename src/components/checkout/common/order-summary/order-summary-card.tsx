@@ -199,7 +199,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
           <hr className="opacity-20" />
 
-          <div className="flex justify-between bg-deep-maroon/5 p-2 rounded-lg font-medium">
+          <div className="flex justify-between bg-[#FFF4F4] p-2 rounded-lg font-medium">
             <span>Total Amount</span>
             <span>{formatCurrency(totals.total, countryCode, locale)}</span>
           </div>
