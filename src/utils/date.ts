@@ -18,12 +18,13 @@ export const formatDisplay = (iso?: string) => {
   }
 };
 
-export const formatDateWithOrdinal = (iso?: string) => {
+export const formatDateWithOrdinal = (iso?: string, withTime = false) => {
   if (!iso) return '';
   try {
-    const d = new Date(iso + 'T00:00:00');
+    const input = iso.includes('T') ? iso : iso + 'T00:00:00';
+    const d = new Date(input);
     const day = d.getDate();
-    const month = d.toLocaleString('en-GB', { month: 'short' });
+    const month = d.toLocaleString('en-GB', { month: 'long' });
     const year = d.getFullYear();
     // Get ordinal suffix
     const j = day % 10,
@@ -32,6 +33,13 @@ export const formatDateWithOrdinal = (iso?: string) => {
     if (j === 1 && k !== 11) suffix = 'st';
     else if (j === 2 && k !== 12) suffix = 'nd';
     else if (j === 3 && k !== 13) suffix = 'rd';
+    if (withTime) {
+      const time = d.toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      return `${day}${suffix} ${month} ${year}, ${time}`;
+    }
     return `${day}${suffix} ${month} ${year}`;
   } catch {
     return iso;

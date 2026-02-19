@@ -45,7 +45,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           {/* Reviews Section */}
           <div className="section-container">
-            <UserReviews />
+            <UserReviews productSlug={productData.product_info.slug} />
             {/* <hr className="mt-6 opacity-10" /> */}
           </div>
 

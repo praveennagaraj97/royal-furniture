@@ -398,6 +398,34 @@ export interface WishlistCollection {
 
 export type WishlistCollectionsResponse = BaseAPIResponse<WishlistCollection[]>;
 
+// Reviews API Types
+export interface ReviewImage {
+  id?: number;
+  image: string;
+}
+
+export interface ReviewUserDetail {
+  username?: string;
+  profile_image?: string | null;
+}
+
+export interface ReviewItem {
+  id: number;
+  rating: number;
+  content?: string;
+  created_at?: string;
+  user_detail?: ReviewUserDetail | null;
+  images?: ReviewImage[] | null;
+}
+
+export interface ReviewsData {
+  overall_rating?: number;
+  ratings_breakdown?: Record<string, number>;
+  reviews?: ReviewItem[];
+}
+
+export type ReviewsResponse = BaseAPIResponse<ReviewsData>;
+
 export interface CreateCollectionPayload {
   title: string;
 }
