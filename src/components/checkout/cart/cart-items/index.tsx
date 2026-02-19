@@ -2,6 +2,7 @@
 
 import { useCart } from '@/contexts/cart-context';
 import { FC } from 'react';
+import CartEmptyState from '../empty-state';
 import { CartFreeShippingBanner } from '../free-shipping';
 import { CartItemRow } from './cart-item-row';
 
@@ -10,14 +11,7 @@ export const CartItemsSection: FC = () => {
     useCart();
 
   if (!items.length) {
-    return (
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center">
-        <p className="text-lg font-semibold   mb-2">Your cart is empty</p>
-        <p className="text-sm text-gray-500">
-          Browse our collections and add products to your cart to see them here.
-        </p>
-      </div>
-    );
+    return <CartEmptyState />;
   }
 
   return (

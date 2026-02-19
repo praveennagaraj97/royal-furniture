@@ -60,7 +60,7 @@ export const setupAxiosInterceptors = (instance: AxiosInstance): void => {
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
   // Add response interceptor to handle token invalidation
@@ -74,7 +74,7 @@ export const setupAxiosInterceptors = (instance: AxiosInstance): void => {
         }
       }
       return Promise.reject(error);
-    }
+    },
   );
 };
 
@@ -112,3 +112,16 @@ export const apiFetcher = async <T>(url: string): Promise<T> => {
   const response = await apiFetcherInstance.get<T>(url);
   return response.data;
 };
+
+export const apiFetcherWithGuest = async <T>(
+  url: string,
+  guestSessionId?: string | null,
+): Promise<T> => {
+  const headers = guestSessionId
+    ? { 'X-Guest-Session': guestSessionId }
+    : undefined;
+  const response = await apiFetcherInstance.get<T>(url, { headers });
+  return response.data;
+};
+
+export const getApiFetcherClient = () => apiFetcherInstance;

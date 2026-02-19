@@ -44,6 +44,7 @@ export class CartService extends BaseAPIService {
   }
 
   async removeItem(
+    cartId: string,
     cartItemId: string,
     guestSessionId?: string,
   ): Promise<unknown> {
@@ -52,9 +53,12 @@ export class CartService extends BaseAPIService {
       if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
 
       const response = await this.http.delete(
-        API_ROUTES.CART.REMOVE_ITEM(cartItemId),
+        API_ROUTES.CART.REMOVE_ITEM(cartId),
         {
           headers,
+          data: {
+            cart_item_id: cartItemId,
+          },
         },
       );
 

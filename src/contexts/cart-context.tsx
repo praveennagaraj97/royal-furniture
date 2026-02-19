@@ -1,5 +1,6 @@
 'use client';
 
+import { useGetCart, useGetCartShippingStep } from '@/hooks/api';
 import { cartService } from '@/services/api/cart-service';
 import type {
   CartApiData,
@@ -198,6 +199,18 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   >({});
   const { showSuccess, showError } = useToast();
 
+  const {
+    data: cartResponse,
+    isLoading: isCartLoading,
+    mutate: mutateCart,
+  } = useGetCart({ guestSessionId });
+
+  const {
+    data: shippingResponse,
+    isLoading: isShippingFetching,
+    mutate: mutateShipping,
+  } = useGetCartShippingStep({ guestSessionId, enabled: false });
+
   const getErrorMessage = useCallback(
     (error: unknown, fallback = 'Failed to process request') => {
       const parsed = error as ParsedAPIError;
@@ -229,12 +242,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const refreshCart = useCallback(async () => {
     setIsLoading(true);
     try {
-      const sessionToUse = resolveSession();
-      const response = await cartService.getCart(sessionToUse);
-      setState((prev) => ({
-        ...mapCartDataToState(response.data),
-        shippingStep: prev.shippingStep,
-      }));
+      await mutateCart();
     } catch (error) {
       console.error('Failed to fetch cart from API', error);
       setState({ ...DEFAULT_CART_STATE });
@@ -243,15 +251,14 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setIsHydrated(true);
       setIsLoading(false);
     }
-  }, [resolveSession, getErrorMessage, showError]);
+  }, [mutateCart, getErrorMessage, showError]);
 
   const loadShippingStep = useCallback(async () => {
     setIsShippingLoading(true);
     try {
-      const sessionToUse = resolveSession();
-      const response = await cartService.getShippingStep(sessionToUse);
-      const shippingStep = mapShippingProceedToState(response.data);
-      const mappedCart = mapCartDataToState(response.data?.cart_summary);
+      const response = await mutateShipping();
+      const shippingStep = mapShippingProceedToState(response?.data);
+      const mappedCart = mapCartDataToState(response?.data?.cart_summary);
 
       setState({
         ...mappedCart,
@@ -262,7 +269,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     } finally {
       setIsShippingLoading(false);
     }
-  }, [resolveSession, showError, getErrorMessage]);
+  }, [mutateShipping, getErrorMessage, showError]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -277,6 +284,35 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     void refreshCart();
   }, [refreshCart]);
+
+  useEffect(() => {
+    setIsLoading(isCartLoading);
+  }, [isCartLoading]);
+
+  useEffect(() => {
+    if (cartResponse?.data) {
+      setState((prev) => ({
+        ...mapCartDataToState(cartResponse.data),
+        shippingStep: prev.shippingStep,
+      }));
+      setIsHydrated(true);
+    }
+  }, [cartResponse]);
+
+  useEffect(() => {
+    if (shippingResponse?.data) {
+      const shippingStep = mapShippingProceedToState(shippingResponse.data);
+      const mappedCart = mapCartDataToState(shippingResponse.data.cart_summary);
+      setState({
+        ...mappedCart,
+        shippingStep,
+      });
+    }
+  }, [shippingResponse]);
+
+  useEffect(() => {
+    setIsShippingLoading(isShippingFetching);
+  }, [isShippingFetching]);
 
   const addItem = useCallback(
     async (sku: string, quantity: number) => {
@@ -304,7 +340,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPendingAction(cartItemId, 'remove');
 
       try {
-        await cartService.removeItem(cartItemId, sessionToUse);
+        await cartService.removeItem(state.cartId, cartItemId, sessionToUse);
         showSuccess('Removed from cart');
         await refreshCart();
       } catch (err) {

@@ -421,7 +421,12 @@ export interface ReviewItem {
 export interface ReviewsData {
   overall_rating?: number;
   ratings_breakdown?: Record<string, number>;
-  reviews?: ReviewItem[];
+  reviews?: {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: ReviewItem[];
+  };
 }
 
 export type ReviewsResponse = BaseAPIResponse<ReviewsData>;

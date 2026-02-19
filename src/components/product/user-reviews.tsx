@@ -1,9 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
-import {
-  GalleryViewerModal
-} from '@/components/shared/gallery-viewer';
+import { GalleryViewerModal } from '@/components/shared/gallery-viewer';
 import { UserReviewsSkeleton } from '@/components/skeletons/user-reviews-skeleton';
 import { useGetReviews } from '@/hooks/api';
 import { formatDateWithOrdinal } from '@/utils/date';
@@ -33,9 +31,9 @@ export const UserReviews: FC<UserReviewsProps> = ({ productSlug }) => {
     };
   }, [data]);
 
-  const reviews = data?.reviews ?? [];
+  const reviews = data?.reviews?.results ?? [];
 
-  const reviewCount = reviews.length;
+  const reviewCount = data?.reviews?.count ?? reviews.length;
   const ratingCount = Object.values(ratingDistribution).reduce(
     (a, b) => a + b,
     0,

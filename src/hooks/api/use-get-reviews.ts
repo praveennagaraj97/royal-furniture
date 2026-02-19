@@ -2,7 +2,7 @@
 
 import { apiFetcher } from '@/config/axios';
 import type { ReviewsData, ReviewsResponse } from '@/types/response';
-import useSWR from 'swr';
+import useSWR, { type KeyedMutator } from 'swr';
 
 interface UseGetReviewsProps {
   productSlug?: string | null;
@@ -16,7 +16,7 @@ export const useGetReviews = ({
   data: ReviewsData | null;
   isLoading: boolean;
   error: unknown;
-  mutate: (data?: any, shouldRevalidate?: boolean) => Promise<any>;
+  mutate: KeyedMutator<ReviewsResponse | null>;
 } => {
   const key =
     enabled && productSlug
@@ -25,7 +25,7 @@ export const useGetReviews = ({
 
   const { data, error, isLoading, mutate } = useSWR<ReviewsResponse | null>(
     key,
-    apiFetcher as any,
+    apiFetcher,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,

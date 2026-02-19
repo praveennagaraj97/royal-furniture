@@ -8,13 +8,18 @@ import { FrequentlyBoughtSection } from '../common/frequently-bought';
 import { CartInfoSections } from '../common/info-sections';
 import { OrderSummarySection } from '../common/order-summary';
 import { CartItemsSection } from './cart-items';
+import CartEmptyState from './empty-state';
 
 const CartPageContent: FC = () => {
-  const { isHydrated, isLoading } = useCart();
+  const { isHydrated, isLoading, items } = useCart();
 
   //  Show loading state until cart is hydrated to prevent hydration mismatch
   if (!isHydrated || isLoading) {
     return <CartPageSkeleton />;
+  }
+
+  if (!items.length) {
+    return <CartEmptyState />;
   }
 
   return (
