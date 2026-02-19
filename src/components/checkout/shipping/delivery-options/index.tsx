@@ -1,14 +1,36 @@
 'use client';
 
+import { useCart } from '@/contexts/cart-context';
 import { formatDateWithOrdinal } from '@/utils/date';
-import { FC, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { FiClock } from 'react-icons/fi';
 import CustomDeliveryModal from './custom-delivery-modal';
 
 const DeliveryOptionsSection: FC = () => {
+  const { shippingStep, isShippingLoading } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const timeSlots = useMemo(
+    () => shippingStep?.deliverySlots?.map((slot) => slot.timeRange) || [],
+    [shippingStep?.deliverySlots],
+  );
+
+  useEffect(() => {
+    if (shippingStep?.defaultDeliveryDate) {
+      setSelectedDate(shippingStep.defaultDeliveryDate);
+    }
+    if (shippingStep?.selectedDeliverySlot?.slot) {
+      setSelectedTime(shippingStep.selectedDeliverySlot.slot);
+    } else if (timeSlots.length) {
+      setSelectedTime(timeSlots[0]);
+    }
+  }, [
+    shippingStep?.defaultDeliveryDate,
+    shippingStep?.selectedDeliverySlot?.slot,
+    timeSlots,
+  ]);
 
   return (
     <section className="space-y-4">
@@ -31,10 +53,25 @@ const DeliveryOptionsSection: FC = () => {
             type="button"
             className="rounded-md bg-deep-maroon px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#6b0000]"
             onClick={() => setShowModal(true)}
+            disabled={isShippingLoading}
           >
             Choose
           </button>
         </div>
+
+        {shippingStep?.defaultDeliveryDate && (
+          <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-600">
+            <span className="font-semibold text-gray-900">
+              Default delivery date
+            </span>
+            <span>
+              {formatDateWithOrdinal(shippingStep.defaultDeliveryDate)}{' '}
+              {shippingStep.selectedDeliverySlot?.slot
+                ? `(${shippingStep.selectedDeliverySlot.slot})`
+                : ''}
+            </span>
+          </div>
+        )}
 
         {/* Show the selected date and time stamp */}
         {selectedDate && selectedTime && (
@@ -56,6 +93,7 @@ const DeliveryOptionsSection: FC = () => {
         setSelectedDate={setSelectedDate}
         selectedTime={selectedTime}
         setSelectedTime={setSelectedTime}
+        timeSlots={timeSlots}
       />
     </section>
   );

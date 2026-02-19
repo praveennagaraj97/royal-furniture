@@ -2,7 +2,7 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useCart } from '@/contexts/cart-context';
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useEffect } from 'react';
 import { DeliveryInfoCard } from '../common/info-sections/delivery-card';
 import { OrderSummarySection } from '../common/order-summary';
 import DeliveryOptionsSection from './delivery-options';
@@ -10,7 +10,11 @@ import { ShippingAddressSection } from './shipping-address-section';
 import { ShippingMethodSection } from './shipping-method-section';
 
 const ShippingPageContent: FC = () => {
-  const { isHydrated } = useCart();
+  const { isHydrated, loadShippingStep } = useCart();
+
+  useEffect(() => {
+    loadShippingStep();
+  }, [loadShippingStep]);
 
   if (!isHydrated) {
     return null;

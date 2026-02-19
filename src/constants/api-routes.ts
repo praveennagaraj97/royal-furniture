@@ -44,5 +44,6 @@ export const API_ROUTES = {
     ADD_ITEM: '/cart/items/',
     REMOVE_ITEM: (cartId: string) => `/cart/${cartId}/items/`,
     UPDATE_ITEM: (cartId: string) => `/cart/${cartId}/update/`,
+    SHIPPING_PROCEED: '/cart/shipping/proceed/',
   },
 } as const;

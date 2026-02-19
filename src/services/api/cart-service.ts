@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/api-routes';
-import type { CartApiResponse } from '@/types/cart';
+import type { CartApiResponse, ShippingProceedResponse } from '@/types/cart';
 import { BaseAPIService } from './api-base-service';
 
 interface AddItemPayload {
@@ -44,7 +44,6 @@ export class CartService extends BaseAPIService {
   }
 
   async removeItem(
-    cartId: string,
     cartItemId: string,
     guestSessionId?: string,
   ): Promise<unknown> {
@@ -53,12 +52,9 @@ export class CartService extends BaseAPIService {
       if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
 
       const response = await this.http.delete(
-        API_ROUTES.CART.REMOVE_ITEM(cartId),
+        API_ROUTES.CART.REMOVE_ITEM(cartItemId),
         {
           headers,
-          data: {
-            cart_item_id: cartItemId,
-          },
         },
       );
 
@@ -85,6 +81,24 @@ export class CartService extends BaseAPIService {
         {
           headers,
         },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async getShippingStep(
+    guestSessionId?: string,
+  ): Promise<ShippingProceedResponse> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.get<ShippingProceedResponse>(
+        API_ROUTES.CART.SHIPPING_PROCEED,
+        { headers },
       );
 
       return response.data;

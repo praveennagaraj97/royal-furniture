@@ -11,9 +11,8 @@ interface CustomDeliveryModalProps {
   setSelectedDate: (date: string | null) => void;
   selectedTime: string | null;
   setSelectedTime: (time: string | null) => void;
+  timeSlots: string[];
 }
-
-const timeSlots = ['9 am - 12 pm', '1 pm - 4 pm', '4 pm - 7 pm'];
 
 export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
   isOpen,
@@ -22,6 +21,7 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
   setSelectedDate,
   selectedTime,
   setSelectedTime,
+  timeSlots,
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md" variant="center">

@@ -79,6 +79,49 @@ export type CartApiResponse = BaseAPIResponse<CartApiData> & {
   meta?: unknown;
 };
 
+export interface ShippingDeliverySlot {
+  id: number;
+  time_range: string;
+}
+
+export interface ShippingSelectedSlot {
+  date: string | null;
+  slot: string | null;
+  slot_id: number | null;
+}
+
+export interface ShippingProceedApiData {
+  is_guest: boolean;
+  step: string;
+  delivery_method: string[];
+  shipping_address: unknown;
+  default_delivery_date?: string | null;
+  delivery_slots: ShippingDeliverySlot[];
+  cart_summary: CartApiData;
+  selected_delivery_slot?: ShippingSelectedSlot | null;
+}
+
+export type ShippingProceedResponse =
+  BaseAPIResponse<ShippingProceedApiData> & {
+    version?: string;
+    detail?: string;
+    message?: string;
+  };
+
+export interface ShippingStepState {
+  isGuest: boolean;
+  step?: string;
+  deliveryMethods: ('home' | 'pickup')[];
+  shippingAddress?: unknown;
+  defaultDeliveryDate?: string | null;
+  deliverySlots: { id: number; timeRange: string }[];
+  selectedDeliverySlot?: {
+    date: string | null;
+    slot: string | null;
+    slotId: number | null;
+  };
+}
+
 export interface CartState {
   cartId?: string;
   items: CartItem[];
@@ -89,4 +132,5 @@ export interface CartState {
   freeShippingMessage?: string;
   totals: CartTotals;
   header?: CartHeader;
+  shippingStep?: ShippingStepState;
 }

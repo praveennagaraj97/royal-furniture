@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import CartPageSkeleton from '@/components/skeletons/cart-page-skeleton';
 import { useCart } from '@/contexts/cart-context';
 import { FC, Fragment } from 'react';
 import { FrequentlyBoughtSection } from '../common/frequently-bought';
@@ -9,11 +10,11 @@ import { OrderSummarySection } from '../common/order-summary';
 import { CartItemsSection } from './cart-items';
 
 const CartPageContent: FC = () => {
-  const { isHydrated } = useCart();
+  const { isHydrated, isLoading } = useCart();
 
   //  Show loading state until cart is hydrated to prevent hydration mismatch
-  if (!isHydrated) {
-    return null;
+  if (!isHydrated || isLoading) {
+    return <CartPageSkeleton />;
   }
 
   return (

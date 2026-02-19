@@ -7,6 +7,7 @@ import type {
   CartItem,
   CartState,
   CartTotals,
+  ShippingProceedApiData,
 } from '@/types/cart';
 import type { ParsedAPIError } from '@/types/error';
 import type { ProductItem } from '@/types/response';
@@ -35,12 +36,15 @@ interface CartContextValue {
   freeShippingMessage?: string;
   isHydrated: boolean;
   isLoading: boolean;
+  isShippingLoading: boolean;
   header?: CartState['header'];
+  shippingStep?: CartState['shippingStep'];
   addItem: (sku: string, quantity: number) => Promise<void>;
   removeItem: (cartItemId: string) => Promise<void>;
   updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
   clearCart: () => void;
   refreshCart: () => Promise<void>;
+  loadShippingStep: () => Promise<void>;
   pendingActions: Record<string, 'increase' | 'decrease' | 'remove'>;
   guestSessionId?: string | null;
 }
@@ -62,6 +66,7 @@ const DEFAULT_CART_STATE: CartState = {
   amountToFreeShipping: 0,
   freeShippingProgress: 0,
   totals: EMPTY_TOTALS,
+  shippingStep: undefined,
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -159,10 +164,34 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
   };
 };
 
+const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
+  if (!data) return undefined;
+
+  return {
+    isGuest: data.is_guest,
+    step: data.step,
+    deliveryMethods: (data.delivery_method || []) as ('home' | 'pickup')[],
+    shippingAddress: data.shipping_address || undefined,
+    defaultDeliveryDate: data.default_delivery_date ?? null,
+    deliverySlots: (data.delivery_slots || []).map((slot) => ({
+      id: slot.id,
+      timeRange: slot.time_range,
+    })),
+    selectedDeliverySlot: data.selected_delivery_slot
+      ? {
+          date: data.selected_delivery_slot.date,
+          slot: data.selected_delivery_slot.slot,
+          slotId: data.selected_delivery_slot.slot_id,
+        }
+      : undefined,
+  } satisfies CartState['shippingStep'];
+};
+
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, setState] = useState<CartState>(DEFAULT_CART_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isShippingLoading, setIsShippingLoading] = useState(false);
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
   const [pendingActions, setPendingActions] = useState<
     Record<string, 'increase' | 'decrease' | 'remove'>
@@ -202,7 +231,10 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     try {
       const sessionToUse = resolveSession();
       const response = await cartService.getCart(sessionToUse);
-      setState(mapCartDataToState(response.data));
+      setState((prev) => ({
+        ...mapCartDataToState(response.data),
+        shippingStep: prev.shippingStep,
+      }));
     } catch (error) {
       console.error('Failed to fetch cart from API', error);
       setState({ ...DEFAULT_CART_STATE });
@@ -212,6 +244,25 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setIsLoading(false);
     }
   }, [resolveSession, getErrorMessage, showError]);
+
+  const loadShippingStep = useCallback(async () => {
+    setIsShippingLoading(true);
+    try {
+      const sessionToUse = resolveSession();
+      const response = await cartService.getShippingStep(sessionToUse);
+      const shippingStep = mapShippingProceedToState(response.data);
+      const mappedCart = mapCartDataToState(response.data?.cart_summary);
+
+      setState({
+        ...mappedCart,
+        shippingStep,
+      });
+    } catch (error) {
+      showError(getErrorMessage(error, 'Failed to load shipping details'));
+    } finally {
+      setIsShippingLoading(false);
+    }
+  }, [resolveSession, showError, getErrorMessage]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -253,7 +304,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPendingAction(cartItemId, 'remove');
 
       try {
-        await cartService.removeItem(state.cartId, cartItemId, sessionToUse);
+        await cartService.removeItem(cartItemId, sessionToUse);
         showSuccess('Removed from cart');
         await refreshCart();
       } catch (err) {
@@ -302,7 +353,11 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPendingAction(cartItemId, action);
 
       try {
-        await cartService.updateItemQuantity(cartItemId, action, sessionToUse);
+        await cartService.updateItemQuantity(
+          state.cartId,
+          action,
+          sessionToUse,
+        );
         await refreshCart();
       } catch (err) {
         console.error('Failed to update cart quantity', err);
@@ -340,13 +395,16 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       freeShippingMessage: state.freeShippingMessage,
       isHydrated,
       isLoading,
+      isShippingLoading,
       header: state.header,
+      shippingStep: state.shippingStep,
       guestSessionId,
       addItem,
       removeItem,
       updateQuantity,
       clearCart,
       refreshCart,
+      loadShippingStep,
       pendingActions,
     }),
     [
@@ -359,13 +417,16 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.freeShippingMessage,
       state.totals,
       state.header,
+      state.shippingStep,
       isHydrated,
       isLoading,
+      isShippingLoading,
       addItem,
       removeItem,
       updateQuantity,
       clearCart,
       refreshCart,
+      loadShippingStep,
       pendingActions,
       guestSessionId,
     ],
