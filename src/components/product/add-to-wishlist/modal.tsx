@@ -1,6 +1,7 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
+import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import { FC, startTransition, useEffect, useState } from 'react';
 import { FiHeart, FiPlus } from 'react-icons/fi';
@@ -104,6 +105,17 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
                 {collections.map((collection) => {
                   const isSelected = selectedCollectionId === collection.id;
 
+                  const hasPreview =
+                    collection.preview_items &&
+                    collection.preview_items.length > 0;
+                  const preview = hasPreview
+                    ? collection.preview_items[0]
+                    : null;
+                  const src =
+                    preview?.responsive_images?.mobile?.url ||
+                    preview?.product_image ||
+                    null;
+
                   return (
                     <button
                       key={collection.id}
@@ -113,10 +125,18 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
                     >
                       {/* Icon/Thumbnail */}
                       <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center shrink-0">
-                        {collection.is_default ? (
-                          <FiHeart className="w-6 h-6 text-deep-maroon fill-deep-maroon" />
+                        {src ? (
+                          <ResponsiveImage
+                            images={{
+                              web: { url: src },
+                              ipad: { url: src },
+                              mobile: { url: src },
+                            }}
+                            alt={preview?.product_name || collection.title}
+                            className="w-full h-full object-cover"
+                          />
                         ) : (
-                          <div className="w-full h-full bg-linear-to-br from-gray-200 to-gray-300" />
+                          <FiHeart className="w-6 h-6 text-deep-maroon fill-deep-maroon" />
                         )}
                       </div>
 

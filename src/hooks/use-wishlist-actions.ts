@@ -1,21 +1,28 @@
 'use client';
 
-import { wishlistService } from '@/services/api/wishlist-service';
 import { useToast } from '@/contexts/toast-context';
-import { useGetWishlistCollections } from './api/use-get-wishlist-collections';
+import { wishlistService } from '@/services/api/wishlist-service';
+import type { WishlistPreviewItem } from '@/types/response';
 import { useCallback, useState } from 'react';
+import { useGetWishlistCollections } from './api/use-get-wishlist-collections';
 
 interface UseWishlistActionsReturn {
   addToWishlist: (variantId: number, collectionId?: number) => Promise<void>;
   removeFromWishlist: (variantId: number) => Promise<void>;
   isAdding: boolean;
   isRemoving: boolean;
-  collections: Array<{ id: number; title: string; is_default: boolean }>;
+  collections: Array<{
+    id: number;
+    title: string;
+    is_default: boolean;
+    preview_items: WishlistPreviewItem[];
+  }>;
 }
 
 export const useWishlistActions = (): UseWishlistActionsReturn => {
   const { showSuccess, showError } = useToast();
-  const { collections, mutate: mutateCollections } = useGetWishlistCollections();
+  const { collections, mutate: mutateCollections } =
+    useGetWishlistCollections();
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -44,7 +51,7 @@ export const useWishlistActions = (): UseWishlistActionsReturn => {
         setIsAdding(false);
       }
     },
-    [showSuccess, showError, mutateCollections]
+    [showSuccess, showError, mutateCollections],
   );
 
   const removeFromWishlist = useCallback(
@@ -68,7 +75,7 @@ export const useWishlistActions = (): UseWishlistActionsReturn => {
         setIsRemoving(false);
       }
     },
-    [showSuccess, showError, mutateCollections]
+    [showSuccess, showError, mutateCollections],
   );
 
   return {
@@ -80,6 +87,7 @@ export const useWishlistActions = (): UseWishlistActionsReturn => {
       id: c.id,
       title: c.title,
       is_default: c.is_default,
+      preview_items: c.preview_items || [],
     })),
   };
 };
