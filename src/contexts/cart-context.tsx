@@ -24,6 +24,7 @@ import {
   type FC,
   type ReactNode,
 } from 'react';
+import { useAuth } from './auth-context';
 import { useToast } from './toast-context';
 
 interface CartContextValue {
@@ -198,18 +199,26 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     Record<string, 'increase' | 'decrease' | 'remove'>
   >({});
   const { showSuccess, showError } = useToast();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   const {
     data: cartResponse,
     isLoading: isCartLoading,
     mutate: mutateCart,
-  } = useGetCart({ guestSessionId });
+  } = useGetCart({
+    guestSessionId:
+      isAuthenticated && !isAuthLoading ? undefined : guestSessionId,
+  });
 
   const {
     data: shippingResponse,
     isLoading: isShippingFetching,
     mutate: mutateShipping,
-  } = useGetCartShippingStep({ guestSessionId, enabled: false });
+  } = useGetCartShippingStep({
+    guestSessionId:
+      isAuthenticated && !isAuthLoading ? undefined : guestSessionId,
+    enabled: false,
+  });
 
   const getErrorMessage = useCallback(
     (error: unknown, fallback = 'Failed to process request') => {
