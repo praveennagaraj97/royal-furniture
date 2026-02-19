@@ -12,7 +12,6 @@ import type {
 } from '@/types/cart';
 import type { ParsedAPIError } from '@/types/error';
 import type { ProductItem } from '@/types/response';
-import { getAuthToken } from '@/utils';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
 import {
   createContext,
@@ -201,23 +200,36 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { showSuccess, showError } = useToast();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
+  const guestSessionForUse = !isAuthenticated
+    ? guestSessionId || undefined
+    : undefined;
+  const canUseGuestSession = !isAuthenticated && !!guestSessionForUse;
+  const shouldFetchCart =
+    !isAuthLoading && (isAuthenticated || canUseGuestSession);
+
   const {
     data: cartResponse,
     isLoading: isCartLoading,
     mutate: mutateCart,
   } = useGetCart({
-    guestSessionId:
-      isAuthenticated && !isAuthLoading ? undefined : guestSessionId,
+    guestSessionId: guestSessionForUse,
+    enabled: shouldFetchCart,
   });
+
+  const inShippingStep =
+    state.header?.current_step === 'shipping' ||
+    cartResponse?.data?.header?.current_step === 'shipping';
 
   const {
     data: shippingResponse,
     isLoading: isShippingFetching,
     mutate: mutateShipping,
   } = useGetCartShippingStep({
-    guestSessionId:
-      isAuthenticated && !isAuthLoading ? undefined : guestSessionId,
-    enabled: false,
+    guestSessionId: guestSessionForUse,
+    enabled:
+      !isAuthLoading &&
+      inShippingStep &&
+      (isAuthenticated || canUseGuestSession),
   });
 
   const getErrorMessage = useCallback(
@@ -244,11 +256,12 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   );
 
   const resolveSession = useCallback(() => {
-    const token = getAuthToken();
-    return token ? undefined : guestSessionId || getOrCreateGuestSession();
-  }, [guestSessionId]);
+    if (isAuthenticated) return undefined;
+    return guestSessionId || getOrCreateGuestSession();
+  }, [guestSessionId, isAuthenticated]);
 
   const refreshCart = useCallback(async () => {
+    if (!shouldFetchCart) return;
     setIsLoading(true);
     try {
       await mutateCart();
@@ -260,9 +273,17 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setIsHydrated(true);
       setIsLoading(false);
     }
-  }, [mutateCart, getErrorMessage, showError]);
+  }, [mutateCart, getErrorMessage, showError, shouldFetchCart]);
 
   const loadShippingStep = useCallback(async () => {
+    if (
+      !inShippingStep ||
+      isAuthLoading ||
+      (!isAuthenticated && !guestSessionForUse)
+    ) {
+      return;
+    }
+
     setIsShippingLoading(true);
     try {
       const response = await mutateShipping();
@@ -278,7 +299,15 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     } finally {
       setIsShippingLoading(false);
     }
-  }, [mutateShipping, getErrorMessage, showError]);
+  }, [
+    mutateShipping,
+    inShippingStep,
+    isAuthLoading,
+    isAuthenticated,
+    guestSessionForUse,
+    getErrorMessage,
+    showError,
+  ]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
