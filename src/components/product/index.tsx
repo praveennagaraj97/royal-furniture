@@ -53,8 +53,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     }
   }, [currentColor]);
 
-  console.log(data);
-
   const handleQuantityChange = (delta: number) => {
     const newQuantity = Math.max(1, quantity + delta);
     if (currentColor?.stock) {

@@ -1,21 +1,30 @@
 'use client';
 
 import { useAuth } from '@/contexts/auth-context';
+import { useGetProductDetail } from '@/hooks/api';
 import { FC, Fragment, useState, type MouseEvent } from 'react';
 import { FiHeart } from 'react-icons/fi';
 import AddToWishlistModal from './modal';
 
 interface AddToWishListProps {
   variantId?: number | null;
-  isWishlisted?: boolean;
+  productSlug?: string | null;
 }
 
 const AddToWishList: FC<AddToWishListProps> = ({
   variantId,
-  isWishlisted = false,
+  productSlug = null,
 }) => {
   const { isAuthenticated } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
+
+  // Derive wishlist status from product detail API (slug-based)
+  const { isVariantWishlisted } = useGetProductDetail({
+    productSlug: productSlug ?? null,
+    enabled: isAuthenticated && Boolean(productSlug),
+  });
+
+  const isWishlisted = isVariantWishlisted(variantId ?? null);
 
   const handleClick = (e: MouseEvent) => {
     e.stopPropagation();

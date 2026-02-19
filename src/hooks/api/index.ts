@@ -1,4 +1,5 @@
 export * from './use-get-filters-by-subcategory-id';
+export * from './use-get-product-detail';
 export * from './use-get-products';
 export * from './use-get-products-by-type';
 export * from './use-get-search-results';

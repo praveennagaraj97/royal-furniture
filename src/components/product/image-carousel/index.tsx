@@ -22,6 +22,7 @@ interface ImageCardProps {
   onShareClick?: () => void;
   isWishlisted?: boolean;
   variantId?: number | null;
+  productSlug?: string | null;
 }
 
 const ImageCard: FC<ImageCardProps> = ({
@@ -33,6 +34,7 @@ const ImageCard: FC<ImageCardProps> = ({
   onShareClick,
   idx,
   variantId,
+  productSlug,
 }) => {
   return (
     <div
@@ -59,7 +61,7 @@ const ImageCard: FC<ImageCardProps> = ({
       ) : null}
 
       <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <AddToWishList variantId={variantId} />
+        <AddToWishList variantId={variantId} productSlug={productSlug} />
 
         <button
           type="button"
@@ -100,6 +102,7 @@ export interface ImageCarouselProps {
   isWishlisted?: boolean;
   productName: string;
   variantId?: number | null;
+  productSlug?: string | null;
 }
 
 export const ImageCarousel: FC<ImageCarouselProps> = ({
@@ -111,6 +114,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   isWishlisted = false,
   productName,
   variantId = null,
+  productSlug,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -160,6 +164,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               onShareClick={onShareClick}
               isWishlisted={isWishlisted}
               variantId={variantId}
+              productSlug={productSlug}
             />
           ))}
         />
@@ -177,6 +182,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           onShareClick={onShareClick}
           isWishlisted={isWishlisted}
           variantId={variantId}
+          productSlug={productSlug}
         />
 
         {images.length > 1 && (
@@ -286,6 +292,7 @@ export const ProductImages: FC<ProductImagesProps> = ({
       isWishlisted={isWishlisted}
       productName={product.product_info.name}
       variantId={variantId}
+      productSlug={product.product_info.slug}
     />
   );
 };
