@@ -101,12 +101,18 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 triggerOnView={false}
                 className="shrink-0 flex items-center gap-2 sm:gap-3"
               >
-                <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
+                <AppLink
+                  href="/user/wishlist"
+                  className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2"
+                >
                   <FiHeart className="h-6 w-6" />
-                </button>
-                <button className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2">
+                </AppLink>
+                <AppLink
+                  href="/checkout/cart"
+                  className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2"
+                >
                   <FiShoppingCart className="h-6 w-6" />
-                </button>
+                </AppLink>
               </SlideIn>
 
               {/* Mobile Menu - positioned below this row */}

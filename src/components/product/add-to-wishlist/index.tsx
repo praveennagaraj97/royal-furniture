@@ -1,7 +1,6 @@
 'use client';
 
 import { useAuth } from '@/contexts/auth-context';
-import { useGetProductDetail } from '@/hooks/api';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
 import { FC, Fragment, useState, type MouseEvent } from 'react';
 import { FiHeart } from 'react-icons/fi';
@@ -10,25 +9,24 @@ import AddToWishlistModal from './modal';
 
 interface AddToWishListProps {
   variantId?: number | null;
-  productSlug?: string | null;
+  // Provided by parent (ProductDetail) via `useGetProductDetail`
+  isVariantWishlisted?: (variantId?: number | null) => boolean;
+  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
 const AddToWishList: FC<AddToWishListProps> = ({
   variantId,
-  productSlug = null,
+  isVariantWishlisted,
+  updateVariantWishlist,
 }) => {
   const { isAuthenticated } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
 
-  // Derive wishlist status from product detail API (slug-based)
-  const { isVariantWishlisted, mutate } = useGetProductDetail({
-    productSlug: productSlug ?? null,
-    enabled: isAuthenticated && Boolean(productSlug),
-  });
-
   const { removeFromWishlist, isAdding, isRemoving } = useWishlistActions();
 
-  const isWishlisted = isVariantWishlisted(variantId ?? null);
+  const isWishlisted = (isVariantWishlisted || (() => false))(
+    variantId ?? null,
+  );
   const isLoading = isAdding || isRemoving;
 
   const handleClick = async (e: MouseEvent) => {
@@ -41,25 +39,7 @@ const AddToWishList: FC<AddToWishListProps> = ({
         await removeFromWishlist(variantId);
 
         // Optimistically update product detail cache: mark variant as not wishlisted
-        mutate?.((current) => {
-          if (!current) return current;
-          try {
-            const copy = JSON.parse(JSON.stringify(current));
-            const product = copy.data;
-            for (const variantGroup of product.variants || []) {
-              for (const fabric of variantGroup.fabricsList || []) {
-                for (const color of fabric.colorsList || []) {
-                  if (color.variant_id === variantId) {
-                    color.is_wishlist = false;
-                  }
-                }
-              }
-            }
-            return copy;
-          } catch {
-            return current;
-          }
-        }, false);
+        updateVariantWishlist?.(variantId, false);
       } catch {
         // errors are shown in hook
       }
@@ -96,7 +76,7 @@ const AddToWishList: FC<AddToWishListProps> = ({
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         variantId={variantId}
-        onSuccess={() => mutate?.()}
+        onSuccess={() => updateVariantWishlist?.(variantId as number, true)}
       />
     </Fragment>
   );

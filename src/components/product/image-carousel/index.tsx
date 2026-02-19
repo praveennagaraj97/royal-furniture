@@ -22,7 +22,8 @@ interface ImageCardProps {
   onShareClick?: () => void;
   isWishlisted?: boolean;
   variantId?: number | null;
-  productSlug?: string | null;
+  isVariantWishlisted?: (variantId?: number | null) => boolean;
+  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
 const ImageCard: FC<ImageCardProps> = ({
@@ -34,7 +35,8 @@ const ImageCard: FC<ImageCardProps> = ({
   onShareClick,
   idx,
   variantId,
-  productSlug,
+  isVariantWishlisted,
+  updateVariantWishlist,
 }) => {
   return (
     <div
@@ -61,7 +63,11 @@ const ImageCard: FC<ImageCardProps> = ({
       ) : null}
 
       <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <AddToWishList variantId={variantId} productSlug={productSlug} />
+        <AddToWishList
+          variantId={variantId}
+          isVariantWishlisted={isVariantWishlisted}
+          updateVariantWishlist={updateVariantWishlist}
+        />
 
         <button
           type="button"
@@ -91,8 +97,6 @@ const ImageCard: FC<ImageCardProps> = ({
   );
 };
 
-// ======================= ImageCarousel =======================
-
 export interface ImageCarouselProps {
   images: ResponsiveImages[];
   alt?: string;
@@ -100,9 +104,10 @@ export interface ImageCarouselProps {
   showView3D?: boolean;
   onShareClick?: () => void;
   isWishlisted?: boolean;
+  isVariantWishlisted?: (variantId?: number | null) => boolean;
   productName: string;
   variantId?: number | null;
-  productSlug?: string | null;
+  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
 export const ImageCarousel: FC<ImageCarouselProps> = ({
@@ -112,9 +117,10 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   showView3D = true,
   onShareClick,
   isWishlisted = false,
+  isVariantWishlisted,
+  updateVariantWishlist,
   productName,
   variantId = null,
-  productSlug,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -163,8 +169,9 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               showView3D={showView3D}
               onShareClick={onShareClick}
               isWishlisted={isWishlisted}
+              isVariantWishlisted={isVariantWishlisted}
+              updateVariantWishlist={updateVariantWishlist}
               variantId={variantId}
-              productSlug={productSlug}
             />
           ))}
         />
@@ -181,8 +188,9 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           showView3D={showView3D}
           onShareClick={onShareClick}
           isWishlisted={isWishlisted}
+          isVariantWishlisted={isVariantWishlisted}
+          updateVariantWishlist={updateVariantWishlist}
           variantId={variantId}
-          productSlug={productSlug}
         />
 
         {images.length > 1 && (
@@ -234,8 +242,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   );
 };
 
-// ======================= ProductImages =======================
-
 export interface ProductImagesProps {
   product: ProductDetailData;
   selectedVariant: string;
@@ -243,6 +249,8 @@ export interface ProductImagesProps {
   selectedColor: string;
   onShareClick?: () => void;
   isWishlisted?: boolean;
+  isVariantWishlisted?: (variantId?: number | null) => boolean;
+  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
 export const ProductImages: FC<ProductImagesProps> = ({
@@ -252,6 +260,8 @@ export const ProductImages: FC<ProductImagesProps> = ({
   selectedColor,
   onShareClick,
   isWishlisted = false,
+  isVariantWishlisted,
+  updateVariantWishlist,
 }) => {
   const images = useMemo(() => {
     const variant = product.variants.find((v) => v.name === selectedVariant);
@@ -290,9 +300,10 @@ export const ProductImages: FC<ProductImagesProps> = ({
       showView3D
       onShareClick={onShareClick}
       isWishlisted={isWishlisted}
+      isVariantWishlisted={isVariantWishlisted}
       productName={product.product_info.name}
       variantId={variantId}
-      productSlug={product.product_info.slug}
+      updateVariantWishlist={updateVariantWishlist}
     />
   );
 };

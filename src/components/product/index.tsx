@@ -1,6 +1,10 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { useCart } from '@/contexts/cart-context';
+import { useGetProductDetail } from '@/hooks/api/use-get-product-detail';
+import { useAppRouter } from '@/hooks/use-navigation';
+import type { CartItem } from '@/types/cart';
 import type { ProductDetailData } from '@/types/response';
 import { startTransition, useEffect, useState, type FC } from 'react';
 import { GeneralInformation } from './general-information';
@@ -34,6 +38,45 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   );
   const [quantity, setQuantity] = useState(1);
 
+  const { addItem, items: cartItems } = useCart();
+  const { push } = useAppRouter();
+
+  const [isAdding, setIsAdding] = useState(false);
+
+  // Use client hook to get live product data (SWR). Fall back to server `data`.
+  const {
+    product: liveProduct,
+    isVariantWishlisted,
+    mutate,
+  } = useGetProductDetail({
+    productSlug: data.product_info.slug,
+    enabled: Boolean(data.product_info.slug),
+  });
+  const productForUI = liveProduct || data;
+
+  // Helper to update the product-detail cache for a specific variant's wishlist flag
+  const updateVariantWishlist = (variantId: number, value: boolean) => {
+    try {
+      mutate?.((current) => {
+        if (!current) return current;
+        const copy = JSON.parse(JSON.stringify(current));
+        const product = copy.data;
+        for (const variantGroup of product.variants || []) {
+          for (const fabric of variantGroup.fabricsList || []) {
+            for (const color of fabric.colorsList || []) {
+              if (color.variant_id === variantId) {
+                color.is_wishlist = value;
+              }
+            }
+          }
+        }
+        return copy;
+      }, false);
+    } catch (err) {
+      // swallow
+    }
+  };
+
   // Get current selected color variant
   const currentVariant = data.variants.find((v) => v.name === selectedVariant);
   const currentFabric = currentVariant?.fabricsList.find(
@@ -62,16 +105,47 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
     }
   };
 
-  const handleAddToCart = () => {
-    // Handle add to cart logic
-    console.log('Add to cart', {
-      productId: data.product_info.id,
+  const handleAddToCart = async () => {
+    // Add item to cart (uses cart context which syncs with server for guests)
+
+    const id = currentColor?.sku ?? String(productForUI.product_info.id);
+    const price = parseFloat(
+      currentColor?.region_prices?.offer_price ||
+        data.product_info.pricing.offer_price ||
+        '0',
+    );
+    const basePrice = currentColor?.region_prices?.base_price
+      ? parseFloat(currentColor.region_prices.base_price)
+      : data.product_info.pricing.base_price
+        ? parseFloat(data.product_info.pricing.base_price as string)
+        : undefined;
+
+    const item: CartItem = {
+      id: String(id),
+      name: data.product_info.name,
+      slug: data.product_info.slug,
+      description: undefined,
+      color: currentColor?.name || undefined,
+      image: mainVariantImage || {},
+      price: isNaN(price) ? 0 : price,
+      basePrice: basePrice,
       quantity,
-      selectedColor,
-      selectedVariant,
-      selectedFabric,
-    });
+      attributes: [selectedVariant, selectedFabric].filter(Boolean) as string[],
+    };
+
+    setIsAdding(true);
+    try {
+      await addItem(item);
+    } catch {
+      // swallow error; addItem already logged
+    } finally {
+      setIsAdding(false);
+    }
   };
+
+  // Determine if current selected SKU is in cart
+  const currentId = currentColor?.sku ?? String(productForUI.product_info.id);
+  const isInCart = cartItems.some((ci) => String(ci.id) === String(currentId));
 
   const handleBuyNow = () => {
     // Handle buy now logic
@@ -125,6 +199,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 selectedColor={selectedColor}
                 onShareClick={handleShareClick}
                 isWishlisted={isWishlisted}
+                isVariantWishlisted={isVariantWishlisted}
+                updateVariantWishlist={updateVariantWishlist}
               />
             </div>
           </ViewOnce>
@@ -139,9 +215,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             margin="-40px"
           >
             <div className="w-full space-y-4 px-3 sm:px-4 py-4">
-              {/* Product Header */}
               <ProductHeader product={data} />
-
               {/* Payment Plans Only (Tabby & Tamara) - Moved above options on mobile */}
               <div className="sm:hidden">
                 <PaymentDeliveryInfo
@@ -191,10 +265,13 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
 
               {/* Product Actions - Add to Cart */}
               <ProductActions
-                product={data}
+                product={productForUI}
                 mainVariantImage={mainVariantImage}
                 onAddToCart={handleAddToCart}
                 onBuyNow={handleBuyNow}
+                isInCart={isInCart}
+                onGoToCart={() => push('/checkout/cart')}
+                isAdding={isAdding}
               />
 
               <ProductHelpCard />
@@ -240,6 +317,8 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                   selectedColor={selectedColor}
                   onShareClick={handleShareClick}
                   isWishlisted={isWishlisted}
+                  isVariantWishlisted={isVariantWishlisted}
+                  updateVariantWishlist={updateVariantWishlist}
                 />
               </div>
             </ViewOnce>
@@ -296,6 +375,9 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                   mainVariantImage={mainVariantImage}
                   onAddToCart={handleAddToCart}
                   onBuyNow={handleBuyNow}
+                  isInCart={isInCart}
+                  onGoToCart={() => push('/checkout/cart')}
+                  isAdding={isAdding}
                 />
               </div>
 

@@ -1,7 +1,10 @@
 'use client';
 
+import { cartService } from '@/services/api/cart-service';
 import type { CartItem, CartState } from '@/types/cart';
 import type { ProductItem } from '@/types/response';
+import { getAuthToken } from '@/utils';
+import { getOrCreateGuestSession } from '@/utils/guest-session';
 import {
   createContext,
   useCallback,
@@ -28,7 +31,7 @@ interface CartContextValue {
   freeShippingThreshold: number;
   amountToFreeShipping: number;
   isHydrated: boolean;
-  addItem: (item: CartItem) => void;
+  addItem: (item: CartItem) => Promise<void>;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -36,105 +39,21 @@ interface CartContextValue {
   setDiscountAmount: (amount: number) => void;
   setShippingFee: (amount: number) => void;
   setFreeShippingThreshold: (amount: number) => void;
+  guestSessionId?: string | null;
 }
 
 const STORAGE_KEY = 'rf-cart-state-v1';
 const CART_CURRENCY = 'AED ';
 
-const SAMPLE_PRODUCT_IMAGE = {
-  web: {
-    url: 'https://images.unsplash.com/photo-1585559604903-1adc13f5d3d0?auto=format&fit=crop&w=800&q=80',
-  },
-  mobile: {
-    url: 'https://images.unsplash.com/photo-1585559604903-1adc13f5d3d0?auto=format&fit=crop&w=600&q=80',
-  },
-};
-
-const SAMPLE_CART_ITEMS: CartItem[] = [
-  {
-    id: 'kids-bed-black-1',
-    name: 'Kids Bed',
-    slug: 'kids-bed',
-    description: 'Save AED 200',
-    color: 'Black',
-    image: SAMPLE_PRODUCT_IMAGE,
-    price: 799,
-    basePrice: 1299,
-    quantity: 1,
-    attributes: ['Save AED 200', 'Colour: Black'],
-  },
-  {
-    id: 'kids-bed-black-2',
-    name: 'Kids Bed',
-    slug: 'kids-bed',
-    description: 'Save AED 200',
-    color: 'Black',
-    image: SAMPLE_PRODUCT_IMAGE,
-    price: 799,
-    basePrice: 1299,
-    quantity: 1,
-    attributes: ['Save AED 200', 'Colour: Black'],
-  },
-  {
-    id: 'kids-bed-black-3',
-    name: 'Kids Bed',
-    slug: 'kids-bed',
-    description: 'Save AED 200',
-    color: 'Black',
-    image: SAMPLE_PRODUCT_IMAGE,
-    price: 799,
-    basePrice: 1299,
-    quantity: 1,
-    attributes: ['Save AED 200', 'Colour: Black'],
-  },
-];
-
-const SAMPLE_FREQUENTLY_BOUGHT: ProductItem[] = [1, 2, 3, 4].map((index) => ({
-  id: index,
-  name: 'Premium Sofa Set',
-  slug: `premium-sofa-set-${index}`,
-  description:
-    'A plush sofa set with exquisite detailing and luxurious comfort for modern living spaces.',
-  category: {
-    id: 1,
-    name: 'Living Room',
-    slug: 'living-room',
-  },
-  sub_category: {
-    id: 10 + index,
-    name: 'Sofas',
-    slug: 'sofas',
-    image:
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80',
-    responsive_images: SAMPLE_PRODUCT_IMAGE,
-    category_name: 'Living Room',
-    category_id: 1,
-    category_slug: 'living-room',
-  },
-  pricing: {
-    base_price: '1299',
-    offer_price: '799',
-    offer_percentage: '25',
-    tax: '0',
-  },
-  thumbnail_image:
-    'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80',
-  responsive_images: SAMPLE_PRODUCT_IMAGE,
-  label: [],
-  is_offer: true,
-  average_rating: 4.6,
-  is_in_wishlist: false,
-  available_colors: [],
-}));
-
+// Default empty/dynamic cart state — no sample data
 const DEFAULT_CART_STATE: CartState = {
-  items: SAMPLE_CART_ITEMS,
+  items: [],
   currency: CART_CURRENCY,
   shippingFee: 0,
-  couponAmount: 15,
-  discountAmount: 41,
-  freeShippingThreshold: 2491,
-  frequentlyBought: SAMPLE_FREQUENTLY_BOUGHT,
+  couponAmount: 0,
+  discountAmount: 0,
+  freeShippingThreshold: 0,
+  frequentlyBought: [],
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -142,6 +61,7 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, setState] = useState<CartState>(DEFAULT_CART_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -163,6 +83,17 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, []);
 
+  // Ensure guest session ID is created/persisted for unauthenticated users
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const id = getOrCreateGuestSession();
+      setGuestSessionId(id || null);
+    } catch (err) {
+      // ignore
+    }
+  }, []);
+
   useEffect(() => {
     if (!isHydrated || typeof window === 'undefined') return;
     try {
@@ -172,20 +103,50 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, [state, isHydrated]);
 
-  const addItem = useCallback((item: CartItem) => {
-    setState((prev) => {
-      const existing = prev.items.find((cartItem) => cartItem.id === item.id);
-      const updatedItems = existing
-        ? prev.items.map((cartItem) =>
-            cartItem.id === item.id
-              ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-              : cartItem,
-          )
-        : [...prev.items, item];
+  const addItem = useCallback(
+    async (item: CartItem) => {
+      // Optimistic local update
+      setState((prev) => {
+        const existing = prev.items.find((cartItem) => cartItem.id === item.id);
+        const updatedItems = existing
+          ? prev.items.map((cartItem) =>
+              cartItem.id === item.id
+                ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+                : cartItem,
+            )
+          : [...prev.items, item];
 
-      return { ...prev, items: updatedItems };
-    });
-  }, []);
+        const next = { ...prev, items: updatedItems };
+        console.info('[Cart] addItem -> next.items', next.items);
+        return next;
+      });
+
+      // Network sync. Use guest session for unauthenticated users.
+      try {
+        const token = getAuthToken();
+        const sessionToUse = token
+          ? undefined
+          : guestSessionId || getOrCreateGuestSession();
+        console.info('[Cart] sync addItem to server', {
+          sku: item.id,
+          qty: item.quantity,
+          session: sessionToUse,
+        });
+
+        await cartService.addItem(
+          { product_sku: item.id, quantity: item.quantity },
+          sessionToUse,
+        );
+
+        console.info('[Cart] sync addItem success', item.id);
+      } catch (err) {
+        console.error('Failed to sync cart item with server', err);
+        // Re-throw so callers awaiting addItem can handle error if desired
+        throw err;
+      }
+    },
+    [guestSessionId],
+  );
 
   const removeItem = useCallback((id: string) => {
     setState((prev) => ({
@@ -267,6 +228,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       freeShippingThreshold: state.freeShippingThreshold,
       amountToFreeShipping,
       isHydrated,
+      guestSessionId,
       addItem,
       removeItem,
       updateQuantity,

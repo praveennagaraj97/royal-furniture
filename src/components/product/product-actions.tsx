@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC, startTransition, useEffect, useRef, useState } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 import AddToCartWrapper from '../shared/ui/add-to-cart';
 
 export interface ProductActionsProps {
@@ -13,12 +14,19 @@ export interface ProductActionsProps {
   mainVariantImage?: ResponsiveImages;
   onAddToCart?: () => void;
   onBuyNow?: () => void;
+  isInCart?: boolean;
+  onGoToCart?: () => void;
+  isAdding?: boolean;
 }
 
 export const ProductActions: FC<ProductActionsProps> = ({
   product,
   mainVariantImage,
+  onAddToCart,
   onBuyNow,
+  isInCart = false,
+  onGoToCart,
+  isAdding = false,
 }) => {
   const t = useTranslations();
   const actionsRef = useRef<HTMLDivElement | null>(null);
@@ -34,15 +42,35 @@ export const ProductActions: FC<ProductActionsProps> = ({
   return (
     <>
       <div ref={actionsRef} className="flex flex-col gap-2 sm:gap-3">
-        <AddToCartWrapper product={product} mainVariantImage={mainVariantImage}>
+        {isInCart ? (
           <button
             type="button"
-            className="whitespace-nowrap flex items-center justify-center w-full gap-2 bg-deep-maroon text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#6b0000] transition-colors duration-200 shadow-md hover:shadow-lg"
+            onClick={onGoToCart}
+            className="whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base bg-emerald-50 text-emerald-700 border border-emerald-200"
           >
-            <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>{t('common.addToCart')}</span>
+            <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" />
+            <span className="font-semibold">{t('common.inCart')}</span>
           </button>
-        </AddToCartWrapper>
+        ) : (
+          <AddToCartWrapper
+            product={product}
+            mainVariantImage={mainVariantImage}
+            onOpen={onAddToCart}
+            onGoToCart={onGoToCart}
+          >
+            <button
+              type="button"
+              className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg`}
+            >
+              {isAdding ? (
+                <ImSpinner2 className="w-4 h-4 animate-spin text-white" />
+              ) : (
+                <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+              )}
+              <span>{t('common.addToCart')}</span>
+            </button>
+          </AddToCartWrapper>
+        )}
         <button
           type="button"
           onClick={onBuyNow}
@@ -67,13 +95,25 @@ export const ProductActions: FC<ProductActionsProps> = ({
                 <AddToCartWrapper
                   product={product}
                   mainVariantImage={mainVariantImage}
+                  onOpen={onAddToCart}
+                  onGoToCart={onGoToCart}
                 >
                   <button
                     type="button"
-                    className="whitespace-nowrap flex items-center justify-center w-full gap-2 bg-deep-maroon text-white py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#6b0000] transition-colors duration-200 shadow-md hover:shadow-lg"
+                    className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 ${
+                      isInCart
+                        ? 'bg-white text-deep-maroon border border-deep-maroon hover:bg-deep-maroon/5'
+                        : 'bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg'
+                    }`}
                   >
-                    <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span>{t('common.addToCart')}</span>
+                    {isAdding ? (
+                      <ImSpinner2 className="w-4 h-4 animate-spin text-white" />
+                    ) : (
+                      <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+                    )}
+                    <span>
+                      {isInCart ? t('common.inCart') : t('common.addToCart')}
+                    </span>
                   </button>
                 </AddToCartWrapper>
               </div>
