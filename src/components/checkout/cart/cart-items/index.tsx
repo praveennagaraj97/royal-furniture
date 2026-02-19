@@ -6,7 +6,14 @@ import { CartFreeShippingBanner } from '../free-shipping';
 import { CartItemRow } from './cart-item-row';
 
 export const CartItemsSection: FC = () => {
-  const { items, currency, updateQuantity, removeItem } = useCart();
+  const {
+    items,
+    currency,
+    updateQuantity,
+    removeItem,
+    pendingActions,
+    header,
+  } = useCart();
 
   if (!items.length) {
     return (
@@ -24,7 +31,9 @@ export const CartItemsSection: FC = () => {
       <div className="space-y-4">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-medium">
-            Your cart ({items.reduce((sum, item) => sum + item.quantity, 0)}{' '}
+            Your cart (
+            {header?.total_items ??
+              items.reduce((sum, item) => sum + item.quantity, 0)}{' '}
             items)
           </h1>
           <CartFreeShippingBanner />
@@ -45,6 +54,13 @@ export const CartItemsSection: FC = () => {
             key={item.cartItemId || item.id}
             item={item}
             currency={currency}
+            pendingAction={
+              pendingActions[item.cartItemId || item.id] as
+                | 'increase'
+                | 'decrease'
+                | 'remove'
+                | undefined
+            }
             onQuantityChange={(quantity) =>
               updateQuantity(item.cartItemId || item.id, quantity)
             }

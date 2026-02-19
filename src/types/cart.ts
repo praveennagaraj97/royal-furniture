@@ -79,6 +79,7 @@ export type CartApiResponse = BaseAPIResponse<CartApiData> & {
 };
 
 export interface CartState {
+  cartId?: string;
   items: CartItem[];
   currency: string;
   frequentlyBought: ProductItem[];

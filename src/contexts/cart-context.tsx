@@ -8,6 +8,7 @@ import type {
   CartState,
   CartTotals,
 } from '@/types/cart';
+import type { ParsedAPIError } from '@/types/error';
 import type { ProductItem } from '@/types/response';
 import { getAuthToken } from '@/utils';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
@@ -21,8 +22,10 @@ import {
   type FC,
   type ReactNode,
 } from 'react';
+import { useToast } from './toast-context';
 
 interface CartContextValue {
+  cartId?: string;
   items: CartItem[];
   frequentlyBought: ProductItem[];
   currency: string;
@@ -35,10 +38,11 @@ interface CartContextValue {
   isLoading: boolean;
   header?: CartState['header'];
   addItem: (sku: string, quantity: number) => Promise<void>;
-  removeItem: (cartItemId: string) => void;
-  updateQuantity: (cartItemId: string, quantity: number) => void;
+  removeItem: (cartItemId: string) => Promise<void>;
+  updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
   clearCart: () => void;
   refreshCart: () => Promise<void>;
+  pendingActions: Record<string, 'increase' | 'decrease' | 'remove'>;
   guestSessionId?: string | null;
 }
 
@@ -54,6 +58,7 @@ const EMPTY_TOTALS: CartTotals = {
 };
 
 const DEFAULT_CART_STATE: CartState = {
+  cartId: undefined,
   items: [],
   currency: CART_CURRENCY,
   frequentlyBought: [],
@@ -135,6 +140,7 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
   }, 0);
 
   return {
+    cartId: data.id,
     items,
     currency: CART_CURRENCY,
     frequentlyBought: data.frequently_bought_together || [],
@@ -162,6 +168,33 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isHydrated, setIsHydrated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
+  const [pendingActions, setPendingActions] = useState<
+    Record<string, 'increase' | 'decrease' | 'remove'>
+  >({});
+  const { showSuccess, showError } = useToast();
+
+  const getErrorMessage = useCallback(
+    (error: unknown, fallback = 'Failed to process request') => {
+      const parsed = error as ParsedAPIError;
+      return parsed?.generalError || fallback;
+    },
+    [],
+  );
+
+  const setPendingAction = useCallback(
+    (key: string, action?: 'increase' | 'decrease' | 'remove') => {
+      setPendingActions((prev) => {
+        const next = { ...prev };
+        if (action) {
+          next[key] = action;
+        } else {
+          delete next[key];
+        }
+        return next;
+      });
+    },
+    [],
+  );
 
   const resolveSession = useCallback(() => {
     const token = getAuthToken();
@@ -177,11 +210,12 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     } catch (error) {
       console.error('Failed to fetch cart from API', error);
       setState({ ...DEFAULT_CART_STATE });
+      showError(getErrorMessage(error, 'Failed to load cart'));
     } finally {
       setIsHydrated(true);
       setIsLoading(false);
     }
-  }, [resolveSession]);
+  }, [resolveSession, getErrorMessage, showError]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -205,24 +239,93 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
         await refreshCart();
       } catch (err) {
         console.error('Failed to sync cart item with server', err);
+        showError(getErrorMessage(err, 'Failed to add to cart'));
         throw err;
       }
     },
-    [refreshCart, resolveSession],
+    [refreshCart, resolveSession, getErrorMessage, showError],
   );
 
-  const removeItem = useCallback((cartItemId: string) => {
-    console.info('[Cart] removeItem not wired yet', { cartItemId });
-    // TODO: implement delete API once available
-  }, []);
+  const removeItem = useCallback(
+    async (cartItemId: string) => {
+      if (!state.cartId) {
+        console.warn('[Cart] Cannot remove item without cart id');
+        return;
+      }
 
-  const updateQuantity = useCallback((cartItemId: string, quantity: number) => {
-    console.info('[Cart] updateQuantity not wired yet', {
-      cartItemId,
-      quantity,
-    });
-    // TODO: implement update API once available
-  }, []);
+      const sessionToUse = resolveSession();
+      setPendingAction(cartItemId, 'remove');
+
+      try {
+        await cartService.removeItem(state.cartId, cartItemId, sessionToUse);
+        showSuccess('Removed from cart');
+        await refreshCart();
+      } catch (err) {
+        console.error('Failed to remove cart item', err);
+        showError(getErrorMessage(err, 'Failed to remove item'));
+      } finally {
+        setPendingAction(cartItemId);
+      }
+    },
+    [
+      state.cartId,
+      resolveSession,
+      refreshCart,
+      setPendingAction,
+      showSuccess,
+      showError,
+      getErrorMessage,
+    ],
+  );
+
+  const updateQuantity = useCallback(
+    async (cartItemId: string, quantity: number) => {
+      if (quantity < 1) {
+        return removeItem(cartItemId);
+      }
+
+      const item = state.items.find(
+        (entry) => (entry.cartItemId || entry.id) === cartItemId,
+      );
+      if (!item) {
+        console.warn('[Cart] Item not found for update', { cartItemId });
+        return;
+      }
+
+      if (!state.cartId) {
+        console.warn('[Cart] Cannot update quantity without cart id');
+        return;
+      }
+
+      const action: 'increase' | 'decrease' =
+        quantity > item.quantity ? 'increase' : 'decrease';
+
+      if (quantity === item.quantity) return;
+
+      const sessionToUse = resolveSession();
+      setPendingAction(cartItemId, action);
+
+      try {
+        await cartService.updateItemQuantity(cartItemId, action, sessionToUse);
+        await refreshCart();
+      } catch (err) {
+        console.error('Failed to update cart quantity', err);
+        showError(getErrorMessage(err, 'Failed to update quantity'));
+      } finally {
+        setPendingAction(cartItemId);
+      }
+    },
+    [
+      state.items,
+      state.cartId,
+      resolveSession,
+      refreshCart,
+      setPendingAction,
+      removeItem,
+      showError,
+      getErrorMessage,
+    ],
+  );
 
   const clearCart = useCallback(() => {
     console.info('[Cart] clearCart not wired yet');
@@ -231,6 +334,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const value = useMemo<CartContextValue>(
     () => ({
+      cartId: state.cartId,
       items: state.items,
       frequentlyBought: state.frequentlyBought,
       currency: CART_CURRENCY,
@@ -248,8 +352,10 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       updateQuantity,
       clearCart,
       refreshCart,
+      pendingActions,
     }),
     [
+      state.cartId,
       state.items,
       state.frequentlyBought,
       state.freeShippingThreshold,
@@ -264,6 +370,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       updateQuantity,
       clearCart,
       refreshCart,
+      pendingActions,
       guestSessionId,
     ],
   );

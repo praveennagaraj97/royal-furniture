@@ -7,6 +7,8 @@ interface AddItemPayload {
   quantity: number;
 }
 
+type QuantityAction = 'increase' | 'decrease';
+
 export class CartService extends BaseAPIService {
   async getCart(guestSessionId?: string): Promise<CartApiResponse> {
     try {
@@ -35,6 +37,56 @@ export class CartService extends BaseAPIService {
       const response = await this.http.post(API_ROUTES.CART.ADD_ITEM, payload, {
         headers,
       });
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async removeItem(
+    cartId: string,
+    cartItemId: string,
+    guestSessionId?: string,
+  ): Promise<unknown> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.delete(
+        API_ROUTES.CART.REMOVE_ITEM(cartId),
+        {
+          headers,
+          data: {
+            cart_item_id: cartItemId,
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async updateItemQuantity(
+    cartId: string,
+    action: QuantityAction,
+    guestSessionId?: string,
+  ): Promise<unknown> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.patch(
+        API_ROUTES.CART.UPDATE_ITEM(cartId),
+        {
+          action,
+        },
+        {
+          headers,
+        },
+      );
+
       return response.data;
     } catch (error) {
       throw this.parseError(error);

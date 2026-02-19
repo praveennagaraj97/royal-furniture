@@ -4,10 +4,12 @@ import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { CartItem } from '@/types/cart';
 import { FC } from 'react';
 import { FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 
 interface CartItemRowProps {
   item: CartItem;
   currency: string;
+  pendingAction?: 'increase' | 'decrease' | 'remove';
   onQuantityChange: (quantity: number) => void;
   onRemove: () => void;
 }
@@ -15,11 +17,16 @@ interface CartItemRowProps {
 export const CartItemRow: FC<CartItemRowProps> = ({
   item,
   currency,
+  pendingAction,
   onQuantityChange,
   onRemove,
 }) => {
   const itemTotal = item.totalPrice ?? item.price * item.quantity;
   const hasSavings = item.basePrice && item.basePrice > item.price;
+  const isBusy = Boolean(pendingAction);
+  const isDecreaseBusy = pendingAction === 'decrease';
+  const isIncreaseBusy = pendingAction === 'increase';
+  const isRemoveBusy = pendingAction === 'remove';
 
   return (
     <div className="border-b border-gray-200 pb-4 last:border-none last:pb-0">
@@ -74,9 +81,14 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               <button
                 type="button"
                 onClick={() => onQuantityChange(item.quantity - 1)}
-                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+                disabled={isBusy}
+                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <FiMinus className="w-4 h-4" />
+                {isDecreaseBusy ? (
+                  <ImSpinner2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <FiMinus className="w-4 h-4" />
+                )}
               </button>
               <span className="w-8 text-center font-semibold">
                 {item.quantity}
@@ -84,9 +96,14 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               <button
                 type="button"
                 onClick={() => onQuantityChange(item.quantity + 1)}
-                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+                disabled={isBusy}
+                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <FiPlus className="w-4 h-4" />
+                {isIncreaseBusy ? (
+                  <ImSpinner2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <FiPlus className="w-4 h-4" />
+                )}
               </button>
             </div>
 
@@ -98,9 +115,14 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               <button
                 type="button"
                 onClick={onRemove}
-                className="flex items-center gap-1 text-xs font-semibold text-[#e00000] hover:underline"
+                disabled={isBusy}
+                className="flex items-center gap-1 text-xs font-semibold text-[#e00000] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <FiTrash2 className="w-3 h-3" />
+                {isRemoveBusy ? (
+                  <ImSpinner2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <FiTrash2 className="w-3 h-3" />
+                )}
                 Remove
               </button>
             </div>
@@ -163,9 +185,14 @@ export const CartItemRow: FC<CartItemRowProps> = ({
             <button
               type="button"
               onClick={() => onQuantityChange(item.quantity - 1)}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+              disabled={isBusy}
+              className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <FiMinus className="w-4 h-4" />
+              {isDecreaseBusy ? (
+                <ImSpinner2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <FiMinus className="w-4 h-4" />
+              )}
             </button>
             <span className="w-8 text-center font-semibold">
               {item.quantity}
@@ -173,17 +200,27 @@ export const CartItemRow: FC<CartItemRowProps> = ({
             <button
               type="button"
               onClick={() => onQuantityChange(item.quantity + 1)}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100"
+              disabled={isBusy}
+              className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <FiPlus className="w-4 h-4" />
+              {isIncreaseBusy ? (
+                <ImSpinner2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <FiPlus className="w-4 h-4" />
+              )}
             </button>
           </div>
           <button
             type="button"
             onClick={onRemove}
-            className="flex items-center gap-1 text-xs font-semibold text-[#e00000] hover:underline"
+            disabled={isBusy}
+            className="flex items-center gap-1 text-xs font-semibold text-[#e00000] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <FiTrash2 className="w-3 h-3" />
+            {isRemoveBusy ? (
+              <ImSpinner2 className="w-3 h-3 animate-spin" />
+            ) : (
+              <FiTrash2 className="w-3 h-3" />
+            )}
             Remove
           </button>
         </div>

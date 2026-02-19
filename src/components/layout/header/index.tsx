@@ -6,6 +6,7 @@ import { forwardRef, useState } from 'react';
 import { FiHeart, FiMenu, FiShoppingCart, FiX } from 'react-icons/fi';
 
 import AuthModal from '@/components/auth/auth-modal';
+import { useCart } from '@/contexts/cart-context';
 import { AppLink, useAppPathName } from '@/hooks';
 import Image from 'next/image';
 import { AuthActionButton } from './auth-action-button';
@@ -25,6 +26,11 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
     const [isSignupFormOpen, setIsSignupFormOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathName = useAppPathName();
+    const { items } = useCart();
+    const cartCount = items.reduce(
+      (sum, item) => sum + (item.quantity || 0),
+      0,
+    );
     const isHome = pathName === '/';
 
     return (
@@ -112,6 +118,11 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                   className="relative rounded-full text-black hover:text-[#7F1D1D] transition-colors p-2"
                 >
                   <FiShoppingCart className="h-6 w-6" />
+                  {cartCount > 0 && (
+                    <span className="absolute top-0.5 -right-0.5 min-w-4.5 h-4 px-1.5 rounded-full bg-deep-maroon text-white text-xs font-semibold flex items-center justify-center">
+                      {cartCount}
+                    </span>
+                  )}
                 </AppLink>
               </SlideIn>
 

@@ -42,5 +42,7 @@ export const API_ROUTES = {
   CART: {
     DETAIL: '/cart/',
     ADD_ITEM: '/cart/items/',
+    REMOVE_ITEM: (cartId: string) => `/cart/${cartId}/items/`,
+    UPDATE_ITEM: (cartId: string) => `/cart/${cartId}/update/`,
   },
 } as const;
