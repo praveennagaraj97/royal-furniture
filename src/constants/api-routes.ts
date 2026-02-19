@@ -40,6 +40,7 @@ export const API_ROUTES = {
       `/wishlist/wishlist/remove-variant/${variantId}/`,
   },
   CART: {
+    DETAIL: '/api/cart/',
     ADD_ITEM: '/cart/items/',
   },
 } as const;

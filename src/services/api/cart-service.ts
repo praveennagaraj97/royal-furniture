@@ -1,4 +1,5 @@
 import { API_ROUTES } from '@/constants/api-routes';
+import type { CartApiResponse } from '@/types/cart';
 import { BaseAPIService } from './api-base-service';
 
 interface AddItemPayload {
@@ -7,6 +8,22 @@ interface AddItemPayload {
 }
 
 export class CartService extends BaseAPIService {
+  async getCart(guestSessionId?: string): Promise<CartApiResponse> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.get<CartApiResponse>(
+        API_ROUTES.CART.DETAIL,
+        { headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
   async addItem(
     payload: AddItemPayload,
     guestSessionId?: string,

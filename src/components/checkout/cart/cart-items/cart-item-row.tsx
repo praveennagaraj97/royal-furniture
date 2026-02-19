@@ -18,7 +18,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
   onQuantityChange,
   onRemove,
 }) => {
-  const itemTotal = item.price * item.quantity;
+  const itemTotal = item.totalPrice ?? item.price * item.quantity;
   const hasSavings = item.basePrice && item.basePrice > item.price;
 
   return (

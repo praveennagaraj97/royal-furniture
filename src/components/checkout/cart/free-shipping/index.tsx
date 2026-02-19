@@ -6,35 +6,46 @@ import { FC, useMemo } from 'react';
 import { FaTruckFast } from 'react-icons/fa6';
 
 export const CartFreeShippingBanner: FC = () => {
-  const { currency, amountToFreeShipping, freeShippingThreshold, totals } =
-    useCart();
+  const {
+    currency,
+    amountToFreeShipping,
+    freeShippingThreshold,
+    totals,
+    freeShippingProgress,
+    freeShippingMessage,
+  } = useCart();
 
   const progress = useMemo(() => {
+    if (freeShippingProgress) return freeShippingProgress;
     if (freeShippingThreshold === 0) return 100;
     return Math.min(
       100,
       Math.round((totals.subtotal / freeShippingThreshold) * 100),
     );
-  }, [totals.subtotal, freeShippingThreshold]);
+  }, [freeShippingProgress, totals.subtotal, freeShippingThreshold]);
+
+  const bannerText = useMemo(() => {
+    if (freeShippingMessage) return freeShippingMessage;
+    if (amountToFreeShipping > 0) {
+      return (
+        <>
+          Add{' '}
+          <span className="text-[#007B35]">
+            {currency}
+            {amountToFreeShipping.toFixed(0)}
+          </span>{' '}
+          more for Free Shipping!
+        </>
+      );
+    }
+    return 'You have unlocked Free Shipping!';
+  }, [amountToFreeShipping, currency, freeShippingMessage]);
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2 text-sm sm:text-base font-medium">
         <FaTruckFast className="h-5 w-5 text-deep-maroon" />
-        <span>
-          {amountToFreeShipping > 0 ? (
-            <>
-              Add{' '}
-              <span className="text-[#007B35]">
-                {currency}
-                {amountToFreeShipping.toFixed(0)}
-              </span>{' '}
-              more for Free Shipping!
-            </>
-          ) : (
-            'You have unlocked Free Shipping!'
-          )}
-        </span>
+        <span>{bannerText}</span>
       </div>
       <div className="mt-1 flex flex-col gap-1">
         <div className="w-full h-2 rounded-full bg-gray-200 overflow-hidden">

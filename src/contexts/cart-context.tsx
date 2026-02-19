@@ -1,7 +1,13 @@
 'use client';
 
 import { cartService } from '@/services/api/cart-service';
-import type { CartItem, CartState } from '@/types/cart';
+import type {
+  CartApiData,
+  CartApiItem,
+  CartItem,
+  CartState,
+  CartTotals,
+} from '@/types/cart';
 import type { ProductItem } from '@/types/response';
 import { getAuthToken } from '@/utils';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
@@ -20,70 +26,163 @@ interface CartContextValue {
   items: CartItem[];
   frequentlyBought: ProductItem[];
   currency: string;
-  totals: {
-    subtotal: number;
-    discount: number;
-    coupon: number;
-    shipping: number;
-    total: number;
-    itemsSavings: number;
-  };
+  totals: CartTotals;
   freeShippingThreshold: number;
   amountToFreeShipping: number;
+  freeShippingProgress: number;
+  freeShippingMessage?: string;
   isHydrated: boolean;
-  addItem: (item: CartItem) => Promise<void>;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  isLoading: boolean;
+  header?: CartState['header'];
+  addItem: (sku: string, quantity: number) => Promise<void>;
+  removeItem: (cartItemId: string) => void;
+  updateQuantity: (cartItemId: string, quantity: number) => void;
   clearCart: () => void;
-  setCouponAmount: (amount: number) => void;
-  setDiscountAmount: (amount: number) => void;
-  setShippingFee: (amount: number) => void;
-  setFreeShippingThreshold: (amount: number) => void;
+  refreshCart: () => Promise<void>;
   guestSessionId?: string | null;
 }
 
-const STORAGE_KEY = 'rf-cart-state-v1';
 const CART_CURRENCY = 'AED ';
 
-// Default empty/dynamic cart state — no sample data
+const EMPTY_TOTALS: CartTotals = {
+  subtotal: 0,
+  discount: 0,
+  coupon: 0,
+  shipping: 0,
+  total: 0,
+  itemsSavings: 0,
+};
+
 const DEFAULT_CART_STATE: CartState = {
   items: [],
   currency: CART_CURRENCY,
-  shippingFee: 0,
-  couponAmount: 0,
-  discountAmount: 0,
-  freeShippingThreshold: 0,
   frequentlyBought: [],
+  freeShippingThreshold: 0,
+  amountToFreeShipping: 0,
+  freeShippingProgress: 0,
+  totals: EMPTY_TOTALS,
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
+const normalizePrice = (value?: string | number | null): number => {
+  if (value === null || value === undefined || value === '') return 0;
+  const parsed = typeof value === 'number' ? value : parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const mapCartItem = (item: CartApiItem): CartItem => {
+  const { product } = item;
+
+  const priceFromProduct = normalizePrice(product.pricing?.offer_price);
+  const priceFromTotal = item.total_price
+    ? normalizePrice(item.total_price) / Math.max(item.quantity || 1, 1)
+    : 0;
+  const unitPrice = priceFromProduct || priceFromTotal;
+
+  const basePrice = normalizePrice(product.pricing?.base_price || undefined);
+  const totalPrice = item.total_price
+    ? normalizePrice(item.total_price)
+    : unitPrice * item.quantity;
+  const discountSavings = item.discount_savings
+    ? normalizePrice(item.discount_savings)
+    : undefined;
+
+  const attributes: string[] = [];
+  if (product.category?.name) attributes.push(product.category.name);
+  if (product.sub_category?.name) attributes.push(product.sub_category.name);
+  if (product.colour) attributes.push(product.colour);
+
+  return {
+    id: product.sku || String(product.id || item.id),
+    cartItemId: item.id,
+    name: product.name,
+    slug: product.slug,
+    description: product.description,
+    color: product.colour,
+    image: product.responsive_images || {},
+    price: unitPrice,
+    basePrice: basePrice || undefined,
+    quantity: item.quantity,
+    attributes,
+    totalPrice,
+    discountSavings,
+  };
+};
+
+const mapCartDataToState = (data?: CartApiData): CartState => {
+  if (!data) return { ...DEFAULT_CART_STATE };
+
+  const items = (data.items || []).map(mapCartItem);
+
+  const subtotal = normalizePrice(data.order_summary?.item_price);
+  const discount = normalizePrice(data.order_summary?.discount_applied);
+  const coupon = normalizePrice(
+    data.order_summary?.coupon_applied || undefined,
+  );
+
+  const deliveryCharge = data.order_summary?.delivery_charge || '0';
+  const shipping =
+    typeof deliveryCharge === 'string' &&
+    deliveryCharge.toLowerCase() === 'free'
+      ? 0
+      : normalizePrice(deliveryCharge);
+
+  const total = normalizePrice(data.order_summary?.total_amount);
+  const itemsSavings = (data.items || []).reduce((sum, item) => {
+    const savings = normalizePrice(item.discount_savings || undefined);
+    return sum + savings;
+  }, 0);
+
+  return {
+    items,
+    currency: CART_CURRENCY,
+    frequentlyBought: data.frequently_bought_together || [],
+    freeShippingThreshold: data.free_shipping?.threshold || 0,
+    amountToFreeShipping: data.free_shipping?.remaining_amount || 0,
+    freeShippingProgress: Math.min(
+      100,
+      data.free_shipping?.progress_percentage || 0,
+    ),
+    freeShippingMessage: data.free_shipping?.message,
+    totals: {
+      subtotal,
+      discount,
+      coupon,
+      shipping,
+      total,
+      itemsSavings,
+    },
+    header: data.header,
+  };
+};
+
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, setState] = useState<CartState>(DEFAULT_CART_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+  const resolveSession = useCallback(() => {
+    const token = getAuthToken();
+    return token ? undefined : guestSessionId || getOrCreateGuestSession();
+  }, [guestSessionId]);
+
+  const refreshCart = useCallback(async () => {
+    setIsLoading(true);
     try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as CartState;
-        setState((prev) => ({ ...prev, ...parsed, currency: CART_CURRENCY }));
-      } else {
-        window.localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(DEFAULT_CART_STATE),
-        );
-      }
+      const sessionToUse = resolveSession();
+      const response = await cartService.getCart(sessionToUse);
+      setState(mapCartDataToState(response.data));
     } catch (error) {
-      console.error('Failed to parse cart state from storage', error);
+      console.error('Failed to fetch cart from API', error);
+      setState({ ...DEFAULT_CART_STATE });
     } finally {
       setIsHydrated(true);
+      setIsLoading(false);
     }
-  }, []);
+  }, [resolveSession]);
 
-  // Ensure guest session ID is created/persisted for unauthenticated users
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
@@ -95,164 +194,77 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === 'undefined') return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (error) {
-      console.error('Failed to persist cart state', error);
-    }
-  }, [state, isHydrated]);
+    void refreshCart();
+  }, [refreshCart]);
 
   const addItem = useCallback(
-    async (item: CartItem) => {
-      // Optimistic local update
-      setState((prev) => {
-        const existing = prev.items.find((cartItem) => cartItem.id === item.id);
-        const updatedItems = existing
-          ? prev.items.map((cartItem) =>
-              cartItem.id === item.id
-                ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-                : cartItem,
-            )
-          : [...prev.items, item];
-
-        const next = { ...prev, items: updatedItems };
-        console.info('[Cart] addItem -> next.items', next.items);
-        return next;
-      });
-
-      // Network sync. Use guest session for unauthenticated users.
+    async (sku: string, quantity: number) => {
       try {
-        const token = getAuthToken();
-        const sessionToUse = token
-          ? undefined
-          : guestSessionId || getOrCreateGuestSession();
-        console.info('[Cart] sync addItem to server', {
-          sku: item.id,
-          qty: item.quantity,
-          session: sessionToUse,
-        });
-
-        await cartService.addItem(
-          { product_sku: item.id, quantity: item.quantity },
-          sessionToUse,
-        );
-
-        console.info('[Cart] sync addItem success', item.id);
+        const sessionToUse = resolveSession();
+        await cartService.addItem({ product_sku: sku, quantity }, sessionToUse);
+        await refreshCart();
       } catch (err) {
         console.error('Failed to sync cart item with server', err);
-        // Re-throw so callers awaiting addItem can handle error if desired
         throw err;
       }
     },
-    [guestSessionId],
+    [refreshCart, resolveSession],
   );
 
-  const removeItem = useCallback((id: string) => {
-    setState((prev) => ({
-      ...prev,
-      items: prev.items.filter((item) => item.id !== id),
-    }));
+  const removeItem = useCallback((cartItemId: string) => {
+    console.info('[Cart] removeItem not wired yet', { cartItemId });
+    // TODO: implement delete API once available
   }, []);
 
-  const updateQuantity = useCallback((id: string, quantity: number) => {
-    setState((prev) => ({
-      ...prev,
-      items: prev.items.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item,
-      ),
-    }));
+  const updateQuantity = useCallback((cartItemId: string, quantity: number) => {
+    console.info('[Cart] updateQuantity not wired yet', {
+      cartItemId,
+      quantity,
+    });
+    // TODO: implement update API once available
   }, []);
 
   const clearCart = useCallback(() => {
-    setState((prev) => ({ ...prev, items: [] }));
+    console.info('[Cart] clearCart not wired yet');
+    // TODO: implement clear cart API once available
   }, []);
-
-  const setCouponAmount = useCallback((amount: number) => {
-    setState((prev) => ({ ...prev, couponAmount: Math.max(0, amount) }));
-  }, []);
-
-  const setDiscountAmount = useCallback((amount: number) => {
-    setState((prev) => ({ ...prev, discountAmount: Math.max(0, amount) }));
-  }, []);
-
-  const setShippingFee = useCallback((amount: number) => {
-    setState((prev) => ({ ...prev, shippingFee: Math.max(0, amount) }));
-  }, []);
-
-  const setFreeShippingThreshold = useCallback((amount: number) => {
-    setState((prev) => ({
-      ...prev,
-      freeShippingThreshold: Math.max(0, amount),
-    }));
-  }, []);
-
-  const totals = useMemo(() => {
-    const subtotal = state.items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0,
-    );
-
-    const itemsSavings = state.items.reduce((sum, item) => {
-      if (!item.basePrice || item.basePrice <= item.price) return sum;
-      return sum + (item.basePrice - item.price) * item.quantity;
-    }, 0);
-
-    const discount = state.discountAmount;
-    const coupon = state.couponAmount;
-    const qualifiesForFreeShipping = subtotal >= state.freeShippingThreshold;
-    const shipping = qualifiesForFreeShipping ? 0 : state.shippingFee;
-    const total = subtotal - discount - coupon + shipping;
-
-    return {
-      subtotal,
-      discount,
-      coupon,
-      shipping,
-      total,
-      itemsSavings,
-    };
-  }, [state]);
-
-  const amountToFreeShipping = useMemo(() => {
-    const remaining = state.freeShippingThreshold - totals.subtotal;
-    return remaining > 0 ? remaining : 0;
-  }, [state.freeShippingThreshold, totals.subtotal]);
 
   const value = useMemo<CartContextValue>(
     () => ({
       items: state.items,
       frequentlyBought: state.frequentlyBought,
       currency: CART_CURRENCY,
-      totals,
+      totals: state.totals,
       freeShippingThreshold: state.freeShippingThreshold,
-      amountToFreeShipping,
+      amountToFreeShipping: state.amountToFreeShipping,
+      freeShippingProgress: state.freeShippingProgress,
+      freeShippingMessage: state.freeShippingMessage,
       isHydrated,
+      isLoading,
+      header: state.header,
       guestSessionId,
       addItem,
       removeItem,
       updateQuantity,
       clearCart,
-      setCouponAmount,
-      setDiscountAmount,
-      setShippingFee,
-      setFreeShippingThreshold,
+      refreshCart,
     }),
     [
       state.items,
       state.frequentlyBought,
       state.freeShippingThreshold,
-      totals,
-      amountToFreeShipping,
+      state.amountToFreeShipping,
+      state.freeShippingProgress,
+      state.freeShippingMessage,
+      state.totals,
       isHydrated,
+      isLoading,
       addItem,
       removeItem,
       updateQuantity,
       clearCart,
-      setCouponAmount,
-      setDiscountAmount,
-      setShippingFee,
-      setFreeShippingThreshold,
+      refreshCart,
+      guestSessionId,
     ],
   );
 

@@ -42,11 +42,13 @@ export const CartItemsSection: FC = () => {
       <div className="space-y-6">
         {items.map((item) => (
           <CartItemRow
-            key={item.id}
+            key={item.cartItemId || item.id}
             item={item}
             currency={currency}
-            onQuantityChange={(quantity) => updateQuantity(item.id, quantity)}
-            onRemove={() => removeItem(item.id)}
+            onQuantityChange={(quantity) =>
+              updateQuantity(item.cartItemId || item.id, quantity)
+            }
+            onRemove={() => removeItem(item.cartItemId || item.id)}
           />
         ))}
       </div>
