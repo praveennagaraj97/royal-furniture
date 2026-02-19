@@ -28,7 +28,6 @@ interface CartContextValue {
   cartId?: string;
   items: CartItem[];
   frequentlyBought: ProductItem[];
-  currency: string;
   totals: CartTotals;
   freeShippingThreshold: number;
   amountToFreeShipping: number;
@@ -46,8 +45,6 @@ interface CartContextValue {
   guestSessionId?: string | null;
 }
 
-const CART_CURRENCY = 'AED ';
-
 const EMPTY_TOTALS: CartTotals = {
   subtotal: 0,
   discount: 0,
@@ -60,7 +57,6 @@ const EMPTY_TOTALS: CartTotals = {
 const DEFAULT_CART_STATE: CartState = {
   cartId: undefined,
   items: [],
-  currency: CART_CURRENCY,
   frequentlyBought: [],
   freeShippingThreshold: 0,
   amountToFreeShipping: 0,
@@ -109,6 +105,7 @@ const mapCartItem = (item: CartApiItem): CartItem => {
     price: unitPrice,
     basePrice: basePrice || undefined,
     quantity: item.quantity,
+    stock: product.stock_count,
     attributes,
     totalPrice,
     discountSavings,
@@ -142,7 +139,6 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
   return {
     cartId: data.id,
     items,
-    currency: CART_CURRENCY,
     frequentlyBought: data.frequently_bought_together || [],
     freeShippingThreshold: data.free_shipping?.threshold || 0,
     amountToFreeShipping: data.free_shipping?.remaining_amount || 0,
@@ -222,7 +218,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     try {
       const id = getOrCreateGuestSession();
       setGuestSessionId(id || null);
-    } catch (err) {
+    } catch {
       // ignore
     }
   }, []);
@@ -337,7 +333,6 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       cartId: state.cartId,
       items: state.items,
       frequentlyBought: state.frequentlyBought,
-      currency: CART_CURRENCY,
       totals: state.totals,
       freeShippingThreshold: state.freeShippingThreshold,
       amountToFreeShipping: state.amountToFreeShipping,
@@ -363,6 +358,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.freeShippingProgress,
       state.freeShippingMessage,
       state.totals,
+      state.header,
       isHydrated,
       isLoading,
       addItem,

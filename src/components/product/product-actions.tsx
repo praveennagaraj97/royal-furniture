@@ -17,6 +17,7 @@ export interface ProductActionsProps {
   isInCart?: boolean;
   onGoToCart?: () => void;
   isAdding?: boolean;
+  isOutOfStock?: boolean;
 }
 
 export const ProductActions: FC<ProductActionsProps> = ({
@@ -27,6 +28,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
   isInCart = false,
   onGoToCart,
   isAdding = false,
+  isOutOfStock = false,
 }) => {
   const t = useTranslations();
   const actionsRef = useRef<HTMLDivElement | null>(null);
@@ -61,22 +63,26 @@ export const ProductActions: FC<ProductActionsProps> = ({
             <button
               type="button"
               className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg`}
+              disabled={isOutOfStock}
             >
               {isAdding ? (
                 <ImSpinner2 className="w-4 h-4 animate-spin text-white" />
               ) : (
                 <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
               )}
-              <span>{t('common.addToCart')}</span>
+              <span>
+                {isOutOfStock ? 'Out of Stock' : t('common.addToCart')}
+              </span>
             </button>
           </AddToCartWrapper>
         )}
         <button
           type="button"
           onClick={onBuyNow}
+          disabled={isOutOfStock}
           className="whitespace-nowrap w-full border border-deep-maroon text-deep-maroon py-2 sm:py-2.5 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base hover:bg-deep-maroon hover:text-white transition-all duration-200"
         >
-          Buy Now
+          {isOutOfStock ? 'Out of Stock' : 'Buy Now'}
         </button>
       </div>
 
@@ -105,6 +111,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
                         ? 'bg-white text-deep-maroon border border-deep-maroon hover:bg-deep-maroon/5'
                         : 'bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg'
                     }`}
+                    disabled={isOutOfStock && !isInCart}
                   >
                     {isAdding ? (
                       <ImSpinner2 className="w-4 h-4 animate-spin text-white" />
@@ -112,7 +119,11 @@ export const ProductActions: FC<ProductActionsProps> = ({
                       <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
                     )}
                     <span>
-                      {isInCart ? t('common.inCart') : t('common.addToCart')}
+                      {isOutOfStock
+                        ? 'Out of Stock'
+                        : isInCart
+                          ? t('common.inCart')
+                          : t('common.addToCart')}
                     </span>
                   </button>
                 </AddToCartWrapper>
@@ -120,9 +131,10 @@ export const ProductActions: FC<ProductActionsProps> = ({
               <button
                 type="button"
                 onClick={onBuyNow}
+                disabled={isOutOfStock}
                 className="whitespace-nowrap flex-1 border border-deep-maroon text-deep-maroon py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base hover:bg-deep-maroon hover:text-white transition-all duration-200"
               >
-                Buy Now
+                {isOutOfStock ? 'Out of Stock' : 'Buy Now'}
               </button>
             </div>
           </motion.div>

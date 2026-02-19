@@ -20,6 +20,11 @@ export interface ProductDetailProps {
 export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   const { product, selection, options, wishlist, cart, share } =
     useProductDetail(data);
+  const isOutOfStock = Boolean(
+    selection.currentColor && selection.currentColor.stock !== undefined
+      ? selection.currentColor.stock <= 0
+      : false,
+  );
 
   return (
     <div className="w-full">
@@ -199,6 +204,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                   isInCart={cart.status.isInCart}
                   onGoToCart={cart.actions.handleGoToCart}
                   isAdding={cart.status.isAdding}
+                  isOutOfStock={isOutOfStock}
                 />
               </div>
 

@@ -62,7 +62,7 @@ interface OrderSummaryCardProps {
 }
 
 export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
-  const { currency, totals } = useCart();
+  const { totals } = useCart();
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
   const locale = params?.locale ?? 'en';
@@ -92,16 +92,16 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         value:
           totals.discount > 0
             ? `-${formatCurrency(totals.discount, countryCode, locale)}`
-            : `${currency}0`,
-        className: 'text-[#007B35]',
+            : '—',
+        className: totals.discount > 0 ? 'text-[#007B35]' : 'text-gray-400',
       },
       {
         label: 'Coupon Applied',
         value:
           totals.coupon > 0
             ? `-${formatCurrency(totals.coupon, countryCode, locale)}`
-            : `${currency}0`,
-        className: 'text-[#5c2ea5]',
+            : '—',
+        className: totals.coupon > 0 ? 'text-[#5c2ea5]' : 'text-gray-400',
       },
       {
         label: 'Delivery Charges',
@@ -112,7 +112,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         strike: totals.shipping === 0,
       },
     ],
-    [currency, totals, countryCode, locale],
+    [totals, countryCode, locale],
   );
 
   const cta = useMemo(() => {

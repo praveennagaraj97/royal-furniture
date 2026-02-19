@@ -16,6 +16,7 @@ export interface CartItem {
   price: number;
   basePrice?: number;
   quantity: number;
+  stock?: number;
   attributes?: string[];
   totalPrice?: number;
   discountSavings?: number;
@@ -81,7 +82,6 @@ export type CartApiResponse = BaseAPIResponse<CartApiData> & {
 export interface CartState {
   cartId?: string;
   items: CartItem[];
-  currency: string;
   frequentlyBought: ProductItem[];
   freeShippingThreshold: number;
   amountToFreeShipping: number;

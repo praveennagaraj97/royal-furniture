@@ -2,13 +2,14 @@
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { CartItem } from '@/types/cart';
-import { FC } from 'react';
+import { formatCurrency } from '@/utils/format-currency';
+import { useParams } from 'next/navigation';
+import { FC, useMemo } from 'react';
 import { FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { ImSpinner2 } from 'react-icons/im';
 
 interface CartItemRowProps {
   item: CartItem;
-  currency: string;
   pendingAction?: 'increase' | 'decrease' | 'remove';
   onQuantityChange: (quantity: number) => void;
   onRemove: () => void;
@@ -16,11 +17,14 @@ interface CartItemRowProps {
 
 export const CartItemRow: FC<CartItemRowProps> = ({
   item,
-  currency,
   pendingAction,
   onQuantityChange,
   onRemove,
 }) => {
+  const params = useParams<{ country?: string; locale?: string }>();
+  const locale = params?.locale ?? 'en';
+  const countryCode = params?.country ?? 'ae';
+
   const itemTotal = item.totalPrice ?? item.price * item.quantity;
   const hasSavings = item.basePrice && item.basePrice > item.price;
   const isBusy = Boolean(pendingAction);
@@ -28,11 +32,30 @@ export const CartItemRow: FC<CartItemRowProps> = ({
   const isIncreaseBusy = pendingAction === 'increase';
   const isRemoveBusy = pendingAction === 'remove';
 
+  const decreaseDisabled = isBusy || item.quantity <= 1;
+  const increaseDisabled =
+    isBusy || (item.stock !== undefined && item.quantity >= item.stock);
+
+  const formattedPrice = useMemo(
+    () => formatCurrency(item.price, countryCode, locale),
+    [item.price, countryCode, locale],
+  );
+  const formattedBasePrice = useMemo(
+    () =>
+      item.basePrice !== undefined
+        ? formatCurrency(item.basePrice, countryCode, locale)
+        : null,
+    [item.basePrice, countryCode, locale],
+  );
+  const formattedTotal = useMemo(
+    () => formatCurrency(itemTotal, countryCode, locale),
+    [itemTotal, countryCode, locale],
+  );
+
   return (
     <div className="border-b border-gray-200 pb-4 last:border-none last:pb-0">
-      {/* Mobile layout: [image][content][qty/total] */}
+      {/* Mobile layout */}
       <div className="flex gap-3 sm:hidden">
-        {/* Image */}
         <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-100 shrink-0">
           <ResponsiveImage
             images={item.image}
@@ -42,9 +65,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
           />
         </div>
 
-        {/* Content + right column */}
         <div className="flex-1 flex items-stretch gap-3 text-sm text-gray-700">
-          {/* Middle: title, attributes, price */}
           <div className="flex-1 space-y-1">
             <span className="text-base font-medium text-gray-900">
               {item.name}
@@ -61,27 +82,24 @@ export const CartItemRow: FC<CartItemRowProps> = ({
                 {attribute}
               </span>
             ))}
-            <div className="mt-1 flex items-center gap-2">
-              {hasSavings && (
+            <div className="flex items-center gap-2">
+              {hasSavings && formattedBasePrice && (
                 <span className="text-xs text-gray-400 line-through">
-                  {currency}
-                  {item.basePrice?.toFixed(0)}
+                  {formattedBasePrice}
                 </span>
               )}
               <span className="text-[#e00000] font-semibold">
-                {currency}
-                {item.price.toFixed(0)}
+                {formattedPrice}
               </span>
             </div>
           </div>
 
-          {/* Right: qty on top, total + remove at bottom */}
           <div className="flex flex-col items-end justify-between gap-2">
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => onQuantityChange(item.quantity - 1)}
-                disabled={isBusy}
+                disabled={decreaseDisabled}
                 className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isDecreaseBusy ? (
@@ -96,7 +114,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               <button
                 type="button"
                 onClick={() => onQuantityChange(item.quantity + 1)}
-                disabled={isBusy}
+                disabled={increaseDisabled}
                 className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isIncreaseBusy ? (
@@ -107,11 +125,8 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               </button>
             </div>
 
-            <div className="flex flex-col items-end gap-1">
-              <span className="text-sm font-semibold text-gray-900">
-                {currency}
-                {itemTotal.toFixed(0)}
-              </span>
+            <div className="flex items-center gap-3 text-sm font-semibold text-gray-900">
+              <span>{formattedTotal}</span>
               <button
                 type="button"
                 onClick={onRemove}
@@ -130,9 +145,8 @@ export const CartItemRow: FC<CartItemRowProps> = ({
         </div>
       </div>
 
-      {/* Desktop / tablet table row */}
+      {/* Desktop / tablet layout */}
       <div className="hidden sm:grid sm:grid-cols-[0.9fr_1.6fr_1fr_1fr_1fr] sm:items-center sm:gap-4">
-        {/* Item image */}
         <div className="flex justify-center sm:justify-start">
           <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
             <ResponsiveImage
@@ -144,7 +158,6 @@ export const CartItemRow: FC<CartItemRowProps> = ({
           </div>
         </div>
 
-        {/* Description */}
         <div className="flex flex-col gap-1 text-sm text-gray-700">
           <span className="text-base font-medium line-clamp-1 text-gray-900">
             {item.name}
@@ -163,29 +176,21 @@ export const CartItemRow: FC<CartItemRowProps> = ({
           ))}
         </div>
 
-        {/* Price */}
-        <div className="text-sm sm:text-base font-semibold text-right sm:text-left">
-          <div className="flex flex-col">
-            {hasSavings && (
-              <span className="text-xs text-gray-400 line-through">
-                {currency}
-                {item.basePrice?.toFixed(0)}
-              </span>
-            )}
-            <span className="text-[#e00000]">
-              {currency}
-              {item.price.toFixed(0)}
+        <div className="flex flex-col gap-1 text-sm">
+          {hasSavings && formattedBasePrice && (
+            <span className="text-xs text-gray-400 line-through">
+              {formattedBasePrice}
             </span>
-          </div>
+          )}
+          <span className="text-[#e00000] font-semibold">{formattedPrice}</span>
         </div>
 
-        {/* Quantity + Remove */}
         <div className="flex flex-col items-start gap-2">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => onQuantityChange(item.quantity - 1)}
-              disabled={isBusy}
+              disabled={decreaseDisabled}
               className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isDecreaseBusy ? (
@@ -200,7 +205,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
             <button
               type="button"
               onClick={() => onQuantityChange(item.quantity + 1)}
-              disabled={isBusy}
+              disabled={increaseDisabled}
               className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isIncreaseBusy ? (
@@ -225,10 +230,8 @@ export const CartItemRow: FC<CartItemRowProps> = ({
           </button>
         </div>
 
-        {/* Total */}
-        <div className="text-sm sm:text-base font-semibold text-right">
-          {currency}
-          {itemTotal.toFixed(0)}
+        <div className="text-sm font-semibold text-gray-900 text-right">
+          {formattedTotal}
         </div>
       </div>
     </div>

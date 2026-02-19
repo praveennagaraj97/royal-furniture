@@ -6,14 +6,8 @@ import { CartFreeShippingBanner } from '../free-shipping';
 import { CartItemRow } from './cart-item-row';
 
 export const CartItemsSection: FC = () => {
-  const {
-    items,
-    currency,
-    updateQuantity,
-    removeItem,
-    pendingActions,
-    header,
-  } = useCart();
+  const { items, updateQuantity, removeItem, pendingActions, header } =
+    useCart();
 
   if (!items.length) {
     return (
@@ -53,7 +47,6 @@ export const CartItemsSection: FC = () => {
           <CartItemRow
             key={item.cartItemId || item.id}
             item={item}
-            currency={currency}
             pendingAction={
               pendingActions[item.cartItemId || item.id] as
                 | 'increase'
@@ -61,7 +54,7 @@ export const CartItemsSection: FC = () => {
                 | 'remove'
                 | undefined
             }
-            onQuantityChange={(quantity) =>
+            onQuantityChange={(quantity: number) =>
               updateQuantity(item.cartItemId || item.id, quantity)
             }
             onRemove={() => removeItem(item.cartItemId || item.id)}
