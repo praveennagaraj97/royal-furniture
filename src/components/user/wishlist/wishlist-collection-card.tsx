@@ -49,7 +49,7 @@ const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
             </h3>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 justify-start">
+          <div className="flex gap-3 justify-start overflow-x-auto flex-nowrap">
             {displayItems.map((item, index) => (
               <div
                 key={`${item.product_name}-${index}`}

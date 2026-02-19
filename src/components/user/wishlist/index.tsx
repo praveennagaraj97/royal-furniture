@@ -30,7 +30,7 @@ const WishlistPageContent: FC = () => {
         className="space-y-6"
       >
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-4">
           <h1 className="text-2xl font-semibold  ">Wishlist</h1>
 
           {/* Create New Collection Button */}
