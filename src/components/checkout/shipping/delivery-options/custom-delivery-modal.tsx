@@ -12,6 +12,8 @@ interface CustomDeliveryModalProps {
   selectedTime: string | null;
   setSelectedTime: (time: string | null) => void;
   timeSlots: string[];
+  highlightedDate?: string | null;
+  highlightedLabel?: string;
 }
 
 export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
@@ -22,7 +24,11 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
   selectedTime,
   setSelectedTime,
   timeSlots,
+  highlightedDate,
+  highlightedLabel,
 }) => {
+  const highlightedDateValue = highlightedDate || undefined;
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md" variant="center">
       <div className="w-full flex justify-center">
@@ -53,12 +59,18 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <div className="space-y-2">
               <label className="block text-sm font-medium">Select Date</label>
-              <DatePicker
-                value={selectedDate ?? undefined}
-                onChange={setSelectedDate}
-                className="w-full"
-                placeholder="Delivery Date"
-              />
+              <div className="flex items-center gap-2">
+                <DatePicker
+                  value={selectedDate ?? undefined}
+                  onChange={setSelectedDate}
+                  className="w-full"
+                  placeholder="Delivery Date"
+                  highlightedDates={
+                    highlightedDateValue ? [highlightedDateValue] : []
+                  }
+                  highlightedLabel={highlightedLabel}
+                />
+              </div>
             </div>
           </StaggerItem>
           <StaggerItem type="slideUp" distance={20} duration={0.35}>

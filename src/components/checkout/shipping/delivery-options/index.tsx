@@ -1,8 +1,8 @@
 'use client';
 
 import { useCart } from '@/contexts/cart-context';
-import { formatDateWithOrdinal } from '@/utils/date';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { buildIso, formatDateWithOrdinal, parseDateInput } from '@/utils/date';
+import { FC, startTransition, useEffect, useMemo, useState } from 'react';
 import { FiClock } from 'react-icons/fi';
 import CustomDeliveryModal from './custom-delivery-modal';
 
@@ -17,17 +17,28 @@ const DeliveryOptionsSection: FC = () => {
     [shippingStep?.deliverySlots],
   );
 
+  const highlightedDefaultDate = useMemo(() => {
+    const parsed = parseDateInput(shippingStep?.defaultDeliveryDate);
+    return parsed ? buildIso(parsed) : null;
+  }, [shippingStep?.defaultDeliveryDate]);
+
   useEffect(() => {
-    if (shippingStep?.defaultDeliveryDate) {
-      setSelectedDate(shippingStep.defaultDeliveryDate);
-    }
-    if (shippingStep?.selectedDeliverySlot?.slot) {
-      setSelectedTime(shippingStep.selectedDeliverySlot.slot);
-    } else if (timeSlots.length) {
-      setSelectedTime(timeSlots[0]);
-    }
+    startTransition(() => {
+      const savedCustomDate = parseDateInput(
+        shippingStep?.selectedDeliverySlot?.date,
+      );
+      setSelectedDate(savedCustomDate ? buildIso(savedCustomDate) : null);
+
+      if (shippingStep?.selectedDeliverySlot?.slot) {
+        setSelectedTime(shippingStep.selectedDeliverySlot.slot);
+      } else if (timeSlots.length) {
+        setSelectedTime(timeSlots[0]);
+      } else {
+        setSelectedTime(null);
+      }
+    });
   }, [
-    shippingStep?.defaultDeliveryDate,
+    shippingStep?.selectedDeliverySlot?.date,
     shippingStep?.selectedDeliverySlot?.slot,
     timeSlots,
   ]);
@@ -62,7 +73,7 @@ const DeliveryOptionsSection: FC = () => {
         {shippingStep?.defaultDeliveryDate && (
           <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-600">
             <span className="font-semibold text-gray-900">
-              Default delivery date
+              Estimated delivery date
             </span>
             <span>
               {formatDateWithOrdinal(shippingStep.defaultDeliveryDate)}{' '}
@@ -94,6 +105,10 @@ const DeliveryOptionsSection: FC = () => {
         selectedTime={selectedTime}
         setSelectedTime={setSelectedTime}
         timeSlots={timeSlots}
+        highlightedDate={highlightedDefaultDate}
+        highlightedLabel={
+          highlightedDefaultDate ? `Estimated delivery date` : undefined
+        }
       />
     </section>
   );

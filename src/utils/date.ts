@@ -3,47 +3,91 @@ export const pad = (n: number) => String(n).padStart(2, '0');
 export const buildIso = (date: Date) =>
   `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
+const monthMap: Record<string, number> = {
+  jan: 0,
+  feb: 1,
+  mar: 2,
+  apr: 3,
+  may: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  oct: 9,
+  nov: 10,
+  dec: 11,
+};
+
+export const parseDateInput = (value?: string | null): Date | null => {
+  if (!value) return null;
+  const trimmed = value.trim();
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const isoDate = new Date(trimmed + 'T00:00:00');
+    return Number.isNaN(isoDate.getTime()) ? null : isoDate;
+  }
+
+  const parsed = Date.parse(trimmed);
+  if (!Number.isNaN(parsed)) {
+    const date = new Date(parsed);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const ordinalMatch = trimmed.match(
+    /^(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(\d{4})$/i,
+  );
+  if (ordinalMatch) {
+    const day = Number(ordinalMatch[1]);
+    const monthKey = ordinalMatch[2].slice(0, 3).toLowerCase();
+    const year = Number(ordinalMatch[3]);
+    const month = monthMap[monthKey];
+
+    if (month !== undefined) {
+      const date = new Date(year, month, day);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+  }
+
+  return null;
+};
+
 export const formatDisplay = (iso?: string) => {
   if (!iso) return '';
-  try {
-    const d = new Date(iso + 'T00:00:00');
-    // Format as DD/MM/YYYY
-    return d.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-  } catch {
-    return iso;
-  }
+  const date = parseDateInput(iso);
+  if (!date) return iso;
+
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
 };
 
 export const formatDateWithOrdinal = (iso?: string, withTime = false) => {
   if (!iso) return '';
-  try {
-    const input = iso.includes('T') ? iso : iso + 'T00:00:00';
-    const d = new Date(input);
-    const day = d.getDate();
-    const month = d.toLocaleString('en-GB', { month: 'long' });
-    const year = d.getFullYear();
-    // Get ordinal suffix
-    const j = day % 10,
-      k = day % 100;
-    let suffix = 'th';
-    if (j === 1 && k !== 11) suffix = 'st';
-    else if (j === 2 && k !== 12) suffix = 'nd';
-    else if (j === 3 && k !== 13) suffix = 'rd';
-    if (withTime) {
-      const time = d.toLocaleTimeString(undefined, {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-      return `${day}${suffix} ${month} ${year}, ${time}`;
-    }
-    return `${day}${suffix} ${month} ${year}`;
-  } catch {
-    return iso;
+
+  const date = parseDateInput(iso);
+  if (!date) return iso;
+
+  const day = date.getDate();
+  const month = date.toLocaleString('en-GB', { month: 'long' });
+  const year = date.getFullYear();
+  const j = day % 10;
+  const k = day % 100;
+  let suffix = 'th';
+  if (j === 1 && k !== 11) suffix = 'st';
+  else if (j === 2 && k !== 12) suffix = 'nd';
+  else if (j === 3 && k !== 13) suffix = 'rd';
+
+  if (withTime) {
+    const time = date.toLocaleTimeString(undefined, {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    return `${day}${suffix} ${month} ${year}, ${time}`;
   }
+
+  return `${day}${suffix} ${month} ${year}`;
 };
 
 export const todayIso = () => new Date().toISOString().slice(0, 10);

@@ -255,7 +255,7 @@ const Modal: FC<ModalProps> = ({
                   ref={modalRef}
                   className={`bg-white shadow-2xl ${
                     isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`
-                  } ${className} flex flex-col overflow-hidden ${
+                  } ${className} flex flex-col ${
                     isMobile
                       ? 'rounded-t-2xl max-h-[95vh]'
                       : 'rounded-lg max-h-[95vh]'

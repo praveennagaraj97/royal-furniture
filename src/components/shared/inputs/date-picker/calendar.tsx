@@ -1,5 +1,6 @@
 'use client';
 
+import Tooltip from '@/components/shared/tooltip';
 import {
   addMonths,
   getMonthMatrix,
@@ -15,6 +16,8 @@ interface CalendarProps {
   onSelect: (d: Date) => void;
   minDate?: Date;
   maxDate?: Date;
+  highlightedDates?: Date[];
+  highlightedLabel?: string;
 }
 
 const Calendar: FC<CalendarProps> = ({
@@ -22,6 +25,8 @@ const Calendar: FC<CalendarProps> = ({
   onSelect,
   minDate,
   maxDate,
+  highlightedDates,
+  highlightedLabel,
 }) => {
   const [month, setMonth] = useState<Date>(
     selected
@@ -72,8 +77,12 @@ const Calendar: FC<CalendarProps> = ({
             : true;
           const isSelected = isSameDay(day, selected ?? null);
           const isToday = isSameDay(day, today);
+          const isHighlighted =
+            !isSelected &&
+            !!day &&
+            highlightedDates?.some((d) => isSameDay(day, d));
 
-          return (
+          const dayButton = (
             <button
               key={idx}
               type="button"
@@ -82,16 +91,30 @@ const Calendar: FC<CalendarProps> = ({
               className={`h-8 w-8 flex items-center justify-center rounded-md text-sm ${
                 !day
                   ? 'text-gray-300'
-                  : isSelected
-                    ? 'bg-deep-maroon text-white'
-                    : isToday
-                      ? 'border border-deep-maroon text-deep-maroon'
-                      : 'hover:bg-gray-100 text-gray-700'
+                  : disabled
+                    ? 'text-gray-300 cursor-not-allowed'
+                    : isSelected
+                      ? 'bg-deep-maroon text-white'
+                      : isHighlighted
+                        ? 'border border-amber-300 bg-amber-50 text-amber-700'
+                        : isToday
+                          ? 'border border-deep-maroon text-deep-maroon'
+                          : 'hover:bg-gray-100 text-gray-700'
               }`}
             >
               {day ? day.getDate() : ''}
             </button>
           );
+
+          if (isHighlighted && highlightedLabel) {
+            return (
+              <Tooltip key={idx} content={highlightedLabel}>
+                {dayButton}
+              </Tooltip>
+            );
+          }
+
+          return dayButton;
         })}
       </div>
     </div>

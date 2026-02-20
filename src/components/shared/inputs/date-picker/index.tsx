@@ -1,7 +1,12 @@
 'use client';
 
 import { useClickOutside } from '@/hooks/use-click-outside';
-import { buildIso, formatDisplay, todayIso } from '@/utils/date';
+import {
+  buildIso,
+  formatDisplay,
+  parseDateInput,
+  todayIso,
+} from '@/utils/date';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FC, useRef, useState } from 'react';
 import { FiCalendar } from 'react-icons/fi';
@@ -14,6 +19,8 @@ export interface DatePickerProps {
   placeholder?: string;
   minDate?: string;
   maxDate?: string;
+  highlightedDates?: string[];
+  highlightedLabel?: string;
 }
 
 const DatePicker: FC<DatePickerProps> = ({
@@ -23,6 +30,8 @@ const DatePicker: FC<DatePickerProps> = ({
   placeholder = 'Select date',
   minDate,
   maxDate,
+  highlightedDates,
+  highlightedLabel,
 }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -38,6 +47,12 @@ const DatePicker: FC<DatePickerProps> = ({
   // Ensure min is at least today when not provided
   const effectiveMin = minDate ?? todayIso();
   const effectiveMax = maxDate ?? undefined;
+
+  const selectedDate = value ? parseDateInput(value) : null;
+  const highlighted =
+    highlightedDates
+      ?.map((d) => parseDateInput(d))
+      .filter((d): d is Date => Boolean(d)) ?? [];
 
   return (
     <div ref={ref} className={`relative ${className}`}>
@@ -63,10 +78,10 @@ const DatePicker: FC<DatePickerProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-200 z-50 overflow-hidden"
+            className="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-200 z-50"
           >
             <Calendar
-              selected={value ? new Date(value + 'T00:00:00') : undefined}
+              selected={selectedDate ?? undefined}
               onSelect={handleSelect}
               minDate={
                 effectiveMin ? new Date(effectiveMin + 'T00:00:00') : undefined
@@ -74,6 +89,8 @@ const DatePicker: FC<DatePickerProps> = ({
               maxDate={
                 effectiveMax ? new Date(effectiveMax + 'T00:00:00') : undefined
               }
+              highlightedDates={highlighted}
+              highlightedLabel={highlightedLabel}
             />
           </motion.div>
         )}
