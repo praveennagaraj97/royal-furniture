@@ -378,7 +378,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPendingAction(cartItemId, 'remove');
 
       try {
-        await cartService.removeItem(state.cartId, cartItemId, sessionToUse);
+        await cartService.removeItem(cartItemId, sessionToUse);
         showSuccess('Removed from cart');
         await refreshCart();
       } catch (err) {
@@ -427,11 +427,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPendingAction(cartItemId, action);
 
       try {
-        await cartService.updateItemQuantity(
-          state.cartId,
-          action,
-          sessionToUse,
-        );
+        await cartService.updateItemQuantity(cartItemId, action, sessionToUse);
         await refreshCart();
       } catch (err) {
         console.error('Failed to update cart quantity', err);

@@ -7,7 +7,7 @@ import type {
 
 export interface CartItem {
   id: string; // product SKU or identifier
-  cartItemId?: string; // server-side cart line id
+  cartItemId: string; // server-side cart line id
   name: string;
   slug: string;
   description?: string;

@@ -37,23 +37,26 @@ export const CartItemsSection: FC = () => {
       </div>
 
       <div className="space-y-6">
-        {items.map((item) => (
-          <CartItemRow
-            key={item.cartItemId || item.id}
-            item={item}
-            pendingAction={
-              pendingActions[item.cartItemId || item.id] as
-                | 'increase'
-                | 'decrease'
-                | 'remove'
-                | undefined
-            }
-            onQuantityChange={(quantity: number) =>
-              updateQuantity(item.cartItemId || item.id, quantity)
-            }
-            onRemove={() => removeItem(item.cartItemId || item.id)}
-          />
-        ))}
+        {items.map((item) => {
+          console.log(item);
+          return (
+            <CartItemRow
+              key={item.cartItemId}
+              item={item}
+              pendingAction={
+                pendingActions[item.cartItemId] as
+                  | 'increase'
+                  | 'decrease'
+                  | 'remove'
+                  | undefined
+              }
+              onQuantityChange={(quantity: number) =>
+                updateQuantity(item.cartItemId, quantity)
+              }
+              onRemove={() => removeItem(item.cartItemId)}
+            />
+          );
+        })}
       </div>
     </div>
   );
