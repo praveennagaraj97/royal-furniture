@@ -99,6 +99,7 @@ export interface ShippingProceedApiData {
   delivery_slots: ShippingDeliverySlot[];
   cart_summary: CartApiData;
   selected_delivery_slot?: ShippingSelectedSlot | null;
+  custom_delivery_charge?: string | number | null;
 }
 
 export type ShippingProceedResponse =
@@ -120,6 +121,7 @@ export interface ShippingStepState {
     slot: string | null;
     slotId: number | null;
   };
+  customDeliveryCharge?: number | null;
 }
 
 export interface CartState {

@@ -2,15 +2,19 @@
 
 import { useCart } from '@/contexts/cart-context';
 import { buildIso, formatDateWithOrdinal, parseDateInput } from '@/utils/date';
-import { FC, startTransition, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { FiClock } from 'react-icons/fi';
 import CustomDeliveryModal from './custom-delivery-modal';
 
 const DeliveryOptionsSection: FC = () => {
-  const { shippingStep, isShippingLoading } = useCart();
+  const {
+    shippingStep,
+    isShippingLoading,
+    shippingSelection,
+    setShippingSelection,
+  } = useCart();
+  const [isSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const timeSlots = useMemo(
     () => shippingStep?.deliverySlots?.map((slot) => slot.timeRange) || [],
@@ -22,26 +26,29 @@ const DeliveryOptionsSection: FC = () => {
     return parsed ? buildIso(parsed) : null;
   }, [shippingStep?.defaultDeliveryDate]);
 
-  useEffect(() => {
-    startTransition(() => {
-      const savedCustomDate = parseDateInput(
-        shippingStep?.selectedDeliverySlot?.date,
-      );
-      setSelectedDate(savedCustomDate ? buildIso(savedCustomDate) : null);
+  const selectedDate = shippingSelection.date;
+  const selectedTime = shippingSelection.slotLabel;
 
-      if (shippingStep?.selectedDeliverySlot?.slot) {
-        setSelectedTime(shippingStep.selectedDeliverySlot.slot);
-      } else if (timeSlots.length) {
-        setSelectedTime(timeSlots[0]);
-      } else {
-        setSelectedTime(null);
-      }
+  const handleDateChange = (date: string | null) => {
+    setShippingSelection({
+      date,
+      isCustomDelivery: Boolean(date && (shippingSelection.slotId ?? null)),
     });
-  }, [
-    shippingStep?.selectedDeliverySlot?.date,
-    shippingStep?.selectedDeliverySlot?.slot,
-    timeSlots,
-  ]);
+  };
+
+  const handleTimeChange = (slot: string | null) => {
+    const slotId = shippingStep?.deliverySlots.find(
+      (s) => s.timeRange === slot,
+    )?.id;
+
+    setShippingSelection({
+      slotLabel: slot,
+      slotId: slotId ?? null,
+      isCustomDelivery: Boolean((slotId ?? null) && shippingSelection.date),
+    });
+  };
+
+  const handleSaveCustomDelivery = async (): Promise<boolean> => true;
 
   return (
     <section className="space-y-4">
@@ -101,14 +108,17 @@ const DeliveryOptionsSection: FC = () => {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
+        setSelectedDate={handleDateChange}
         selectedTime={selectedTime}
-        setSelectedTime={setSelectedTime}
+        setSelectedTime={(time) => handleTimeChange(time)}
         timeSlots={timeSlots}
         highlightedDate={highlightedDefaultDate}
         highlightedLabel={
           highlightedDefaultDate ? `Estimated delivery date` : undefined
         }
+        onSaveSelection={handleSaveCustomDelivery}
+        isSavingSelection={isSaving}
+        customDeliveryCharge={shippingStep?.customDeliveryCharge}
       />
     </section>
   );

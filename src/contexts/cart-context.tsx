@@ -12,6 +12,7 @@ import type {
 } from '@/types/cart';
 import type { ParsedAPIError } from '@/types/error';
 import type { ProductItem } from '@/types/response';
+import { buildIso, parseDateInput } from '@/utils/date';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
 import { usePathname } from 'next/navigation';
 import {
@@ -51,7 +52,18 @@ interface CartContextValue {
   loadShippingStep: () => Promise<void>;
   pendingActions: Record<string, 'increase' | 'decrease' | 'remove'>;
   guestSessionId?: string | null;
+  shippingSelection: ShippingSelection;
+  setShippingSelection: (update: Partial<ShippingSelection>) => void;
 }
+
+type ShippingSelection = {
+  deliveryType: 'home' | 'pickup';
+  isCustomDelivery: boolean;
+  date: string | null;
+  slotId: number | null;
+  slotLabel: string | null;
+  storeId: number | null;
+};
 
 const EMPTY_TOTALS: CartTotals = {
   subtotal: 0,
@@ -71,6 +83,15 @@ const DEFAULT_CART_STATE: CartState = {
   freeShippingProgress: 0,
   totals: EMPTY_TOTALS,
   shippingStep: undefined,
+};
+
+const DEFAULT_SHIPPING_SELECTION: ShippingSelection = {
+  deliveryType: 'home',
+  isCustomDelivery: false,
+  date: null,
+  slotId: null,
+  slotLabel: null,
+  storeId: null,
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -111,8 +132,8 @@ const mapCartItem = (item: CartApiItem): CartItem => {
     description: product.description,
     color: product.colour,
     image: product.responsive_images || {},
-    price: unitPrice,
     basePrice: basePrice || undefined,
+    price: unitPrice,
     quantity: item.quantity,
     stock: product.stock_count,
     attributes,
@@ -181,6 +202,11 @@ const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
       id: slot.id,
       timeRange: slot.time_range,
     })),
+    customDeliveryCharge:
+      data.custom_delivery_charge === undefined ||
+      data.custom_delivery_charge === null
+        ? null
+        : normalizePrice(data.custom_delivery_charge),
     selectedDeliverySlot: data.selected_delivery_slot
       ? {
           date: data.selected_delivery_slot.date,
@@ -204,9 +230,10 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [shippingMethod, setShippingMethod] = useState<'home' | 'pickup'>(
     'home',
   );
+  const [shippingSelection, setShippingSelectionState] =
+    useState<ShippingSelection>(DEFAULT_SHIPPING_SELECTION);
   const { showSuccess, showError } = useToast();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-
   const isOnShippingPage = useMemo(
     () => pathname?.includes('/checkout/shipping') ?? false,
     [pathname],
@@ -273,6 +300,15 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     if (isAuthenticated) return undefined;
     return guestSessionId || getOrCreateGuestSession();
   }, [guestSessionId, isAuthenticated]);
+
+  const setShippingSelection = useCallback(
+    (update: Partial<ShippingSelection>) => {
+      setShippingSelectionState((prev) => ({ ...prev, ...update }));
+    },
+    [],
+  );
+
+  // Shipping payload is now built at component level to keep context fetch-only.
 
   const refreshCart = useCallback(async () => {
     if (!shouldFetchCart) return;
@@ -371,9 +407,34 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     if (shippingResponse?.data) {
       const shippingStep = mapShippingProceedToState(shippingResponse.data);
       const mappedCart = mapCartDataToState(shippingResponse.data.cart_summary);
+      const parsedSelectedDate = parseDateInput(
+        shippingResponse.data.selected_delivery_slot?.date,
+      );
+      const slotLabel = shippingResponse.data.selected_delivery_slot?.slot;
+      const slotId =
+        shippingResponse.data.selected_delivery_slot?.slot_id ??
+        shippingStep?.deliverySlots.find((slot) => slot.timeRange === slotLabel)
+          ?.id ??
+        null;
+
       setState({
         ...mappedCart,
         shippingStep,
+      });
+
+      setShippingSelectionState((prev) => {
+        const nextDeliveryType = prev.deliveryType;
+        const nextDate = parsedSelectedDate
+          ? buildIso(parsedSelectedDate)
+          : null;
+        return {
+          ...prev,
+          deliveryType: nextDeliveryType,
+          date: nextDate,
+          slotId: slotId ?? null,
+          slotLabel: slotLabel ?? null,
+          isCustomDelivery: Boolean(nextDate && slotId),
+        };
       });
     }
   }, [shippingResponse]);
@@ -384,6 +445,28 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       available.includes(prev) ? prev : available[0] || 'home',
     );
   }, [state.shippingStep?.deliveryMethods]);
+
+  useEffect(() => {
+    setShippingSelectionState((prev) => {
+      if (shippingMethod === 'home') {
+        return {
+          ...prev,
+          deliveryType: 'home',
+          isCustomDelivery: false,
+          storeId: null,
+        };
+      }
+
+      return {
+        ...prev,
+        deliveryType: 'pickup',
+        isCustomDelivery: false,
+        date: null,
+        slotId: null,
+        slotLabel: null,
+      };
+    });
+  }, [shippingMethod]);
 
   useEffect(() => {
     setIsShippingLoading(isShippingFetching);
@@ -490,6 +573,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     // TODO: implement clear cart API once available
   }, []);
 
+  // Shipping submit logic lives in components; context only exposes fetch/state.
+
   const value = useMemo<CartContextValue>(
     () => ({
       cartId: state.cartId,
@@ -508,6 +593,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       shippingMethod,
       setShippingMethod,
       guestSessionId,
+      shippingSelection,
+      setShippingSelection,
       addItem,
       removeItem,
       updateQuantity,
@@ -529,6 +616,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.shippingStep,
       shippingMethod,
       setShippingMethod,
+      shippingSelection,
+      setShippingSelection,
       isHydrated,
       isLoading,
       isShippingLoading,

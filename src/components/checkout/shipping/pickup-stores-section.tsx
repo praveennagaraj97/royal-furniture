@@ -16,7 +16,13 @@ const renderStoreAddress = (store: StoreLocation) => {
 };
 
 export const PickupStoresSection: FC = () => {
-  const { cartId, guestSessionId, shippingMethod } = useCart();
+  const {
+    cartId,
+    shippingMethod,
+    shippingSelection,
+    setShippingSelection,
+    guestSessionId,
+  } = useCart();
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
 
   const { stores, isLoading } = useGetStoresByCart({
@@ -32,6 +38,28 @@ export const PickupStoresSection: FC = () => {
       });
     }
   }, [stores]);
+
+  useEffect(() => {
+    if (selectedStoreId) {
+      setShippingSelection({ storeId: selectedStoreId });
+    }
+  }, [selectedStoreId, setShippingSelection]);
+
+  useEffect(() => {
+    if (
+      shippingMethod === 'pickup' &&
+      selectedStoreId &&
+      shippingSelection.date &&
+      shippingSelection.slotId
+    ) {
+      // Selection is tracked locally; backend save will be handled in a later flow.
+    }
+  }, [
+    shippingMethod,
+    selectedStoreId,
+    shippingSelection.date,
+    shippingSelection.slotId,
+  ]);
 
   if (shippingMethod !== 'pickup') {
     return null;

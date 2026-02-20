@@ -106,6 +106,26 @@ export class CartService extends BaseAPIService {
       throw this.parseError(error);
     }
   }
+
+  async proceedToPayment(
+    payload: Record<string, unknown>,
+    guestSessionId?: string,
+  ): Promise<unknown> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.post(
+        API_ROUTES.CART.SHIPPING_PROCEED_TO_PAYMENT,
+        payload,
+        { headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
 }
 
 export const cartService = new CartService();

@@ -26,9 +26,17 @@ interface StickyCtaProps {
   Icon?: FC<{ className?: string }>;
   onClick: () => void;
   id?: string;
+  disabled?: boolean;
 }
 
-const StickyCta: FC<StickyCtaProps> = ({ show, label, Icon, onClick, id }) => {
+const StickyCta: FC<StickyCtaProps> = ({
+  show,
+  label,
+  Icon,
+  onClick,
+  id,
+  disabled,
+}) => {
   return (
     <Portal>
       <AnimatePresence>
@@ -45,6 +53,7 @@ const StickyCta: FC<StickyCtaProps> = ({ show, label, Icon, onClick, id }) => {
               type="button"
               onClick={onClick}
               aria-label={label}
+              disabled={disabled}
               className="w-full flex items-center justify-center gap-2 rounded-xl bg-deep-maroon text-white py-3 text-sm font-medium hover:bg-[#6b0000] transition-colors shadow-md"
             >
               {Icon && <Icon className="w-4 h-4" />}
@@ -71,6 +80,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
   const actionBtnRef = useRef<HTMLButtonElement | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
   const [isShippingInfoOpen, setIsShippingInfoOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isVisible = useIntersectionObserver({
     ref: actionBtnRef,
@@ -122,6 +132,13 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     const country = params?.country;
     const locale = params?.locale;
 
+    const handleProceedToPayment = async () => {
+      // Temporarily skip shipping save; navigate directly.
+      setIsSubmitting(true);
+      router.push(buildPath(country, locale, 'checkout', 'payment'));
+      setIsSubmitting(false);
+    };
+
     if (step === 'cart') {
       return {
         label: 'Proceed to Shipping',
@@ -133,10 +150,10 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
     if (step === 'shipping') {
       return {
-        label: 'Proceed to Payment',
+        label: isSubmitting ? 'Saving...' : 'Proceed to Payment',
         Icon: FiCreditCard,
-        onClick: () =>
-          router.push(buildPath(country, locale, 'checkout', 'payment')),
+        onClick: handleProceedToPayment,
+        disabled: isSubmitting,
       };
     }
 
@@ -149,7 +166,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     }
 
     return null;
-  }, [step, params?.country, params?.locale, router]);
+  }, [step, params?.country, params?.locale, router, isSubmitting]);
 
   if (!cta) return null;
 
@@ -208,7 +225,8 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         <button
           onClick={cta.onClick}
           ref={actionBtnRef}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-deep-maroon text-white py-3 text-sm font-medium hover:bg-[#6b0000] transition-colors shadow-md"
+          disabled={cta.disabled}
+          className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-medium transition-colors shadow-md ${cta.disabled ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-deep-maroon text-white hover:bg-[#6b0000]'}`}
         >
           <cta.Icon className="w-4 h-4" />
           {cta.label}
@@ -230,6 +248,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
           label={cta.label}
           Icon={cta.Icon}
           onClick={cta.onClick}
+          disabled={cta.disabled}
           id={`cta-${step}`}
         />
       )}

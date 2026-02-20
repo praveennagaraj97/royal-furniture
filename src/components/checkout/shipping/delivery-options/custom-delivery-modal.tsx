@@ -14,6 +14,9 @@ interface CustomDeliveryModalProps {
   timeSlots: string[];
   highlightedDate?: string | null;
   highlightedLabel?: string;
+  onSaveSelection: () => Promise<boolean>;
+  isSavingSelection: boolean;
+  customDeliveryCharge?: number | null;
 }
 
 export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
@@ -26,6 +29,9 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
   timeSlots,
   highlightedDate,
   highlightedLabel,
+  onSaveSelection,
+  isSavingSelection,
+  customDeliveryCharge,
 }) => {
   const highlightedDateValue = highlightedDate || undefined;
 
@@ -96,25 +102,31 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
               per company policy
             </p>
           </StaggerItem>
-          <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <div className="rounded-lg bg-gray-100 px-3 py-2 flex items-center justify-between text-sm font-medium text-gray-700 mb-1">
-              <span>Charge for custom delivery</span>
-              <span className="font-bold text-lg">₿ 55</span>
-            </div>
-            <p className="text-xs text-gray-500">
-              This charge is based on your currently selected location.
-            </p>
-          </StaggerItem>
+          {selectedDate && selectedTime && customDeliveryCharge ? (
+            <StaggerItem type="slideUp" distance={20} duration={0.35}>
+              <div className="rounded-lg bg-gray-100 px-3 py-2 flex items-center justify-between text-sm font-medium text-gray-700 mb-1">
+                <span>Charge for custom delivery</span>
+                <span className="font-bold text-lg">
+                  {customDeliveryCharge}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">
+                This charge is based on your currently selected location.
+              </p>
+            </StaggerItem>
+          ) : null}
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <button
               type="button"
-              className={`w-full mt-2 rounded-lg font-semibold py-2 text-base transition-colors ${selectedDate && selectedTime ? 'bg-deep-maroon text-white hover:bg-[#6b0000]' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-              disabled={!selectedDate || !selectedTime}
-              onClick={() => {
-                if (selectedDate && selectedTime) onClose();
+              className={`w-full mt-2 rounded-lg font-semibold py-2 text-base transition-colors ${selectedDate && selectedTime && !isSavingSelection ? 'bg-deep-maroon text-white hover:bg-[#6b0000]' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+              disabled={!selectedDate || !selectedTime || isSavingSelection}
+              onClick={async () => {
+                if (!selectedDate || !selectedTime) return;
+                const saved = await onSaveSelection();
+                if (saved) onClose();
               }}
             >
-              Continue
+              {isSavingSelection ? 'Saving...' : 'Continue'}
             </button>
           </StaggerItem>
         </StaggerContainer>
