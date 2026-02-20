@@ -249,10 +249,6 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    void refreshCart();
-  }, [refreshCart]);
-
-  useEffect(() => {
     if (!isHydrated) {
       setIsLoading((prev) => prev || isCartLoading);
       return;
