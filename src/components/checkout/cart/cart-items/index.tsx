@@ -38,7 +38,6 @@ export const CartItemsSection: FC = () => {
 
       <div className="space-y-6">
         {items.map((item) => {
-          console.log(item);
           return (
             <CartItemRow
               key={item.cartItemId}

@@ -16,8 +16,6 @@ const WishlistPageContent: FC = () => {
     mutate(); // Refresh collections after creating
   };
 
-  console.log('Wishlist Collections:', collections);
-
   return (
     <>
       <ViewOnce

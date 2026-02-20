@@ -232,6 +232,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       (isAuthenticated || canUseGuestSession),
   });
 
+  console.log(shippingResponse, inShippingStep);
+
   const getErrorMessage = useCallback(
     (error: unknown, fallback = 'Failed to process request') => {
       const parsed = error as ParsedAPIError;
