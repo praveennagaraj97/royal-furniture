@@ -6,11 +6,12 @@ import { FC, Fragment, useEffect } from 'react';
 import { DeliveryInfoCard } from '../common/info-sections/delivery-card';
 import { OrderSummarySection } from '../common/order-summary';
 import DeliveryOptionsSection from './delivery-options';
+import PickupStoresSection from './pickup-stores-section';
 import { ShippingAddressSection } from './shipping-address-section';
 import { ShippingMethodSection } from './shipping-method-section';
 
 const ShippingPageContent: FC = () => {
-  const { isHydrated, loadShippingStep } = useCart();
+  const { isHydrated, loadShippingStep, shippingMethod } = useCart();
 
   useEffect(() => {
     loadShippingStep();
@@ -30,7 +31,11 @@ const ShippingPageContent: FC = () => {
               <ShippingMethodSection />
             </StaggerItem>
             <StaggerItem type="slideUp" distance={30}>
-              <ShippingAddressSection />
+              {shippingMethod === 'pickup' ? (
+                <PickupStoresSection />
+              ) : (
+                <ShippingAddressSection />
+              )}
             </StaggerItem>
           </div>
 

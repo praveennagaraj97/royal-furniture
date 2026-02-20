@@ -1,3 +1,4 @@
+export * from './use-get-addresses';
 export * from './use-get-cart';
 export * from './use-get-cart-shipping-step';
 export * from './use-get-filters-by-subcategory-id';
@@ -7,5 +8,6 @@ export * from './use-get-products-by-type';
 export * from './use-get-reviews';
 export * from './use-get-search-results';
 export * from './use-get-search-suggestions';
+export * from './use-get-stores-by-cart';
 export * from './use-get-wishlist-collection';
 export * from './use-get-wishlist-collections';

@@ -13,6 +13,7 @@ import type {
 import type { ParsedAPIError } from '@/types/error';
 import type { ProductItem } from '@/types/response';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
+import { usePathname } from 'next/navigation';
 import {
   createContext,
   useCallback,
@@ -40,6 +41,8 @@ interface CartContextValue {
   isShippingLoading: boolean;
   header?: CartState['header'];
   shippingStep?: CartState['shippingStep'];
+  shippingMethod: 'home' | 'pickup';
+  setShippingMethod: (method: 'home' | 'pickup') => void;
   addItem: (sku: string, quantity: number) => Promise<void>;
   removeItem: (cartItemId: string) => Promise<void>;
   updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
@@ -189,6 +192,7 @@ const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
 };
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const pathname = usePathname();
   const [state, setState] = useState<CartState>(DEFAULT_CART_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -197,8 +201,16 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [pendingActions, setPendingActions] = useState<
     Record<string, 'increase' | 'decrease' | 'remove'>
   >({});
+  const [shippingMethod, setShippingMethod] = useState<'home' | 'pickup'>(
+    'home',
+  );
   const { showSuccess, showError } = useToast();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+
+  const isOnShippingPage = useMemo(
+    () => pathname?.includes('/checkout/shipping') ?? false,
+    [pathname],
+  );
 
   const guestSessionForUse = !isAuthenticated
     ? guestSessionId || undefined
@@ -220,19 +232,19 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     state.header?.current_step === 'shipping' ||
     cartResponse?.data?.header?.current_step === 'shipping';
 
+  const shouldFetchShippingStep =
+    !isAuthLoading &&
+    (isAuthenticated || canUseGuestSession) &&
+    (inShippingStep || isOnShippingPage);
+
   const {
     data: shippingResponse,
     isLoading: isShippingFetching,
     mutate: mutateShipping,
   } = useGetCartShippingStep({
     guestSessionId: guestSessionForUse,
-    enabled:
-      !isAuthLoading &&
-      inShippingStep &&
-      (isAuthenticated || canUseGuestSession),
+    enabled: shouldFetchShippingStep,
   });
-
-  console.log(shippingResponse, inShippingStep);
 
   const getErrorMessage = useCallback(
     (error: unknown, fallback = 'Failed to process request') => {
@@ -287,7 +299,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const loadShippingStep = useCallback(async () => {
     if (
-      !inShippingStep ||
+      !shouldFetchShippingStep ||
       isAuthLoading ||
       (!isAuthenticated && !guestSessionForUse)
     ) {
@@ -311,7 +323,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, [
     mutateShipping,
-    inShippingStep,
+    shouldFetchShippingStep,
     isAuthLoading,
     isAuthenticated,
     guestSessionForUse,
@@ -365,6 +377,13 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       });
     }
   }, [shippingResponse]);
+
+  useEffect(() => {
+    const available = state.shippingStep?.deliveryMethods || ['home', 'pickup'];
+    setShippingMethod((prev) =>
+      available.includes(prev) ? prev : available[0] || 'home',
+    );
+  }, [state.shippingStep?.deliveryMethods]);
 
   useEffect(() => {
     setIsShippingLoading(isShippingFetching);
@@ -486,6 +505,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       isShippingLoading,
       header: state.header,
       shippingStep: state.shippingStep,
+      shippingMethod,
+      setShippingMethod,
       guestSessionId,
       addItem,
       removeItem,
@@ -506,6 +527,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.totals,
       state.header,
       state.shippingStep,
+      shippingMethod,
+      setShippingMethod,
       isHydrated,
       isLoading,
       isShippingLoading,

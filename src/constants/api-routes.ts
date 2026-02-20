@@ -46,4 +46,11 @@ export const API_ROUTES = {
     UPDATE_ITEM: (cartId: string) => `/cart/${cartId}/update/`,
     SHIPPING_PROCEED: '/cart/shipping/proceed/',
   },
+  STORES: {
+    BY_CART: '/store/by-cart/',
+  },
+  ADDRESSES: {
+    ROOT: '/users/addresses/',
+    DETAIL: (id: number | string) => `/users/addresses/${id}/`,
+  },
 } as const;

@@ -1,30 +1,33 @@
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import type { UserAddress } from '@/types/address';
 import { FC } from 'react';
-import { FiBriefcase, FiEdit2, FiHome, FiTrash2 } from 'react-icons/fi';
+import {
+  FiBriefcase,
+  FiEdit2,
+  FiHome,
+  FiMoreHorizontal,
+  FiTrash2,
+} from 'react-icons/fi';
 
-export interface Address {
-  id: string;
-  type: 'home' | 'work';
-  name: string;
-  company?: string;
-  addressLine1: string;
-  addressLine2?: string;
-  city: string;
-  country: string;
-  phone: string;
-  selected?: boolean;
-}
+export type Address = UserAddress & { selected?: boolean };
 
 interface AddressListProps {
   addresses: Address[];
   onEdit: (address: Address) => void;
-  onDelete: (id: string) => void;
-  onSelect: (id: string) => void;
+  onDelete: (id: string | number) => void;
+  onSelect: (id: string | number) => void;
 }
 
 const typeIcon = {
   home: <FiHome className="h-5 w-5 text-deep-maroon" />,
-  work: <FiBriefcase className="h-5 w-5 text-deep-maroon" />,
+  office: <FiBriefcase className="h-5 w-5 text-deep-maroon" />,
+  other: <FiMoreHorizontal className="h-5 w-5 text-deep-maroon" />,
+};
+
+const typeLabel: Record<Address['category'], string> = {
+  home: 'Home',
+  office: 'Office',
+  other: 'Other',
 };
 
 export const AddressList: FC<AddressListProps> = ({
@@ -36,7 +39,7 @@ export const AddressList: FC<AddressListProps> = ({
   return (
     <div className="space-y-4">
       <div className="bg-[#fff3f3] rounded-t-lg px-4 py-2 text-sm font-semibold text-gray-900">
-        {addresses.length} Saved addressees
+        {addresses.length} Saved addresses
       </div>
       <StaggerContainer
         mode="animate"
@@ -60,9 +63,9 @@ export const AddressList: FC<AddressListProps> = ({
               onClick={() => onSelect(address.id)}
             >
               <div className="flex items-center gap-2 mb-1">
-                {typeIcon[address.type]}
+                {typeIcon[address.category]}
                 <span className="font-semibold text-base text-black">
-                  {address.type === 'home' ? 'Home' : 'Office'}
+                  {typeLabel[address.category]}
                 </span>
                 <button
                   type="button"
@@ -78,23 +81,18 @@ export const AddressList: FC<AddressListProps> = ({
               <div className="text-sm text-gray-900 font-semibold">
                 {address.name}
               </div>
-              {address.company && (
-                <div className="text-sm text-gray-700">{address.company}</div>
-              )}
+              <div className="text-sm text-gray-700">{address.street}</div>
+              {address.building ? (
+                <div className="text-sm text-gray-700">{address.building}</div>
+              ) : null}
               <div className="text-sm text-gray-700">
-                {address.addressLine1}
+                {address.town_or_city}
               </div>
-              {address.addressLine2 && (
+              {address.phone ? (
                 <div className="text-sm text-gray-700">
-                  {address.addressLine2}
+                  Phone: {address.phone}
                 </div>
-              )}
-              <div className="text-sm text-gray-700">
-                {address.city}, {address.country}
-              </div>
-              <div className="text-sm text-gray-700">
-                Phone: {address.phone}
-              </div>
+              ) : null}
               <button
                 type="button"
                 className="absolute top-3 right-3 text-deep-maroon hover:text-red-600"
@@ -107,7 +105,7 @@ export const AddressList: FC<AddressListProps> = ({
                 <FiTrash2 className="h-5 w-5" />
               </button>
               <span
-                className={`absolute bottom-3 right-3 h-4 w-4 rounded-full border-2 ${address.selected ? 'border-deep-maroon bg-deep-maroon' : 'border-gray-300 bg-white'}`}
+                className={`absolute bottom-3 right-3 h-4 w-4 rounded-full border-2 ${address.selected || address.is_default ? 'border-deep-maroon bg-deep-maroon' : 'border-gray-300 bg-white'}`}
               ></span>
             </div>
           </StaggerItem>

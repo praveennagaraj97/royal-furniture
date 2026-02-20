@@ -140,7 +140,7 @@ const CreateOrEditAddressForm: FC<Props> = ({
     });
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch({ type: 'SET_IS_SUBMITTED', value: true });
     dispatch({ type: 'SET_ALL_TOUCHED' });
@@ -158,11 +158,13 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
     dispatch({ type: 'SET_IS_SUBMITTING', value: true });
 
-    if (onAddressSaved) {
-      onAddressSaved(state.formData);
+    try {
+      if (onAddressSaved) {
+        await onAddressSaved(state.formData);
+      }
+    } finally {
+      dispatch({ type: 'SET_IS_SUBMITTING', value: false });
     }
-
-    dispatch({ type: 'SET_IS_SUBMITTING', value: false });
   };
 
   const handleUseMyLocation = () => {
@@ -344,7 +346,7 @@ const CreateOrEditAddressForm: FC<Props> = ({
               disabled={state.isSubmitting}
               className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-deep-maroon px-4 py-2.5 text-sm sm:text-base font-semibold text-white hover:bg-[#6b0000] disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
             >
-              Add Address
+              {editMode ? 'Save Address' : 'Add Address'}
               <FiArrowRight className="h-4 w-4" />
             </button>
           </StaggerItem>
