@@ -38,7 +38,7 @@ import {
 } from './reducer';
 
 interface CreateOrEditAddressFormProps {
-  onAddressSaved?: (data: AddressFormData) => void;
+  onAddressSaved?: (data: AddressFormData, countryCode: string) => void;
   onCancel?: () => void;
   initialData?: AddressFormData;
   editMode?: boolean;
@@ -64,16 +64,34 @@ const CreateOrEditAddressForm: FC<Props> = ({
   initialData,
   editMode,
 }) => {
+  const parsePhone = (phone?: string) => {
+    const trimmed = phone?.trim();
+    if (!trimmed) return { code: '+971', number: '' };
+    const match = trimmed.match(/^(\+\d{1,3})\s*(.*)$/);
+    if (match) {
+      return { code: match[1], number: match[2] || '' };
+    }
+    return { code: '+971', number: trimmed };
+  };
+
+  const { code: initialCode, number: initialPhone } = parsePhone(
+    initialData?.phone,
+  );
+
   const [state, dispatch] = useReducer(
     addressFormReducer,
     initialData
       ? {
           ...initialAddressFormState,
-          formData: { ...initialAddressFormState.formData, ...initialData },
+          formData: {
+            ...initialAddressFormState.formData,
+            ...initialData,
+            phone: initialPhone,
+          },
         }
       : initialAddressFormState,
   );
-  const [countryCode, setCountryCode] = useState('+971');
+  const [countryCode, setCountryCode] = useState(initialCode);
   const tValidation = useTranslations('auth.validation');
   const addressFormValidators = useMemo(
     () => createAddressFormValidators(tValidation),
@@ -160,7 +178,7 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
     try {
       if (onAddressSaved) {
-        await onAddressSaved(state.formData);
+        await onAddressSaved(state.formData, countryCode);
       }
     } finally {
       dispatch({ type: 'SET_IS_SUBMITTING', value: false });

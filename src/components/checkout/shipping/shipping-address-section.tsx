@@ -116,13 +116,18 @@ export const ShippingAddressSection: FC = () => {
     // Persisting selected address to cart will be handled in a later step; avoid PATCH here.
   };
 
-  const handleSave = async (data: AddressFormData) => {
+  const handleSave = async (data: AddressFormData, countryCode: string) => {
     const isDefault =
       editAddress?.selected || (!editAddress && !addresses.length);
 
+    const trimmedPhone = data.phone.trim();
+    const phoneWithCode = trimmedPhone.startsWith('+')
+      ? trimmedPhone
+      : `${countryCode} ${trimmedPhone}`.trim();
+
     const payload = {
       name: data.name,
-      phone: data.phone,
+      phone: phoneWithCode,
       email: data.email,
       street: data.streetAddress,
       building: data.building,
