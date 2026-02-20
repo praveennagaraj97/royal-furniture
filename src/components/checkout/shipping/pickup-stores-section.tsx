@@ -1,5 +1,6 @@
 'use client';
 
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useCart } from '@/contexts/cart-context';
 import { useGetStoresByCart } from '@/hooks/api';
 import type { StoreLocation } from '@/types/store';
@@ -69,52 +70,63 @@ export const PickupStoresSection: FC = () => {
       ) : null}
 
       {stores?.length ? (
-        <div className="space-y-4">
+        <StaggerContainer
+          mode="animate"
+          staggerChildren={0.08}
+          delayChildren={0.05}
+          className="space-y-4"
+        >
           {stores.map((store) => {
             const selected = selectedStoreId === store.id;
             const firstProduct = store.products?.[0];
             return (
-              <button
+              <StaggerItem
                 key={store.id}
-                type="button"
-                onClick={() => setSelectedStoreId(store.id)}
-                className={`w-full text-left rounded-xl border px-4 py-3 shadow-sm transition-colors ${selected ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+                type="slideUp"
+                distance={18}
+                duration={0.35}
               >
-                <div className="flex items-start gap-3">
-                  <span className="mt-1 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF4F4] text-deep-maroon">
-                    <FiMapPin className="h-4 w-4" />
-                  </span>
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm font-semibold text-gray-900">
-                        {store.name}
+                <button
+                  type="button"
+                  onClick={() => setSelectedStoreId(store.id)}
+                  className={`w-full text-left rounded-xl border px-4 py-3 shadow-sm transition-colors ${selected ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="mt-1 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF4F4] text-deep-maroon">
+                      <FiMapPin className="h-4 w-4" />
+                    </span>
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-semibold text-gray-900">
+                          {store.name}
+                        </p>
+                        <span
+                          className={`inline-flex h-4 w-4 rounded-full border-2 ${selected ? 'border-deep-maroon bg-deep-maroon' : 'border-gray-300 bg-white'}`}
+                          aria-hidden
+                        />
+                      </div>
+                      <p className="text-xs text-gray-700">
+                        {renderStoreAddress(store)}
                       </p>
-                      <span
-                        className={`inline-flex h-4 w-4 rounded-full border-2 ${selected ? 'border-deep-maroon bg-deep-maroon' : 'border-gray-300 bg-white'}`}
-                        aria-hidden
-                      />
+                      {store.phone_number ? (
+                        <p className="text-xs text-gray-700 inline-flex items-center gap-1">
+                          <FiPhone className="h-3 w-3" />
+                          {store.phone_number}
+                        </p>
+                      ) : null}
+                      {firstProduct ? (
+                        <p className="text-xs text-gray-600">
+                          {firstProduct.product_name} — Stock:{' '}
+                          {firstProduct.stock}
+                        </p>
+                      ) : null}
                     </div>
-                    <p className="text-xs text-gray-700">
-                      {renderStoreAddress(store)}
-                    </p>
-                    {store.phone_number ? (
-                      <p className="text-xs text-gray-700 inline-flex items-center gap-1">
-                        <FiPhone className="h-3 w-3" />
-                        {store.phone_number}
-                      </p>
-                    ) : null}
-                    {firstProduct ? (
-                      <p className="text-xs text-gray-600">
-                        {firstProduct.product_name} — Stock:{' '}
-                        {firstProduct.stock}
-                      </p>
-                    ) : null}
                   </div>
-                </div>
-              </button>
+                </button>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       ) : null}
     </section>
   );

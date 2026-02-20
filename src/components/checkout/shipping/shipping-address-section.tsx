@@ -1,6 +1,7 @@
 'use client';
 
 import { ConfirmationModal } from '@/components/shared/confirmation-modal';
+import ShippingAddressSkeleton from '@/components/skeletons/shipping-address-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
 import { useGetAddresses } from '@/hooks/api';
@@ -11,22 +12,6 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Address, AddressList } from './address-list/address-list';
 import CreateOrEditAddressForm from './create-or-edit-address';
 import { AddressFormData } from './create-or-edit-address/reducer';
-
-const AddressListSkeleton = () => (
-  <div className="space-y-3">
-    {[1, 2].map((item) => (
-      <div
-        key={item}
-        className="animate-pulse rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm"
-      >
-        <div className="h-4 w-24 bg-gray-200 rounded mb-3" />
-        <div className="h-4 w-40 bg-gray-200 rounded mb-2" />
-        <div className="h-3 w-56 bg-gray-200 rounded mb-1.5" />
-        <div className="h-3 w-48 bg-gray-200 rounded" />
-      </div>
-    ))}
-  </div>
-);
 
 const toFormCategory = (type: AddressFormData['addressType']) => {
   if (type === 'work') return 'office';
@@ -231,7 +216,7 @@ export const ShippingAddressSection: FC = () => {
       ) : (
         <>
           {isLoading && !addresses.length ? (
-            <AddressListSkeleton />
+            <ShippingAddressSkeleton />
           ) : (
             <AddressList
               addresses={addresses}

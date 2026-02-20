@@ -42,7 +42,7 @@ export const AddressList: FC<AddressListProps> = ({
         {addresses.length} Saved addresses
       </div>
       <StaggerContainer
-        mode="animate"
+        mode="whileInView"
         staggerChildren={0.08}
         delayChildren={0.05}
         className="space-y-4"
