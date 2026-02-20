@@ -262,7 +262,13 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const refreshCart = useCallback(async () => {
     if (!shouldFetchCart) return;
-    setIsLoading(true);
+
+    // Only show the full-page loading state while hydrating the cart initially.
+    const shouldShowFullLoader = !isHydrated;
+    if (shouldShowFullLoader) {
+      setIsLoading(true);
+    }
+
     try {
       await mutateCart();
     } catch (error) {
@@ -271,9 +277,11 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       showError(getErrorMessage(error, 'Failed to load cart'));
     } finally {
       setIsHydrated(true);
-      setIsLoading(false);
+      if (shouldShowFullLoader) {
+        setIsLoading(false);
+      }
     }
-  }, [mutateCart, getErrorMessage, showError, shouldFetchCart]);
+  }, [mutateCart, getErrorMessage, showError, shouldFetchCart, isHydrated]);
 
   const loadShippingStep = useCallback(async () => {
     if (
@@ -324,8 +332,16 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [refreshCart]);
 
   useEffect(() => {
-    setIsLoading(isCartLoading);
-  }, [isCartLoading]);
+    if (!isHydrated) {
+      setIsLoading((prev) => prev || isCartLoading);
+      return;
+    }
+
+    // After hydration, keep the page content visible and rely on inline spinners.
+    if (!isCartLoading && isLoading) {
+      setIsLoading(false);
+    }
+  }, [isCartLoading, isHydrated, isLoading]);
 
   useEffect(() => {
     if (cartResponse?.data) {
