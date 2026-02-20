@@ -2,11 +2,11 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import PickupStoresSkeleton from '@/components/skeletons/pickup-stores-skeleton';
-import { useCart } from '@/contexts/cart-context';
 import { useGetStoresByCart } from '@/hooks/api';
 import type { StoreLocation } from '@/types/store';
 import { FC, startTransition, useEffect, useState } from 'react';
 import { FiInbox, FiMapPin, FiPhone } from 'react-icons/fi';
+import type { ShippingSelection } from './types';
 
 const renderStoreAddress = (store: StoreLocation) => {
   const parts = [store.street, store.city, store.state, store.postal_code]
@@ -15,14 +15,21 @@ const renderStoreAddress = (store: StoreLocation) => {
   return parts;
 };
 
-export const PickupStoresSection: FC = () => {
-  const {
-    cartId,
-    shippingMethod,
-    shippingSelection,
-    setShippingSelection,
-    guestSessionId,
-  } = useCart();
+interface PickupStoresSectionProps {
+  cartId?: string;
+  shippingMethod: 'home' | 'pickup';
+  shippingSelection: ShippingSelection;
+  setShippingSelection: (update: Partial<ShippingSelection>) => void;
+  guestSessionId?: string | null;
+}
+
+export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
+  cartId,
+  shippingMethod,
+  shippingSelection,
+  setShippingSelection,
+  guestSessionId,
+}) => {
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
 
   const { stores, isLoading } = useGetStoresByCart({

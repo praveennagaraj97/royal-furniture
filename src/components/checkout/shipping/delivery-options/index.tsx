@@ -1,18 +1,25 @@
 'use client';
 
-import { useCart } from '@/contexts/cart-context';
+import type { ShippingStepState } from '@/types/cart';
 import { buildIso, formatDateWithOrdinal, parseDateInput } from '@/utils/date';
 import { FC, useMemo, useState } from 'react';
 import { FiClock } from 'react-icons/fi';
+import type { ShippingSelection } from '../types';
 import CustomDeliveryModal from './custom-delivery-modal';
 
-const DeliveryOptionsSection: FC = () => {
-  const {
-    shippingStep,
-    isShippingLoading,
-    shippingSelection,
-    setShippingSelection,
-  } = useCart();
+interface DeliveryOptionsSectionProps {
+  shippingStep?: ShippingStepState;
+  isShippingLoading: boolean;
+  shippingSelection: ShippingSelection;
+  setShippingSelection: (update: Partial<ShippingSelection>) => void;
+}
+
+const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
+  shippingStep,
+  isShippingLoading,
+  shippingSelection,
+  setShippingSelection,
+}) => {
   const [isSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
 

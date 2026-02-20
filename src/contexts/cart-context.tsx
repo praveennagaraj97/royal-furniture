@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetCart, useGetCartShippingStep } from '@/hooks/api';
+import { useGetCart } from '@/hooks/api';
 import { cartService } from '@/services/api/cart-service';
 import type {
   CartApiData,
@@ -8,13 +8,10 @@ import type {
   CartItem,
   CartState,
   CartTotals,
-  ShippingProceedApiData,
 } from '@/types/cart';
 import type { ParsedAPIError } from '@/types/error';
 import type { ProductItem } from '@/types/response';
-import { buildIso, parseDateInput } from '@/utils/date';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
-import { usePathname } from 'next/navigation';
 import {
   createContext,
   useCallback,
@@ -39,31 +36,15 @@ interface CartContextValue {
   freeShippingMessage?: string;
   isHydrated: boolean;
   isLoading: boolean;
-  isShippingLoading: boolean;
   header?: CartState['header'];
-  shippingStep?: CartState['shippingStep'];
-  shippingMethod: 'home' | 'pickup';
-  setShippingMethod: (method: 'home' | 'pickup') => void;
   addItem: (sku: string, quantity: number) => Promise<void>;
   removeItem: (cartItemId: string) => Promise<void>;
   updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
   clearCart: () => void;
   refreshCart: () => Promise<void>;
-  loadShippingStep: () => Promise<void>;
   pendingActions: Record<string, 'increase' | 'decrease' | 'remove'>;
   guestSessionId?: string | null;
-  shippingSelection: ShippingSelection;
-  setShippingSelection: (update: Partial<ShippingSelection>) => void;
 }
-
-type ShippingSelection = {
-  deliveryType: 'home' | 'pickup';
-  isCustomDelivery: boolean;
-  date: string | null;
-  slotId: number | null;
-  slotLabel: string | null;
-  storeId: number | null;
-};
 
 const EMPTY_TOTALS: CartTotals = {
   subtotal: 0,
@@ -83,15 +64,6 @@ const DEFAULT_CART_STATE: CartState = {
   freeShippingProgress: 0,
   totals: EMPTY_TOTALS,
   shippingStep: undefined,
-};
-
-const DEFAULT_SHIPPING_SELECTION: ShippingSelection = {
-  deliveryType: 'home',
-  isCustomDelivery: false,
-  date: null,
-  slotId: null,
-  slotLabel: null,
-  storeId: null,
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -189,56 +161,16 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
   };
 };
 
-const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
-  if (!data) return undefined;
-
-  return {
-    isGuest: data.is_guest,
-    step: data.step,
-    deliveryMethods: (data.delivery_method || []) as ('home' | 'pickup')[],
-    shippingAddress: data.shipping_address || undefined,
-    defaultDeliveryDate: data.default_delivery_date ?? null,
-    deliverySlots: (data.delivery_slots || []).map((slot) => ({
-      id: slot.id,
-      timeRange: slot.time_range,
-    })),
-    customDeliveryCharge:
-      data.custom_delivery_charge === undefined ||
-      data.custom_delivery_charge === null
-        ? null
-        : normalizePrice(data.custom_delivery_charge),
-    selectedDeliverySlot: data.selected_delivery_slot
-      ? {
-          date: data.selected_delivery_slot.date,
-          slot: data.selected_delivery_slot.slot,
-          slotId: data.selected_delivery_slot.slot_id,
-        }
-      : undefined,
-  } satisfies CartState['shippingStep'];
-};
-
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const pathname = usePathname();
   const [state, setState] = useState<CartState>(DEFAULT_CART_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isShippingLoading, setIsShippingLoading] = useState(false);
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
   const [pendingActions, setPendingActions] = useState<
     Record<string, 'increase' | 'decrease' | 'remove'>
   >({});
-  const [shippingMethod, setShippingMethod] = useState<'home' | 'pickup'>(
-    'home',
-  );
-  const [shippingSelection, setShippingSelectionState] =
-    useState<ShippingSelection>(DEFAULT_SHIPPING_SELECTION);
   const { showSuccess, showError } = useToast();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-  const isOnShippingPage = useMemo(
-    () => pathname?.includes('/checkout/shipping') ?? false,
-    [pathname],
-  );
-
   const guestSessionForUse = !isAuthenticated
     ? guestSessionId || undefined
     : undefined;
@@ -253,24 +185,6 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   } = useGetCart({
     guestSessionId: guestSessionForUse,
     enabled: shouldFetchCart,
-  });
-
-  const inShippingStep =
-    state.header?.current_step === 'shipping' ||
-    cartResponse?.data?.header?.current_step === 'shipping';
-
-  const shouldFetchShippingStep =
-    !isAuthLoading &&
-    (isAuthenticated || canUseGuestSession) &&
-    (inShippingStep || isOnShippingPage);
-
-  const {
-    data: shippingResponse,
-    isLoading: isShippingFetching,
-    mutate: mutateShipping,
-  } = useGetCartShippingStep({
-    guestSessionId: guestSessionForUse,
-    enabled: shouldFetchShippingStep,
   });
 
   const getErrorMessage = useCallback(
@@ -301,15 +215,6 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     return guestSessionId || getOrCreateGuestSession();
   }, [guestSessionId, isAuthenticated]);
 
-  const setShippingSelection = useCallback(
-    (update: Partial<ShippingSelection>) => {
-      setShippingSelectionState((prev) => ({ ...prev, ...update }));
-    },
-    [],
-  );
-
-  // Shipping payload is now built at component level to keep context fetch-only.
-
   const refreshCart = useCallback(async () => {
     if (!shouldFetchCart) return;
 
@@ -332,40 +237,6 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       }
     }
   }, [mutateCart, getErrorMessage, showError, shouldFetchCart, isHydrated]);
-
-  const loadShippingStep = useCallback(async () => {
-    if (
-      !shouldFetchShippingStep ||
-      isAuthLoading ||
-      (!isAuthenticated && !guestSessionForUse)
-    ) {
-      return;
-    }
-
-    setIsShippingLoading(true);
-    try {
-      const response = await mutateShipping();
-      const shippingStep = mapShippingProceedToState(response?.data);
-      const mappedCart = mapCartDataToState(response?.data?.cart_summary);
-
-      setState({
-        ...mappedCart,
-        shippingStep,
-      });
-    } catch (error) {
-      showError(getErrorMessage(error, 'Failed to load shipping details'));
-    } finally {
-      setIsShippingLoading(false);
-    }
-  }, [
-    mutateShipping,
-    shouldFetchShippingStep,
-    isAuthLoading,
-    isAuthenticated,
-    guestSessionForUse,
-    getErrorMessage,
-    showError,
-  ]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -395,82 +266,10 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (cartResponse?.data) {
-      setState((prev) => ({
-        ...mapCartDataToState(cartResponse.data),
-        shippingStep: prev.shippingStep,
-      }));
+      setState(mapCartDataToState(cartResponse.data));
       setIsHydrated(true);
     }
   }, [cartResponse]);
-
-  useEffect(() => {
-    if (shippingResponse?.data) {
-      const shippingStep = mapShippingProceedToState(shippingResponse.data);
-      const mappedCart = mapCartDataToState(shippingResponse.data.cart_summary);
-      const parsedSelectedDate = parseDateInput(
-        shippingResponse.data.selected_delivery_slot?.date,
-      );
-      const slotLabel = shippingResponse.data.selected_delivery_slot?.slot;
-      const slotId =
-        shippingResponse.data.selected_delivery_slot?.slot_id ??
-        shippingStep?.deliverySlots.find((slot) => slot.timeRange === slotLabel)
-          ?.id ??
-        null;
-
-      setState({
-        ...mappedCart,
-        shippingStep,
-      });
-
-      setShippingSelectionState((prev) => {
-        const nextDeliveryType = prev.deliveryType;
-        const nextDate = parsedSelectedDate
-          ? buildIso(parsedSelectedDate)
-          : null;
-        return {
-          ...prev,
-          deliveryType: nextDeliveryType,
-          date: nextDate,
-          slotId: slotId ?? null,
-          slotLabel: slotLabel ?? null,
-          isCustomDelivery: Boolean(nextDate && slotId),
-        };
-      });
-    }
-  }, [shippingResponse]);
-
-  useEffect(() => {
-    const available = state.shippingStep?.deliveryMethods || ['home', 'pickup'];
-    setShippingMethod((prev) =>
-      available.includes(prev) ? prev : available[0] || 'home',
-    );
-  }, [state.shippingStep?.deliveryMethods]);
-
-  useEffect(() => {
-    setShippingSelectionState((prev) => {
-      if (shippingMethod === 'home') {
-        return {
-          ...prev,
-          deliveryType: 'home',
-          isCustomDelivery: false,
-          storeId: null,
-        };
-      }
-
-      return {
-        ...prev,
-        deliveryType: 'pickup',
-        isCustomDelivery: false,
-        date: null,
-        slotId: null,
-        slotLabel: null,
-      };
-    });
-  }, [shippingMethod]);
-
-  useEffect(() => {
-    setIsShippingLoading(isShippingFetching);
-  }, [isShippingFetching]);
 
   const addItem = useCallback(
     async (sku: string, quantity: number) => {
@@ -573,7 +372,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     // TODO: implement clear cart API once available
   }, []);
 
-  // Shipping submit logic lives in components; context only exposes fetch/state.
+  // Shipping data is handled at the shipping flow components; cart context stays fetch-only for cart data.
 
   const value = useMemo<CartContextValue>(
     () => ({
@@ -587,20 +386,13 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       freeShippingMessage: state.freeShippingMessage,
       isHydrated,
       isLoading,
-      isShippingLoading,
       header: state.header,
-      shippingStep: state.shippingStep,
-      shippingMethod,
-      setShippingMethod,
       guestSessionId,
-      shippingSelection,
-      setShippingSelection,
       addItem,
       removeItem,
       updateQuantity,
       clearCart,
       refreshCart,
-      loadShippingStep,
       pendingActions,
     }),
     [
@@ -613,20 +405,13 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.freeShippingMessage,
       state.totals,
       state.header,
-      state.shippingStep,
-      shippingMethod,
-      setShippingMethod,
-      shippingSelection,
-      setShippingSelection,
       isHydrated,
       isLoading,
-      isShippingLoading,
       addItem,
       removeItem,
       updateQuantity,
       clearCart,
       refreshCart,
-      loadShippingStep,
       pendingActions,
       guestSessionId,
     ],

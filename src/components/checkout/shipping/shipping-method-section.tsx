@@ -1,13 +1,22 @@
 'use client';
 
-import { useCart } from '@/contexts/cart-context';
+import type { ShippingStepState } from '@/types/cart';
 import { FC, useMemo } from 'react';
 import { FiHome, FiMapPin } from 'react-icons/fi';
 
-export const ShippingMethodSection: FC = () => {
-  const { shippingStep, isShippingLoading, shippingMethod, setShippingMethod } =
-    useCart();
+interface ShippingMethodSectionProps {
+  shippingStep?: ShippingStepState;
+  isShippingLoading: boolean;
+  shippingMethod: 'home' | 'pickup';
+  setShippingMethod: (method: 'home' | 'pickup') => void;
+}
 
+export const ShippingMethodSection: FC<ShippingMethodSectionProps> = ({
+  shippingStep,
+  isShippingLoading,
+  shippingMethod,
+  setShippingMethod,
+}) => {
   const availableMethods = useMemo<('home' | 'pickup')[]>(
     () => shippingStep?.deliveryMethods || ['home', 'pickup'],
     [shippingStep?.deliveryMethods],
