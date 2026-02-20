@@ -1,11 +1,12 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import PickupStoresSkeleton from '@/components/skeletons/pickup-stores-skeleton';
 import { useCart } from '@/contexts/cart-context';
 import { useGetStoresByCart } from '@/hooks/api';
 import type { StoreLocation } from '@/types/store';
 import { FC, startTransition, useEffect, useState } from 'react';
-import { FiMapPin, FiPhone } from 'react-icons/fi';
+import { FiInbox, FiMapPin, FiPhone } from 'react-icons/fi';
 
 const renderStoreAddress = (store: StoreLocation) => {
   const parts = [store.street, store.city, store.state, store.postal_code]
@@ -59,14 +60,18 @@ export const PickupStoresSection: FC = () => {
         </h2>
       </div>
 
-      {isLoading && !stores?.length ? (
-        <p className="text-sm text-gray-600">Loading nearby stores...</p>
-      ) : null}
+      {isLoading && !stores?.length ? <PickupStoresSkeleton /> : null}
 
       {!isLoading && !stores?.length ? (
-        <p className="text-sm text-gray-600">
-          No pickup stores available for this cart yet.
-        </p>
+        <div className="flex items-center gap-3 rounded-xl border border-dashed border-gray-200 bg-white px-4 py-3 text-sm text-gray-600">
+          <FiInbox className="h-5 w-5 text-gray-500" />
+          <div>
+            <p className="font-semibold text-gray-800">No pickup stores yet</p>
+            <p className="text-xs text-gray-500">
+              We’ll show available stores for your cart here.
+            </p>
+          </div>
+        </div>
       ) : null}
 
       {stores?.length ? (

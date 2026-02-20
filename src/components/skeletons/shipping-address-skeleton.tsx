@@ -7,9 +7,10 @@ export const ShippingAddressSkeleton: FC = () => {
   return (
     <div className="space-y-3">
       <StaggerContainer
-        mode="animate"
+        mode="whileInView"
         staggerChildren={0.08}
         delayChildren={0.05}
+        className="space-y-3"
       >
         {[0, 1].map((idx) => (
           <StaggerItem key={idx} type="slideUp" distance={16} duration={0.35}>

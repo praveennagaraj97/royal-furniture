@@ -9,6 +9,7 @@ import { addressService } from '@/services/api/address-service';
 import type { AddressCategory, UserAddress } from '@/types/address';
 import type { ParsedAPIError } from '@/types/error';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FiInbox, FiLock } from 'react-icons/fi';
 import { Address, AddressList } from './address-list/address-list';
 import CreateOrEditAddressForm from './create-or-edit-address';
 import { AddressFormData } from './create-or-edit-address/reducer';
@@ -112,12 +113,7 @@ export const ShippingAddressSection: FC = () => {
     setAddresses((prev) =>
       prev.map((a) => ({ ...a, selected: String(a.id) === nextId })),
     );
-    try {
-      await addressService.updateAddress(id, { is_default: true });
-      await mutate();
-    } catch (error) {
-      showError(getErrorMessage(error, 'Failed to select address'));
-    }
+    // Persisting selected address to cart will be handled in a later step; avoid PATCH here.
   };
 
   const handleSave = async (data: AddressFormData) => {
@@ -166,9 +162,10 @@ export const ShippingAddressSection: FC = () => {
             Shipping address
           </h2>
         </div>
-        <p className="text-sm text-gray-600">
-          Please sign in to add or manage your shipping addresses.
-        </p>
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <FiLock className="h-4 w-4" />
+          <span>Please sign in to add or manage your shipping addresses.</span>
+        </div>
       </section>
     );
   }
@@ -217,6 +214,16 @@ export const ShippingAddressSection: FC = () => {
         <>
           {isLoading && !addresses.length ? (
             <ShippingAddressSkeleton />
+          ) : !isLoading && !addresses.length ? (
+            <div className="flex items-center gap-3 rounded-xl border border-dashed border-gray-200 bg-white px-4 py-3 text-sm text-gray-600">
+              <FiInbox className="h-5 w-5 text-gray-500" />
+              <div>
+                <p className="font-semibold text-gray-800">No addresses yet</p>
+                <p className="text-xs text-gray-500">
+                  Add an address to continue checkout.
+                </p>
+              </div>
+            </div>
           ) : (
             <AddressList
               addresses={addresses}
