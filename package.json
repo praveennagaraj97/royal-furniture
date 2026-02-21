@@ -14,7 +14,7 @@
   "dependencies": {
     "@types/nprogress": "^0.2.3",
     "@vercel/toolbar": "^0.2.1",
-    "axios": "^1.13.4",
+    "axios": "^1.13.5",
     "country-flag-icons": "^1.6.12",
     "framer-motion": "^12.29.2",
     "libphonenumber-js": "^1.12.36",
