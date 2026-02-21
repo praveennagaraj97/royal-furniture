@@ -8,6 +8,7 @@ import { useGetAddresses } from '@/hooks/api';
 import { addressService } from '@/services/api/address-service';
 import type { AddressCategory, UserAddress } from '@/types/address';
 import type { ParsedAPIError } from '@/types/error';
+import NProgress from 'nprogress';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiInbox, FiLock } from 'react-icons/fi';
 import { Address, AddressList } from './address-list/address-list';
@@ -27,7 +28,15 @@ const addressCategoryToFormType = (
   return 'home';
 };
 
-export const ShippingAddressSection: FC = () => {
+type Props = {
+  shippingAddress?: UserAddress | null;
+  onShippingRevalidate?: () => Promise<void> | void;
+};
+
+export const ShippingAddressSection: FC<Props> = ({
+  shippingAddress,
+  onShippingRevalidate,
+}) => {
   const { isAuthenticated } = useAuth();
   const { showError, showSuccess } = useToast();
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -62,14 +71,23 @@ export const ShippingAddressSection: FC = () => {
       selectedAddressIdRef.current = null;
       return;
     }
-
     const previouslySelected = selectedAddressIdRef.current;
     const defaultSelected = parsedAddresses.find((addr) => addr.is_default)?.id;
+
+    // If parent provided a selected shipping address from the shipping step, prefer that
+    const selectedFromShipping = shippingAddress?.id
+      ? String(shippingAddress.id)
+      : null;
+
     const selectedIdRaw =
-      previouslySelected &&
-      parsedAddresses.some((a) => String(a.id) === previouslySelected)
-        ? previouslySelected
-        : String(defaultSelected ?? parsedAddresses[0].id);
+      selectedFromShipping &&
+      parsedAddresses.some((a) => String(a.id) === selectedFromShipping)
+        ? selectedFromShipping
+        : previouslySelected &&
+            parsedAddresses.some((a) => String(a.id) === previouslySelected)
+          ? previouslySelected
+          : String(defaultSelected ?? parsedAddresses[0].id);
+
     const selectedId = String(selectedIdRaw);
 
     setAddresses(
@@ -79,7 +97,7 @@ export const ShippingAddressSection: FC = () => {
       })),
     );
     selectedAddressIdRef.current = selectedId;
-  }, [parsedAddresses]);
+  }, [parsedAddresses, shippingAddress?.id]);
 
   const handleEdit = (address: Address) => {
     setEditAddress(address);
@@ -113,7 +131,19 @@ export const ShippingAddressSection: FC = () => {
     setAddresses((prev) =>
       prev.map((a) => ({ ...a, selected: String(a.id) === nextId })),
     );
-    // Persisting selected address to cart will be handled in a later step; avoid PATCH here.
+    // Persist selected address as default on server for this user
+    NProgress.start();
+    try {
+      await addressService.setDefaultAddress(Number(nextId));
+      await mutate();
+      showSuccess('Address selected');
+      // Ask parent to revalidate shipping step (so shipping_address is updated)
+      await onShippingRevalidate?.();
+    } catch (error) {
+      showError(getErrorMessage(error, 'Failed to set default address'));
+    } finally {
+      NProgress.done();
+    }
   };
 
   const handleSave = async (data: AddressFormData, countryCode: string) => {

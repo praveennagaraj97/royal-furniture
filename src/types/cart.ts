@@ -114,7 +114,7 @@ export interface ShippingStepState {
   isGuest: boolean;
   step?: string;
   deliveryMethods: ('home' | 'pickup')[];
-  shippingAddress?: unknown;
+  shippingAddress?: UserAddress | null;
   defaultDeliveryDate?: string | null;
   deliverySlots: { id: number; timeRange: string }[];
   selectedDeliverySlot?: {

@@ -85,6 +85,7 @@ const ShippingPageContent: FC = () => {
     data: shippingResponse,
     isLoading: isShippingLoading,
     isValidating: isShippingValidating,
+    mutate: mutateShipping,
   } = useGetCartShippingStep({
     guestSessionId,
     enabled: shouldFetchShipping,
@@ -190,7 +191,12 @@ const ShippingPageContent: FC = () => {
                   setShippingSelection={handleShippingSelectionUpdate}
                 />
               ) : (
-                <ShippingAddressSection />
+                <ShippingAddressSection
+                  shippingAddress={shippingStep?.shippingAddress ?? null}
+                  onShippingRevalidate={async () => {
+                    await mutateShipping();
+                  }}
+                />
               )}
             </StaggerItem>
           </div>

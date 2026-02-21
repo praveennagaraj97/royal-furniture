@@ -52,6 +52,15 @@ export class AddressService extends BaseAPIService {
       throw this.parseError(error);
     }
   }
+
+  async setDefaultAddress(id: number | string): Promise<void> {
+    try {
+      // POST to the set_default endpoint for the given address
+      await this.http.post(`${API_ROUTES.ADDRESSES.DETAIL(id)}set_default/`);
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
 }
 
 export const addressService = new AddressService();
