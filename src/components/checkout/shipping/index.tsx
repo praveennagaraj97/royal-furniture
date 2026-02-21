@@ -6,7 +6,15 @@ import { useCart } from '@/contexts/cart-context';
 import { useGetCartShippingStep } from '@/hooks/api';
 import type { ShippingProceedApiData, ShippingStepState } from '@/types/cart';
 import { buildIso, parseDateInput } from '@/utils/date';
-import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  FC,
+  Fragment,
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { DeliveryInfoCard } from '../common/info-sections/delivery-card';
 import { OrderSummarySection } from '../common/order-summary';
 import DeliveryOptionsSection from './delivery-options';
@@ -92,58 +100,65 @@ const ShippingPageContent: FC = () => {
   );
 
   useEffect(() => {
-    const shippingData = shippingResponse?.data;
-    if (!shippingData) return;
+    startTransition(() => {
+      const shippingData = shippingResponse?.data;
+      if (!shippingData) return;
 
-    const mappedStep = mapShippingProceedToState(shippingData);
-    setShippingStep(mappedStep);
+      const mappedStep = mapShippingProceedToState(shippingData);
+      setShippingStep(mappedStep);
 
-    const slotLabel = shippingData.selected_delivery_slot?.slot ?? null;
-    const parsedSelectedDate = parseDateInput(
-      shippingData.selected_delivery_slot?.date,
-    );
-    const slotId =
-      shippingData.selected_delivery_slot?.slot_id ??
-      mappedStep?.deliverySlots.find((slot) => slot.timeRange === slotLabel)
-        ?.id ??
-      null;
+      const slotLabel = shippingData.selected_delivery_slot?.slot ?? null;
+      const parsedSelectedDate = parseDateInput(
+        shippingData.selected_delivery_slot?.date,
+      );
+      const slotId =
+        shippingData.selected_delivery_slot?.slot_id ??
+        mappedStep?.deliverySlots.find((slot) => slot.timeRange === slotLabel)
+          ?.id ??
+        null;
 
-    const availableMethods = mappedStep?.deliveryMethods || ['home', 'pickup'];
-    setShippingMethod((prev) =>
-      availableMethods.includes(prev) ? prev : availableMethods[0] || 'home',
-    );
+      const availableMethods = mappedStep?.deliveryMethods || [
+        'home',
+        'pickup',
+      ];
+      setShippingMethod((prev) =>
+        availableMethods.includes(prev) ? prev : availableMethods[0] || 'home',
+      );
 
-    setShippingSelection((prev) => ({
-      ...prev,
-      deliveryType: availableMethods.includes(prev.deliveryType)
-        ? prev.deliveryType
-        : availableMethods[0] || 'home',
-      date: parsedSelectedDate ? buildIso(parsedSelectedDate) : null,
-      slotId: slotId ?? null,
-      slotLabel,
-      isCustomDelivery: Boolean(parsedSelectedDate && slotId),
-    }));
+      setShippingSelection((prev) => ({
+        ...prev,
+        deliveryType: availableMethods.includes(prev.deliveryType)
+          ? prev.deliveryType
+          : availableMethods[0] || 'home',
+        date: parsedSelectedDate ? buildIso(parsedSelectedDate) : null,
+        slotId: slotId ?? null,
+        slotLabel,
+        isCustomDelivery: Boolean(parsedSelectedDate && slotId),
+      }));
+    });
   }, [shippingResponse]);
 
   useEffect(() => {
-    setShippingSelection((prev) => {
-      if (shippingMethod === 'home') {
+    startTransition(() => {
+      setShippingSelection((prev) => {
+        if (shippingMethod === 'home') {
+          return {
+            ...prev,
+            deliveryType: 'home',
+            isCustomDelivery: false,
+            storeId: null,
+          };
+        }
+
         return {
           ...prev,
-          deliveryType: 'home',
+          deliveryType: 'pickup',
           isCustomDelivery: false,
-          storeId: null,
+          date: null,
+          slotId: null,
+          slotLabel: null,
         };
-      }
-
-      return {
-        ...prev,
-        deliveryType: 'pickup',
-        isCustomDelivery: false,
-        date: null,
-        slotId: null,
-        slotLabel: null,
-      };
+      });
     });
   }, [shippingMethod]);
 
