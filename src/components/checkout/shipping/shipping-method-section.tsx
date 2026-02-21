@@ -1,6 +1,7 @@
 'use client';
 
 import type { ShippingStepState } from '@/types/cart';
+import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
 import { FiHome, FiMapPin } from 'react-icons/fi';
 
@@ -17,6 +18,7 @@ export const ShippingMethodSection: FC<ShippingMethodSectionProps> = ({
   shippingMethod,
   setShippingMethod,
 }) => {
+  const t = useTranslations('shipping');
   const availableMethods = useMemo<('home' | 'pickup')[]>(
     () => shippingStep?.deliveryMethods || ['home', 'pickup'],
     [shippingStep?.deliveryMethods],
@@ -25,7 +27,7 @@ export const ShippingMethodSection: FC<ShippingMethodSectionProps> = ({
   return (
     <section className="space-y-3">
       <h2 className="text-base sm:text-lg font-medium text-gray-900">
-        Shipping Method
+        {t('titles.shippingMethod')}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <button
@@ -39,10 +41,10 @@ export const ShippingMethodSection: FC<ShippingMethodSectionProps> = ({
           </span>
           <div className="flex flex-col">
             <span className="text-sm font-semibold text-gray-900">
-              Home Delivery
+              {t('method.homeTitle')}
             </span>
             <span className="text-xs text-gray-500">
-              We deliver to your doorstep
+              {t('method.homeSubtitle')}
             </span>
           </div>
         </button>
@@ -57,9 +59,11 @@ export const ShippingMethodSection: FC<ShippingMethodSectionProps> = ({
             <FiMapPin className="h-4 w-4" />
           </span>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-gray-900">Pickup</span>
+            <span className="text-sm font-semibold text-gray-900">
+              {t('method.pickupTitle')}
+            </span>
             <span className="text-xs text-gray-500">
-              Collect your order from our store
+              {t('method.pickupSubtitle')}
             </span>
           </div>
         </button>

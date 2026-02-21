@@ -1,6 +1,7 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
+import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { FiSearch } from 'react-icons/fi';
@@ -65,6 +66,8 @@ const STORES: Store[] = [
 ];
 
 const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
+  const t = useTranslations('product.storeLocator');
+  const tCommon = useTranslations('common');
   const [selectedStore, setSelectedStore] = useState<Store | null>(STORES[0]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -76,10 +79,14 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
 
   const getStockStatus = (stock: number) => {
     if (stock === 0) {
-      return <span className="text-red-500 font-semibold">Out of stock</span>;
+      return (
+        <span className="text-red-500 font-semibold">{t('stock.out')}</span>
+      );
     }
     return (
-      <span className="text-green-500 font-semibold">Only {stock} left</span>
+      <span className="text-green-500 font-semibold">
+        {t('stock.onlyLeft', { count: stock })}
+      </span>
     );
   };
 
@@ -90,9 +97,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200">
           <div className="flex items-center gap-2 min-w-0">
             <IoLocationSharp className="w-5 h-5 sm:w-6 sm:h-6 text-deep-maroon shrink-0" />
-            <h2 className="text-lg sm:text-2xl   truncate">
-              Store Availability
-            </h2>
+            <h2 className="text-lg sm:text-2xl   truncate">{t('title')}</h2>
           </div>
           <button
             onClick={onClose}
@@ -124,7 +129,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
                   <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
                   <input
                     type="text"
-                    placeholder="Search for location"
+                    placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-maroon text-xs sm:text-sm shadow-md"
@@ -135,7 +140,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
               {/* Set Location Button - Bottom Center Overlay */}
               <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10">
                 <button className="bg-deep-maroon hover:bg-[#6b0000] text-white py-2.5 px-6 rounded-lg font-semibold transition-colors text-sm shadow-md">
-                  Set location
+                  {t('setLocation')}
                 </button>
               </div>
 
@@ -171,7 +176,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
           <div className="w-full md:w-96 flex flex-col bg-white md:border-l md:border-gray-200 shrink-0">
             <div className="px-3 py-3 border-b border-gray-200 shrink-0">
               <h3 className="text-base sm:text-lg font-semibold text-indigo-slate">
-                Select your desired store
+                {t('selectStore')}
               </h3>
             </div>
 
@@ -179,7 +184,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
             <div className="flex-1 overflow-y-auto">
               {filteredStores.length === 0 ? (
                 <div className="p-4 text-center text-gray-500 text-sm">
-                  No stores found
+                  {t('noStores')}
                 </div>
               ) : (
                 <div className="space-y-0 divide-y divide-gray-200">
@@ -219,7 +224,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
                 onClick={onClose}
                 className="w-full bg-deep-maroon text-white py-2.5 px-3 rounded-lg font-semibold hover:bg-[#6b0000] transition-colors text-sm"
               >
-                Continue
+                {tCommon('continue')}
               </button>
             </div>
           </div>

@@ -4,17 +4,19 @@ import { ViewOnce } from '@/components/shared/animations';
 import ProductCard from '@/components/shared/ui/product-listing/product-card';
 import { AppLink } from '@/hooks';
 import { useGetWishlistCollection } from '@/hooks/api';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { FC } from 'react';
 import { FiArrowLeft, FiHeart } from 'react-icons/fi';
 
 const WishlistCollectionPageContent: FC = () => {
+  const t = useTranslations('user.wishlist');
   const params = useParams();
   const collectionId = params.collectionId as string | undefined;
 
   const { collection, isLoading } = useGetWishlistCollection(collectionId);
 
-  const title = collection?.title || 'Wishlist Collection';
+  const title = collection?.title || t('collectionTitleDefault');
   const totalItems = collection?.total_items ?? 0;
   const products = collection?.items?.map((i) => i.product) || [];
 
@@ -43,7 +45,7 @@ const WishlistCollectionPageContent: FC = () => {
           <h1 className="text-2xl font-semibold  ">{title}</h1>
         </div>
         <span className="text-sm text-gray-500 ml-auto">
-          {totalItems} Items
+          {t('itemCount', { count: totalItems })}
         </span>
       </div>
 
@@ -65,7 +67,7 @@ const WishlistCollectionPageContent: FC = () => {
       {!isLoading && products.length === 0 && (
         <div className="text-center py-12">
           <FiHeart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 text-lg">No items in this collection</p>
+          <p className="text-gray-500 text-lg">{t('collectionEmpty')}</p>
         </div>
       )}
     </ViewOnce>

@@ -3,12 +3,14 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { WishlistCollectionsSkeleton } from '@/components/skeletons/wishlist-collections-skeleton';
 import { useGetWishlistCollections } from '@/hooks/api';
+import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 import { FiHeart, FiPlus } from 'react-icons/fi';
 import CreateCollectionModal from './create-collection-modal';
 import WishlistCollectionCard from './wishlist-collection-card';
 
 const WishlistPageContent: FC = () => {
+  const t = useTranslations('user.wishlist');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { collections, isLoading, mutate } = useGetWishlistCollections();
 
@@ -29,7 +31,7 @@ const WishlistPageContent: FC = () => {
       >
         {/* Header */}
         <div className="flex items-center justify-between flex-wrap gap-4">
-          <h1 className="text-2xl font-semibold  ">Wishlist</h1>
+          <h1 className="text-2xl font-semibold  ">{t('title')}</h1>
 
           {/* Create New Collection Button */}
           <button
@@ -38,7 +40,7 @@ const WishlistPageContent: FC = () => {
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-all duration-200 shadow-sm hover:shadow-md"
           >
             <FiPlus className="w-5 h-5" />
-            <span>Create new collection</span>
+            <span>{t('createNew')}</span>
           </button>
         </div>
 
@@ -70,11 +72,10 @@ const WishlistPageContent: FC = () => {
                 </div>
               </div>
               <h3 className="text-lg font-semibold   mb-2">
-                No collections yet
+                {t('emptyTitle')}
               </h3>
               <p className="text-sm text-gray-500 text-center max-w-sm mb-6">
-                Start organizing your favorite products by creating your first
-                wishlist collection.
+                {t('emptyDescription')}
               </p>
               <button
                 type="button"
@@ -82,7 +83,7 @@ const WishlistPageContent: FC = () => {
                 className="flex items-center justify-center gap-2 px-6 py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 <FiPlus className="w-5 h-5" />
-                <span>Create new collection</span>
+                <span>{t('createNew')}</span>
               </button>
             </div>
           </>

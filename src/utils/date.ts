@@ -92,8 +92,8 @@ export const formatDateWithOrdinal = (iso?: string, withTime = false) => {
 
 export const todayIso = () => new Date().toISOString().slice(0, 10);
 
-export const monthNames = (d: Date) =>
-  d.toLocaleString(undefined, { month: 'long', year: 'numeric' });
+export const monthNames = (d: Date, locale?: string) =>
+  d.toLocaleString(locale || undefined, { month: 'long', year: 'numeric' });
 
 export const startOfMonth = (d: Date) =>
   new Date(d.getFullYear(), d.getMonth(), 1);

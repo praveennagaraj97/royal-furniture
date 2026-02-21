@@ -3,6 +3,9 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { ChangeEvent } from 'react';
 
 interface PhoneFieldProps {
+  label: string;
+  placeholder: string;
+  required?: boolean;
   value: string;
   countryCode: string;
   error?: string;
@@ -14,6 +17,9 @@ interface PhoneFieldProps {
 }
 
 export function PhoneField({
+  label,
+  placeholder,
+  required = false,
   value,
   countryCode,
   error,
@@ -29,7 +35,8 @@ export function PhoneField({
         className="block text-sm font-medium text-gray-700 mb-1"
         htmlFor="address-phone"
       >
-        Phone<span className="text-red-500">*</span>
+        {label}
+        {required ? <span className="text-red-500">*</span> : null}
       </label>
       <div className="flex items-start gap-2">
         <div className="shrink-0">
@@ -44,7 +51,7 @@ export function PhoneField({
             id="address-phone"
             type="tel"
             inputMode="tel"
-            placeholder="Enter your number"
+            placeholder={placeholder}
             value={value}
             onChange={onChange}
             onBlur={onBlur}

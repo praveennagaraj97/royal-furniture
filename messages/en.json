@@ -12,7 +12,9 @@
     "seeAll": "See All",
     "addToCart": "Add to Cart",
     "inCart": "In cart",
-    "off": "{percentage}% OFF"
+    "off": "{percentage}% OFF",
+    "productCount": "{count, plural, one {# Product} other {# Products}}",
+    "continue": "Continue"
   },
   "quickLinks": {
     "freeShipping": "Free shipping",
@@ -142,6 +144,10 @@
       "lastNameRequired": "Last name is required",
       "mobileNumberRequired": "Mobile number is required",
       "mobileNumberInvalid": "Please enter a valid mobile number",
+      "nameRequired": "Name is required",
+      "streetAddressRequired": "Street address is required",
+      "buildingRequired": "Building name or villa number is required",
+      "cityRequired": "City is required",
       "fieldRequired": "is required",
       "reEnterPasswordRequired": "Please re-enter your password",
       "passwordsDoNotMatch": "Passwords do not match",
@@ -168,6 +174,18 @@
       "unsavedChanges": "You have unsaved changes. Are you sure you want to close? All your entered information will be lost.",
       "yesClose": "Yes, Close",
       "continueEditing": "Continue Editing"
+    }
+  },
+  "sort": {
+    "sortBy": "Sort by",
+    "recommended": "Recommended",
+    "options": {
+      "relevant": "Relevant Products",
+      "best_seller": "Best Seller",
+      "new_arrival": "New Arrival",
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "discount": "Discount"
     }
   },
   "countries": {
@@ -238,6 +256,401 @@
       "update": "Update",
       "updating": "Updating...",
       "updateSuccess": "Profile updated successfully"
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "createNew": "Create new collection",
+      "emptyTitle": "No collections yet",
+      "emptyDescription": "Start organizing your favorite products by creating your first wishlist collection.",
+      "collectionTitleDefault": "Wishlist Collection",
+      "collectionEmpty": "No items in this collection",
+      "itemCount": "{count, plural, one {# Item} other {# Items}}"
+    }
+  },
+  "checkout": {
+    "header": {
+      "home": "Home",
+      "checkout": "Checkout"
+    },
+    "progress": {
+      "steps": {
+        "cart": "Cart",
+        "shipping": "Shipping",
+        "payment": "Payment"
+      }
+    },
+    "cart": {
+      "freeShipping": {
+        "addMore": "Add <amount>{value}</amount> more for Free Shipping!",
+        "unlocked": "You have unlocked Free Shipping!"
+      },
+      "items": {
+        "title": "Your cart ({count} {count, plural, one {item} other {items}})",
+        "table": {
+          "item": "Item",
+          "description": "Description",
+          "price": "Price",
+          "quantity": "Quantity",
+          "total": "Total Price"
+        },
+        "remove": "Remove"
+      },
+      "empty": {
+        "imageAlt": "Empty cart",
+        "title": "Your cart is empty",
+        "description": "Browse our collections and add products to see them here.",
+        "cta": "Go back to Home"
+      },
+      "added": {
+        "success": "Successfully added to your cart",
+        "continue": "Continue Shopping",
+        "goToCart": "Go to Cart"
+      },
+      "promos": {
+        "title": "Promos & Vouchers",
+        "description": "Apply your coupon codes or vouchers to get additional discounts.",
+        "openButton": "View / Enter Code",
+        "modalTitle": "View / Enter code",
+        "applyOffer": "Apply Offer",
+        "offerApplied": "Offer Applied",
+        "continue": "Continue",
+        "offers": {
+          "wc500": {
+            "description": "Shop for AED 1999 and get an additional 500 off. Use code WC500. Valid on first homeware order."
+          },
+          "big1": {
+            "description": "Shop for AED 1999 and get an additional 500 off. Use code WC500. Valid on first homeware order."
+          }
+        }
+      },
+      "support": {
+        "title": "Need help? We're here for you.",
+        "call": "Call Customer Support",
+        "write": "Write to us",
+        "return": "Return Policy"
+      },
+      "deliveryInfo": {
+        "title": "Delivery on",
+        "date": "Fri, 28 Feb 2025",
+        "update": "Update"
+      }
+    },
+    "payment": {
+      "title": "Payment Method",
+      "creditDebitTitle": "Credit & Debit Card",
+      "addNewCard": "Add New Card",
+      "otherMethodsTitle": "Other Payment Methods"
+    },
+    "orderSummary": {
+      "title": "Order Summary",
+      "itemPrice": "Item Price",
+      "discountApplied": "Discount Applied",
+      "couponApplied": "Coupon Applied",
+      "deliveryCharges": "Delivery Charges",
+      "free": "Free",
+      "youSavedPrefix": "You Saved",
+      "totalAmount": "Total Amount",
+      "notAvailable": "N/A",
+      "cta": {
+        "proceedToShipping": "Proceed to Shipping",
+        "saving": "Saving...",
+        "proceedToPayment": "Proceed to Payment",
+        "payNow": "Pay Now"
+      },
+      "shippingFees": {
+        "title": "Shipping Fees",
+        "totalShippingCharge": "Total Shipping Charge",
+        "free": "FREE",
+        "freeShippingMessage": "Congrats! You got free shipping on Furniture",
+        "howItWorksTitle": "How Shipping Fees Works",
+        "howItWorksDescription": "The charge depends on your order value and the type of products you wish to buy.",
+        "household": {
+          "title": "Household & Small Items Shipping",
+          "rate": "AED 19 On Orders Below AED 99",
+          "description": "This fee applies to items which are small and easy to assemble. Assembly not provided."
+        },
+        "furniture": {
+          "title": "Furniture & Large Items Shipping",
+          "rate": "AED 79 On Orders Below AED 299",
+          "description": "This fee applies to furniture and large items which are shipped and assembled by our crew."
+        }
+      }
+    },
+    "success": {
+      "title": "Payment Successful!",
+      "subtitle": "Your Order is Booked",
+      "trackOrder": "Track my order",
+      "viewOrder": "View my order"
+    }
+  },
+  "product": {
+    "info": {
+      "title": "General Information"
+    },
+    "header": {
+      "saveAmount": "Save {amount}",
+      "viewsIn24h": "{count} views in 24 hrs"
+    },
+    "actions": {
+      "outOfStock": "Out of Stock",
+      "buyNow": "Buy Now"
+    },
+    "paymentDelivery": {
+      "tabbyDescription": "4 interest-free payments of",
+      "tamaraDescription": "Split in 4 of",
+      "more": "More",
+      "learn": "Learn",
+      "waysOfPayment": "Ways of Payment",
+      "assemblyTitle": "Free Assembly Available",
+      "assemblyDescriptionFallback": "We will happily assemble your furniture for you at no additional cost",
+      "expressTitle": "Express Delivery Available",
+      "getItBy": "Get it by {date} if ordered within {time}",
+      "tomorrow": "tomorrow",
+      "extraCharges": "Extra Charges: {amount}",
+      "deliveryOn": "Delivery on",
+      "update": "Update",
+      "tryInStore": "Try in store!",
+      "flexiPaymentAvailable": "Flexi Payment Available",
+      "flexiPaymentNote": "Pay 20% upfront to confirm booking, remaining amount before delivery",
+      "modal": {
+        "title": "Info",
+        "closeAria": "Close",
+        "flexiTitle": "What is Flexi Payment?",
+        "flexiDescription": "Flexi Payment lets you book your order by paying a part of the total amount upfront and the rest before delivery.",
+        "benefitsTitle": "Benefits",
+        "close": "Ok"
+      }
+    },
+    "help": {
+      "noteLabel": "Note:",
+      "noteDescription": "The product {productName} images have props used for illustrative purposes. Product color may vary slightly due to photographic lighting or your screen settings.",
+      "helpTitle": "Need help? We’re here for you.",
+      "requestCall": "Request a call back",
+      "chatWithUs": "Chat with us",
+      "visitStore": "Visit our store"
+    },
+    "storeLocator": {
+      "title": "Store Availability",
+      "searchPlaceholder": "Search for location",
+      "setLocation": "Set location",
+      "selectStore": "Select your desired store",
+      "noStores": "No stores found",
+      "stock": {
+        "out": "Out of stock",
+        "onlyLeft": "Only {count} left"
+      }
+    },
+    "wishlist": {
+      "title": "Add to Wishlist",
+      "createNew": "Create new collection",
+      "empty": "No collections found. Create one to get started.",
+      "adding": "Adding...",
+      "done": "Done"
+    }
+  },
+  "user": {
+    "greeting": "Hello, {name}",
+    "edit": "Edit",
+    "account": {
+      "deleteAccount": "Delete Account",
+      "logout": "Log Out",
+      "logoutSuccess": "Logged out successfully",
+      "logoutConfirmTitle": "Log Out",
+      "logoutConfirmMessage": "Are you sure you want to log out?",
+      "logoutConfirmButton": "Log Out",
+      "logoutCancelButton": "Cancel"
+    },
+    "exclusiveOffers": {
+      "title": "Exclusive Offers for You"
+    },
+    "quickLinks": {
+      "myOrders": "My Orders",
+      "myProfile": "My Profile",
+      "wishlist": "Wishlist",
+      "savedAddresses": "Saved Addresses"
+    },
+    "profile": {
+      "title": "Profile",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phoneNumber": "Phone number",
+      "change": "Change",
+      "updating": "Updating...",
+      "update": "Update",
+      "updateSuccess": "Profile updated successfully"
+    },
+    "settings": {
+      "title": "Settings",
+      "savedForLater": "Saved for Later",
+      "notificationsSettings": "Notification Settings",
+      "selectLanguage": "Select Language"
+    },
+    "feedback": {
+      "title": "Help & Information",
+      "returnPolicy": "Return Policy",
+      "privacyPolicy": "Privacy Policy",
+      "termsConditions": "Terms & Conditions",
+      "contactUs": "Contact Us",
+      "faqs": "FAQs",
+      "aboutUs": "About Us"
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "createNew": "Create new collection",
+      "emptyTitle": "No collections yet",
+      "emptyDescription": "Start organizing your favorite products by creating your first wishlist collection.",
+      "collectionTitleDefault": "Wishlist Collection",
+      "collectionEmpty": "No items in this collection",
+      "itemCount": "{count, plural, one {# Item} other {# Items}}"
+    }
+  },
+  "products": {
+    "list": {
+      "title": "Products",
+      "foundForType": "{count, plural, one {Found # product} other {Found # products}}",
+      "noneForType": "No products found for \"{type}\""
+    },
+    "empty": {
+      "title": "No Products Found",
+      "withType": "We couldn't find any products in the \"{type}\" category at the moment. Please check back later.",
+      "generic": "No products available. Please select a category to browse."
+    }
+  },
+  "search": {
+    "list": {
+      "title": "Search Results",
+      "foundForQuery": "{count, plural, one {Found # result} other {Found # results}} for \"{query}\"",
+      "noneForQuery": "No results found for \"{query}\"",
+      "clear": "Clear search"
+    },
+    "empty": {
+      "title": "No Results Found",
+      "withQuery": "We couldn't find any products matching \"{query}\". Try different keywords or browse our categories.",
+      "generic": "Start searching for products by entering a keyword in the search bar."
+    }
+  },
+  "categories": {
+    "subcategory": {
+      "topBar": {
+        "showFilter": "Show Filter",
+        "hideFilter": "Hide Filter",
+        "gridViewAria": "Grid view"
+      },
+      "empty": {
+        "title": "No Products Found",
+        "description": "We couldn't find any products in this category. Try adjusting your filters or browse other categories."
+      }
+    },
+    "filters": {
+      "title": "Filters",
+      "closeAria": "Close filters",
+      "empty": {
+        "title": "No Filters Available",
+        "description": "There are no filter options available for this category at the moment."
+      }
+    }
+  },
+  "shipping": {
+    "titles": {
+      "shippingAddress": "Shipping address",
+      "pickupStore": "Pickup store",
+      "shippingMethod": "Shipping Method",
+      "deliveryOptions": "Pick a convenient Date & Time"
+    },
+    "actions": {
+      "addNew": "Add New",
+      "addAddress": "Add Address",
+      "addNewAddress": "Add New Address",
+      "editAddress": "Edit Address",
+      "saveAddress": "Save Address",
+      "cancel": "Cancel",
+      "useMyLocation": "Use my location",
+      "detectingLocation": "Detecting location...",
+      "choose": "Choose",
+      "continue": "Continue"
+    },
+    "addressTypes": {
+      "home": "Home",
+      "office": "Office",
+      "other": "Other"
+    },
+    "states": {
+      "authTitle": "Shipping address",
+      "authDescription": "Please sign in to add or manage your shipping addresses.",
+      "emptyTitle": "No addresses yet",
+      "emptyDescription": "Add an address to continue checkout or try picking up from store."
+    },
+    "form": {
+      "orderNotesLabel": "Order Notes (Optional)",
+      "orderNotesPlaceholder": "Any additional information for delivery",
+      "requiredHint": "Please fill in all required fields marked with *."
+    },
+    "fields": {
+      "nameLabel": "Name",
+      "namePlaceholder": "Full Name",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "Enter your number",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Email Address",
+      "streetLabel": "Street Address",
+      "streetPlaceholder": "House number and Street name",
+      "buildingLabel": "Building Name/Villa No",
+      "buildingPlaceholder": "e.g bay central west tower",
+      "cityLabel": "Town / City",
+      "cityPlaceholder": "Town or City"
+    },
+    "addressList": {
+      "savedAddresses": "{count} Saved addresses",
+      "phone": "Phone",
+      "deleteTitle": "Delete Address",
+      "deleteMessage": "Are you sure you want to delete this address? This action cannot be undone.",
+      "deleteConfirm": "Delete",
+      "deleteCancel": "Cancel",
+      "deleteSubmitting": "Deleting...",
+      "selected": "Address selected",
+      "deleted": "Address deleted",
+      "failedDelete": "Failed to delete address",
+      "failedSelect": "Failed to set default address",
+      "ariaDelete": "Delete address"
+    },
+    "toasts": {
+      "addressAdded": "Address added",
+      "addressUpdated": "Address updated",
+      "addressSavedError": "Failed to save address",
+      "addressSelected": "Address selected"
+    },
+    "method": {
+      "homeTitle": "Home Delivery",
+      "homeSubtitle": "We deliver to your doorstep",
+      "pickupTitle": "Pickup",
+      "pickupSubtitle": "Collect your order from our store"
+    },
+    "delivery": {
+      "title": "Pick a convenient Date & Time",
+      "customDelivery": "Custom Delivery",
+      "customDeliveryDescription": "Extra charges may apply for custom delivery",
+      "selectPrompt": "Select your desired delivery date and time",
+      "choose": "Choose",
+      "estimatedDate": "Estimated delivery date",
+      "scheduledTitle": "Your delivery is scheduled!",
+      "scheduledText": "{date} between {time}",
+      "highlightedLabel": "Estimated delivery date",
+      "customDeliveryNote": "Choosing a custom delivery time may incur additional charges as per company policy",
+      "chargesTitle": "Charge for custom delivery",
+      "chargesDescription": "This charge is based on your currently selected location.",
+      "saving": "Saving...",
+      "continue": "Continue",
+      "selectDate": "Select Date",
+      "deliveryDatePlaceholder": "Delivery Date",
+      "selectTime": "Select Time"
+    },
+    "pickup": {
+      "title": "Pickup store",
+      "addItemsPrompt": "Add items to your cart to see available pickup locations.",
+      "emptyTitle": "No pickup stores yet",
+      "emptyDescription": "We’ll show available stores for your cart here.",
+      "stock": "Stock"
     }
   }
 }

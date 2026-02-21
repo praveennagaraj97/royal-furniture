@@ -6,6 +6,7 @@ import { useToast } from '@/contexts/toast-context';
 import { addressService } from '@/services/api/address-service';
 import { ParsedAPIError } from '@/types';
 import type { AddressesListResponse, UserAddress } from '@/types/address';
+import { useTranslations } from 'next-intl';
 import NProgress from 'nprogress';
 import { FC, useEffect, useState } from 'react';
 import {
@@ -33,18 +34,13 @@ const typeIcon = {
   other: <FiMoreHorizontal className="h-5 w-5 text-deep-maroon" />,
 };
 
-const typeLabel: Record<Address['category'], string> = {
-  home: 'Home',
-  office: 'Office',
-  other: 'Other',
-};
-
 export const AddressList: FC<AddressListProps> = ({
   addresses,
   onEdit,
   mutateAddresses,
   onShippingRevalidate,
 }) => {
+  const t = useTranslations('shipping');
   const { showError, showSuccess } = useToast();
   const [deletingId, setDeletingId] = useState<string | number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -63,6 +59,12 @@ export const AddressList: FC<AddressListProps> = ({
     }
   }, [addresses, selectingId]);
 
+  const typeLabel: Record<Address['category'], string> = {
+    home: t('addressTypes.home'),
+    office: t('addressTypes.office'),
+    other: t('addressTypes.other'),
+  };
+
   const handleDeleteRequest = (id: string | number) => {
     setDeletingId(id);
     setIsConfirmOpen(true);
@@ -74,10 +76,10 @@ export const AddressList: FC<AddressListProps> = ({
     try {
       await addressService.deleteAddress(Number(deletingId));
       await mutateAddresses();
-      showSuccess('Address deleted');
+      showSuccess(t('addressList.deleted'));
     } catch (err) {
       const parsedError = err as ParsedAPIError;
-      showError(parsedError?.generalError || 'Failed to delete address');
+      showError(parsedError?.generalError || t('addressList.failedDelete'));
     } finally {
       setIsDeleting(false);
       setIsConfirmOpen(false);
@@ -97,12 +99,12 @@ export const AddressList: FC<AddressListProps> = ({
     try {
       await addressService.setDefaultAddress(Number(id));
       await mutateAddresses();
-      showSuccess('Address selected');
+      showSuccess(t('addressList.selected'));
       await onShippingRevalidate?.();
     } catch (error) {
       const message =
         (error as ParsedAPIError)?.generalError ||
-        'Failed to set default address';
+        t('addressList.failedSelect');
       showError(message);
     } finally {
       setSelectingId(null);
@@ -120,7 +122,7 @@ export const AddressList: FC<AddressListProps> = ({
   return (
     <div className="space-y-4">
       <div className="bg-[#fff3f3] rounded-t-lg px-4 py-2 text-sm font-semibold text-gray-900">
-        {addresses.length} Saved addresses
+        {t('addressList.savedAddresses', { count: addresses.length })}
       </div>
       <StaggerContainer
         mode="whileInView"
@@ -174,7 +176,7 @@ export const AddressList: FC<AddressListProps> = ({
               </div>
               {address.phone ? (
                 <div className="text-sm text-gray-700">
-                  Phone: {address.phone}
+                  {t('addressList.phone')}: {address.phone}
                 </div>
               ) : null}
               <button
@@ -184,7 +186,7 @@ export const AddressList: FC<AddressListProps> = ({
                   e.stopPropagation();
                   handleDeleteRequest(address.id);
                 }}
-                aria-label="Delete address"
+                aria-label={t('addressList.ariaDelete')}
               >
                 {isDeleting && String(deletingId) === String(address.id) ? (
                   <ImSpinner2 className="animate-spin h-5 w-5" />
@@ -207,10 +209,14 @@ export const AddressList: FC<AddressListProps> = ({
         isOpen={isConfirmOpen}
         onClose={cancelDelete}
         onConfirm={confirmDelete}
-        title="Delete Address"
-        message="Are you sure you want to delete this address? This action cannot be undone."
-        confirmText={isDeleting ? 'Deleting...' : 'Delete'}
-        cancelText="Cancel"
+        title={t('addressList.deleteTitle')}
+        message={t('addressList.deleteMessage')}
+        confirmText={
+          isDeleting
+            ? t('addressList.deleteSubmitting')
+            : t('addressList.deleteConfirm')
+        }
+        cancelText={t('addressList.deleteCancel')}
         variant="danger"
       />
     </div>

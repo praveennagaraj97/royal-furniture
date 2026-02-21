@@ -3,6 +3,7 @@
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { AppLink } from '@/hooks';
 import { WishlistCollection } from '@/types/response';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiHeart } from 'react-icons/fi';
 
@@ -13,6 +14,7 @@ interface WishlistCollectionCardProps {
 const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
   collection,
 }) => {
+  const t = useTranslations('user.wishlist');
   const displayItems = (collection.preview_items || []).slice(0, 4);
   const remainingCount = Math.max(
     0,
@@ -30,8 +32,7 @@ const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
           <h3 className="text-lg font-semibold  ">{collection.title}</h3>
 
           <p className="text-sm text-gray-500">
-            {collection.total_items}{' '}
-            {collection.total_items === 1 ? 'Item' : 'Items'}
+            {t('itemCount', { count: collection.total_items })}
           </p>
         </div>
       </div>
@@ -45,7 +46,7 @@ const WishlistCollectionCard: FC<WishlistCollectionCardProps> = ({
               </div>
             </div>
             <h3 className="text-lg font-semibold   mb-2">
-              No Items in this collection
+              {t('collectionEmpty')}
             </h3>
           </div>
         ) : (

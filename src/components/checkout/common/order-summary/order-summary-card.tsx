@@ -6,6 +6,7 @@ import { useCart } from '@/contexts/cart-context';
 import { useIntersectionObserver } from '@/hooks';
 import { formatCurrency } from '@/utils/format-currency';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
 import {
   FC,
@@ -71,6 +72,7 @@ interface OrderSummaryCardProps {
 }
 
 export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
+  const t = useTranslations('checkout.orderSummary');
   const { totals } = useCart();
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
@@ -94,35 +96,35 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
   const summaryRows = useMemo(
     () => [
       {
-        label: 'Item Price',
+        label: t('itemPrice'),
         value: formatCurrency(totals.subtotal, countryCode, locale),
       },
       {
-        label: 'Discount Applied',
+        label: t('discountApplied'),
         value:
           totals.discount > 0
             ? `-${formatCurrency(totals.discount, countryCode, locale)}`
-            : '—',
+            : t('notAvailable'),
         className: totals.discount > 0 ? 'text-[#007B35]' : 'text-gray-400',
       },
       {
-        label: 'Coupon Applied',
+        label: t('couponApplied'),
         value:
           totals.coupon > 0
             ? `-${formatCurrency(totals.coupon, countryCode, locale)}`
-            : '—',
+            : t('notAvailable'),
         className: totals.coupon > 0 ? 'text-[#5c2ea5]' : 'text-gray-400',
       },
       {
-        label: 'Delivery Charges',
+        label: t('deliveryCharges'),
         value:
           totals.shipping === 0
-            ? 'Free'
+            ? t('free')
             : formatCurrency(totals.shipping, countryCode, locale),
         strike: totals.shipping === 0,
       },
     ],
-    [totals, countryCode, locale],
+    [totals, countryCode, locale, t],
   );
 
   const cta = useMemo(() => {
@@ -141,7 +143,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
     if (step === 'cart') {
       return {
-        label: 'Proceed to Shipping',
+        label: t('cta.proceedToShipping'),
         Icon: FiTruck,
         onClick: () =>
           router.push(buildPath(country, locale, 'checkout', 'shipping')),
@@ -150,7 +152,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
     if (step === 'shipping') {
       return {
-        label: isSubmitting ? 'Saving...' : 'Proceed to Payment',
+        label: isSubmitting ? t('cta.saving') : t('cta.proceedToPayment'),
         Icon: FiCreditCard,
         onClick: handleProceedToPayment,
         disabled: isSubmitting,
@@ -159,7 +161,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
     if (step === 'payment') {
       return {
-        label: 'Pay Now',
+        label: t('cta.payNow'),
         Icon: FiCreditCard,
         onClick: () => alert('Pay Now clicked (stub)'),
       };
@@ -173,7 +175,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
   return (
     <Fragment>
       <div className="rounded-2xl border border-gray-200 bg-white p-4 space-y-6">
-        <h2 className="text-lg font-medium">Order Summary</h2>
+        <h2 className="text-lg font-medium">{t('title')}</h2>
 
         <div className="space-y-4 text-sm text-gray-700">
           {summaryRows.map((row) => (
@@ -184,7 +186,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
                 }
               >
                 {row.label}
-                {row.label === 'Delivery Charges' && (
+                {row.label === t('deliveryCharges') && (
                   <button
                     type="button"
                     onClick={() => setIsShippingInfoOpen(true)}
@@ -203,7 +205,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
 
           {totals.discount + totals.coupon > 0 && (
             <div className="bg-[#91E809] rounded-md px-2 py-2 text-center font-medium">
-              You Saved{' '}
+              {t('youSavedPrefix')}{' '}
               <span className="font-semibold">
                 {formatCurrency(
                   totals.discount + totals.coupon,
@@ -217,7 +219,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
           <hr className="opacity-20" />
 
           <div className="flex justify-between bg-[#FFF4F4] p-2 rounded-lg font-medium">
-            <span>Total Amount</span>
+            <span>{t('totalAmount')}</span>
             <span>{formatCurrency(totals.total, countryCode, locale)}</span>
           </div>
         </div>

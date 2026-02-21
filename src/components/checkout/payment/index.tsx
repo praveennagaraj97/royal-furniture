@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
@@ -13,6 +14,7 @@ import tabbyIcon from '@/assets/payments/tabby.png';
 import tamaraIcon from '@/assets/payments/tamara.png';
 
 export const PaymentPageContent: FC = () => {
+  const t = useTranslations('checkout.payment');
   const [selected, setSelected] = useState<string>('card-1');
 
   const cardItems = [
@@ -36,7 +38,7 @@ export const PaymentPageContent: FC = () => {
             <section className="space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="text-base sm:text-lg font-medium text-gray-900">
-                  Payment Method
+                  {t('title')}
                 </h2>
               </div>
             </section>
@@ -45,7 +47,7 @@ export const PaymentPageContent: FC = () => {
           <StaggerItem type="slideUp" distance={30}>
             <section className="space-y-3">
               <h3 className="text-sm font-medium text-indigo-slate">
-                Credit & Debit Card
+                {t('creditDebitTitle')}
               </h3>
 
               <div className="space-y-3">
@@ -80,7 +82,7 @@ export const PaymentPageContent: FC = () => {
                 >
                   <div className="flex items-center gap-2">
                     <FiPlus className="h-4 w-4 text-deep-maroon" />
-                    <span className="font-medium">Add New Card</span>
+                    <span className="font-medium">{t('addNewCard')}</span>
                   </div>
                   <div className="ml-auto">
                     <input
@@ -88,7 +90,7 @@ export const PaymentPageContent: FC = () => {
                       name="payment"
                       checked={selected === 'add-card'}
                       onChange={() => setSelected('add-card')}
-                      aria-label="Add New Card"
+                      aria-label={t('addNewCard')}
                     />
                   </div>
                 </button>
@@ -99,7 +101,7 @@ export const PaymentPageContent: FC = () => {
           <StaggerItem type="slideUp" distance={30}>
             <section className="space-y-3">
               <h3 className="text-sm font-medium text-indigo-slate">
-                Other method
+                {t('otherMethodsTitle')}
               </h3>
 
               <div className="space-y-3">

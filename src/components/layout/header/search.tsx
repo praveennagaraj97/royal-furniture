@@ -14,6 +14,8 @@ import SearchProductCard from './search-product-card';
 
 const SearchBar: FC = () => {
   const t = useTranslations('common');
+  const tSearch = useTranslations('search.list');
+  const tEmpty = useTranslations('search.empty');
   const router = useAppRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -103,7 +105,7 @@ const SearchBar: FC = () => {
               >
                 <div className="p-4">
                   <h3 className="text-base font-semibold   mb-4">
-                    Search Results
+                    {tSearch('title')}
                   </h3>
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
@@ -120,12 +122,10 @@ const SearchBar: FC = () => {
                       </div>
                     </div>
                     <h3 className="text-lg font-semibold   mb-2">
-                      No results found
+                      {tEmpty('title')}
                     </h3>
                     <p className="text-sm text-gray-500 text-center max-w-sm mb-4">
-                      We couldn&apos;t find any products matching &quot;
-                      {debouncedQuery}&quot;. Try different keywords or browse
-                      our categories.
+                      {tEmpty('withQuery', { query: debouncedQuery })}
                     </p>
                     <button
                       type="button"
@@ -135,7 +135,7 @@ const SearchBar: FC = () => {
                       }}
                       className="text-sm text-deep-maroon hover:text-deep-maroon/80 font-medium transition-colors"
                     >
-                      Clear search
+                      {tSearch('clear')}
                     </button>
                   </motion.div>
                 </div>
@@ -151,7 +151,7 @@ const SearchBar: FC = () => {
                   >
                     <div className="p-4">
                       <h3 className="text-base font-semibold   mb-4">
-                        Search Results
+                        {tSearch('title')}
                       </h3>
                       {results && results.length > 0 ? (
                         <div className="grid grid-cols-3 gap-3">

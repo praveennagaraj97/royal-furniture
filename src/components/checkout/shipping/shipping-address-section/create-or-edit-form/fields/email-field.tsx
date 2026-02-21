@@ -2,6 +2,9 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { ChangeEvent } from 'react';
 
 interface EmailFieldProps {
+  label: string;
+  placeholder: string;
+  required?: boolean;
   value: string;
   error?: string;
   showError: boolean;
@@ -10,6 +13,9 @@ interface EmailFieldProps {
 }
 
 export function EmailField({
+  label,
+  placeholder,
+  required = false,
   value,
   error,
   showError,
@@ -21,11 +27,12 @@ export function EmailField({
       id="address-email"
       label={
         <span>
-          Email Address<span className="text-red-500">*</span>
+          {label}
+          {required ? <span className="text-red-500">*</span> : null}
         </span>
       }
       type="email"
-      placeholder="Email Address"
+      placeholder={placeholder}
       value={value}
       onChange={onChange}
       onBlur={onBlur}

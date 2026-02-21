@@ -52,12 +52,6 @@ interface CreateOrEditAddressFormProps {
   shouldSetDefaultOnCreate?: boolean;
 }
 
-const addressTypeLabel: Record<AddressType, string> = {
-  home: 'Home',
-  office: 'Office',
-  other: 'Other',
-};
-
 const addressTypeIcon: Record<AddressType, ReactElement> = {
   home: <FiHome className="h-4 w-4" />,
   office: <FiBriefcase className="h-4 w-4" />,
@@ -76,6 +70,7 @@ const CreateOrEditAddressForm: FC<Props> = ({
   shouldSetDefaultOnCreate = false,
 }) => {
   const { showError, showSuccess } = useToast();
+  const t = useTranslations('shipping');
   const parsePhone = (phone?: string) => {
     const trimmed = phone?.trim();
     if (!trimmed) return { code: '+971', number: '' };
@@ -216,17 +211,18 @@ const CreateOrEditAddressForm: FC<Props> = ({
         editingAddressId !== null
       ) {
         await addressService.updateAddress(editingAddressId, payload);
-        showSuccess('Address updated');
+        showSuccess(t('toasts.addressUpdated'));
       } else {
         await addressService.createAddress(payload);
-        showSuccess('Address added');
+        showSuccess(t('toasts.addressAdded'));
       }
 
       await mutateAddresses?.();
       onCancel?.();
     } catch (error) {
       const message =
-        (error as ParsedAPIError)?.generalError || 'Failed to save address';
+        (error as ParsedAPIError)?.generalError ||
+        t('toasts.addressSavedError');
       showError(message);
     } finally {
       dispatch({ type: 'SET_IS_SUBMITTING', value: false });
@@ -255,6 +251,12 @@ const CreateOrEditAddressForm: FC<Props> = ({
   const showFieldError = (field: keyof AddressFormErrors) =>
     !!state.errors[field] && (!!state.touched[field] || state.isSubmitted);
 
+  const addressTypeLabel: Record<AddressType, string> = {
+    home: t('addressTypes.home'),
+    office: t('addressTypes.office'),
+    other: t('addressTypes.other'),
+  };
+
   return (
     <section className="flex flex-col gap-4">
       <StaggerContainer
@@ -266,14 +268,14 @@ const CreateOrEditAddressForm: FC<Props> = ({
         <StaggerItem type="slideUp" distance={20} duration={0.35}>
           <div className="flex items-center justify-between">
             <h2 className="text-base sm:text-lg font-medium text-gray-900">
-              {editMode ? 'Edit Address' : 'Add New Address'}
+              {editMode ? t('actions.editAddress') : t('actions.addNewAddress')}
             </h2>
             <button
               type="button"
               onClick={onCancel}
               className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
             >
-              Cancel
+              {t('actions.cancel')}
             </button>
           </div>
         </StaggerItem>
@@ -310,6 +312,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <NameField
+              label={t('fields.nameLabel')}
+              placeholder={t('fields.namePlaceholder')}
+              required
               value={state.formData.name}
               onChange={handleInputChange('name')}
               onBlur={handleBlur('name')}
@@ -320,6 +325,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <PhoneField
+              label={t('fields.phoneLabel')}
+              placeholder={t('fields.phonePlaceholder')}
+              required
               value={state.formData.phone}
               countryCode={countryCode}
               onCountryCodeChange={setCountryCode}
@@ -338,6 +346,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <EmailField
+              label={t('fields.emailLabel')}
+              placeholder={t('fields.emailPlaceholder')}
+              required
               value={state.formData.email}
               onChange={handleInputChange('email')}
               onBlur={handleBlur('email')}
@@ -355,13 +366,16 @@ const CreateOrEditAddressForm: FC<Props> = ({
             >
               <FiMapPin className="h-4 w-4" />
               {state.isUsingLocation
-                ? 'Detecting location...'
-                : 'Use my location'}
+                ? t('actions.detectingLocation')
+                : t('actions.useMyLocation')}
             </button>
           </div>
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <StreetField
+              label={t('fields.streetLabel')}
+              placeholder={t('fields.streetPlaceholder')}
+              required
               value={state.formData.streetAddress}
               onChange={handleInputChange('streetAddress')}
               onBlur={handleBlur('streetAddress')}
@@ -372,6 +386,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <BuildingField
+              label={t('fields.buildingLabel')}
+              placeholder={t('fields.buildingPlaceholder')}
+              required
               value={state.formData.building}
               onChange={handleInputChange('building')}
               onBlur={handleBlur('building')}
@@ -382,6 +399,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <CityField
+              label={t('fields.cityLabel')}
+              placeholder={t('fields.cityPlaceholder')}
+              required
               value={state.formData.city}
               onChange={handleInputChange('city')}
               onBlur={handleBlur('city')}
@@ -395,11 +415,11 @@ const CreateOrEditAddressForm: FC<Props> = ({
               <TextAreaFormInput
                 label={
                   <label htmlFor="address-notes" className="form-input-label">
-                    Order Notes (Optional)
+                    {t('form.orderNotesLabel')}
                   </label>
                 }
                 id="address-notes"
-                placeholder="Any additional information for delivery"
+                placeholder={t('form.orderNotesPlaceholder')}
                 value={state.formData.notes}
                 onChange={handleTextareaChange('notes')}
               />
@@ -412,16 +432,14 @@ const CreateOrEditAddressForm: FC<Props> = ({
               disabled={state.isSubmitting}
               className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-deep-maroon px-4 py-2.5 text-sm sm:text-base font-semibold text-white hover:bg-[#6b0000] disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
             >
-              {editMode ? 'Save Address' : 'Add Address'}
+              {editMode ? t('actions.saveAddress') : t('actions.addAddress')}
               <FiArrowRight className="h-4 w-4" />
             </button>
           </StaggerItem>
 
           {hasErrors && state.isSubmitted && (
             <StaggerItem type="slideUp" distance={20} duration={0.35}>
-              <p className="text-xs text-red-500">
-                Please fill in all required fields marked with *.
-              </p>
+              <p className="text-xs text-red-500">{t('form.requiredHint')}</p>
             </StaggerItem>
           )}
         </form>

@@ -2,6 +2,9 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { ChangeEvent } from 'react';
 
 interface BuildingFieldProps {
+  label: string;
+  placeholder: string;
+  required?: boolean;
   value: string;
   error?: string;
   showError: boolean;
@@ -10,6 +13,9 @@ interface BuildingFieldProps {
 }
 
 export function BuildingField({
+  label,
+  placeholder,
+  required = false,
   value,
   error,
   showError,
@@ -21,11 +27,12 @@ export function BuildingField({
       id="address-building"
       label={
         <span>
-          Building Name/Villa No<span className="text-red-500">*</span>
+          {label}
+          {required ? <span className="text-red-500">*</span> : null}
         </span>
       }
       type="text"
-      placeholder="e.g bay central west tower"
+      placeholder={placeholder}
       value={value}
       onChange={onChange}
       onBlur={onBlur}

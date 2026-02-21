@@ -5,6 +5,7 @@ import Portal from '@/components/shared/portal';
 import { SubcategoryFiltersSkeleton } from '@/components/skeletons/subcategory-filters-skeleton';
 import { useGetFiltersBySubCategoryId } from '@/hooks/api';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { FiltersEmptyState } from './empty-state';
@@ -24,6 +25,7 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   subcategoryId,
   onFiltersChange,
 }) => {
+  const tFilters = useTranslations('categories.filters');
   const { filters, isLoading } = useGetFiltersBySubCategoryId({
     subcategoryId,
   });
@@ -229,12 +231,14 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
               >
                 {/* Header */}
                 <div className="flex justify-between items-center p-4 border-b border-gray-200 shrink-0">
-                  <h2 className="text-lg font-semibold  ">Filters</h2>
+                  <h2 className="text-lg font-semibold  ">
+                    {tFilters('title')}
+                  </h2>
                   <button
                     type="button"
                     onClick={onHide}
                     className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                    aria-label="Close filters"
+                    aria-label={tFilters('closeAria')}
                   >
                     <FiX className="h-5 w-5 text-gray-600" />
                   </button>

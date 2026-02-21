@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FC, Fragment, useEffect, useState } from 'react';
 
@@ -44,6 +45,7 @@ export const PaymentDeliveryInfo: FC<
   showOnlyPlanCards = false,
 }) => {
   const formatCurrency = useFormatCurrency();
+  const t = useTranslations('product.paymentDelivery');
 
   // Calculate payment plan amounts (4 payments)
   const tabbyAmount = (productPrice / 4).toFixed(2);
@@ -90,7 +92,7 @@ export const PaymentDeliveryInfo: FC<
             />
             <div className="flex-1 min-w-0">
               <p className="text-xs md:text-sm text-gray-700 line-clamp-2">
-                4 interest-free payments of{' '}
+                {t('tabbyDescription')}{' '}
                 <span className="text-red-600 font-bold">
                   {formatCurrency(tabbyAmount)}
                 </span>
@@ -100,7 +102,7 @@ export const PaymentDeliveryInfo: FC<
               type="button"
               className="text-indigo-slate hover:underline text-xs md:text-sm font-medium whitespace-nowrap shrink-0"
             >
-              More
+              {t('more')}
             </button>
           </div>
         </ViewOnce>
@@ -124,7 +126,7 @@ export const PaymentDeliveryInfo: FC<
             />
             <div className="flex-1 min-w-0">
               <p className="text-xs md:text-sm text-gray-700 line-clamp-2">
-                Split in 4 of{' '}
+                {t('tamaraDescription')}{' '}
                 <span className="text-red-600 font-bold">
                   {formatCurrency(tamaraAmount)}
                 </span>
@@ -134,7 +136,7 @@ export const PaymentDeliveryInfo: FC<
               type="button"
               className="text-indigo-slate hover:underline text-xs md:text-sm font-medium whitespace-nowrap shrink-0"
             >
-              Learn
+              {t('learn')}
             </button>
           </div>
         </ViewOnce>
@@ -153,7 +155,7 @@ export const PaymentDeliveryInfo: FC<
           >
             <div className="space-y-3">
               <h3 className="font-medium text-sm md:text-base text-indigo-slate">
-                Ways of Payment
+                {t('waysOfPayment')}
               </h3>
               <div className="flex flex-wrap items-center gap-3">
                 <Image
@@ -207,12 +209,10 @@ export const PaymentDeliveryInfo: FC<
             >
               <div className="p-4 bg-white rounded-lg border border-gray-200">
                 <h4 className="text-xs md:text-sm font-bold mb-1.5">
-                  <span className="text-green-600">Free</span>{' '}
-                  <span className=" ">Assembly Available</span>
+                  {t('assemblyTitle')}
                 </h4>
                 <p className="text-xs md:text-sm text-gray-700">
-                  {freeAssembly.description ||
-                    'We will happily assemble your furniture for you at no additional cost'}
+                  {freeAssembly.description || t('assemblyDescriptionFallback')}
                 </p>
               </div>
             </ViewOnce>
@@ -232,21 +232,21 @@ export const PaymentDeliveryInfo: FC<
                   <div className="flex items-center gap-2 mb-1.5">
                     <FaTruckFast className="text-deep-maroon text-base md:text-lg" />
                     <h4 className="text-xs md:text-sm font-bold">
-                      <span className="text-green-600">Express Delivery</span>{' '}
-                      <span className=" ">Available</span>
+                      {t('expressTitle')}
                     </h4>
                   </div>
                   <p className="text-xs md:text-sm text-gray-700 mb-1">
-                    Get it by{' '}
-                    {deliveryInfo.express_delivery_duration || 'tomorrow'} If
-                    ordered within{' '}
-                    <span className="text-red-600 font-medium">
-                      {formatCountdown(countdown)}
-                    </span>
+                    {t('getItBy', {
+                      date:
+                        deliveryInfo.express_delivery_duration || t('tomorrow'),
+                      time: formatCountdown(countdown),
+                    })}
                   </p>
                   {deliveryInfo.express_delivery_charge && (
                     <p className="text-xs text-gray-600">
-                      Extra Charges: {deliveryInfo.express_delivery_charge}
+                      {t('extraCharges', {
+                        amount: deliveryInfo.express_delivery_charge,
+                      })}
                     </p>
                   )}
                 </div>

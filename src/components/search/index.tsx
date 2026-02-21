@@ -6,12 +6,15 @@ import { ProductsListSkeleton } from '@/components/skeletons/products-list-skele
 import { SORT_OPTIONS } from '@/constants/sort-options';
 import { useGetSearchResults } from '@/hooks/api';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 import { SearchEmptyState } from './empty-state';
 import SortBar from './sort-bar';
 
 const SearchResults: FC = () => {
+  const tSearch = useTranslations('search.list');
+  const tSort = useTranslations('sort');
   const [selectedSort, setSelectedSort] = useState('relevant');
   const searchParams = useSearchParams();
 
@@ -40,21 +43,31 @@ const SearchResults: FC = () => {
 
   const displayQuery = apiQuery || searchQuery;
 
+  const localizedSortOptions = useMemo(
+    () =>
+      SORT_OPTIONS.map((opt) => ({
+        ...opt,
+        label: tSort(`options.${opt.id}`),
+      })),
+    [tSort],
+  );
+
   return (
     <div className="section-container mt-4">
       {/* Header with search query */}
       <div className="mb-2 flex space-x-2 justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold   mb-2">Search Results</h1>
+          <h1 className="text-2xl font-semibold   mb-2">{tSearch('title')}</h1>
           {displayQuery && (
             <p className="text-sm text-gray-600">
               {totalCount > 0
-                ? `Found ${totalCount} result${
-                    totalCount !== 1 ? 's' : ''
-                  } for "${displayQuery}"`
+                ? tSearch('foundForQuery', {
+                    count: totalCount,
+                    query: displayQuery,
+                  })
                 : isLoadingProducts
                   ? ''
-                  : `No results found for "${displayQuery}"`}
+                  : tSearch('noneForQuery', { query: displayQuery })}
             </p>
           )}
         </div>
@@ -62,7 +75,7 @@ const SearchResults: FC = () => {
         {searchQuery && (
           <SortBar
             productCount={totalCount || displayProducts.length}
-            sortOptions={SORT_OPTIONS}
+            sortOptions={localizedSortOptions}
             selectedSort={selectedSort}
             onSortChange={setSelectedSort}
           />

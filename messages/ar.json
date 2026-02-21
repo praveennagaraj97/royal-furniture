@@ -1,5 +1,51 @@
 {
   "common": {
+    "greeting": "مرحباً، {name}",
+    "edit": "تعديل",
+    "account": {
+      "deleteAccount": "حذف الحساب",
+      "logout": "تسجيل الخروج",
+      "logoutSuccess": "تم تسجيل الخروج بنجاح",
+      "logoutConfirmTitle": "تسجيل الخروج",
+      "logoutConfirmMessage": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+      "logoutConfirmButton": "تسجيل الخروج",
+      "logoutCancelButton": "إلغاء"
+    },
+    "exclusiveOffers": {
+      "title": "عروض حصرية لك"
+    },
+    "quickLinks": {
+      "myOrders": "طلباتي",
+      "myProfile": "ملفي الشخصي",
+      "wishlist": "قائمة المفضلة",
+      "savedAddresses": "العناوين المحفوظة"
+    },
+    "profile": {
+      "title": "الملف الشخصي",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+      "change": "تغيير",
+      "updating": "جارٍ التحديث...",
+      "update": "تحديث",
+      "updateSuccess": "تم تحديث الملف الشخصي بنجاح"
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "savedForLater": "محفوظ لوقت لاحق",
+      "notificationsSettings": "إعدادات الإشعارات",
+      "selectLanguage": "اختر اللغة"
+    },
+    "feedback": {
+      "title": "المساعدة والمعلومات",
+      "returnPolicy": "سياسة الإرجاع",
+      "privacyPolicy": "سياسة الخصوصية",
+      "termsConditions": "الشروط والأحكام",
+      "contactUs": "اتصل بنا",
+      "faqs": "الأسئلة الشائعة",
+      "aboutUs": "معلومات عنا"
+    },
     "signInOrSignUp": "تسجيل الدخول أو التسجيل",
     "english": "English",
     "arabic": "العربية",
@@ -12,7 +58,9 @@
     "seeAll": "مشاهدة الكل",
     "addToCart": "أضف إلى السلة",
     "inCart": "في السلة",
-    "off": "خصم {percentage}%"
+    "off": "خصم {percentage}%",
+    "productCount": "{count, plural, one {# منتج} other {# منتجات}}",
+    "continue": "متابعة"
   },
   "quickLinks": {
     "freeShipping": "شحن مجاني",
@@ -142,6 +190,10 @@
       "lastNameRequired": "اسم العائلة مطلوب",
       "mobileNumberRequired": "رقم الجوال مطلوب",
       "mobileNumberInvalid": "يرجى إدخال رقم جوال صحيح",
+      "nameRequired": "الاسم مطلوب",
+      "streetAddressRequired": "عنوان الشارع مطلوب",
+      "buildingRequired": "اسم المبنى/رقم الفيلا مطلوب",
+      "cityRequired": "المدينة مطلوبة",
       "fieldRequired": "مطلوب",
       "reEnterPasswordRequired": "يرجى إعادة إدخال كلمة المرور",
       "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
@@ -168,6 +220,18 @@
       "unsavedChanges": "لديك تغييرات غير محفوظة. هل أنت متأكد أنك تريد الإغلاق؟ سيتم فقدان جميع المعلومات التي أدخلتها.",
       "yesClose": "نعم، إغلاق",
       "continueEditing": "متابعة التحرير"
+    }
+  },
+  "sort": {
+    "sortBy": "فرز حسب",
+    "recommended": "موصى به",
+    "options": {
+      "relevant": "المنتجات ذات الصلة",
+      "best_seller": "الأكثر مبيعاً",
+      "new_arrival": "وصل حديثاً",
+      "price_asc": "السعر: من الأقل إلى الأعلى",
+      "price_desc": "السعر: من الأعلى إلى الأقل",
+      "discount": "الخصم"
     }
   },
   "countries": {
@@ -238,6 +302,344 @@
       "update": "تحديث",
       "updating": "جاري التحديث...",
       "updateSuccess": "تم تحديث الملف الشخصي بنجاح"
+    },
+    "wishlist": {
+      "title": "المفضلة",
+      "createNew": "إنشاء مجموعة جديدة",
+      "emptyTitle": "لا توجد مجموعات بعد",
+      "emptyDescription": "ابدأ بتنظيم منتجاتك المفضلة عن طريق إنشاء أول مجموعة مفضلة.",
+      "collectionTitleDefault": "مجموعة المفضلة",
+      "collectionEmpty": "لا توجد عناصر في هذه المجموعة",
+      "itemCount": "{count, plural, one {# عنصر} other {# عناصر}}"
+    }
+  },
+  "checkout": {
+    "header": {
+      "home": "الرئيسية",
+      "checkout": "إتمام الشراء"
+    },
+    "progress": {
+      "steps": {
+        "cart": "السلة",
+        "shipping": "الشحن",
+        "payment": "الدفع"
+      }
+    },
+    "cart": {
+      "freeShipping": {
+        "addMore": "أضف <amount>{value}</amount> للحصول على الشحن المجاني!",
+        "unlocked": "لقد حصلت على الشحن المجاني!"
+      },
+      "items": {
+        "title": "سلتك ({count} {count, plural, one {عنصر} other {عناصر}})",
+        "table": {
+          "item": "المنتج",
+          "description": "الوصف",
+          "price": "السعر",
+          "quantity": "الكمية",
+          "total": "السعر الإجمالي"
+        },
+        "remove": "إزالة"
+      },
+      "empty": {
+        "imageAlt": "السلة فارغة",
+        "title": "سلتك فارغة",
+        "description": "تصفح مجموعاتنا وأضف المنتجات لتظهر هنا.",
+        "cta": "العودة إلى الرئيسية"
+      },
+      "added": {
+        "success": "تمت الإضافة إلى السلة بنجاح",
+        "continue": "متابعة التسوق",
+        "goToCart": "الانتقال إلى السلة"
+      },
+      "promos": {
+        "title": "العروض والقسائم",
+        "description": "طبّق رموز القسائم أو الفواتير للحصول على خصومات إضافية.",
+        "openButton": "عرض / إدخال الكود",
+        "modalTitle": "عرض / إدخال الكود",
+        "applyOffer": "تطبيق العرض",
+        "offerApplied": "تم تطبيق العرض",
+        "continue": "متابعة",
+        "offers": {
+          "wc500": {
+            "description": "تسوّق بقيمة 1999 درهم واحصل على خصم إضافي 500. استخدم الرمز WC500. صالح للطلب الأول من الأدوات المنزلية."
+          },
+          "big1": {
+            "description": "تسوّق بقيمة 1999 درهم واحصل على خصم إضافي 500. استخدم الرمز WC500. صالح للطلب الأول من الأدوات المنزلية."
+          }
+        }
+      },
+      "support": {
+        "title": "تحتاج مساعدة؟ نحن هنا من أجلك.",
+        "call": "الاتصال بخدمة العملاء",
+        "write": "اكتب لنا",
+        "return": "سياسة الإرجاع"
+      },
+      "deliveryInfo": {
+        "title": "التوصيل في",
+        "date": "الجمعة، 28 فبراير 2025",
+        "update": "تحديث"
+      }
+    },
+    "payment": {
+      "title": "طريقة الدفع",
+      "creditDebitTitle": "بطاقة ائتمان وبطاقة خصم",
+      "addNewCard": "إضافة بطاقة جديدة",
+      "otherMethodsTitle": "طرق دفع أخرى"
+    },
+    "orderSummary": {
+      "title": "ملخص الطلب",
+      "itemPrice": "سعر المنتجات",
+      "discountApplied": "الخصم المطبق",
+      "couponApplied": "الكوبون المطبق",
+      "deliveryCharges": "رسوم التوصيل",
+      "free": "مجاني",
+      "youSavedPrefix": "لقد وفرت",
+      "totalAmount": "المبلغ الإجمالي",
+      "notAvailable": "غير متوفر",
+      "cta": {
+        "proceedToShipping": "المتابعة إلى الشحن",
+        "saving": "جاري الحفظ...",
+        "proceedToPayment": "المتابعة إلى الدفع",
+        "payNow": "ادفع الآن"
+      },
+      "shippingFees": {
+        "title": "رسوم الشحن",
+        "totalShippingCharge": "إجمالي رسوم الشحن",
+        "free": "مجاني",
+        "freeShippingMessage": "تهانينا! حصلت على شحن مجاني على الأثاث",
+        "howItWorksTitle": "كيف تعمل رسوم الشحن",
+        "howItWorksDescription": "تعتمد الرسوم على قيمة الطلب ونوع المنتجات التي ترغب بشرائها.",
+        "household": {
+          "title": "شحن الأدوات المنزلية والصغيرة",
+          "rate": "19 درهم للطلبات أقل من 99 درهم",
+          "description": "تنطبق هذه الرسوم على العناصر الصغيرة وسهلة التجميع. لا يوفر التجميع."
+        },
+        "furniture": {
+          "title": "شحن الأثاث والعناصر الكبيرة",
+          "rate": "79 درهم للطلبات أقل من 299 درهم",
+          "description": "تنطبق هذه الرسوم على الأثاث والعناصر الكبيرة التي يتم شحنها وتجميعها بواسطة فريقنا."
+        }
+      }
+    },
+    "success": {
+      "title": "تم الدفع بنجاح!",
+      "subtitle": "تم حجز طلبك",
+      "trackOrder": "تتبع طلبي",
+      "viewOrder": "عرض طلبي"
+    }
+  },
+  "product": {
+    "info": {
+      "title": "معلومات عامة"
+    },
+    "header": {
+      "saveAmount": "وفر {amount}",
+      "viewsIn24h": "{count} مشاهدة خلال 24 ساعة"
+    },
+    "actions": {
+      "outOfStock": "غير متوفر حالياً",
+      "buyNow": "اشترِ الآن"
+    },
+    "paymentDelivery": {
+      "tabbyDescription": "4 دفعات بدون فوائد بقيمة",
+      "tamaraDescription": "قسّم إلى 4 دفعات بقيمة",
+      "more": "المزيد",
+      "learn": "اعرف أكثر",
+      "waysOfPayment": "طرق الدفع",
+      "assemblyTitle": "تجميع مجاني متاح",
+      "assemblyDescriptionFallback": "سنقوم بتجميع الأثاث لك مجاناً دون أي رسوم إضافية",
+      "expressTitle": "توصيل سريع متاح",
+      "getItBy": "استلمها بحلول {date} إذا طلبت خلال {time}",
+      "tomorrow": "الغد",
+      "extraCharges": "رسوم إضافية: {amount}",
+      "deliveryOn": "التوصيل في",
+      "update": "تحديث",
+      "tryInStore": "جرّب في المتجر!",
+      "flexiPaymentAvailable": "الدفع المرن متاح",
+      "flexiPaymentNote": "ادفع 20% مقدماً لتأكيد الحجز، والباقي قبل التوصيل",
+      "modal": {
+        "title": "معلومات",
+        "closeAria": "إغلاق",
+        "flexiTitle": "ما هو الدفع المرن؟",
+        "flexiDescription": "يتيح لك الدفع المرن حجز طلبك بدفع جزء من المبلغ مقدماً والباقي قبل التوصيل.",
+        "benefitsTitle": "المزايا",
+        "close": "حسناً"
+      }
+    },
+    "help": {
+      "noteLabel": "ملاحظة:",
+      "noteDescription": "صور منتج {productName} تحتوي على ملحقات لأغراض توضيحية. قد يختلف لون المنتج قليلاً بسبب إضاءة التصوير أو إعدادات شاشتك.",
+      "helpTitle": "تحتاج مساعدة؟ نحن هنا من أجلك.",
+      "requestCall": "طلب مكالمة",
+      "chatWithUs": "الدردشة معنا",
+      "visitStore": "زر متجرنا"
+    },
+    "storeLocator": {
+      "title": "توافر المتجر",
+      "searchPlaceholder": "ابحث عن الموقع",
+      "setLocation": "تعيين الموقع",
+      "selectStore": "اختر المتجر المناسب",
+      "noStores": "لم يتم العثور على متاجر",
+      "stock": {
+        "out": "غير متوفر",
+        "onlyLeft": "متبقي {count} فقط"
+      }
+    },
+    "wishlist": {
+      "title": "أضف إلى المفضلة",
+      "createNew": "إنشاء مجموعة جديدة",
+      "empty": "لا توجد مجموعات. أنشئ واحدة للبدء.",
+      "adding": "جارٍ الإضافة...",
+      "done": "تم"
+    }
+  },
+  "products": {
+    "list": {
+      "title": "المنتجات",
+      "foundForType": "{count, plural, one {تم العثور على # منتج} other {تم العثور على # منتجات}}",
+      "noneForType": "لم يتم العثور على منتجات لـ \"{type}\""
+    },
+    "empty": {
+      "title": "لا توجد منتجات",
+      "withType": "لم نتمكن من العثور على أي منتجات في فئة \"{type}\" حالياً. يرجى التحقق لاحقاً.",
+      "generic": "لا توجد منتجات متاحة. يرجى اختيار فئة للتصفح."
+    }
+  },
+  "search": {
+    "list": {
+      "title": "نتائج البحث",
+      "foundForQuery": "{count, plural, one {تم العثور على # نتيجة} other {تم العثور على # نتائج}} لـ \"{query}\"",
+      "noneForQuery": "لم يتم العثور على نتائج لـ \"{query}\"",
+      "clear": "مسح البحث"
+    },
+    "empty": {
+      "title": "لا توجد نتائج",
+      "withQuery": "لم نتمكن من العثور على منتجات تطابق \"{query}\". جرّب كلمات أخرى أو تصفح فئاتنا.",
+      "generic": "ابدأ بالبحث عن المنتجات بإدخال كلمة في شريط البحث."
+    }
+  },
+  "categories": {
+    "subcategory": {
+      "topBar": {
+        "showFilter": "عرض الفلاتر",
+        "hideFilter": "إخفاء الفلاتر",
+        "gridViewAria": "عرض الشبكة"
+      },
+      "empty": {
+        "title": "لا توجد منتجات",
+        "description": "لم نتمكن من العثور على أي منتجات في هذه الفئة. جرّب تعديل الفلاتر أو تصفح فئات أخرى."
+      }
+    },
+    "filters": {
+      "title": "الفلاتر",
+      "closeAria": "إغلاق الفلاتر",
+      "empty": {
+        "title": "لا توجد فلاتر",
+        "description": "لا توجد خيارات تصفية متاحة لهذه الفئة حالياً."
+      }
+    }
+  },
+  "shipping": {
+    "titles": {
+      "shippingAddress": "عنوان الشحن",
+      "pickupStore": "متجر الاستلام",
+      "shippingMethod": "طريقة الشحن",
+      "deliveryOptions": "اختر تاريخاً ووقتاً مناسبين"
+    },
+    "actions": {
+      "addNew": "إضافة جديد",
+      "addAddress": "إضافة العنوان",
+      "addNewAddress": "إضافة عنوان جديد",
+      "editAddress": "تعديل العنوان",
+      "saveAddress": "حفظ العنوان",
+      "cancel": "إلغاء",
+      "useMyLocation": "استخدم موقعي",
+      "detectingLocation": "جاري تحديد الموقع...",
+      "choose": "اختر",
+      "continue": "متابعة"
+    },
+    "addressTypes": {
+      "home": "المنزل",
+      "office": "المكتب",
+      "other": "أخرى"
+    },
+    "states": {
+      "authTitle": "عنوان الشحن",
+      "authDescription": "يرجى تسجيل الدخول لإضافة أو إدارة عناوين الشحن الخاصة بك.",
+      "emptyTitle": "لا توجد عناوين بعد",
+      "emptyDescription": "أضف عنوانًا للمتابعة في إتمام الشراء أو جرّب الاستلام من المتجر."
+    },
+    "form": {
+      "orderNotesLabel": "ملاحظات الطلب (اختياري)",
+      "orderNotesPlaceholder": "أي معلومات إضافية للتوصيل",
+      "requiredHint": "يرجى تعبئة جميع الحقول المطلوبة المشار إليها بـ *."
+    },
+    "fields": {
+      "nameLabel": "الاسم",
+      "namePlaceholder": "الاسم الكامل",
+      "phoneLabel": "رقم الهاتف",
+      "phonePlaceholder": "أدخل رقمك",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "البريد الإلكتروني",
+      "streetLabel": "عنوان الشارع",
+      "streetPlaceholder": "رقم المنزل واسم الشارع",
+      "buildingLabel": "اسم المبنى/رقم الفيلا",
+      "buildingPlaceholder": "مثال: برج باي سنترال الغربي",
+      "cityLabel": "المدينة / البلدة",
+      "cityPlaceholder": "المدينة أو البلدة"
+    },
+    "addressList": {
+      "savedAddresses": "{count} عناوين محفوظة",
+      "phone": "الهاتف",
+      "deleteTitle": "حذف العنوان",
+      "deleteMessage": "هل أنت متأكد من حذف هذا العنوان؟ هذا الإجراء لا يمكن التراجع عنه.",
+      "deleteConfirm": "حذف",
+      "deleteCancel": "إلغاء",
+      "deleteSubmitting": "جارٍ الحذف...",
+      "selected": "تم اختيار العنوان",
+      "deleted": "تم حذف العنوان",
+      "failedDelete": "فشل حذف العنوان",
+      "failedSelect": "فشل تعيين العنوان الافتراضي",
+      "ariaDelete": "حذف العنوان"
+    },
+    "toasts": {
+      "addressAdded": "تم إضافة العنوان",
+      "addressUpdated": "تم تحديث العنوان",
+      "addressSavedError": "فشل حفظ العنوان",
+      "addressSelected": "تم اختيار العنوان"
+    },
+    "method": {
+      "homeTitle": "توصيل إلى المنزل",
+      "homeSubtitle": "نوصّل حتى باب منزلك",
+      "pickupTitle": "الاستلام",
+      "pickupSubtitle": "استلم طلبك من متجرنا"
+    },
+    "delivery": {
+      "title": "اختر تاريخاً ووقتاً مناسبين",
+      "customDelivery": "توصيل مخصص",
+      "customDeliveryDescription": "قد تُطبق رسوم إضافية للتوصيل المخصص",
+      "selectPrompt": "اختر تاريخ ووقت التوصيل المفضل",
+      "choose": "اختر",
+      "estimatedDate": "تاريخ التوصيل المتوقع",
+      "scheduledTitle": "تم جدولة التوصيل!",
+      "scheduledText": "{date} بين {time}",
+      "highlightedLabel": "تاريخ التوصيل المتوقع",
+      "customDeliveryNote": "قد يؤدي اختيار وقت توصيل مخصص إلى رسوم إضافية حسب سياسة الشركة",
+      "chargesTitle": "رسوم التوصيل المخصص",
+      "chargesDescription": "تعتمد هذه الرسوم على موقعك المحدد حالياً.",
+      "saving": "جاري الحفظ...",
+      "continue": "متابعة",
+      "selectDate": "اختر التاريخ",
+      "deliveryDatePlaceholder": "تاريخ التوصيل",
+      "selectTime": "اختر الوقت"
+    },
+    "pickup": {
+      "title": "متجر الاستلام",
+      "addItemsPrompt": "أضف منتجات إلى سلة التسوق لعرض مواقع الاستلام المتاحة.",
+      "emptyTitle": "لا توجد متاجر استلام حالياً",
+      "emptyDescription": "سنظهر المتاجر المتاحة لسلتك هنا.",
+      "stock": "المخزون"
     }
   }
 }

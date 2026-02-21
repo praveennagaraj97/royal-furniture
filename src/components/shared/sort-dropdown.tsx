@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { FiChevronDown } from 'react-icons/fi';
@@ -21,10 +22,12 @@ const SortDropdown: FC<SortDropdownProps> = ({
   selectedSort,
   onSortChange,
 }) => {
+  const t = useTranslations('sort');
+
   const selectedSortLabel =
     sortOptions.find((opt) => opt.id === selectedSort)?.label ||
     sortOptions[0]?.label ||
-    'Recommended';
+    t('recommended');
 
   return (
     <Dropdown
@@ -35,7 +38,9 @@ const SortDropdown: FC<SortDropdownProps> = ({
             <BiSortAlt2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
           <span className="text-xs sm:text-sm font-medium text-indigo-slate whitespace-nowrap">
-            <span className="hidden sm:inline font-semibold">Sort by: </span>
+            <span className="hidden sm:inline font-semibold">
+              {t('sortBy')}:{' '}
+            </span>
             {selectedSortLabel}
           </span>
           <FiChevronDown className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-deep-maroon transition-colors shrink-0" />

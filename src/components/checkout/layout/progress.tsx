@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { FiCheck, FiCreditCard, FiShoppingCart, FiTruck } from 'react-icons/fi';
@@ -15,13 +16,15 @@ interface Step {
   icon: FC<{ className?: string }>;
 }
 
-const baseSteps: Step[] = [
-  { id: 'cart', label: 'Cart', icon: FiShoppingCart },
-  { id: 'shipping', label: 'Shipping', icon: FiTruck },
-  { id: 'payment', label: 'Payment', icon: FiCreditCard },
+const baseSteps: Omit<Step, 'label'>[] = [
+  { id: 'cart', icon: FiShoppingCart },
+  { id: 'shipping', icon: FiTruck },
+  { id: 'payment', icon: FiCreditCard },
 ];
 
-export const checkoutSteps = baseSteps.map(({ id, label }) => ({ id, label }));
+export const getCheckoutSteps = (
+  t: ReturnType<typeof useTranslations<'checkout.progress'>>,
+) => baseSteps.map(({ id, icon }) => ({ id, icon, label: t(`steps.${id}`) }));
 
 const indicatorStyles: Record<StepStatus, string> = {
   current: 'bg-[#f8c6c8] text-deep-maroon border border-[#f3aeb3]',
@@ -42,6 +45,7 @@ interface CheckoutProgressProps {
 export const CheckoutProgress: FC<CheckoutProgressProps> = ({
   currentStep,
 }) => {
+  const t = useTranslations('checkout.progress');
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
 
@@ -56,19 +60,21 @@ export const CheckoutProgress: FC<CheckoutProgressProps> = ({
     return `/${segments.join('/')}`;
   };
 
+  const localizedSteps = useMemo(() => getCheckoutSteps(t), [t]);
+
   const currentIndex = useMemo(() => {
-    const index = baseSteps.findIndex((step) => step.id === currentStep);
+    const index = localizedSteps.findIndex((step) => step.id === currentStep);
     return index === -1 ? 0 : index;
-  }, [currentStep]);
+  }, [currentStep, localizedSteps]);
 
   const stepsWithStatus = useMemo(() => {
-    return baseSteps.map((step, index) => {
+    return localizedSteps.map((step, index) => {
       let status: StepStatus = 'upcoming';
       if (index < currentIndex) status = 'completed';
       else if (index === currentIndex) status = 'current';
       return { ...step, status };
     });
-  }, [currentIndex]);
+  }, [currentIndex, localizedSteps]);
 
   const progressPercent = useMemo(() => {
     const totalSteps = baseSteps.length;

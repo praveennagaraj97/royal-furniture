@@ -1,10 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 import { FiTag } from 'react-icons/fi';
 import PromosModal from './promos-modal';
 
 export const PromosCard: FC = () => {
+  const t = useTranslations('checkout.cart.promos');
   const [isOpen, setIsOpen] = useState(false);
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
 
@@ -16,10 +18,8 @@ export const PromosCard: FC = () => {
             <FiTag className="w-5 h-5" />
           </div>
           <div>
-            <p className="font-semibold  ">Promos & Vouchers</p>
-            <p className="text-xs text-gray-500 mt-1">
-              Apply your coupon codes or vouchers to get additional discounts.
-            </p>
+            <p className="font-semibold  ">{t('title')}</p>
+            <p className="text-xs text-gray-500 mt-1">{t('description')}</p>
           </div>
         </div>
         <button
@@ -27,7 +27,7 @@ export const PromosCard: FC = () => {
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center gap-2 self-start md:self-center text-sm font-semibold text-deep-maroon hover:text-[#6b0000] transition-colors duration-200"
         >
-          View / Enter Code
+          {t('openButton')}
         </button>
       </div>
 

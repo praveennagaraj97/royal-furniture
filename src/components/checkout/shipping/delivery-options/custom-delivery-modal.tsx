@@ -1,6 +1,9 @@
+'use client';
+
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import DatePicker from '@/components/shared/inputs/date-picker';
 import Modal from '@/components/shared/modal';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiX } from 'react-icons/fi';
 
@@ -33,6 +36,7 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
   isSavingSelection,
   customDeliveryCharge,
 }) => {
+  const t = useTranslations('shipping');
   const highlightedDateValue = highlightedDate || undefined;
 
   return (
@@ -46,10 +50,12 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
         >
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-lg font-semibold">Custom Delivery</h2>
+              <h2 className="text-lg font-semibold">
+                {t('delivery.customDelivery')}
+              </h2>
               <button
                 type="button"
-                aria-label="Close"
+                aria-label={t('actions.cancel')}
                 onClick={onClose}
                 className="rounded-full p-1.5 bg-deep-maroon hover:bg-[#6b0000] text-white transition-colors"
               >
@@ -59,18 +65,20 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
           </StaggerItem>
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <p className="font-semibold text-gray-900 mb-2">
-              Select your desired delivery date and time
+              {t('delivery.selectPrompt')}
             </p>
           </StaggerItem>
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Select Date</label>
+              <label className="block text-sm font-medium">
+                {t('delivery.selectDate')}
+              </label>
               <div className="flex items-center gap-2">
                 <DatePicker
                   value={selectedDate ?? undefined}
                   onChange={setSelectedDate}
                   className="w-full"
-                  placeholder="Delivery Date"
+                  placeholder={t('delivery.deliveryDatePlaceholder')}
                   highlightedDates={
                     highlightedDateValue ? [highlightedDateValue] : []
                   }
@@ -81,7 +89,9 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
           </StaggerItem>
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <div className="space-y-2">
-              <label className="block text-sm font-medium">Select Time</label>
+              <label className="block text-sm font-medium">
+                {t('delivery.selectTime')}
+              </label>
               <div className="flex gap-2">
                 {timeSlots.map((slot) => (
                   <button
@@ -98,20 +108,19 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
           </StaggerItem>
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <p className="text-xs text-gray-600 mb-2">
-              Choosing a custom delivery time may incur additional charges as
-              per company policy
+              {t('delivery.customDeliveryNote')}
             </p>
           </StaggerItem>
           {selectedDate && selectedTime && customDeliveryCharge ? (
             <StaggerItem type="slideUp" distance={20} duration={0.35}>
               <div className="rounded-lg bg-gray-100 px-3 py-2 flex items-center justify-between text-sm font-medium text-gray-700 mb-1">
-                <span>Charge for custom delivery</span>
+                <span>{t('delivery.chargesTitle')}</span>
                 <span className="font-bold text-lg">
                   {customDeliveryCharge}
                 </span>
               </div>
               <p className="text-xs text-gray-500">
-                This charge is based on your currently selected location.
+                {t('delivery.chargesDescription')}
               </p>
             </StaggerItem>
           ) : null}
@@ -126,7 +135,9 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
                 if (saved) onClose();
               }}
             >
-              {isSavingSelection ? 'Saving...' : 'Continue'}
+              {isSavingSelection
+                ? t('delivery.saving')
+                : t('delivery.continue')}
             </button>
           </StaggerItem>
         </StaggerContainer>

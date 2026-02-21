@@ -3,6 +3,7 @@
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { CartItem } from '@/types/cart';
 import { formatCurrency } from '@/utils/format-currency';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
@@ -21,6 +22,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
   onQuantityChange,
   onRemove,
 }) => {
+  const t = useTranslations('checkout.cart.items');
   const params = useParams<{ country?: string; locale?: string }>();
   const locale = params?.locale ?? 'en';
   const countryCode = params?.country ?? 'ae';
@@ -138,7 +140,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
                 ) : (
                   <FiTrash2 className="w-3 h-3" />
                 )}
-                Remove
+                {t('remove')}
               </button>
             </div>
           </div>
@@ -226,7 +228,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
             ) : (
               <FiTrash2 className="w-3 h-3" />
             )}
-            Remove
+            {t('remove')}
           </button>
         </div>
 

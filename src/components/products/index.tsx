@@ -6,12 +6,15 @@ import { ProductsListSkeleton } from '@/components/skeletons/products-list-skele
 import { SORT_OPTIONS } from '@/constants/sort-options';
 import { useGetProductsByType } from '@/hooks/api';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 import { ProductsEmptyState } from './empty-state';
 import SortBar from './sort-bar';
 
 const ProductResults: FC = () => {
+  const tProducts = useTranslations('products.list');
+  const tSort = useTranslations('sort');
   const [selectedSort, setSelectedSort] = useState('relevant');
   const searchParams = useSearchParams();
 
@@ -40,14 +43,23 @@ const ProductResults: FC = () => {
 
   const displayType = apiQuery || productType;
 
+  const localizedSortOptions = useMemo(
+    () =>
+      SORT_OPTIONS.map((opt) => ({
+        ...opt,
+        label: tSort(`options.${opt.id}`),
+      })),
+    [tSort],
+  );
+
   // Format type name for display (e.g., "trending" -> "Trending Products")
   const formattedTypeName = useMemo(() => {
-    if (!displayType) return 'Products';
+    if (!displayType) return tProducts('title');
     return displayType
       .split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
-  }, [displayType]);
+  }, [displayType, tProducts]);
 
   return (
     <div className="section-container mt-4">
@@ -58,10 +70,13 @@ const ProductResults: FC = () => {
           {displayType && (
             <p className="text-sm text-gray-600">
               {totalCount > 0
-                ? `Found ${totalCount} product${totalCount !== 1 ? 's' : ''}`
+                ? tProducts('foundForType', {
+                    count: totalCount,
+                    type: displayType,
+                  })
                 : isLoadingProducts
                   ? ''
-                  : `No products found for "${displayType}"`}
+                  : tProducts('noneForType', { type: displayType })}
             </p>
           )}
         </div>
@@ -69,7 +84,7 @@ const ProductResults: FC = () => {
         {productType && (
           <SortBar
             productCount={totalCount || displayProducts.length}
-            sortOptions={SORT_OPTIONS}
+            sortOptions={localizedSortOptions}
             selectedSort={selectedSort}
             onSortChange={setSelectedSort}
           />

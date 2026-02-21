@@ -2,6 +2,7 @@
 
 import { ViewOnce } from '@/components/shared/animations';
 import SortDropdown, { SortOption } from '@/components/shared/sort-dropdown';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 
 interface SortBarProps {
@@ -17,12 +18,16 @@ const SortBar: FC<SortBarProps> = ({
   selectedSort,
   onSortChange,
 }) => {
+  const tCommon = useTranslations('common');
+
   return (
     <ViewOnce type="slideDown" distance={10} duration={0.3} delay={0.1}>
       <div className="flex items-center justify-end gap-2 sm:gap-4">
         {/* Product Count - Desktop only */}
         <div className="hidden lg:block px-3 py-1.5 bg-gray-100 rounded-lg">
-          <span className="text-sm font-medium  ">{productCount} Products</span>
+          <span className="text-sm font-medium  ">
+            {tCommon('productCount', { count: productCount })}
+          </span>
         </div>
 
         {/* Sort Dropdown */}

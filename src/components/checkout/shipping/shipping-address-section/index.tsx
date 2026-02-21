@@ -4,6 +4,7 @@ import ShippingAddressSkeleton from '@/components/skeletons/shipping-address-ske
 import { useAuth } from '@/contexts/auth-context';
 import { useGetAddresses } from '@/hooks/api';
 import type { AddressCategory, UserAddress } from '@/types/address';
+import { useTranslations } from 'next-intl';
 import {
   FC,
   startTransition,
@@ -32,6 +33,7 @@ export const ShippingAddressSection: FC<Props> = ({
   shippingAddress,
   onShippingRevalidate,
 }) => {
+  const t = useTranslations('shipping');
   const { isAuthenticated } = useAuth();
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -111,7 +113,7 @@ export const ShippingAddressSection: FC<Props> = ({
     <section className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-base sm:text-lg font-medium text-gray-900">
-          Shipping address
+          {t('titles.shippingAddress')}
         </h2>
         {!isEditing && (
           <button
@@ -122,7 +124,7 @@ export const ShippingAddressSection: FC<Props> = ({
             }}
             className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
           >
-            Add New
+            {t('actions.addNew')}
           </button>
         )}
       </div>

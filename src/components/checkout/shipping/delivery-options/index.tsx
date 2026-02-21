@@ -2,6 +2,7 @@
 
 import type { ShippingStepState } from '@/types/cart';
 import { buildIso, formatDateWithOrdinal, parseDateInput } from '@/utils/date';
+import { useTranslations } from 'next-intl';
 import { FC, useMemo, useState } from 'react';
 import { FiClock } from 'react-icons/fi';
 import type { ShippingSelection } from '../types';
@@ -20,6 +21,7 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
   shippingSelection,
   setShippingSelection,
 }) => {
+  const t = useTranslations('shipping');
   const [isSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -60,7 +62,7 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
   return (
     <section className="space-y-4">
       <h2 className="text-base sm:text-lg font-medium text-gray-900">
-        Pick a convenient Date &amp; Time
+        {t('delivery.title')}
       </h2>
 
       <div className="space-y-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -68,9 +70,11 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
           <div className="flex items-center gap-2">
             <FiClock className="h-4 w-4 text-deep-maroon" />
             <div className="text-xs sm:text-sm text-gray-700">
-              <p className="font-semibold text-gray-900">Custom Delivery</p>
+              <p className="font-semibold text-gray-900">
+                {t('delivery.customDelivery')}
+              </p>
               <p className="text-[11px] sm:text-xs text-gray-500">
-                Extra charges may apply for custom delivery
+                {t('delivery.customDeliveryDescription')}
               </p>
             </div>
           </div>
@@ -80,14 +84,14 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
             onClick={() => setShowModal(true)}
             disabled={isShippingLoading}
           >
-            Choose
+            {t('delivery.choose')}
           </button>
         </div>
 
         {shippingStep?.defaultDeliveryDate && (
           <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-600">
             <span className="font-semibold text-gray-900">
-              Estimated delivery date
+              {t('delivery.estimatedDate')}
             </span>
             <span>
               {formatDateWithOrdinal(shippingStep.defaultDeliveryDate)}{' '}
@@ -102,11 +106,13 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
         {selectedDate && selectedTime && (
           <div className="pt-2 text-[11px] sm:text-xs text-gray-600">
             <p className="font-semibold text-deep-maroon mb-0.5">
-              Your delivery is scheduled!
+              {t('delivery.scheduledTitle')}
             </p>
             <p>
-              {formatDateWithOrdinal(selectedDate ?? undefined)} between{' '}
-              {selectedTime}
+              {t('delivery.scheduledText', {
+                date: formatDateWithOrdinal(selectedDate ?? undefined),
+                time: selectedTime,
+              })}
             </p>
           </div>
         )}
@@ -121,7 +127,7 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
         timeSlots={timeSlots}
         highlightedDate={highlightedDefaultDate}
         highlightedLabel={
-          highlightedDefaultDate ? `Estimated delivery date` : undefined
+          highlightedDefaultDate ? t('delivery.highlightedLabel') : undefined
         }
         onSaveSelection={handleSaveCustomDelivery}
         isSavingSelection={isSaving}

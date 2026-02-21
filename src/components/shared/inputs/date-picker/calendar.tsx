@@ -8,6 +8,7 @@ import {
   monthNames,
   startOfMonth,
 } from '@/utils/date';
+import { useLocale } from 'next-intl';
 import { FC, useMemo, useState } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
@@ -34,7 +35,15 @@ const Calendar: FC<CalendarProps> = ({
       : startOfMonth(new Date()),
   );
 
+  const locale = useLocale();
+
   const weeks = useMemo(() => getMonthMatrix(month), [month]);
+  const weekDayLabels = useMemo(() => {
+    const formatter = new Intl.DateTimeFormat(locale, { weekday: 'short' });
+    return Array.from({ length: 7 }, (_, i) =>
+      formatter.format(new Date(2021, 7, 1 + i)),
+    );
+  }, [locale]);
 
   const handlePrev = () => setMonth((m) => addMonths(m, -1));
   const handleNext = () => setMonth((m) => addMonths(m, 1));
@@ -51,7 +60,7 @@ const Calendar: FC<CalendarProps> = ({
         >
           <FiChevronLeft />
         </button>
-        <div className="text-sm font-medium">{monthNames(month)}</div>
+        <div className="text-sm font-medium">{monthNames(month, locale)}</div>
         <button
           type="button"
           onClick={handleNext}
@@ -62,7 +71,7 @@ const Calendar: FC<CalendarProps> = ({
       </div>
 
       <div className="grid grid-cols-7 text-xs text-gray-500 gap-1 mb-2">
-        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+        {weekDayLabels.map((d) => (
           <div key={d} className="text-center">
             {d}
           </div>

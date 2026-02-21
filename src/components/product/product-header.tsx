@@ -3,6 +3,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { useFormatCurrency } from '@/hooks/use-format-currency';
 import type { ProductDetailData } from '@/types/response';
+import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiEye } from 'react-icons/fi';
 import { IoIosStarOutline } from 'react-icons/io';
@@ -13,6 +14,7 @@ export interface ProductHeaderProps {
 
 export const ProductHeader: FC<ProductHeaderProps> = ({ product }) => {
   const formatCurrency = useFormatCurrency();
+  const t = useTranslations('product.header');
 
   const basePrice = product.product_info.pricing.base_price
     ? parseFloat(product.product_info.pricing.base_price)
@@ -77,7 +79,7 @@ export const ProductHeader: FC<ProductHeaderProps> = ({ product }) => {
             >
               {amountSaved > 0 && (
                 <span className="text-green-600 font-medium text-sm sm:text-base lg:text-lg">
-                  Save {formatCurrency(amountSaved)}
+                  {t('saveAmount', { amount: formatCurrency(amountSaved) })}
                 </span>
               )}
             </ViewOnce>
@@ -124,7 +126,7 @@ export const ProductHeader: FC<ProductHeaderProps> = ({ product }) => {
             <div className="flex space-x-2 items-center w-fit p-2 bg-gray-50 rounded-md">
               <FiEye className="w-4 h-4 text-green-600 shrink-0" />
               <span className=" text-xs">
-                {product.product_info.view_count} views in 24 hrs
+                {t('viewsIn24h', { count: product.product_info.view_count })}
               </span>
             </div>
           </ViewOnce>

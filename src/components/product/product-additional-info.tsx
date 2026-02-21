@@ -3,6 +3,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import Modal from '@/components/shared/modal';
 import type { ProductDetailData } from '@/types/response';
+import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 import { FiChevronRight, FiX } from 'react-icons/fi';
 import { GiWallet } from 'react-icons/gi';
@@ -17,6 +18,7 @@ export interface ProductAdditionalInfoProps {
 export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
   product,
 }) => {
+  const t = useTranslations('product.paymentDelivery');
   const [isFlexiPaymentModalOpen, setIsFlexiPaymentModalOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
 
@@ -36,7 +38,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
             <div className="p-4 bg-[#FFF4F4] rounded-lg flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-xs md:text-sm text-deep-maroon min-w-0 flex-1">
                 <HiMapPin className="text-deep-maroon text-lg md:text-xl shrink-0" />
-                <span className="truncate">Delivery on</span>
+                <span className="truncate">{t('deliveryOn')}</span>
                 <span className="font-semibold text-indigo-slate shrink-0">
                   {product.delivery_info.estimated_delivery}
                 </span>
@@ -45,7 +47,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
                 type="button"
                 className="text-indigo-slate hover:underline font-medium text-xs md:text-sm whitespace-nowrap shrink-0 ml-2"
               >
-                Update
+                {t('update')}
               </button>
             </div>
           </ViewOnce>
@@ -67,7 +69,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
           >
             <div className="flex items-center gap-2">
               <IoStorefront className="text-xl text-deep-maroon" />
-              <span className="font-semibold text-sm  ">Try in store!</span>
+              <span className="font-semibold text-sm  ">{t('tryInStore')}</span>
             </div>
             <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
           </button>
@@ -92,14 +94,13 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
                 <div className="flex items-center gap-2">
                   <GiWallet className="text-xl text-deep-maroon" />
                   <span className="font-semibold text-sm  ">
-                    Flexi Payment Available
+                    {t('flexiPaymentAvailable')}
                   </span>
                 </div>
                 <FiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-deep-maroon transition-colors" />
               </div>
               <p className="text-deep-maroon text-left text-xs mt-2">
-                Pay 20% upfront to confirm booking, remaining amount before
-                delivery
+                {t('flexiPaymentNote')}
               </p>
             </button>
           </ViewOnce>
@@ -123,12 +124,14 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
         <div className="flex flex-col h-full p-6">
           {/* Header */}
           <div className="flex items-start justify-between  pb-4">
-            <h2 className="text-lg md:text-xl font-medium  ">Info</h2>
+            <h2 className="text-lg md:text-xl font-medium  ">
+              {t('modal.title')}
+            </h2>
             <button
               type="button"
               onClick={() => setIsFlexiPaymentModalOpen(false)}
               className="w-8 h-8 rounded-full bg-deep-maroon flex items-center justify-center hover:bg-[#6b0000] transition-colors duration-200"
-              aria-label="Close"
+              aria-label={t('modal.closeAria')}
             >
               <FiX className="w-4 h-4 text-white" />
             </button>
@@ -141,11 +144,11 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
               <div>
                 <h3 className="text-base md:text-lg font-semibold   mb-2">
                   {product.flexi_payment.modal_content.title ||
-                    'What is Flexi Payment?'}
+                    t('modal.flexiTitle')}
                 </h3>
                 <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                   {product.flexi_payment.modal_content.description ||
-                    'Flexi Payment lets you book your order by paying a part of the total amount upfront and the rest before delivery.'}
+                    t('modal.flexiDescription')}
                 </p>
               </div>
 
@@ -153,7 +156,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
               {product.flexi_payment.modal_content.benefits.length > 0 && (
                 <div>
                   <h3 className="text-base md:text-lg font-semibold   mb-3">
-                    Benefits
+                    {t('modal.benefitsTitle')}
                   </h3>
                   <ol className="space-y-2 text-xs md:text-sm text-gray-600">
                     {product.flexi_payment.modal_content.benefits.map(
@@ -177,7 +180,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
             onClick={() => setIsFlexiPaymentModalOpen(false)}
             className="w-full bg-deep-maroon text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#6b0000] transition-colors duration-200"
           >
-            Ok
+            {t('modal.close')}
           </button>
         </div>
       </Modal>

@@ -2,6 +2,9 @@ import { FormInput } from '@/components/shared/inputs/form-input';
 import { ChangeEvent } from 'react';
 
 interface CityFieldProps {
+  label: string;
+  placeholder: string;
+  required?: boolean;
   value: string;
   error?: string;
   showError: boolean;
@@ -10,6 +13,9 @@ interface CityFieldProps {
 }
 
 export function CityField({
+  label,
+  placeholder,
+  required = false,
   value,
   error,
   showError,
@@ -21,11 +27,12 @@ export function CityField({
       id="address-city"
       label={
         <span>
-          Town / City<span className="text-red-500">*</span>
+          {label}
+          {required ? <span className="text-red-500">*</span> : null}
         </span>
       }
       type="text"
-      placeholder="Town or City"
+      placeholder={placeholder}
       value={value}
       onChange={onChange}
       onBlur={onBlur}

@@ -8,10 +8,12 @@ import { useLayoutData } from '@/contexts/layout-context';
 import { useGetProducts } from '@/hooks/api';
 import { useResizeWindow } from '@/hooks/use-resize-window';
 import { AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 
 const SubcategoryDetail: FC = () => {
+  const tSort = useTranslations('sort');
   const params = useParams();
   const { categories } = useLayoutData();
   const [isFilterVisible, setIsFilterVisible] = useState(false);
@@ -69,6 +71,15 @@ const SubcategoryDetail: FC = () => {
     return apiProducts || [];
   }, [apiProducts]);
 
+  const localizedSortOptions = useMemo(
+    () =>
+      SORT_OPTIONS.map((opt) => ({
+        ...opt,
+        label: tSort(`options.${opt.id}`),
+      })),
+    [tSort],
+  );
+
   const handleToggleFilter = () => {
     setIsFilterVisible(!isFilterVisible);
   };
@@ -86,7 +97,7 @@ const SubcategoryDetail: FC = () => {
         productCount={productCount || displayProducts.length}
         isFilterVisible={isFilterVisible}
         onToggleFilter={handleToggleFilter}
-        sortOptions={SORT_OPTIONS}
+        sortOptions={localizedSortOptions}
         selectedSort={selectedSort}
         onSortChange={setSelectedSort}
       />

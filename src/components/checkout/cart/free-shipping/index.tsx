@@ -3,11 +3,13 @@
 import { useCart } from '@/contexts/cart-context';
 import { formatCurrency } from '@/utils/format-currency';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { FaTruckFast } from 'react-icons/fa6';
 
 export const CartFreeShippingBanner: FC = () => {
+  const t = useTranslations('checkout.cart.freeShipping');
   const params = useParams<{ country?: string; locale?: string }>();
   const locale = params?.locale ?? 'en';
   const countryCode = params?.country ?? 'ae';
@@ -30,21 +32,24 @@ export const CartFreeShippingBanner: FC = () => {
 
   const bannerText = useMemo(() => {
     if (amountToFreeShipping > 0) {
-      return (
-        <>
-          Add{' '}
-          <span className="text-[#007B35] font-semibold">
-            {formatCurrency(amountToFreeShipping, countryCode, locale)}
-          </span>{' '}
-          more for Free Shipping!
-        </>
+      const formattedAmount = formatCurrency(
+        amountToFreeShipping,
+        countryCode,
+        locale,
       );
+
+      return t.rich('addMore', {
+        amount: (chunks) => (
+          <span className="text-[#007B35] font-semibold">{chunks}</span>
+        ),
+        value: formattedAmount,
+      });
     }
 
     if (freeShippingMessage) return freeShippingMessage;
 
-    return 'You have unlocked Free Shipping!';
-  }, [amountToFreeShipping, countryCode, locale, freeShippingMessage]);
+    return t('unlocked');
+  }, [amountToFreeShipping, countryCode, locale, freeShippingMessage, t]);
 
   return (
     <div className="flex flex-col gap-2">

@@ -3,6 +3,7 @@
 import Modal from '@/components/shared/modal';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { useWishlistActions } from '@/hooks/use-wishlist-actions';
+import { useTranslations } from 'next-intl';
 import { FC, startTransition, useEffect, useState } from 'react';
 import { FiHeart, FiPlus } from 'react-icons/fi';
 import { IoClose } from 'react-icons/io5';
@@ -22,6 +23,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
   variantId,
   onSuccess,
 }) => {
+  const t = useTranslations('product.wishlist');
   const { collections, addToWishlist, isAdding } = useWishlistActions();
   const [selectedCollectionId, setSelectedCollectionId] = useState<
     number | null
@@ -73,7 +75,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
         <div className="flex flex-col h-full max-h-[90vh]">
           {/* Header */}
           <div className="flex items-center justify-between gap-4 p-3 border-b border-gray-200">
-            <h2 className="text-lg font-semibold  ">Add to Wishlist</h2>
+            <h2 className="text-lg font-semibold  ">{t('title')}</h2>
             <button
               type="button"
               onClick={onClose}
@@ -95,7 +97,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
                 <FiPlus className="w-6 h-6 text-deep-maroon" />
               </div>
               <span className="font-semibold text-indigo-slate">
-                Create new collection
+                {t('createNew')}
               </span>
             </button>
 
@@ -165,7 +167,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
               </div>
             ) : (
               <div className="text-center py-8 text-gray-500 text-sm">
-                No collections found. Create one to get started.
+                {t('empty')}
               </div>
             )}
           </div>
@@ -178,7 +180,7 @@ const AddToWishlistModal: FC<AddToWishlistModalProps> = ({
               disabled={!selectedCollectionId || isAdding}
               className="w-full py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isAdding ? 'Adding...' : 'Done'}
+              {isAdding ? t('adding') : t('done')}
             </button>
           </div>
         </div>

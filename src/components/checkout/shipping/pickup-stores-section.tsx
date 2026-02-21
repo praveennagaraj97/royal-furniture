@@ -4,6 +4,7 @@ import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import PickupStoresSkeleton from '@/components/skeletons/pickup-stores-skeleton';
 import { useGetStoresByCart } from '@/hooks/api';
 import type { StoreLocation } from '@/types/store';
+import { useTranslations } from 'next-intl';
 import { FC, startTransition, useEffect, useState } from 'react';
 import { FiInbox, FiMapPin, FiPhone } from 'react-icons/fi';
 import type { ShippingSelection } from './types';
@@ -30,6 +31,7 @@ export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
   setShippingSelection,
   guestSessionId,
 }) => {
+  const t = useTranslations('shipping');
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
 
   const { stores, isLoading } = useGetStoresByCart({
@@ -77,12 +79,10 @@ export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-base sm:text-lg font-medium text-gray-900">
-            Pickup store
+            {t('titles.pickupStore')}
           </h2>
         </div>
-        <p className="text-sm text-gray-600">
-          Add items to your cart to see available pickup locations.
-        </p>
+        <p className="text-sm text-gray-600">{t('pickup.addItemsPrompt')}</p>
       </section>
     );
   }
@@ -91,7 +91,7 @@ export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
     <section className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-base sm:text-lg font-medium text-gray-900">
-          Pickup store
+          {t('titles.pickupStore')}
         </h2>
       </div>
 
@@ -101,9 +101,11 @@ export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
         <div className="flex items-center gap-3 rounded-xl border border-dashed border-gray-200 bg-white px-4 py-3 text-sm text-gray-600">
           <FiInbox className="h-5 w-5 text-gray-500" />
           <div>
-            <p className="font-semibold text-gray-800">No pickup stores yet</p>
+            <p className="font-semibold text-gray-800">
+              {t('pickup.emptyTitle')}
+            </p>
             <p className="text-xs text-gray-500">
-              We’ll show available stores for your cart here.
+              {t('pickup.emptyDescription')}
             </p>
           </div>
         </div>
@@ -156,7 +158,7 @@ export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
                       ) : null}
                       {firstProduct ? (
                         <p className="text-xs text-gray-600">
-                          {firstProduct.product_name} — Stock:{' '}
+                          {firstProduct.product_name} — {t('pickup.stock')}:{' '}
                           {firstProduct.stock}
                         </p>
                       ) : null}

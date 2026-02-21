@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { type FC } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
@@ -6,6 +7,8 @@ interface SearchEmptyStateProps {
 }
 
 export const SearchEmptyState: FC<SearchEmptyStateProps> = ({ query }) => {
+  const t = useTranslations('search.empty');
+
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4">
       <div className="relative mb-2">
@@ -14,11 +17,9 @@ export const SearchEmptyState: FC<SearchEmptyStateProps> = ({ query }) => {
           <FiSearch className="w-12 h-12 text-gray-400" />
         </div>
       </div>
-      <h3 className="text-lg font-semibold   mb-2">No Results Found</h3>
+      <h3 className="text-lg font-semibold   mb-2">{t('title')}</h3>
       <p className="text-sm text-gray-500 text-center max-w-md">
-        {query
-          ? `We couldn't find any products matching "${query}". Try different keywords or browse our categories.`
-          : 'Start searching for products by entering a keyword in the search bar.'}
+        {query ? t('withQuery', { query }) : t('generic')}
       </p>
     </div>
   );

@@ -4,11 +4,12 @@ import {
   Breadcrumb,
   type BreadcrumbItem,
 } from '@/components/shared/ui/breadcrumb';
+import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import {
   CheckoutProgress,
-  checkoutSteps,
+  getCheckoutSteps,
   type CheckoutStepId,
 } from './progress';
 
@@ -21,7 +22,10 @@ export const CheckoutHeader: FC<CheckoutHeaderProps> = ({
   currentStep,
   breadcrumbItems,
 }) => {
+  const t = useTranslations('checkout');
+  const tProgress = useTranslations('checkout.progress');
   const params = useParams<{ country?: string; locale?: string }>();
+  const steps = useMemo(() => getCheckoutSteps(tProgress), [tProgress]);
 
   const buildPath = (...segments: (string | undefined)[]) => {
     const filtered = segments.filter(Boolean) as string[];
@@ -40,14 +44,15 @@ export const CheckoutHeader: FC<CheckoutHeaderProps> = ({
 
     // Simplified breadcrumb: Home / <Current Step>
     return [
-      { label: 'Home', href: homeHref },
+      { label: t('header.home'), href: homeHref },
       {
         label:
-          checkoutSteps.find((s) => s.id === currentStep)?.label ?? 'Checkout',
+          steps.find((s) => s.id === currentStep)?.label ??
+          t('header.checkout'),
         href: stepHref,
       },
     ];
-  }, [currentStep, params?.country, params?.locale]);
+  }, [currentStep, params?.country, params?.locale, steps, t, tProgress]);
 
   const resolvedBreadcrumbItems = breadcrumbItems ?? defaultBreadcrumbItems;
 

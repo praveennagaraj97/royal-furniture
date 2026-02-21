@@ -3,6 +3,7 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { Accordion } from '@/components/shared/ui/accordion';
 import type { ProductInfoSection } from '@/types/response';
+import { useTranslations } from 'next-intl';
 import type { FC } from 'react';
 
 export interface GeneralInformationProps {
@@ -14,6 +15,7 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
   description,
   infoSection,
 }) => {
+  const t = useTranslations('product.info');
   // Helper to render data rows
   const renderDataRows = (data: Array<{ label: string; value: string }>) => (
     <div>
@@ -64,7 +66,7 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
       <div className="space-y-3">
         <div>
           <h2 className="text-base md:text-xl font-medium text-indigo-slate mb-2">
-            General Information
+            {t('title')}
           </h2>
           <p className="leading-relaxed">{description}</p>
         </div>

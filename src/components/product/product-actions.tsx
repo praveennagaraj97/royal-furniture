@@ -30,7 +30,8 @@ export const ProductActions: FC<ProductActionsProps> = ({
   isAdding = false,
   isOutOfStock = false,
 }) => {
-  const t = useTranslations();
+  const tCommon = useTranslations('common');
+  const tActions = useTranslations('product.actions');
   const actionsRef = useRef<HTMLDivElement | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
   const isVisible = useIntersectionObserver({ ref: actionsRef });
@@ -51,7 +52,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
             className="whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base bg-emerald-50 text-emerald-700 border border-emerald-200"
           >
             <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" />
-            <span className="font-semibold">{t('common.inCart')}</span>
+            <span className="font-semibold">{tCommon('inCart')}</span>
           </button>
         ) : (
           <AddToCartWrapper
@@ -71,7 +72,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
                 <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
               )}
               <span>
-                {isOutOfStock ? 'Out of Stock' : t('common.addToCart')}
+                {isOutOfStock ? tActions('outOfStock') : tCommon('addToCart')}
               </span>
             </button>
           </AddToCartWrapper>
@@ -82,7 +83,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
           disabled={isOutOfStock}
           className="whitespace-nowrap w-full border border-deep-maroon text-deep-maroon py-2 sm:py-2.5 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base hover:bg-deep-maroon hover:text-white transition-all duration-200"
         >
-          {isOutOfStock ? 'Out of Stock' : 'Buy Now'}
+          {isOutOfStock ? tActions('outOfStock') : tActions('buyNow')}
         </button>
       </div>
 
@@ -120,10 +121,10 @@ export const ProductActions: FC<ProductActionsProps> = ({
                     )}
                     <span>
                       {isOutOfStock
-                        ? 'Out of Stock'
+                        ? tActions('outOfStock')
                         : isInCart
-                          ? t('common.inCart')
-                          : t('common.addToCart')}
+                          ? tCommon('inCart')
+                          : tCommon('addToCart')}
                     </span>
                   </button>
                 </AddToCartWrapper>
@@ -134,7 +135,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
                 disabled={isOutOfStock}
                 className="whitespace-nowrap flex-1 border border-deep-maroon text-deep-maroon py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base hover:bg-deep-maroon hover:text-white transition-all duration-200"
               >
-                {isOutOfStock ? 'Out of Stock' : 'Buy Now'}
+                {isOutOfStock ? tActions('outOfStock') : tActions('buyNow')}
               </button>
             </div>
           </motion.div>
