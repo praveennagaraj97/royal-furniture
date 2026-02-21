@@ -40,6 +40,7 @@ const RegionSelect: FC = () => {
                   src={item.image}
                   alt={item.country_name}
                   fill
+                  sizes="20px"
                   className="object-cover"
                 />
               </span>

@@ -61,6 +61,24 @@ export const SlideIn: FC<SlideInProps> = ({
       ? document.documentElement.dir === 'rtl'
       : false);
 
+  const toZeroValue = (value: string | number | undefined) => {
+    if (typeof value === 'number') return 0;
+    if (typeof value === 'string') {
+      const unit = value.match(/[-+]?\d+(?:\.\d+)?(.*)/)?.[1] ?? '';
+      return `0${unit}`;
+    }
+    return 0;
+  };
+
+  const getOffset = (sign: 1 | -1) => {
+    if (typeof distance === 'number') return sign * distance;
+    if (typeof distance === 'string') {
+      const abs = distance.replace(/^[-+]?/, '');
+      return sign === -1 ? `-${abs}` : abs;
+    }
+    return 0;
+  };
+
   const getInitialValues = () => {
     const initial: Record<string, string | number> = {};
 
@@ -68,25 +86,28 @@ export const SlideIn: FC<SlideInProps> = ({
     if (scale) initial.scale = initialScale;
 
     if (direction === 'left') {
-      initial.x = rtlAware && isRTL ? distance : `-${distance}`;
+      const sign = rtlAware && isRTL ? 1 : -1;
+      initial.x = getOffset(sign);
     } else if (direction === 'right') {
-      initial.x = rtlAware && isRTL ? `-${distance}` : distance;
+      const sign = rtlAware && isRTL ? -1 : 1;
+      initial.x = getOffset(sign);
     } else if (direction === 'up') {
-      initial.y = `-${distance}`;
+      initial.y = getOffset(-1);
     } else if (direction === 'down') {
-      initial.y = distance;
+      initial.y = getOffset(1);
     }
 
     return initial;
   };
 
-  const getAnimateValues = () => {
+  const getAnimateValues = (initialValues: Record<string, string | number>) => {
     const animate: Record<string, string | number> = {};
 
     if (fade) animate.opacity = 1;
     if (scale) animate.scale = 1;
-    animate.x = 0;
-    animate.y = 0;
+
+    if (initialValues.x !== undefined) animate.x = toZeroValue(initialValues.x);
+    if (initialValues.y !== undefined) animate.y = toZeroValue(initialValues.y);
 
     return animate;
   };
@@ -102,10 +123,12 @@ export const SlideIn: FC<SlideInProps> = ({
     delay,
   };
 
+  const initialValues = getInitialValues();
+  const animateValues = getAnimateValues(initialValues);
   const commonProps = {
     className,
-    initial: getInitialValues(),
-    animate: getAnimateValues(),
+    initial: initialValues,
+    animate: animateValues,
     exit: getExitValues(),
     transition,
   };
@@ -114,7 +137,7 @@ export const SlideIn: FC<SlideInProps> = ({
     return (
       <motion.div
         {...commonProps}
-        whileInView={getAnimateValues()}
+        whileInView={animateValues}
         viewport={viewport}
       >
         {children}
