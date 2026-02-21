@@ -1,6 +1,6 @@
 'use client';
 
-import { ConfirmationModal } from '@/components/shared/confirmation-modal';
+// Confirmation modal and delete logic moved to card-level in AddressList
 import ShippingAddressSkeleton from '@/components/skeletons/shipping-address-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useToast } from '@/contexts/toast-context';
@@ -42,8 +42,6 @@ export const ShippingAddressSection: FC<Props> = ({
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editAddress, setEditAddress] = useState<Address | null>(null);
-  const [deleteId, setDeleteId] = useState<string | number | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
   const selectedAddressIdRef = useRef<string | null>(null);
 
   const {
@@ -104,26 +102,7 @@ export const ShippingAddressSection: FC<Props> = ({
     setIsEditing(true);
   };
 
-  const handleDelete = (id: string | number) => {
-    setDeleteId(id);
-  };
-
-  const confirmDelete = async () => {
-    if (!deleteId) return;
-    setIsDeleting(true);
-    try {
-      await addressService.deleteAddress(Number(deleteId));
-      await mutate();
-      showSuccess('Address deleted');
-    } catch (error) {
-      showError(getErrorMessage(error, 'Failed to delete address'));
-    } finally {
-      setIsDeleting(false);
-      setDeleteId(null);
-    }
-  };
-
-  const cancelDelete = () => setDeleteId(null);
+  // delete handled at card level inside AddressList via mutateAddresses prop
 
   const handleSelect = async (id: string | number) => {
     const nextId = String(id);
@@ -255,7 +234,8 @@ export const ShippingAddressSection: FC<Props> = ({
               <div>
                 <p className="font-semibold text-gray-800">No addresses yet</p>
                 <p className="text-xs text-gray-500">
-                  Add an address to continue checkout.
+                  Add an address to continue checkout or try picking up from
+                  store.
                 </p>
               </div>
             </div>
@@ -263,23 +243,14 @@ export const ShippingAddressSection: FC<Props> = ({
             <AddressList
               addresses={addresses}
               onEdit={handleEdit}
-              onDelete={handleDelete}
               onSelect={handleSelect}
+              mutateAddresses={mutate}
             />
           )}
         </>
       )}
 
-      <ConfirmationModal
-        isOpen={!!deleteId}
-        onClose={cancelDelete}
-        onConfirm={confirmDelete}
-        title="Delete Address"
-        message="Are you sure you want to delete this address? This action cannot be undone."
-        confirmText={isDeleting ? 'Deleting...' : 'Delete'}
-        cancelText="Cancel"
-        variant="danger"
-      />
+      {/* Delete confirmation handled inside AddressList cards */}
     </section>
   );
 };

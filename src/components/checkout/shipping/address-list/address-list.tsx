@@ -1,6 +1,12 @@
+'use client';
+
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
-import type { UserAddress } from '@/types/address';
-import { FC } from 'react';
+import { ConfirmationModal } from '@/components/shared/confirmation-modal';
+import { useToast } from '@/contexts/toast-context';
+import { addressService } from '@/services/api/address-service';
+import { ParsedAPIError } from '@/types';
+import type { AddressesListResponse, UserAddress } from '@/types/address';
+import { FC, useState } from 'react';
 import {
   FiBriefcase,
   FiEdit2,
@@ -8,14 +14,17 @@ import {
   FiMoreHorizontal,
   FiTrash2,
 } from 'react-icons/fi';
+import { KeyedMutator } from 'swr';
 
 export type Address = UserAddress & { selected?: boolean };
 
 interface AddressListProps {
   addresses: Address[];
   onEdit: (address: Address) => void;
-  onDelete: (id: string | number) => void;
+  onDelete?: (id: string | number) => void;
   onSelect: (id: string | number) => void;
+  // function to revalidate addresses after deletion
+  mutateAddresses: KeyedMutator<AddressesListResponse>;
 }
 
 const typeIcon = {
@@ -35,7 +44,41 @@ export const AddressList: FC<AddressListProps> = ({
   onEdit,
   onDelete,
   onSelect,
+  mutateAddresses,
 }) => {
+  const { showError, showSuccess } = useToast();
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const handleDeleteRequest = (id: string | number) => {
+    setDeletingId(id);
+    setIsConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
+    setIsDeleting(true);
+    try {
+      await addressService.deleteAddress(Number(deletingId));
+      await mutateAddresses();
+      showSuccess('Address deleted');
+    } catch (err) {
+      const parsedError = err as ParsedAPIError;
+
+      showError(parsedError?.generalError || 'Failed to delete address');
+    } finally {
+      setIsDeleting(false);
+      setIsConfirmOpen(false);
+      setDeletingId(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setIsConfirmOpen(false);
+    setDeletingId(null);
+  };
+
   return (
     <div className="space-y-4">
       <div className="bg-[#fff3f3] rounded-t-lg px-4 py-2 text-sm font-semibold text-gray-900">
@@ -60,7 +103,11 @@ export const AddressList: FC<AddressListProps> = ({
                   ? 'border-deep-maroon bg-[#fff3f3]'
                   : 'border-gray-200 bg-white'
               }`}
-              onClick={() => onSelect(address.id)}
+              onClick={() => {
+                // Do nothing when already selected
+                if (address.selected || address.is_default) return;
+                onSelect(address.id);
+              }}
             >
               <div className="flex items-center gap-2 mb-1">
                 {typeIcon[address.category]}
@@ -95,14 +142,38 @@ export const AddressList: FC<AddressListProps> = ({
               ) : null}
               <button
                 type="button"
-                className="absolute top-3 right-3 text-deep-maroon hover:text-red-600"
+                className="absolute top-3 right-3 text-deep-maroon hover:text-red-600 flex items-center justify-center"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDelete(address.id);
+                  // open local confirm modal
+                  handleDeleteRequest(address.id);
                 }}
                 aria-label="Delete address"
               >
-                <FiTrash2 className="h-5 w-5" />
+                {isDeleting && String(deletingId) === String(address.id) ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-red-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <FiTrash2 className="h-5 w-5" />
+                )}
               </button>
               <span
                 className={`absolute bottom-3 right-3 h-4 w-4 rounded-full border-2 ${address.selected || address.is_default ? 'border-deep-maroon bg-deep-maroon' : 'border-gray-300 bg-white'}`}
@@ -111,6 +182,16 @@ export const AddressList: FC<AddressListProps> = ({
           </StaggerItem>
         ))}
       </StaggerContainer>
+      <ConfirmationModal
+        isOpen={isConfirmOpen}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        title="Delete Address"
+        message="Are you sure you want to delete this address? This action cannot be undone."
+        confirmText={isDeleting ? 'Deleting...' : 'Delete'}
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };
