@@ -4,6 +4,7 @@ import type {
   ProductPricing,
   ResponsiveImages,
 } from '@/types/response';
+import { UserAddress } from './address';
 
 export interface CartItem {
   id: string; // product SKU or identifier
@@ -94,7 +95,7 @@ export interface ShippingProceedApiData {
   is_guest: boolean;
   step: string;
   delivery_method: string[];
-  shipping_address: unknown;
+  shipping_address: UserAddress | null;
   default_delivery_date?: string | null;
   delivery_slots: ShippingDeliverySlot[];
   cart_summary: CartApiData;
