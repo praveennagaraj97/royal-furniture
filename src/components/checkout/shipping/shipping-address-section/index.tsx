@@ -20,9 +20,7 @@ import { AuthRequiredState, EmptyAddressesState } from './states';
 const addressCategoryToFormType = (
   category: AddressCategory,
 ): AddressFormData['addressType'] => {
-  if (category === 'office') return 'work';
-  if (category === 'other') return 'other';
-  return 'home';
+  return category;
 };
 
 type Props = {

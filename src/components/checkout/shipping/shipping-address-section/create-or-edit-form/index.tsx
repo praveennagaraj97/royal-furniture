@@ -54,13 +54,13 @@ interface CreateOrEditAddressFormProps {
 
 const addressTypeLabel: Record<AddressType, string> = {
   home: 'Home',
-  work: 'Work',
+  office: 'Office',
   other: 'Other',
 };
 
 const addressTypeIcon: Record<AddressType, ReactElement> = {
   home: <FiHome className="h-4 w-4" />,
-  work: <FiBriefcase className="h-4 w-4" />,
+  office: <FiBriefcase className="h-4 w-4" />,
   other: <FiMoreHorizontal className="h-4 w-4" />,
 };
 
@@ -280,7 +280,7 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
         <StaggerItem type="slideUp" distance={20} duration={0.35}>
           <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
-            {(['home', 'work', 'other'] as AddressType[]).map((type) => {
+            {(['home', 'office', 'other'] as AddressType[]).map((type) => {
               const isActive = state.formData.addressType === type;
               return (
                 <button
@@ -432,8 +432,4 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
 export default CreateOrEditAddressForm;
 
-const toFormCategory = (type: AddressType) => {
-  if (type === 'work') return 'office';
-  if (type === 'other') return 'other';
-  return 'home';
-};
+const toFormCategory = (type: AddressType) => type;

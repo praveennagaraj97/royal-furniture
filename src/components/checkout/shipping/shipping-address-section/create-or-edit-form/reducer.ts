@@ -1,4 +1,4 @@
-export type AddressType = 'home' | 'work' | 'other';
+export type AddressType = 'home' | 'office' | 'other';
 
 export interface AddressFormData {
   name: string;
