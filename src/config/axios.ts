@@ -17,6 +17,7 @@ export const baseURL = process.env.NEXT_PUBLIC_BASE_API_URL!;
 export const getAxiosConfig = (): AxiosRequestConfig => ({
   baseURL,
   timeout: 30000,
+  proxy: false,
 });
 
 export const setupAxiosInterceptors = (instance: AxiosInstance): void => {
