@@ -15,6 +15,7 @@ import {
   FiMoreHorizontal,
   FiTrash2,
 } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 import { KeyedMutator } from 'swr';
 
 export type Address = UserAddress & { selected?: boolean };
@@ -55,7 +56,9 @@ export const AddressList: FC<AddressListProps> = ({
 
   useEffect(() => {
     if (selectingId === null) {
-      const selected = addresses.find((addr) => addr.selected);
+      const selected = addresses.find(
+        (addr) => addr.selected || addr.is_default,
+      );
       setOptimisticSelectedId(selected ? String(selected.id) : null);
     }
   }, [addresses, selectingId]);
@@ -74,7 +77,6 @@ export const AddressList: FC<AddressListProps> = ({
       showSuccess('Address deleted');
     } catch (err) {
       const parsedError = err as ParsedAPIError;
-
       showError(parsedError?.generalError || 'Failed to delete address');
     } finally {
       setIsDeleting(false);
@@ -108,6 +110,13 @@ export const AddressList: FC<AddressListProps> = ({
     }
   };
 
+  const isAddressSelected = (address: Address) => {
+    if (optimisticSelectedId) {
+      return String(address.id) === optimisticSelectedId;
+    }
+    return address.selected || address.is_default;
+  };
+
   return (
     <div className="space-y-4">
       <div className="bg-[#fff3f3] rounded-t-lg px-4 py-2 text-sm font-semibold text-gray-900">
@@ -128,15 +137,12 @@ export const AddressList: FC<AddressListProps> = ({
           >
             <div
               className={`relative rounded-xl border px-4 py-3 shadow-sm cursor-pointer transition-all ${
-                address.selected
+                isAddressSelected(address)
                   ? 'border-deep-maroon bg-[#fff3f3]'
                   : 'border-gray-200 bg-white'
               }`}
               onClick={() => {
-                const isCurrentlySelected = optimisticSelectedId
-                  ? String(address.id) === optimisticSelectedId
-                  : address.selected || address.is_default;
-                if (isCurrentlySelected || selectingId) return;
+                if (isAddressSelected(address) || selectingId) return;
                 handleSelect(address.id);
               }}
             >
@@ -176,43 +182,19 @@ export const AddressList: FC<AddressListProps> = ({
                 className="absolute top-3 right-3 text-deep-maroon hover:text-red-600 flex items-center justify-center"
                 onClick={(e) => {
                   e.stopPropagation();
-                  // open local confirm modal
                   handleDeleteRequest(address.id);
                 }}
                 aria-label="Delete address"
               >
                 {isDeleting && String(deletingId) === String(address.id) ? (
-                  <svg
-                    className="animate-spin h-5 w-5 text-red-600"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
+                  <ImSpinner2 className="animate-spin h-5 w-5" />
                 ) : (
                   <FiTrash2 className="h-5 w-5" />
                 )}
               </button>
               <span
                 className={`absolute bottom-3 right-3 h-4 w-4 rounded-full border-2 ${
-                  (
-                    optimisticSelectedId
-                      ? String(address.id) === optimisticSelectedId
-                      : address.selected || address.is_default
-                  )
+                  isAddressSelected(address)
                     ? 'border-deep-maroon bg-deep-maroon'
                     : 'border-gray-300 bg-white'
                 }`}

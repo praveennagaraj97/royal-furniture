@@ -2,6 +2,10 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { TextAreaFormInput } from '@/components/shared/inputs/text-area-input';
+import { useToast } from '@/contexts/toast-context';
+import { addressService } from '@/services/api/address-service';
+import type { AddressesListResponse, UserAddress } from '@/types/address';
+import type { ParsedAPIError } from '@/types/error';
 import {
   createAddressFormValidators,
   validateAddressForm,
@@ -23,6 +27,7 @@ import {
   FiMapPin,
   FiMoreHorizontal,
 } from 'react-icons/fi';
+import type { KeyedMutator } from 'swr';
 import { BuildingField } from './fields/building-field';
 import { CityField } from './fields/city-field';
 import { EmailField } from './fields/email-field';
@@ -38,10 +43,13 @@ import {
 } from './reducer';
 
 interface CreateOrEditAddressFormProps {
-  onAddressSaved?: (data: AddressFormData, countryCode: string) => void;
   onCancel?: () => void;
   initialData?: AddressFormData;
   editMode?: boolean;
+  mutateAddresses?: KeyedMutator<AddressesListResponse>;
+  editingAddressId?: string | number | null;
+  isDefaultSelection?: boolean;
+  shouldSetDefaultOnCreate?: boolean;
 }
 
 const addressTypeLabel: Record<AddressType, string> = {
@@ -59,11 +67,15 @@ const addressTypeIcon: Record<AddressType, ReactElement> = {
 type Props = CreateOrEditAddressFormProps;
 
 const CreateOrEditAddressForm: FC<Props> = ({
-  onAddressSaved,
   onCancel,
   initialData,
   editMode,
+  mutateAddresses,
+  editingAddressId,
+  isDefaultSelection = false,
+  shouldSetDefaultOnCreate = false,
 }) => {
+  const { showError, showSuccess } = useToast();
   const parsePhone = (phone?: string) => {
     const trimmed = phone?.trim();
     if (!trimmed) return { code: '+971', number: '' };
@@ -176,10 +188,46 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
     dispatch({ type: 'SET_IS_SUBMITTING', value: true });
 
+    const isDefault = editMode
+      ? Boolean(isDefaultSelection)
+      : Boolean(shouldSetDefaultOnCreate);
+
+    const trimmedPhone = state.formData.phone.trim();
+    const phoneWithCode = trimmedPhone.startsWith('+')
+      ? trimmedPhone
+      : `${countryCode} ${trimmedPhone}`.trim();
+
+    const payload = {
+      name: state.formData.name,
+      phone: phoneWithCode,
+      email: state.formData.email,
+      street: state.formData.streetAddress,
+      building: state.formData.building,
+      town_or_city: state.formData.city,
+      notes: state.formData.notes,
+      category: toFormCategory(state.formData.addressType),
+      is_default: isDefault,
+    } satisfies Partial<UserAddress>;
+
     try {
-      if (onAddressSaved) {
-        await onAddressSaved(state.formData, countryCode);
+      if (
+        editMode &&
+        editingAddressId !== undefined &&
+        editingAddressId !== null
+      ) {
+        await addressService.updateAddress(editingAddressId, payload);
+        showSuccess('Address updated');
+      } else {
+        await addressService.createAddress(payload);
+        showSuccess('Address added');
       }
+
+      await mutateAddresses?.();
+      onCancel?.();
+    } catch (error) {
+      const message =
+        (error as ParsedAPIError)?.generalError || 'Failed to save address';
+      showError(message);
     } finally {
       dispatch({ type: 'SET_IS_SUBMITTING', value: false });
     }
@@ -383,3 +431,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
 };
 
 export default CreateOrEditAddressForm;
+
+const toFormCategory = (type: AddressType) => {
+  if (type === 'work') return 'office';
+  if (type === 'other') return 'other';
+  return 'home';
+};
