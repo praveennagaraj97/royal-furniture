@@ -82,6 +82,9 @@ const DEFAULT_SHIPPING_SELECTION: ShippingSelection = {
   slotId: null,
   slotLabel: null,
   storeId: null,
+  pickupDate: null,
+  pickupSlotId: null,
+  pickupSlotLabel: null,
 };
 
 const DEFAULT_CART_STATE: CartState = {

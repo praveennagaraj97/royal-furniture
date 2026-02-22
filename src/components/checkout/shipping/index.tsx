@@ -17,6 +17,7 @@ import {
 import { DeliveryInfoCard } from '../common/info-sections/delivery-card';
 import { OrderSummarySection } from '../common/order-summary';
 import DeliveryOptionsSection from './delivery-options';
+import PickupOptionsSection from './pickup-options';
 import PickupStoresSection from './pickup-stores-section';
 import { ShippingAddressSection } from './shipping-address-section';
 import { ShippingMethodSection } from './shipping-method-section';
@@ -132,6 +133,9 @@ const ShippingPageContent: FC = () => {
         slotId: slotId ?? null,
         slotLabel,
         isCustomDelivery: Boolean(parsedSelectedDate && slotId),
+        pickupDate: prev.pickupDate,
+        pickupSlotId: prev.pickupSlotId,
+        pickupSlotLabel: prev.pickupSlotLabel,
       }));
     });
   }, [
@@ -150,6 +154,9 @@ const ShippingPageContent: FC = () => {
             deliveryType: 'home',
             isCustomDelivery: false,
             storeId: null,
+            pickupDate: null,
+            pickupSlotId: null,
+            pickupSlotLabel: null,
           };
         }
 
@@ -221,8 +228,12 @@ const ShippingPageContent: FC = () => {
               </>
             ) : (
               <>
-                <div>Ui for Pickup Info Card</div>
-                <div>Ui for Pickup options</div>
+                <PickupOptionsSection
+                  shippingStep={shippingStep}
+                  isShippingLoading={isShippingFetching}
+                  shippingSelection={shippingSelection}
+                  setShippingSelection={handleShippingSelectionUpdate}
+                />
               </>
             )}
           </div>

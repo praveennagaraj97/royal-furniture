@@ -608,7 +608,8 @@
       "addressAdded": "تم إضافة العنوان",
       "addressUpdated": "تم تحديث العنوان",
       "addressSavedError": "فشل حفظ العنوان",
-      "addressSelected": "تم اختيار العنوان"
+      "addressSelected": "تم اختيار العنوان",
+      "proceedToPaymentFailed": "حدث خطأ أثناء المتابعة للدفع. يرجى المحاولة مرة أخرى."
     },
     "method": {
       "homeTitle": "توصيل إلى المنزل",
@@ -640,7 +641,12 @@
       "addItemsPrompt": "أضف منتجات إلى سلة التسوق لعرض مواقع الاستلام المتاحة.",
       "emptyTitle": "لا توجد متاجر استلام حالياً",
       "emptyDescription": "سنظهر المتاجر المتاحة لسلتك هنا.",
-      "stock": "المخزون"
+      "stock": "المخزون",
+      "optionsTitle": "اختر تاريخاً ووقتاً مناسبين",
+      "selectDate": "اختر التاريخ",
+      "datePlaceholder": "تاريخ الاستلام",
+      "selectTime": "اختر الوقت",
+      "requiredbadge": "مطلوب"
     }
   }
 }

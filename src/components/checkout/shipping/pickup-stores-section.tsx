@@ -58,16 +58,16 @@ export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
     if (
       shippingMethod === 'pickup' &&
       selectedStoreId &&
-      shippingSelection.date &&
-      shippingSelection.slotId
+      shippingSelection.pickupDate &&
+      shippingSelection.pickupSlotId
     ) {
       // Selection is tracked locally; backend save will be handled in a later flow.
     }
   }, [
     shippingMethod,
     selectedStoreId,
-    shippingSelection.date,
-    shippingSelection.slotId,
+    shippingSelection.pickupDate,
+    shippingSelection.pickupSlotId,
   ]);
 
   if (shippingMethod !== 'pickup') {

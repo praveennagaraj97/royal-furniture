@@ -132,6 +132,9 @@ export type ShippingSelection = {
   slotId: number | null;
   slotLabel: string | null;
   storeId: number | null;
+  pickupDate: string | null;
+  pickupSlotId: number | null;
+  pickupSlotLabel: string | null;
 };
 
 export interface CartShippingState {

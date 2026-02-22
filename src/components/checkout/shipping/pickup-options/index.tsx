@@ -1,0 +1,102 @@
+'use client';
+
+import { SlideIn } from '@/components/shared/animations';
+import DatePicker from '@/components/shared/inputs/date-picker';
+import type { ShippingStepState } from '@/types/cart';
+import { useTranslations } from 'next-intl';
+import { FC, useMemo } from 'react';
+import type { ShippingSelection } from '../types';
+
+interface PickupOptionsSectionProps {
+  shippingStep?: ShippingStepState;
+  isShippingLoading: boolean;
+  shippingSelection: ShippingSelection;
+  setShippingSelection: (update: Partial<ShippingSelection>) => void;
+}
+
+const PickupOptionsSection: FC<PickupOptionsSectionProps> = ({
+  shippingStep,
+  isShippingLoading,
+  shippingSelection,
+  setShippingSelection,
+}) => {
+  const t = useTranslations('shipping');
+
+  const timeSlots = useMemo(
+    () => shippingStep?.deliverySlots?.map((slot) => slot.timeRange) || [],
+    [shippingStep?.deliverySlots],
+  );
+
+  const selectedDate = shippingSelection.pickupDate;
+  const selectedTime = shippingSelection.pickupSlotLabel;
+
+  const handleDateChange = (date: string | null) => {
+    setShippingSelection({
+      pickupDate: date,
+    });
+  };
+
+  const handleTimeChange = (slot: string | null) => {
+    const slotId = shippingStep?.deliverySlots.find(
+      (s) => s.timeRange === slot,
+    )?.id;
+
+    setShippingSelection({
+      pickupSlotLabel: slot,
+      pickupSlotId: slotId ?? null,
+    });
+  };
+
+  return (
+    <SlideIn className="space-y-4">
+      <h2 className="text-base sm:text-lg font-medium text-gray-900">
+        {t('pickup.optionsTitle')}
+      </h2>
+
+      <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-medium text-gray-700">
+              {t('pickup.selectDate')}
+            </label>
+
+            <span
+              className="inline-block px-2 py-0.5 text-xs font-medium rounded-sm bg-red-100 text-red-700 border border-red-200"
+              aria-label={t('pickup.requiredbadge')}
+            >
+              {t('pickup.requiredbadge')}
+            </span>
+          </div>
+
+          <DatePicker
+            value={selectedDate ?? undefined}
+            onChange={handleDateChange}
+            className="w-full"
+            placeholder={t('pickup.datePlaceholder')}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            {t('pickup.selectTime')}
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {timeSlots.map((slot) => (
+              <button
+                key={slot}
+                type="button"
+                disabled={isShippingLoading}
+                onClick={() => handleTimeChange(slot)}
+                className={`rounded-md border p-2 text-sm font-medium transition-colors ${selectedTime === slot ? 'border-deep-maroon bg-[#fff5f5] text-deep-maroon' : 'border-gray-200 text-gray-700 hover:border-deep-maroon hover:text-deep-maroon'} ${isShippingLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {slot}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </SlideIn>
+  );
+};
+
+export default PickupOptionsSection;

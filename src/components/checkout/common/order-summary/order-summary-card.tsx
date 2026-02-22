@@ -76,6 +76,7 @@ interface OrderSummaryCardProps {
 
 export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
   const t = useTranslations('checkout.orderSummary');
+  const tShipping = useTranslations('shipping');
   const { totals, shipping, guestSessionId, refreshCart } = useCart();
   const { showError } = useToast();
   const router = useRouter();
@@ -143,14 +144,18 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
       try {
         const payload: Record<string, unknown> = {
           delivery_type: shipping.method,
-          is_custom_delivery: shipping.selection.isCustomDelivery,
         };
 
-        if (shipping.method === 'home' && shipping.selection.isCustomDelivery) {
-          payload.date = shipping.selection.date;
-          payload.slot_id = shipping.selection.slotId;
+        if (shipping.method === 'home') {
+          payload.is_custom_delivery = shipping.selection.isCustomDelivery;
+          if (shipping.selection.isCustomDelivery) {
+            payload.date = shipping.selection.date;
+            payload.slot_id = shipping.selection.slotId;
+          }
         } else if (shipping.method === 'pickup') {
           payload.store_id = shipping.selection.storeId;
+          payload.date = shipping.selection.pickupDate;
+          payload.slot_id = shipping.selection.pickupSlotId;
         }
 
         await cartService.proceedToPayment(
@@ -163,7 +168,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         const parsedError = error as ParsedAPIError;
         showError(
           parsedError.generalError ||
-            'An error occurred while proceeding to payment. Please try again.',
+            tShipping('toasts.proceedToPaymentFailed'),
         );
       } finally {
         setIsSubmitting(false);
@@ -180,11 +185,24 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     }
 
     if (step === 'shipping') {
+      const isPickupIncomplete =
+        shipping.method === 'pickup' &&
+        (!shipping.selection.storeId ||
+          !shipping.selection.pickupDate ||
+          !shipping.selection.pickupSlotId);
+
+      const isHomeIncomplete =
+        shipping.method === 'home' &&
+        shipping.selection.isCustomDelivery &&
+        (!shipping.selection.date || !shipping.selection.slotId);
+
+      const isDisabled = isSubmitting || isPickupIncomplete || isHomeIncomplete;
+
       return {
         label: isSubmitting ? t('cta.saving') : t('cta.proceedToPayment'),
         Icon: FiCreditCard,
         onClick: handleProceedToPayment,
-        disabled: isSubmitting,
+        disabled: isDisabled,
       };
     }
 
@@ -208,6 +226,7 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     refreshCart,
     showError,
     t,
+    tShipping,
   ]);
 
   if (!cta) return null;

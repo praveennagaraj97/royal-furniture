@@ -619,7 +619,8 @@
       "addressAdded": "Address added",
       "addressUpdated": "Address updated",
       "addressSavedError": "Failed to save address",
-      "addressSelected": "Address selected"
+      "addressSelected": "Address selected",
+      "proceedToPaymentFailed": "An error occurred while proceeding to payment. Please try again."
     },
     "method": {
       "homeTitle": "Home Delivery",
@@ -651,7 +652,12 @@
       "addItemsPrompt": "Add items to your cart to see available pickup locations.",
       "emptyTitle": "No pickup stores yet",
       "emptyDescription": "We’ll show available stores for your cart here.",
-      "stock": "Stock"
+      "stock": "Stock",
+      "optionsTitle": "Pick a convenient Date & Time",
+      "selectDate": "Select Date",
+      "datePlaceholder": "Pickup Date",
+      "selectTime": "Select Time",
+      "requiredbadge": "Required"
     }
   }
 }
