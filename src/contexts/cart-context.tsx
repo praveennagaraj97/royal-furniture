@@ -2,6 +2,8 @@
 
 import { useGetCart } from '@/hooks/api';
 import { cartService } from '@/services/api/cart-service';
+import type { ParsedAPIError } from '@/types/error';
+import type { ProductItem } from '@/types/response';
 import type {
   CartApiData,
   CartApiItem,
@@ -11,9 +13,7 @@ import type {
   CartTotals,
   ShippingSelection,
   ShippingStepState,
-} from '@/types/cart';
-import type { ParsedAPIError } from '@/types/error';
-import type { ProductItem } from '@/types/response';
+} from '@/types/response/cart';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
 import {
   createContext,

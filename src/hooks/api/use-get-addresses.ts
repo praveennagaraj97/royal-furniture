@@ -2,7 +2,7 @@
 
 import { apiFetcher } from '@/config/axios';
 import { API_ROUTES } from '@/constants/api-routes';
-import type { AddressesListResponse } from '@/types/address';
+import type { AddressesListResponse } from '@/types/response/address';
 import useSWR from 'swr';
 
 interface UseGetAddressesProps {

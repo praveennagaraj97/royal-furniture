@@ -1,12 +1,14 @@
 'use client';
 
 import { SlideIn } from '@/components/shared/animations';
-import type { ShippingStepState } from '@/types/cart';
+import type {
+  ShippingSelection,
+  ShippingStepState,
+} from '@/types/response/cart';
 import { buildIso, formatDateWithOrdinal, parseDateInput } from '@/utils/date';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo, useState } from 'react';
 import { FiClock } from 'react-icons/fi';
-import type { ShippingSelection } from '../types';
 import CustomDeliveryModal from './custom-delivery-modal';
 
 interface DeliveryOptionsSectionProps {

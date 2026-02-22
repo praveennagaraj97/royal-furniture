@@ -3,11 +3,11 @@
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import PickupStoresSkeleton from '@/components/skeletons/pickup-stores-skeleton';
 import { useGetStoresByCart } from '@/hooks/api';
-import type { StoreLocation } from '@/types/store';
+import { ShippingSelection } from '@/types';
+import type { StoreLocation } from '@/types/response/store';
 import { useTranslations } from 'next-intl';
 import { FC, startTransition, useEffect, useState } from 'react';
 import { FiInbox, FiMapPin, FiPhone } from 'react-icons/fi';
-import type { ShippingSelection } from './types';
 
 const renderStoreAddress = (store: StoreLocation) => {
   const parts = [store.street, store.city, store.state, store.postal_code]

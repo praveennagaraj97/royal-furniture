@@ -1,6 +1,6 @@
 'use client';
 
-import type { ShippingStepState } from '@/types/cart';
+import type { ShippingStepState } from '@/types/response/cart';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
 import { FiHome, FiMapPin } from 'react-icons/fi';

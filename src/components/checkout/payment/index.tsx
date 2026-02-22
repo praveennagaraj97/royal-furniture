@@ -137,7 +137,9 @@ export const PaymentPageContent: FC = () => {
                       />
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="font-medium text-gray-900">{m.display_name}</div>
+                      <div className="font-medium text-gray-900">
+                        {m.display_name}
+                      </div>
                     </div>
                     <div className="shrink-0">
                       <input
@@ -167,7 +169,9 @@ export const PaymentPageContent: FC = () => {
                       />
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="font-medium text-gray-900">{m.display_name}</div>
+                      <div className="font-medium text-gray-900">
+                        {m.display_name}
+                      </div>
                     </div>
                     <div className="shrink-0">
                       <input

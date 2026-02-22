@@ -4,8 +4,11 @@ import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { TextAreaFormInput } from '@/components/shared/inputs/text-area-input';
 import { useToast } from '@/contexts/toast-context';
 import { addressService } from '@/services/api/address-service';
-import type { AddressesListResponse, UserAddress } from '@/types/address';
 import type { ParsedAPIError } from '@/types/error';
+import type {
+  AddressesListResponse,
+  UserAddress,
+} from '@/types/response/address';
 import {
   createAddressFormValidators,
   validateAddressForm,

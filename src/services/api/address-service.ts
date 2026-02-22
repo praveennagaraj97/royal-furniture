@@ -3,7 +3,7 @@ import type {
   AddressPayload,
   AddressResponse,
   AddressesListResponse,
-} from '@/types/address';
+} from '@/types/response/address';
 import { BaseAPIService } from './api-base-service';
 
 export class AddressService extends BaseAPIService {

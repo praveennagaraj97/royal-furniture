@@ -1,5 +1,5 @@
 import { API_ROUTES } from '@/constants/api-routes';
-import type { StoresByCartResponse } from '@/types/store';
+import type { StoresByCartResponse } from '@/types/response/store';
 import { BaseAPIService } from './api-base-service';
 
 export class StoreService extends BaseAPIService {

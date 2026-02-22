@@ -3,7 +3,7 @@ import type {
   CartApiResponse,
   PaymentProceedResponse,
   ShippingProceedResponse,
-} from '@/types/cart';
+} from '@/types/response/cart';
 import { BaseAPIService } from './api-base-service';
 
 interface AddItemPayload {

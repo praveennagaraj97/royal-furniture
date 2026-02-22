@@ -2,10 +2,12 @@
 
 import { SlideIn } from '@/components/shared/animations';
 import DatePicker from '@/components/shared/inputs/date-picker';
-import type { ShippingStepState } from '@/types/cart';
+import type {
+  ShippingSelection,
+  ShippingStepState,
+} from '@/types/response/cart';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
-import type { ShippingSelection } from '../types';
 
 interface PickupOptionsSectionProps {
   shippingStep?: ShippingStepState;

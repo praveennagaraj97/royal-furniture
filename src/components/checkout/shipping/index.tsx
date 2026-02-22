@@ -8,7 +8,7 @@ import type {
   ShippingProceedApiData,
   ShippingSelection,
   ShippingStepState,
-} from '@/types/cart';
+} from '@/types/response/cart';
 import { buildIso, parseDateInput } from '@/utils/date';
 import {
   FC,

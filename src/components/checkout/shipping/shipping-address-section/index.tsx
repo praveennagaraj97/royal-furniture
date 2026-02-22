@@ -3,7 +3,7 @@
 import ShippingAddressSkeleton from '@/components/skeletons/shipping-address-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useGetAddresses } from '@/hooks/api';
-import type { AddressCategory, UserAddress } from '@/types/address';
+import type { AddressCategory, UserAddress } from '@/types/response/address';
 import { useTranslations } from 'next-intl';
 import {
   FC,

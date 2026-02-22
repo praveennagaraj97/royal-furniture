@@ -2,7 +2,7 @@
 
 import { apiFetcherWithGuest } from '@/config/axios';
 import { API_ROUTES } from '@/constants/api-routes';
-import type { StoresByCartResponse } from '@/types/store';
+import type { StoresByCartResponse } from '@/types/response/store';
 import useSWR from 'swr';
 
 interface UseGetStoresByCartProps {

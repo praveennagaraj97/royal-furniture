@@ -5,7 +5,10 @@ import { ConfirmationModal } from '@/components/shared/confirmation-modal';
 import { useToast } from '@/contexts/toast-context';
 import { addressService } from '@/services/api/address-service';
 import { ParsedAPIError } from '@/types';
-import type { AddressesListResponse, UserAddress } from '@/types/address';
+import type {
+  AddressesListResponse,
+  UserAddress,
+} from '@/types/response/address';
 import { useTranslations } from 'next-intl';
 import NProgress from 'nprogress';
 import { FC, useEffect, useState } from 'react';

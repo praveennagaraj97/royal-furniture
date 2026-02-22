@@ -1,7 +1,7 @@
 'use client';
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
-import type { CartItem } from '@/types/cart';
+import type { CartItem } from '@/types/response/cart';
 import { formatCurrency } from '@/utils/format-currency';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
