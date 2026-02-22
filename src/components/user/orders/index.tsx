@@ -23,7 +23,7 @@ const OrdersPageContent: FC = () => {
       quantity: 1,
       price: 799,
       originalPrice: 1299,
-      currencySymbol: 'د.إ',
+      currencySymbol: 'AED',
     },
     {
       id: '17139846',
@@ -34,7 +34,7 @@ const OrdersPageContent: FC = () => {
       quantity: 1,
       price: 799,
       originalPrice: 1299,
-      currencySymbol: 'د.إ',
+      currencySymbol: 'AED',
     },
     {
       id: '17139845',
@@ -45,7 +45,7 @@ const OrdersPageContent: FC = () => {
       quantity: 1,
       price: 799,
       originalPrice: 1299,
-      currencySymbol: 'د.إ',
+      currencySymbol: 'AED',
     },
     {
       id: '17139844',
@@ -56,7 +56,7 @@ const OrdersPageContent: FC = () => {
       quantity: 1,
       price: 799,
       originalPrice: 1299,
-      currencySymbol: 'د.إ',
+      currencySymbol: 'AED',
     },
   ];
 

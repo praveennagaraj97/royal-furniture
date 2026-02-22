@@ -121,16 +121,16 @@ export const OrderCard: FC<OrderCardProps> = ({ order }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-3 mt-2 sm:mt-0 sm:ml-auto">
+        <div className="flex w-full items-center gap-3 mt-3 sm:mt-0 sm:w-auto sm:ml-auto">
           <button
             type="button"
-            className="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-deep-maroon text-deep-maroon text-sm font-medium bg-white hover:bg-[#FFF4F4] transition-colors duration-200 whitespace-nowrap"
+            className="inline-flex w-full flex-1 items-center justify-center px-4 py-2 rounded-lg border border-deep-maroon text-deep-maroon text-sm font-medium bg-white hover:bg-[#FFF4F4] transition-colors duration-200 whitespace-nowrap sm:w-auto sm:flex-none"
           >
             Need help?
           </button>
           <button
             type="button"
-            className="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:border-deep-maroon hover:text-deep-maroon transition-colors duration-200 whitespace-nowrap"
+            className="inline-flex w-full flex-1 items-center justify-center px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:border-deep-maroon hover:text-deep-maroon transition-colors duration-200 whitespace-nowrap sm:w-auto sm:flex-none"
           >
             Track
           </button>
