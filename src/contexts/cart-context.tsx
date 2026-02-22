@@ -6,8 +6,11 @@ import type {
   CartApiData,
   CartApiItem,
   CartItem,
+  CartShippingState,
   CartState,
   CartTotals,
+  ShippingSelection,
+  ShippingStepState,
 } from '@/types/cart';
 import type { ParsedAPIError } from '@/types/error';
 import type { ProductItem } from '@/types/response';
@@ -37,6 +40,23 @@ interface CartContextValue {
   isHydrated: boolean;
   isLoading: boolean;
   header?: CartState['header'];
+  shipping: CartShippingState;
+  setShippingStep: (
+    step?:
+      | ShippingStepState
+      | ((prev?: ShippingStepState) => ShippingStepState | undefined),
+  ) => void;
+  setShippingMethod: (
+    method:
+      | 'home'
+      | 'pickup'
+      | ((prev: 'home' | 'pickup') => 'home' | 'pickup'),
+  ) => void;
+  setShippingSelection: (
+    selection:
+      | Partial<ShippingSelection>
+      | ((prev: ShippingSelection) => Partial<ShippingSelection>),
+  ) => void;
   addItem: (sku: string, quantity: number) => Promise<void>;
   removeItem: (cartItemId: string) => Promise<void>;
   updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
@@ -55,6 +75,15 @@ const EMPTY_TOTALS: CartTotals = {
   itemsSavings: 0,
 };
 
+const DEFAULT_SHIPPING_SELECTION: ShippingSelection = {
+  deliveryType: 'home',
+  isCustomDelivery: false,
+  date: null,
+  slotId: null,
+  slotLabel: null,
+  storeId: null,
+};
+
 const DEFAULT_CART_STATE: CartState = {
   cartId: undefined,
   items: [],
@@ -63,7 +92,10 @@ const DEFAULT_CART_STATE: CartState = {
   amountToFreeShipping: 0,
   freeShippingProgress: 0,
   totals: EMPTY_TOTALS,
-  shippingStep: undefined,
+  shipping: {
+    method: 'home',
+    selection: DEFAULT_SHIPPING_SELECTION,
+  },
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -158,6 +190,7 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
       itemsSavings,
     },
     header: data.header,
+    shipping: DEFAULT_CART_STATE.shipping,
   };
 };
 
@@ -262,7 +295,10 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (cartResponse?.data) {
-      setState(mapCartDataToState(cartResponse.data));
+      setState((prev) => ({
+        ...mapCartDataToState(cartResponse.data),
+        shipping: prev.shipping,
+      }));
       setIsHydrated(true);
     }
   }, [cartResponse]);
@@ -368,7 +404,65 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     // TODO: implement clear cart API once available
   }, []);
 
-  // Shipping data is handled at the shipping flow components; cart context stays fetch-only for cart data.
+  const setShippingStep = useCallback(
+    (
+      step?:
+        | ShippingStepState
+        | ((prev?: ShippingStepState) => ShippingStepState | undefined),
+    ) => {
+      setState((prev) => ({
+        ...prev,
+        shipping: {
+          ...prev.shipping,
+          step: typeof step === 'function' ? step(prev.shipping.step) : step,
+        },
+      }));
+    },
+    [],
+  );
+
+  const setShippingMethod = useCallback(
+    (
+      method:
+        | 'home'
+        | 'pickup'
+        | ((prev: 'home' | 'pickup') => 'home' | 'pickup'),
+    ) => {
+      setState((prev) => ({
+        ...prev,
+        shipping: {
+          ...prev.shipping,
+          method:
+            typeof method === 'function'
+              ? method(prev.shipping.method)
+              : method,
+        },
+      }));
+    },
+    [],
+  );
+
+  const setShippingSelection = useCallback(
+    (
+      selection:
+        | Partial<ShippingSelection>
+        | ((prev: ShippingSelection) => Partial<ShippingSelection>),
+    ) => {
+      setState((prev) => ({
+        ...prev,
+        shipping: {
+          ...prev.shipping,
+          selection: {
+            ...prev.shipping.selection,
+            ...(typeof selection === 'function'
+              ? selection(prev.shipping.selection)
+              : selection),
+          },
+        },
+      }));
+    },
+    [],
+  );
 
   const value = useMemo<CartContextValue>(
     () => ({
@@ -383,6 +477,10 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       isHydrated,
       isLoading,
       header: state.header,
+      shipping: state.shipping,
+      setShippingStep,
+      setShippingMethod,
+      setShippingSelection,
       guestSessionId,
       addItem,
       removeItem,
@@ -401,6 +499,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.freeShippingMessage,
       state.totals,
       state.header,
+      state.shipping,
       isHydrated,
       isLoading,
       addItem,
@@ -410,6 +509,9 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       refreshCart,
       pendingActions,
       guestSessionId,
+      setShippingStep,
+      setShippingMethod,
+      setShippingSelection,
     ],
   );
 

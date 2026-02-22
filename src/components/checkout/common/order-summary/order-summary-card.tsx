@@ -3,7 +3,10 @@
 import Modal from '@/components/shared/modal';
 import Portal from '@/components/shared/portal';
 import { useCart } from '@/contexts/cart-context';
+import { useToast } from '@/contexts/toast-context';
 import { useIntersectionObserver } from '@/hooks';
+import { cartService } from '@/services/api/cart-service';
+import { ParsedAPIError } from '@/types';
 import { formatCurrency } from '@/utils/format-currency';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -73,7 +76,8 @@ interface OrderSummaryCardProps {
 
 export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
   const t = useTranslations('checkout.orderSummary');
-  const { totals } = useCart();
+  const { totals, shipping, guestSessionId, refreshCart } = useCart();
+  const { showError } = useToast();
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
   const locale = params?.locale ?? 'en';
@@ -135,10 +139,35 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     const locale = params?.locale;
 
     const handleProceedToPayment = async () => {
-      // Temporarily skip shipping save; navigate directly.
       setIsSubmitting(true);
-      router.push(buildPath(country, locale, 'checkout', 'payment'));
-      setIsSubmitting(false);
+      try {
+        const payload: Record<string, unknown> = {
+          delivery_type: shipping.method,
+          is_custom_delivery: shipping.selection.isCustomDelivery,
+        };
+
+        if (shipping.method === 'home' && shipping.selection.isCustomDelivery) {
+          payload.date = shipping.selection.date;
+          payload.slot_id = shipping.selection.slotId;
+        } else if (shipping.method === 'pickup') {
+          payload.store_id = shipping.selection.storeId;
+        }
+
+        await cartService.proceedToPayment(
+          payload,
+          guestSessionId || undefined,
+        );
+        await refreshCart();
+        router.push(buildPath(country, locale, 'checkout', 'payment'));
+      } catch (error) {
+        const parsedError = error as ParsedAPIError;
+        showError(
+          parsedError.generalError ||
+            'An error occurred while proceeding to payment. Please try again.',
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
     };
 
     if (step === 'cart') {
@@ -168,7 +197,18 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     }
 
     return null;
-  }, [step, params?.country, params?.locale, router, isSubmitting]);
+  }, [
+    step,
+    params?.country,
+    params?.locale,
+    router,
+    isSubmitting,
+    shipping,
+    guestSessionId,
+    refreshCart,
+    showError,
+    t,
+  ]);
 
   if (!cta) return null;
 

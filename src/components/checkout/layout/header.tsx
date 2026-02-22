@@ -52,7 +52,7 @@ export const CheckoutHeader: FC<CheckoutHeaderProps> = ({
         href: stepHref,
       },
     ];
-  }, [currentStep, params?.country, params?.locale, steps, t, tProgress]);
+  }, [currentStep, params?.country, params?.locale, steps, t]);
 
   const resolvedBreadcrumbItems = breadcrumbItems ?? defaultBreadcrumbItems;
 

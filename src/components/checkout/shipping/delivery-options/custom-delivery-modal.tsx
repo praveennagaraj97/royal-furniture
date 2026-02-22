@@ -106,23 +106,26 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
               </div>
             </div>
           </StaggerItem>
-          <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <p className="text-xs text-gray-600 mb-2">
-              {t('delivery.customDeliveryNote')}
-            </p>
-          </StaggerItem>
-          {selectedDate && selectedTime && customDeliveryCharge ? (
-            <StaggerItem type="slideUp" distance={20} duration={0.35}>
-              <div className="rounded-lg bg-gray-100 px-3 py-2 flex items-center justify-between text-sm font-medium text-gray-700 mb-1">
-                <span>{t('delivery.chargesTitle')}</span>
-                <span className="font-bold text-lg">
-                  {customDeliveryCharge}
-                </span>
-              </div>
-              <p className="text-xs text-gray-500">
-                {t('delivery.chargesDescription')}
-              </p>
-            </StaggerItem>
+
+          {customDeliveryCharge ? (
+            <>
+              <StaggerItem type="slideUp" distance={20} duration={0.35}>
+                <p className="text-xs text-gray-600 mb-2">
+                  {t('delivery.customDeliveryNote')}
+                </p>
+              </StaggerItem>
+              <StaggerItem type="slideUp" distance={20} duration={0.35}>
+                <div className="rounded-lg bg-gray-100 px-3 py-2 flex items-center justify-between text-sm font-medium text-gray-700 mb-1">
+                  <span>{t('delivery.chargesTitle')}</span>
+                  <span className="font-bold text-lg">
+                    {customDeliveryCharge}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500">
+                  {t('delivery.chargesDescription')}
+                </p>
+              </StaggerItem>
+            </>
           ) : null}
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <button

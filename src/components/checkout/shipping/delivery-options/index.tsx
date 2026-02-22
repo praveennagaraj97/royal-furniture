@@ -1,5 +1,6 @@
 'use client';
 
+import { SlideIn } from '@/components/shared/animations';
 import type { ShippingStepState } from '@/types/cart';
 import { buildIso, formatDateWithOrdinal, parseDateInput } from '@/utils/date';
 import { useTranslations } from 'next-intl';
@@ -60,7 +61,7 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
   const handleSaveCustomDelivery = async (): Promise<boolean> => true;
 
   return (
-    <section className="space-y-4">
+    <SlideIn className="space-y-4">
       <h2 className="text-base sm:text-lg font-medium text-gray-900">
         {t('delivery.title')}
       </h2>
@@ -133,7 +134,7 @@ const DeliveryOptionsSection: FC<DeliveryOptionsSectionProps> = ({
         isSavingSelection={isSaving}
         customDeliveryCharge={shippingStep?.customDeliveryCharge}
       />
-    </section>
+    </SlideIn>
   );
 };
 

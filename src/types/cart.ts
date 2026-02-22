@@ -125,6 +125,21 @@ export interface ShippingStepState {
   customDeliveryCharge?: number | null;
 }
 
+export type ShippingSelection = {
+  deliveryType: 'home' | 'pickup';
+  isCustomDelivery: boolean;
+  date: string | null;
+  slotId: number | null;
+  slotLabel: string | null;
+  storeId: number | null;
+};
+
+export interface CartShippingState {
+  step?: ShippingStepState;
+  method: 'home' | 'pickup';
+  selection: ShippingSelection;
+}
+
 export interface CartState {
   cartId?: string;
   items: CartItem[];
@@ -135,5 +150,5 @@ export interface CartState {
   freeShippingMessage?: string;
   totals: CartTotals;
   header?: CartHeader;
-  shippingStep?: ShippingStepState;
+  shipping: CartShippingState;
 }

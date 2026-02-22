@@ -13,7 +13,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useState,
 } from 'react';
 import { DeliveryInfoCard } from '../common/info-sections/delivery-card';
 import { OrderSummarySection } from '../common/order-summary';
@@ -22,15 +21,6 @@ import PickupStoresSection from './pickup-stores-section';
 import { ShippingAddressSection } from './shipping-address-section';
 import { ShippingMethodSection } from './shipping-method-section';
 import type { ShippingSelection } from './types';
-
-const DEFAULT_SHIPPING_SELECTION: ShippingSelection = {
-  deliveryType: 'home',
-  isCustomDelivery: false,
-  date: null,
-  slotId: null,
-  slotLabel: null,
-  storeId: null,
-};
 
 const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
   if (!data) return undefined;
@@ -64,14 +54,21 @@ const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
 
 const ShippingPageContent: FC = () => {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-  const { isHydrated, cartId, guestSessionId } = useCart();
-  const [shippingStep, setShippingStep] = useState<ShippingStepState>();
-  const [shippingMethod, setShippingMethod] = useState<'home' | 'pickup'>(
-    'home',
-  );
-  const [shippingSelection, setShippingSelection] = useState<ShippingSelection>(
-    DEFAULT_SHIPPING_SELECTION,
-  );
+  const {
+    isHydrated,
+    cartId,
+    guestSessionId,
+    shipping,
+    setShippingStep,
+    setShippingMethod,
+    setShippingSelection,
+  } = useCart();
+
+  const {
+    step: shippingStep,
+    method: shippingMethod,
+    selection: shippingSelection,
+  } = shipping;
 
   const shouldFetchShipping = useMemo(
     () =>
@@ -95,9 +92,9 @@ const ShippingPageContent: FC = () => {
 
   const handleShippingSelectionUpdate = useCallback(
     (update: Partial<ShippingSelection>) => {
-      setShippingSelection((prev) => ({ ...prev, ...update }));
+      setShippingSelection(update);
     },
-    [],
+    [setShippingSelection],
   );
 
   useEffect(() => {
@@ -137,7 +134,12 @@ const ShippingPageContent: FC = () => {
         isCustomDelivery: Boolean(parsedSelectedDate && slotId),
       }));
     });
-  }, [shippingResponse]);
+  }, [
+    shippingResponse,
+    setShippingStep,
+    setShippingMethod,
+    setShippingSelection,
+  ]);
 
   useEffect(() => {
     startTransition(() => {
@@ -161,7 +163,7 @@ const ShippingPageContent: FC = () => {
         };
       });
     });
-  }, [shippingMethod]);
+  }, [shippingMethod, setShippingSelection]);
 
   if (!isHydrated) {
     return null;
@@ -206,17 +208,23 @@ const ShippingPageContent: FC = () => {
             <StaggerItem type="slideUp" distance={30}>
               <OrderSummarySection step="shipping" showPaymentPlans={false} />
             </StaggerItem>
-            <StaggerItem type="slideUp" distance={30}>
-              <DeliveryInfoCard />
-            </StaggerItem>
-            <StaggerItem type="slideUp" distance={30}>
-              <DeliveryOptionsSection
-                shippingStep={shippingStep}
-                isShippingLoading={isShippingFetching}
-                shippingSelection={shippingSelection}
-                setShippingSelection={handleShippingSelectionUpdate}
-              />
-            </StaggerItem>
+
+            {shippingMethod === 'home' ? (
+              <>
+                <DeliveryInfoCard />
+                <DeliveryOptionsSection
+                  shippingStep={shippingStep}
+                  isShippingLoading={isShippingFetching}
+                  shippingSelection={shippingSelection}
+                  setShippingSelection={handleShippingSelectionUpdate}
+                />
+              </>
+            ) : (
+              <>
+                <div>Ui for Pickup Info Card</div>
+                <div>Ui for Pickup options</div>
+              </>
+            )}
           </div>
         </StaggerContainer>
       </div>
