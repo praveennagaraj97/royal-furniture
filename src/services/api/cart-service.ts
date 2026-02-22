@@ -1,5 +1,9 @@
 import { API_ROUTES } from '@/constants/api-routes';
-import type { CartApiResponse, ShippingProceedResponse } from '@/types/cart';
+import type {
+  CartApiResponse,
+  PaymentProceedResponse,
+  ShippingProceedResponse,
+} from '@/types/cart';
 import { BaseAPIService } from './api-base-service';
 
 interface AddItemPayload {
@@ -98,6 +102,24 @@ export class CartService extends BaseAPIService {
 
       const response = await this.http.get<ShippingProceedResponse>(
         API_ROUTES.CART.SHIPPING_PROCEED,
+        { headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async getPaymentStep(
+    guestSessionId?: string,
+  ): Promise<PaymentProceedResponse> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.get<PaymentProceedResponse>(
+        API_ROUTES.CART.PAYMENT_PROCEED,
         { headers },
       );
 

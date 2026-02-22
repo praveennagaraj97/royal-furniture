@@ -1,5 +1,6 @@
 export * from './use-get-addresses';
 export * from './use-get-cart';
+export * from './use-get-cart-payment-step';
 export * from './use-get-cart-shipping-step';
 export * from './use-get-filters-by-subcategory-id';
 export * from './use-get-product-detail';

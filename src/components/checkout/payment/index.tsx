@@ -1,34 +1,49 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { useAuth } from '@/contexts/auth-context';
+import { useCart } from '@/contexts/cart-context';
+import { useGetCartPaymentStep } from '@/hooks/api';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { OrderSummarySection } from '../common/order-summary';
-
-import applePayIcon from '@/assets/payments/apple-pay.png';
-import paypalIcon from '@/assets/payments/paypal.png';
-import samsungPayIcon from '@/assets/payments/samsung-pay.png';
-import tabbyIcon from '@/assets/payments/tabby.png';
-import tamaraIcon from '@/assets/payments/tamara.png';
 
 export const PaymentPageContent: FC = () => {
   const t = useTranslations('checkout.payment');
   const [selected, setSelected] = useState<string>('card-1');
 
-  const cardItems = [
-    { id: 'card-1', label: 'Mastercard •••• 9722', icon: null },
-    { id: 'card-2', label: 'Visa •••• 5877', icon: null },
-  ];
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const { isHydrated, guestSessionId } = useCart();
 
-  const otherMethods = [
-    { id: 'apple-pay', label: 'Apple Pay', img: applePayIcon },
-    { id: 'samsung-pay', label: 'Samsung Pay', img: samsungPayIcon },
-    { id: 'tabby', label: 'Tabby', img: tabbyIcon },
-    { id: 'tamara', label: 'Tamara', img: tamaraIcon },
-    { id: 'paypal', label: 'PayPal', img: paypalIcon },
-  ];
+  const shouldFetchPayment = useMemo(
+    () =>
+      isHydrated &&
+      !isAuthLoading &&
+      (isAuthenticated || (!isAuthenticated && !!guestSessionId)),
+    [isHydrated, isAuthLoading, isAuthenticated, guestSessionId],
+  );
+
+  const {
+    data: paymentResponse,
+    isLoading: isPaymentLoading,
+    isValidating: isPaymentValidating,
+  } = useGetCartPaymentStep({
+    guestSessionId,
+    enabled: shouldFetchPayment,
+  });
+
+  const paymentData = paymentResponse?.data;
+  const isPaymentFetching = isPaymentLoading || isPaymentValidating;
+
+  const savedCards = paymentData?.payments?.saved_cards || [];
+  const otherMethods = paymentData?.payments?.other_payment_options || [];
+  const wallets = paymentData?.payments?.wallets || [];
+
+  if (isPaymentFetching && !paymentData) {
+    return <div>Loading...</div>; // Or a proper skeleton
+  }
 
   return (
     <div className="section-container">
@@ -51,25 +66,25 @@ export const PaymentPageContent: FC = () => {
               </h3>
 
               <div className="space-y-3">
-                {cardItems.map((card) => (
+                {savedCards.map((card) => (
                   <button
-                    key={card.id}
+                    key={card.method}
                     type="button"
-                    onClick={() => setSelected(card.id)}
-                    className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === card.id ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
+                    onClick={() => setSelected(card.method)}
+                    className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === card.method ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
                   >
                     <div className="flex-1 text-left">
                       <div className="font-semibold text-gray-900">
-                        {card.label}
+                        {card.display_name}
                       </div>
                     </div>
                     <div className="shrink-0">
                       <input
                         type="radio"
                         name="payment"
-                        checked={selected === card.id}
-                        onChange={() => setSelected(card.id)}
-                        aria-label={card.label}
+                        checked={selected === card.method}
+                        onChange={() => setSelected(card.method)}
+                        aria-label={card.display_name}
                       />
                     </div>
                   </button>
@@ -105,32 +120,62 @@ export const PaymentPageContent: FC = () => {
               </h3>
 
               <div className="space-y-3">
-                {otherMethods.map((m) => (
+                {wallets.map((m) => (
                   <button
-                    key={m.id}
+                    key={m.method}
                     type="button"
-                    onClick={() => setSelected(m.id)}
-                    className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === m.id ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
+                    onClick={() => setSelected(m.method)}
+                    className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === m.method ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
                   >
                     <div className="h-6 w-20 flex items-center">
                       <Image
-                        src={m.img}
-                        alt={m.label}
+                        src={m.icon_url}
+                        alt={m.display_name}
                         className="object-contain h-6 w-auto"
                         width={80}
                         height={24}
                       />
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="font-medium text-gray-900">{m.label}</div>
+                      <div className="font-medium text-gray-900">{m.display_name}</div>
                     </div>
                     <div className="shrink-0">
                       <input
                         type="radio"
                         name="payment"
-                        checked={selected === m.id}
-                        onChange={() => setSelected(m.id)}
-                        aria-label={m.label}
+                        checked={selected === m.method}
+                        onChange={() => setSelected(m.method)}
+                        aria-label={m.display_name}
+                      />
+                    </div>
+                  </button>
+                ))}
+                {otherMethods.map((m) => (
+                  <button
+                    key={m.method}
+                    type="button"
+                    onClick={() => setSelected(m.method)}
+                    className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === m.method ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
+                  >
+                    <div className="h-6 w-20 flex items-center">
+                      <Image
+                        src={m.icon_url}
+                        alt={m.display_name}
+                        className="object-contain h-6 w-auto"
+                        width={80}
+                        height={24}
+                      />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-medium text-gray-900">{m.display_name}</div>
+                    </div>
+                    <div className="shrink-0">
+                      <input
+                        type="radio"
+                        name="payment"
+                        checked={selected === m.method}
+                        onChange={() => setSelected(m.method)}
+                        aria-label={m.display_name}
                       />
                     </div>
                   </button>

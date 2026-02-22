@@ -110,6 +110,31 @@ export type ShippingProceedResponse =
     message?: string;
   };
 
+export interface PaymentOption {
+  method: string;
+  display_name: string;
+  category: string;
+  icon_url: string;
+  sort_order: number;
+}
+
+export interface PaymentProceedApiData {
+  cart_step: string;
+  payments: {
+    wallets: PaymentOption[];
+    saved_cards: PaymentOption[];
+    other_payment_options: PaymentOption[];
+  };
+  address: UserAddress;
+  order_summary: CartOrderSummary;
+}
+
+export type PaymentProceedResponse = BaseAPIResponse<PaymentProceedApiData> & {
+  version?: string;
+  detail?: string;
+  message?: string;
+};
+
 export interface ShippingStepState {
   isGuest: boolean;
   step?: string;

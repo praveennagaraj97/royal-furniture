@@ -4,7 +4,11 @@ import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { useAuth } from '@/contexts/auth-context';
 import { useCart } from '@/contexts/cart-context';
 import { useGetCartShippingStep } from '@/hooks/api';
-import type { ShippingProceedApiData, ShippingStepState } from '@/types/cart';
+import type {
+  ShippingProceedApiData,
+  ShippingSelection,
+  ShippingStepState,
+} from '@/types/cart';
 import { buildIso, parseDateInput } from '@/utils/date';
 import {
   FC,
@@ -21,7 +25,6 @@ import PickupOptionsSection from './pickup-options';
 import PickupStoresSection from './pickup-stores-section';
 import { ShippingAddressSection } from './shipping-address-section';
 import { ShippingMethodSection } from './shipping-method-section';
-import type { ShippingSelection } from './types';
 
 const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
   if (!data) return undefined;
