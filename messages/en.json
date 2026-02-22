@@ -339,7 +339,8 @@
       "title": "Payment Method",
       "creditDebitTitle": "Credit & Debit Card",
       "addNewCard": "Add New Card",
-      "otherMethodsTitle": "Other Payment Methods"
+      "otherMethodsTitle": "Other Payment Methods",
+      "walletsTitle": "Wallets"
     },
     "orderSummary": {
       "title": "Order Summary",

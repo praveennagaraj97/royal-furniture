@@ -385,7 +385,8 @@
       "title": "طريقة الدفع",
       "creditDebitTitle": "بطاقة ائتمان وبطاقة خصم",
       "addNewCard": "إضافة بطاقة جديدة",
-      "otherMethodsTitle": "طرق دفع أخرى"
+      "otherMethodsTitle": "طرق دفع أخرى",
+      "walletsTitle": "المحافظ"
     },
     "orderSummary": {
       "title": "ملخص الطلب",

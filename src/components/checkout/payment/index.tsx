@@ -12,7 +12,7 @@ import { OrderSummarySection } from '../common/order-summary';
 
 export const PaymentPageContent: FC = () => {
   const t = useTranslations('checkout.payment');
-  const [selected, setSelected] = useState<string>('card-1');
+  const [selected, setSelected] = useState<string>('add-card');
 
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const { isHydrated, guestSessionId } = useCart();
@@ -113,80 +113,95 @@ export const PaymentPageContent: FC = () => {
             </section>
           </StaggerItem>
 
-          <StaggerItem type="slideUp" distance={30}>
-            <section className="space-y-3">
-              <h3 className="text-sm font-medium text-indigo-slate">
-                {t('otherMethodsTitle')}
-              </h3>
+          {wallets.length > 0 && (
+            <StaggerItem type="slideUp" distance={30}>
+              <section className="space-y-3">
+                <h3 className="text-sm font-medium text-indigo-slate">
+                  {t('walletsTitle')}
+                </h3>
 
-              <div className="space-y-3">
-                {wallets.map((m) => (
-                  <button
-                    key={m.method}
-                    type="button"
-                    onClick={() => setSelected(m.method)}
-                    className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === m.method ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
-                  >
-                    <div className="h-6 w-20 flex items-center">
-                      <Image
-                        src={m.icon_url}
-                        alt={m.display_name}
-                        className="object-contain h-6 w-auto"
-                        width={80}
-                        height={24}
-                      />
-                    </div>
-                    <div className="flex-1 text-left">
-                      <div className="font-medium text-gray-900">
-                        {m.display_name}
+                <div className="space-y-3">
+                  {wallets.map((m) => (
+                    <button
+                      key={m.method}
+                      type="button"
+                      onClick={() => setSelected(m.method)}
+                      className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === m.method ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
+                    >
+                      <div className="h-6 w-20 flex items-center">
+                        <Image
+                          src={m.icon_url}
+                          alt={m.display_name}
+                          className="object-contain h-6 w-auto"
+                          width={80}
+                          height={24}
+                        />
                       </div>
-                    </div>
-                    <div className="shrink-0">
-                      <input
-                        type="radio"
-                        name="payment"
-                        checked={selected === m.method}
-                        onChange={() => setSelected(m.method)}
-                        aria-label={m.display_name}
-                      />
-                    </div>
-                  </button>
-                ))}
-                {otherMethods.map((m) => (
-                  <button
-                    key={m.method}
-                    type="button"
-                    onClick={() => setSelected(m.method)}
-                    className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === m.method ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
-                  >
-                    <div className="h-6 w-20 flex items-center">
-                      <Image
-                        src={m.icon_url}
-                        alt={m.display_name}
-                        className="object-contain h-6 w-auto"
-                        width={80}
-                        height={24}
-                      />
-                    </div>
-                    <div className="flex-1 text-left">
-                      <div className="font-medium text-gray-900">
-                        {m.display_name}
+                      <div className="flex-1 text-left">
+                        <div className="font-medium text-gray-900">
+                          {m.display_name}
+                        </div>
                       </div>
-                    </div>
-                    <div className="shrink-0">
-                      <input
-                        type="radio"
-                        name="payment"
-                        checked={selected === m.method}
-                        onChange={() => setSelected(m.method)}
-                        aria-label={m.display_name}
-                      />
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </section>
-          </StaggerItem>
+                      <div className="shrink-0">
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={selected === m.method}
+                          onChange={() => setSelected(m.method)}
+                          aria-label={m.display_name}
+                        />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            </StaggerItem>
+          )}
+
+          {otherMethods.length > 0 && (
+            <StaggerItem type="slideUp" distance={30}>
+              <section className="space-y-3">
+                <h3 className="text-sm font-medium text-indigo-slate">
+                  {t('otherMethodsTitle')}
+                </h3>
+
+                <div className="space-y-3">
+                  {otherMethods.map((m) => (
+                    <button
+                      key={m.method}
+                      type="button"
+                      onClick={() => setSelected(m.method)}
+                      className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 text-sm text-gray-700 ${selected === m.method ? 'border-deep-maroon bg-[#fff3f3]' : 'border-gray-200 bg-white'}`}
+                    >
+                      <div className="h-6 w-20 flex items-center">
+                        <Image
+                          src={m.icon_url}
+                          alt={m.display_name}
+                          className="object-contain h-6 w-auto"
+                          width={80}
+                          height={24}
+                        />
+                      </div>
+                      <div className="flex-1 text-left">
+                        <div className="font-medium text-gray-900">
+                          {m.display_name}
+                        </div>
+                      </div>
+                      <div className="shrink-0">
+                        <input
+                          type="radio"
+                          name="payment"
+                          checked={selected === m.method}
+                          onChange={() => setSelected(m.method)}
+                          aria-label={m.display_name}
+                        />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            </StaggerItem>
+          )}
         </div>
 
         <div className="space-y-6 lg:self-start z-30 lg:sticky lg:top-28">
