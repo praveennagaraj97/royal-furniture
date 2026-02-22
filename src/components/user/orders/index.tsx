@@ -5,12 +5,15 @@ import {
   StaggerItem,
   ViewOnce,
 } from '@/components/shared/animations';
+import { useAppRouter } from '@/hooks';
 import { FC } from 'react';
 import { FiBox } from 'react-icons/fi';
 import OrderCard from './order-card';
 import type { OrderListItem } from './types';
 
 const OrdersPageContent: FC = () => {
+  const router = useAppRouter();
+
   // Temporary mocked orders for UI. Integrate real data when API is available.
   const orders: OrderListItem[] = [
     {
@@ -131,7 +134,10 @@ const OrdersPageContent: FC = () => {
               initialScale={0.98}
               duration={0.35}
             >
-              <OrderCard order={order} />
+              <OrderCard
+                order={order}
+                onNavigate={() => router.push(`/user/orders/${order.id}`)}
+              />
             </StaggerItem>
           );
         })}

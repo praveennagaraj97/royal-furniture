@@ -19,4 +19,6 @@ export interface OrderListItem {
 
 export interface OrderCardProps {
   order: OrderListItem;
+  onNavigate?: () => void;
+  showTrackButton?: boolean;
 }

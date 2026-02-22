@@ -1,7 +1,7 @@
 'use client';
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
-import { FC, useMemo } from 'react';
+import { FC, MouseEvent, useMemo } from 'react';
 import {
   FiBox,
   FiCheckCircle,
@@ -41,7 +41,11 @@ const getStatusConfig = (status: OrderStatus) => {
   }
 };
 
-export const OrderCard: FC<OrderCardProps> = ({ order }) => {
+export const OrderCard: FC<OrderCardProps> = ({
+  order,
+  onNavigate,
+  showTrackButton = true,
+}) => {
   const {
     icon: StatusIcon,
     textClass,
@@ -66,8 +70,27 @@ export const OrderCard: FC<OrderCardProps> = ({ order }) => {
 
   const secondaryText = order.timeWindow || order.dateLabel;
 
+  const handleCardClick = () => {
+    if (!onNavigate) return;
+    onNavigate();
+  };
+
+  const handleTrackClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (!onNavigate) return;
+    onNavigate();
+  };
+
+  const handleHelpClick = (event: MouseEvent<HTMLButtonElement>) => {
+    // Prevent triggering card navigation when pressing Need help?
+    event.stopPropagation();
+  };
+
   return (
-    <article className="bg-white border border-gray-100 rounded-md shadow-sm overflow-hidden">
+    <article
+      className={`bg-white border border-gray-100 rounded-md shadow-sm overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-md hover:border-deep-maroon/60 hover:-translate-y-0.5 group`}
+      onClick={handleCardClick}
+    >
       {/* Header */}
       <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-3 border-b border-gray-100">
         <div className="flex items-center gap-3">
@@ -82,7 +105,9 @@ export const OrderCard: FC<OrderCardProps> = ({ order }) => {
           </div>
         </div>
 
-        <FiChevronRight className="w-5 h-5 text-deep-maroon shrink-0" />
+        <FiChevronRight
+          className={`w-5 h-5 text-deep-maroon shrink-0 transition-transform duration-200 group-hover:translate-x-0.5`}
+        />
       </div>
 
       {/* Main Content */}
@@ -124,16 +149,20 @@ export const OrderCard: FC<OrderCardProps> = ({ order }) => {
         <div className="flex w-full items-center gap-3 mt-3 sm:mt-0 sm:w-auto sm:ml-auto">
           <button
             type="button"
+            onClick={handleHelpClick}
             className="inline-flex w-full flex-1 items-center justify-center px-4 py-2 rounded-lg border border-deep-maroon text-deep-maroon text-sm font-medium bg-white hover:bg-[#FFF4F4] transition-colors duration-200 whitespace-nowrap sm:w-auto sm:flex-none"
           >
             Need help?
           </button>
-          <button
-            type="button"
-            className="inline-flex w-full flex-1 items-center justify-center px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:border-deep-maroon hover:text-deep-maroon transition-colors duration-200 whitespace-nowrap sm:w-auto sm:flex-none"
-          >
-            Track
-          </button>
+          {showTrackButton && (
+            <button
+              type="button"
+              onClick={handleTrackClick}
+              className="inline-flex w-full flex-1 items-center justify-center px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:border-deep-maroon hover:text-deep-maroon transition-colors duration-200 whitespace-nowrap sm:w-auto sm:flex-none"
+            >
+              Track
+            </button>
+          )}
         </div>
       </div>
     </article>
