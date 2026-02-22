@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import ShippingPageSkeleton from '@/components/skeletons/shipping-page-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useCart } from '@/contexts/cart-context';
 import { useGetCartShippingStep } from '@/hooks/api';
@@ -175,8 +176,8 @@ const ShippingPageContent: FC = () => {
     });
   }, [shippingMethod, setShippingSelection]);
 
-  if (!isHydrated) {
-    return null;
+  if (!isHydrated || (isShippingFetching && !shippingResponse?.data)) {
+    return <ShippingPageSkeleton />;
   }
 
   return (

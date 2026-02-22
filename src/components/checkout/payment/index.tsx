@@ -1,6 +1,7 @@
 'use client';
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import PaymentPageSkeleton from '@/components/skeletons/payment-page-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useCart } from '@/contexts/cart-context';
 import { useGetCartPaymentStep } from '@/hooks/api';
@@ -41,8 +42,8 @@ export const PaymentPageContent: FC = () => {
   const otherMethods = paymentData?.payments?.other_payment_options || [];
   const wallets = paymentData?.payments?.wallets || [];
 
-  if (isPaymentFetching && !paymentData) {
-    return <div>Loading...</div>; // Or a proper skeleton
+  if (!isHydrated || (isPaymentFetching && !paymentData)) {
+    return <PaymentPageSkeleton />;
   }
 
   return (

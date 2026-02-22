@@ -143,7 +143,7 @@ export const CartPageSkeleton: FC = () => {
             {Array.from({ length: 4 }).map((_, idx) => (
               <div
                 key={idx}
-                className="aspect-[4/4.5] bg-gray-200 rounded-lg animate-pulse"
+                className="aspect-4/4.5 bg-gray-200 rounded-lg animate-pulse"
               />
             ))}
           </div>

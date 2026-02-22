@@ -294,6 +294,14 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
         </button>
       </div>
 
+      <StickyCta
+        show={hasMounted && !isVisible}
+        label={cta.label}
+        Icon={cta.Icon}
+        onClick={cta.onClick}
+        disabled={cta.disabled}
+      />
+
       <Modal
         isOpen={isShippingInfoOpen}
         onClose={() => setIsShippingInfoOpen(false)}
