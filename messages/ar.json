@@ -311,6 +311,24 @@
       "collectionTitleDefault": "مجموعة المفضلة",
       "collectionEmpty": "لا توجد عناصر في هذه المجموعة",
       "itemCount": "{count, plural, one {# عنصر} other {# عناصر}}"
+    },
+    "orders": {
+      "title": "طلباتي",
+      "subtitle": "شاهد وتتبع جميع طلباتك الأخيرة في مكان واحد.",
+      "statuses": {
+        "expectedDelivery": "تاريخ التسليم المتوقع",
+        "delivered": "تم تسليم الطلب",
+        "cancelled": "تم إلغاء الطلب",
+        "pickup": "استلام من المتجر"
+      },
+      "helpCta": "تحتاج مساعدة؟",
+      "trackCta": "تتبع",
+      "orderIdLabel": "رقم الطلب #{id}",
+      "colourLabel": "اللون: {colour}",
+      "qtyLabel": "الكمية: {qty}",
+      "emptyTitle": "لا توجد طلبات بعد",
+      "emptyDescription": "عند إتمام أي طلب، ستتمكن من تتبعه وعرض تفاصيله هنا.",
+      "viewProductsCta": "ابدأ التسوق"
     }
   },
   "checkout": {

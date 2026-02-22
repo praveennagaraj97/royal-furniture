@@ -265,6 +265,24 @@
       "collectionTitleDefault": "Wishlist Collection",
       "collectionEmpty": "No items in this collection",
       "itemCount": "{count, plural, one {# Item} other {# Items}}"
+    },
+    "orders": {
+      "title": "My Orders",
+      "subtitle": "View and manage all your recent purchases in one place.",
+      "statuses": {
+        "expectedDelivery": "Expected delivery",
+        "delivered": "Order Delivered",
+        "cancelled": "Order Cancelled",
+        "pickup": "Pickup from store"
+      },
+      "helpCta": "Need help?",
+      "trackCta": "Track",
+      "orderIdLabel": "ID #{id}",
+      "colourLabel": "Colour: {colour}",
+      "qtyLabel": "Qty: {qty}",
+      "emptyTitle": "No orders yet",
+      "emptyDescription": "Once you place an order, you'll be able to track it here.",
+      "viewProductsCta": "Start Shopping"
     }
   },
   "checkout": {

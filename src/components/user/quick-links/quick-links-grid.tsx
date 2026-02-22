@@ -13,7 +13,7 @@ const QuickLinksGrid: FC = () => {
     {
       key: 'myOrders',
       icon: FiPackage,
-      href: '#',
+      href: '/user/orders',
     },
     {
       key: 'myProfile',
