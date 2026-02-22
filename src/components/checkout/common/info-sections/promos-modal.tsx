@@ -2,14 +2,15 @@
 
 import { FormInput } from '@/components/shared/inputs/form-input';
 import Modal from '@/components/shared/modal';
+import { useCart } from '@/contexts/cart-context';
+import { useToast } from '@/contexts/toast-context';
+import { useGetPromoCodes } from '@/hooks/api/use-get-promo-codes';
+import { cartService } from '@/services/api/cart-service';
+import { ParsedAPIError } from '@/types';
+import { getGuestSession } from '@/utils/guest-session';
 import { useTranslations } from 'next-intl';
-import { FC, startTransition, useEffect, useMemo, useState } from 'react';
+import { FC, startTransition, useEffect, useState } from 'react';
 import { FiX } from 'react-icons/fi';
-
-interface Promo {
-  id: string;
-  code: string;
-}
 
 interface PromosModalProps {
   isOpen: boolean;
@@ -18,17 +19,6 @@ interface PromosModalProps {
   onApply: (code: string) => void;
 }
 
-const PROMOS: Promo[] = [
-  {
-    id: 'wc500',
-    code: 'WC500',
-  },
-  {
-    id: 'big1',
-    code: 'BIG1',
-  },
-];
-
 const PromosModal: FC<PromosModalProps> = ({
   isOpen,
   onClose,
@@ -36,24 +26,54 @@ const PromosModal: FC<PromosModalProps> = ({
   onApply,
 }) => {
   const t = useTranslations('checkout.cart.promos');
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { promoCodes, isLoading } = useGetPromoCodes();
+  const { showError, showSuccess } = useToast();
+  const { refreshCart } = useCart();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [inputValue, setInputValue] = useState('');
+  const [isApplying, setIsApplying] = useState(false);
 
   useEffect(() => {
     if (!appliedCode) return;
-    const match = PROMOS.find((p) => p.code === appliedCode);
+    const match = promoCodes.find((p) => p.code === appliedCode);
     startTransition(() => {
-      if (match) setSelectedId(match.id);
+      if (match) {
+        setSelectedId(match.id);
+        setInputValue(match.code);
+      } else {
+        setInputValue(appliedCode);
+      }
     });
-  }, [appliedCode]);
+  }, [appliedCode, promoCodes]);
 
-  const selected = useMemo(
-    () => PROMOS.find((p) => p.id === selectedId),
-    [selectedId],
-  );
+  const handleSelect = (id: number, code: string) => {
+    setSelectedId(id);
+    setInputValue(code);
+  };
 
-  const handleContinue = () => {
-    if (selected) onApply(selected.code);
-    onClose();
+  const handleContinue = async () => {
+    if (!inputValue) return;
+
+    setIsApplying(true);
+    try {
+      const guestSessionId = getGuestSession() || undefined;
+      await cartService.applyPromoCode(
+        { promo_val: inputValue },
+        guestSessionId,
+      );
+
+      // Revalidate cart details to reflect applied promo code
+      await refreshCart();
+
+      showSuccess(t('applySuccess'));
+      onApply(inputValue);
+      onClose();
+    } catch (error) {
+      const err = error as ParsedAPIError;
+      showError(err.generalError || 'Failed to apply promo code');
+    } finally {
+      setIsApplying(false);
+    }
   };
 
   return (
@@ -77,44 +97,61 @@ const PromosModal: FC<PromosModalProps> = ({
           </div>
 
           <FormInput
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              setSelectedId(null);
+            }}
+            placeholder="Enter promo code"
             rightElement={
-              <div className="bg-[#4DBF5C] text-sm rounded-md text-gray-50 px-1.5 py-1 font-medium">
-                {t('offerApplied')}
-              </div>
+              appliedCode === inputValue && inputValue !== '' ? (
+                <div className="bg-[#4DBF5C] text-sm rounded-md text-gray-50 px-1.5 py-1 font-medium">
+                  {t('offerApplied')}
+                </div>
+              ) : null
             }
           />
         </div>
 
         <div className="space-y-5">
-          {PROMOS.map((promo) => (
-            <label
-              key={promo.id}
-              className="flex items-start gap-3 cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="promo"
-                checked={selectedId === promo.id}
-                onChange={() => setSelectedId(promo.id)}
-                className="mt-1 w-4 h-4"
-              />
-              <div>
-                <div className="font-semibold text-sm">{promo.code}</div>
-                <p className="mt-1 text-xs text-gray-500 leading-relaxed max-w-md">
-                  {t(`offers.${promo.id}.description`)}
-                </p>
-              </div>
-            </label>
-          ))}
+          {isLoading ? (
+            <div className="flex justify-center py-4">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-deep-maroon"></div>
+            </div>
+          ) : (
+            promoCodes.map((promo) => (
+              <label
+                key={promo.id}
+                className="flex items-start gap-3 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="promo"
+                  checked={selectedId === promo.id}
+                  onChange={() => handleSelect(promo.id, promo.code)}
+                  className="mt-1 w-4 h-4"
+                />
+                <div>
+                  <div className="font-semibold text-sm">{promo.code}</div>
+                  <p className="mt-1 text-xs text-gray-500 leading-relaxed max-w-md">
+                    {promo.description}
+                  </p>
+                </div>
+              </label>
+            ))
+          )}
         </div>
       </div>
 
       <div className="sticky bottom-0 z-10 bg-white/95 backdrop-blur-sm border-t border-gray-100 px-4 py-3">
         <button
           onClick={handleContinue}
-          disabled={!selected}
-          className="w-full rounded-lg bg-deep-maroon py-3 text-base font-medium text-white disabled:opacity-50"
+          disabled={!inputValue || isApplying}
+          className="w-full rounded-lg bg-deep-maroon py-3 text-base font-medium text-white disabled:opacity-50 flex items-center justify-center gap-2"
         >
+          {isApplying ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+          ) : null}
           {t('continue')}
         </button>
       </div>

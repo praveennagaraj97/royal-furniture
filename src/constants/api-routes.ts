@@ -48,6 +48,10 @@ export const API_ROUTES = {
     SHIPPING_PROCEED_TO_PAYMENT: '/cart/shipping/proceed-to-payment/',
     PAYMENT_PROCEED: '/cart/payments/proceed/',
   },
+  PAYMENT: {
+    PROMOCODES: '/payment/promocodes/',
+    APPLY_PROMOCODE: '/payment/promocodes/apply/',
+  },
   STORES: {
     BY_CART: '/store/by-cart/',
   },

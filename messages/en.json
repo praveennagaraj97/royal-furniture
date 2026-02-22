@@ -310,9 +310,11 @@
         "title": "Promos & Vouchers",
         "description": "Apply your coupon codes or vouchers to get additional discounts.",
         "openButton": "View / Enter Code",
+        "changeButton": "Change Code",
         "modalTitle": "View / Enter code",
         "applyOffer": "Apply Offer",
         "offerApplied": "Offer Applied",
+        "applySuccess": "Promo code applied successfully",
         "continue": "Continue",
         "offers": {
           "wc500": {

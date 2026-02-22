@@ -1,5 +1,6 @@
 'use client';
 
+import { useCart } from '@/contexts/cart-context';
 import { useTranslations } from 'next-intl';
 import { FC, useState } from 'react';
 import { FiTag } from 'react-icons/fi';
@@ -8,7 +9,8 @@ import PromosModal from './promos-modal';
 export const PromosCard: FC = () => {
   const t = useTranslations('checkout.cart.promos');
   const [isOpen, setIsOpen] = useState(false);
-  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const { totals } = useCart();
+  const appliedCode = totals.couponCode;
 
   return (
     <>
@@ -19,7 +21,15 @@ export const PromosCard: FC = () => {
           </div>
           <div>
             <p className="font-semibold  ">{t('title')}</p>
-            <p className="text-xs text-gray-500 mt-1">{t('description')}</p>
+            <p className="text-xs text-gray-500 mt-1">
+              {appliedCode ? (
+                <span className="text-green-600 font-medium">
+                  {t('offerApplied')}: {appliedCode}
+                </span>
+              ) : (
+                t('description')
+              )}
+            </p>
           </div>
         </div>
         <button
@@ -27,7 +37,7 @@ export const PromosCard: FC = () => {
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center gap-2 self-start md:self-center text-sm font-semibold text-deep-maroon hover:text-[#6b0000] transition-colors duration-200"
         >
-          {t('openButton')}
+          {appliedCode ? t('changeButton') : t('openButton')}
         </button>
       </div>
 
@@ -35,7 +45,7 @@ export const PromosCard: FC = () => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         appliedCode={appliedCode}
-        onApply={(code) => setAppliedCode(code)}
+        onApply={() => {}}
       />
     </>
   );

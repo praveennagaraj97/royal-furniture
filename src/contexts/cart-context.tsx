@@ -70,6 +70,7 @@ const EMPTY_TOTALS: CartTotals = {
   subtotal: 0,
   discount: 0,
   coupon: 0,
+  couponCode: null,
   shipping: 0,
   total: 0,
   itemsSavings: 0,
@@ -156,9 +157,12 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
 
   const subtotal = normalizePrice(data.order_summary?.item_price);
   const discount = normalizePrice(data.order_summary?.discount_applied);
-  const coupon = normalizePrice(
-    data.order_summary?.coupon_applied || undefined,
-  );
+
+  const appliedCoupon = data.order_summary?.coupon_applied || null;
+  const coupon = appliedCoupon
+    ? normalizePrice(appliedCoupon.discount_value)
+    : 0;
+  const couponCode = appliedCoupon?.code || null;
 
   const deliveryCharge = data.order_summary?.delivery_charge || '0';
   const shipping =
@@ -188,6 +192,7 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
       subtotal,
       discount,
       coupon,
+      couponCode,
       shipping,
       total,
       itemsSavings,

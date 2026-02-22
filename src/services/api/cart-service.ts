@@ -4,6 +4,7 @@ import type {
   PaymentProceedResponse,
   ShippingProceedResponse,
 } from '@/types/response/cart';
+import type { PromoCodesResponse } from '@/types/response/payment';
 import { BaseAPIService } from './api-base-service';
 
 interface AddItemPayload {
@@ -139,6 +140,42 @@ export class CartService extends BaseAPIService {
 
       const response = await this.http.post(
         API_ROUTES.CART.SHIPPING_PROCEED_TO_PAYMENT,
+        payload,
+        { headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async getPromoCodes(guestSessionId?: string): Promise<PromoCodesResponse> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.get<PromoCodesResponse>(
+        API_ROUTES.PAYMENT.PROMOCODES,
+        { headers },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async applyPromoCode(
+    payload: { promo_val: string },
+    guestSessionId?: string,
+  ): Promise<unknown> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.post(
+        API_ROUTES.PAYMENT.APPLY_PROMOCODE,
         payload,
         { headers },
       );

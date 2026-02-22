@@ -27,6 +27,7 @@ export interface CartTotals {
   subtotal: number;
   discount: number;
   coupon: number;
+  couponCode?: string | null;
   shipping: number;
   total: number;
   itemsSavings: number;
@@ -37,10 +38,21 @@ export interface CartHeader {
   current_step?: string;
 }
 
+export interface CartAppliedCoupon {
+  id: number;
+  code: string;
+  description: string;
+  type: string;
+  discount_type: string;
+  discount_value: string;
+  min_purchase: string;
+  max_discount: string;
+}
+
 export interface CartOrderSummary {
   item_price: string;
   discount_applied: string;
-  coupon_applied: string | null;
+  coupon_applied: CartAppliedCoupon | null;
   delivery_charge: string;
   total_amount: string;
 }
