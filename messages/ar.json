@@ -557,7 +557,8 @@
       "useMyLocation": "استخدم موقعي",
       "detectingLocation": "جاري تحديد الموقع...",
       "choose": "اختر",
-      "continue": "متابعة"
+      "continue": "متابعة",
+      "savingAddress": "جاري حفظ العنوان..."
     },
     "addressTypes": {
       "home": "المنزل",

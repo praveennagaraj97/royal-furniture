@@ -432,7 +432,11 @@ const CreateOrEditAddressForm: FC<Props> = ({
               disabled={state.isSubmitting}
               className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-deep-maroon px-4 py-2.5 text-sm sm:text-base font-semibold text-white hover:bg-[#6b0000] disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
             >
-              {editMode ? t('actions.saveAddress') : t('actions.addAddress')}
+              {state.isSubmitting
+                ? t('actions.savingAddress')
+                : editMode
+                  ? t('actions.saveAddress')
+                  : t('actions.addAddress')}
               <FiArrowRight className="h-4 w-4" />
             </button>
           </StaggerItem>

@@ -568,7 +568,8 @@
       "useMyLocation": "Use my location",
       "detectingLocation": "Detecting location...",
       "choose": "Choose",
-      "continue": "Continue"
+      "continue": "Continue",
+      "savingAddress": "Saving address..."
     },
     "addressTypes": {
       "home": "Home",
