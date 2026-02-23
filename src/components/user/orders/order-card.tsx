@@ -182,6 +182,7 @@ export const OrderCard: FC<OrderCardProps> = ({
           orderUuid={order.id}
           orderCode={order.order_id}
           canCancel={order.status !== 'cancelled'}
+          canRefund={order.status === 'delivered'}
           onContactUs={() => {
             // Placeholder: wire to contact/support page or chat when available
             setIsNeedHelpOpen(false);

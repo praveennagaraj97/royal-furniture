@@ -17,6 +17,7 @@ interface NeedHelpModalProps {
   onContactUs?: () => void;
   initialStep?: NeedHelpStep;
   canCancel?: boolean;
+  canRefund?: boolean;
 }
 
 const NeedHelpModal: FC<NeedHelpModalProps> = ({
@@ -27,6 +28,7 @@ const NeedHelpModal: FC<NeedHelpModalProps> = ({
   onContactUs,
   initialStep = 'options',
   canCancel = true,
+  canRefund = true,
 }) => {
   const [step, setStep] = useState<NeedHelpStep>(initialStep);
 
@@ -83,14 +85,16 @@ const NeedHelpModal: FC<NeedHelpModalProps> = ({
               Cancel this order
             </button>
           )}
-          <button
-            type="button"
-            onClick={() => setStep('refund-reason')}
-            className="w-full px-4 py-2.5 text-sm font-medium text-deep-maroon bg-[#FFF5F4] rounded-lg hover:bg-[#FFE6E2] transition-colors duration-200 inline-flex items-center justify-center gap-2"
-          >
-            <FiRefreshCw className="w-4 h-4" />
-            Request refund
-          </button>
+          {canRefund && (
+            <button
+              type="button"
+              onClick={() => setStep('refund-reason')}
+              className="w-full px-4 py-2.5 text-sm font-medium text-deep-maroon bg-[#FFF5F4] rounded-lg hover:bg-[#FFE6E2] transition-colors duration-200 inline-flex items-center justify-center gap-2"
+            >
+              <FiRefreshCw className="w-4 h-4" />
+              Request refund
+            </button>
+          )}
           <button
             type="button"
             onClick={onContactUs ?? handleClose}
