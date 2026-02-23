@@ -3,12 +3,9 @@
 
 import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
 import { FC } from 'react';
 
 export const CartEmptyState: FC = () => {
-  const params = useParams<{ country?: string; locale?: string }>();
-
   const t = useTranslations('checkout.cart.empty');
 
   return (
