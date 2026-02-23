@@ -2,7 +2,7 @@ import type { BaseAPIResponse } from '@/types/response';
 
 export type CheckoutType = 'normal';
 
-export type PaymentMethod = 'tamara';
+export type PaymentMethod = 'tamara' | 'tabby';
 
 export interface TamaraGatewayData {
   order_id: string;

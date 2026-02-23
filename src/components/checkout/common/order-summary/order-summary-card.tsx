@@ -5,6 +5,7 @@ import Portal from '@/components/shared/portal';
 import { useCart } from '@/contexts/cart-context';
 import { useToast } from '@/contexts/toast-context';
 import { useIntersectionObserver } from '@/hooks';
+import { useTabbyPayment } from '@/hooks/payment-gateway/use-tabby-payment';
 import { useTamaraPayment } from '@/hooks/payment-gateway/use-tamara-payment';
 import { cartService } from '@/services/api/cart-service';
 import { ParsedAPIError } from '@/types';
@@ -96,6 +97,8 @@ export const OrderSummaryCard: FC<
 
   const { checkout: tamaraCheckout, isLoading: isTamaraLoading } =
     useTamaraPayment();
+  const { checkout: tabbyCheckout, isLoading: isTabbyLoading } =
+    useTabbyPayment();
 
   const isVisible = useIntersectionObserver({
     ref: actionBtnRef,
@@ -216,25 +219,40 @@ export const OrderSummaryCard: FC<
 
     if (step === 'payment') {
       const isTamaraSelected = selectedPaymentMethod === 'tamara';
+      const isTabbySelected = selectedPaymentMethod === 'tabby';
 
       const handlePayNow = async () => {
-        if (!isTamaraSelected || isTamaraLoading) return;
+        if (
+          (!isTamaraSelected && !isTabbySelected) ||
+          isTamaraLoading ||
+          isTabbyLoading
+        ) {
+          return;
+        }
+
         try {
-          await tamaraCheckout();
+          if (isTamaraSelected) {
+            await tamaraCheckout();
+          } else if (isTabbySelected) {
+            await tabbyCheckout();
+          }
         } catch (e) {
           const parsedError = e as ParsedAPIError;
           showError(
             parsedError.generalError ||
-              'Unable to start Tamara payment right now. Please try again.',
+              'Unable to start payment right now. Please try again.',
           );
         }
       };
 
+      const isLoading = isTamaraLoading || isTabbyLoading;
+      const isDisabled = (!isTamaraSelected && !isTabbySelected) || isLoading;
+
       return {
-        label: isTamaraLoading ? t('cta.pleaseWait') : t('cta.payNow'),
+        label: isLoading ? t('cta.pleaseWait') : t('cta.payNow'),
         Icon: FiCreditCard,
         onClick: handlePayNow,
-        disabled: !isTamaraSelected || isTamaraLoading,
+        disabled: isDisabled,
       };
     }
 
@@ -254,6 +272,8 @@ export const OrderSummaryCard: FC<
     selectedPaymentMethod,
     tamaraCheckout,
     isTamaraLoading,
+    tabbyCheckout,
+    isTabbyLoading,
   ]);
 
   if (!cta) return null;
