@@ -39,15 +39,30 @@ export const AnimatePresenceWrapper: FC<AnimatePresenceWrapperProps> = ({
   const defaultExit = exitAnimation || { opacity: 0 };
   const defaultEnter = enterAnimation || { opacity: 1 };
 
+  // Use variants instead of raw initial/animate objects so that
+  // nested motion components (like StaggerItem) can participate
+  // in the same variant tree and don't get stuck at opacity 0
+  // when rendered conditionally inside AnimatePresence.
+  const variants = {
+    hidden: {
+      ...defaultExit,
+      transition: { duration, ease },
+    },
+    visible: {
+      ...defaultEnter,
+      transition: { duration, ease },
+    },
+  } as const;
+
   return (
     <AnimatePresence mode={mode} initial={initial}>
       {show && (
         <motion.div
           key={key}
-          initial={defaultExit}
-          animate={defaultEnter}
-          exit={defaultExit}
-          transition={{ duration, ease }}
+          variants={variants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
         >
           {children}
         </motion.div>
