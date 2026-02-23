@@ -93,41 +93,56 @@ const OrdersPageContent: FC = () => {
         <OrdersListSkeleton />
       ) : (
         <>
-          {/* Orders List */}
-          <StaggerContainer
-            staggerChildren={0.08}
-            delayChildren={0.05}
-            className="space-y-4"
-          >
-            {orders.map((order) => {
-              return (
-                <StaggerItem
-                  key={order.id}
-                  type="slideScale"
-                  direction="up"
-                  distance={20}
-                  initialScale={0.98}
-                  duration={0.35}
-                >
-                  <OrderCard
-                    order={order}
-                    showTrackButton={order.can_track}
-                    onNavigate={() => router.push(`/user/orders/${order.id}`)}
-                  />
-                </StaggerItem>
-              );
-            })}
-          </StaggerContainer>
+          {/* Orders List with page-level stagger */}
+          <div className="space-y-4">
+            {Array.from(
+              { length: Math.ceil(orders.length / 3) },
+              (_, pageIndex) => {
+                const start = pageIndex * 3;
+                const end = start + 3;
+                const pageOrders = orders.slice(start, end);
 
-          {/* Infinite scroll sentinel + summary */}
+                return (
+                  <StaggerContainer
+                    key={pageIndex}
+                    mode="animate"
+                    staggerChildren={0.08}
+                    delayChildren={0.05}
+                    className="space-y-4"
+                  >
+                    {pageOrders.map((order) => (
+                      <StaggerItem
+                        key={order.id}
+                        type="slideScale"
+                        direction="up"
+                        distance={20}
+                        initialScale={0.98}
+                        duration={0.35}
+                      >
+                        <OrderCard
+                          order={order}
+                          showTrackButton={order.can_track}
+                          onNavigate={() =>
+                            router.push(`/user/orders/${order.id}`)
+                          }
+                        />
+                      </StaggerItem>
+                    ))}
+                  </StaggerContainer>
+                );
+              },
+            )}
+          </div>
+
+          {/* Infinite scroll sentinel + loading skeleton */}
           {count > 0 && (
-            <div className="mt-4 flex flex-col items-center gap-2 text-sm text-gray-600">
-              <div
-                ref={sentinelRef}
-                className="h-8 w-full flex items-center justify-center"
-              >
-                {isLoadingMore && <span>Loading more…</span>}
-              </div>
+            <div>
+              <div ref={sentinelRef} className="h-px w-full" />
+              {isLoadingMore && (
+                <div className="mt-2">
+                  <OrdersListSkeleton />
+                </div>
+              )}
             </div>
           )}
         </>
