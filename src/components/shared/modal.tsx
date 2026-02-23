@@ -64,6 +64,9 @@ const Modal: FC<ModalProps> = ({
 
       // Only close if it's a click (not a drag)
       if (deltaX < threshold && deltaY < threshold) {
+        // prevent the event from reaching underlying elements
+        e.stopPropagation();
+        e.preventDefault();
         if (preventClose) {
           // Trigger shake animation
           setShouldShake(true);
@@ -82,10 +85,27 @@ const Modal: FC<ModalProps> = ({
   const handleBackdropClick = (e: MouseEvent) => {
     if (preventClose && e.target === e.currentTarget) {
       // Trigger shake animation
+      e.stopPropagation();
+      e.preventDefault();
       setShouldShake(true);
       setTimeout(() => setShouldShake(false), 500);
       if (onCloseAttempt) {
         onCloseAttempt();
+      }
+    }
+  };
+
+  const handleBackdropClickCapture = (e: MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      // Always consume the click at capture phase so it cannot fall-through
+      e.stopPropagation();
+      e.preventDefault();
+      if (preventClose) {
+        setShouldShake(true);
+        setTimeout(() => setShouldShake(false), 500);
+        if (onCloseAttempt) onCloseAttempt();
+      } else {
+        onClose();
       }
     }
   };
@@ -106,6 +126,10 @@ const Modal: FC<ModalProps> = ({
 
       // Only close if it's a tap (not a drag)
       if (deltaX < threshold && deltaY < threshold) {
+        // prevent the event from reaching underlying elements on touch
+        e.stopPropagation();
+        // prevent default to stop synthetic mouse events in some browsers
+        e.preventDefault();
         if (preventClose) {
           // Trigger shake animation
           setShouldShake(true);
@@ -183,6 +207,7 @@ const Modal: FC<ModalProps> = ({
                 onTouchStart={handleBackdropTouchStart}
                 onTouchEnd={handleBackdropTouchEnd}
                 onClick={preventClose ? handleBackdropClick : undefined}
+                onClickCapture={handleBackdropClickCapture}
               >
                 {/* Modal Content */}
                 <motion.div
@@ -249,6 +274,7 @@ const Modal: FC<ModalProps> = ({
                 onTouchStart={handleBackdropTouchStart}
                 onTouchEnd={handleBackdropTouchEnd}
                 onClick={preventClose ? handleBackdropClick : undefined}
+                onClickCapture={handleBackdropClickCapture}
               >
                 {/* Modal Content */}
                 <motion.div
@@ -314,6 +340,7 @@ const Modal: FC<ModalProps> = ({
               onTouchStart={handleBackdropTouchStart}
               onTouchEnd={handleBackdropTouchEnd}
               onClick={preventClose ? handleBackdropClick : undefined}
+              onClickCapture={handleBackdropClickCapture}
             >
               {/* Modal Content */}
               <motion.div
