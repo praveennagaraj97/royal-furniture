@@ -5,6 +5,7 @@ import Portal from '@/components/shared/portal';
 import { useCart } from '@/contexts/cart-context';
 import { useToast } from '@/contexts/toast-context';
 import { useIntersectionObserver } from '@/hooks';
+import { useTamaraPayment } from '@/hooks/payment-gateway/use-tamara-payment';
 import { cartService } from '@/services/api/cart-service';
 import { ParsedAPIError } from '@/types';
 import { formatCurrency } from '@/utils/format-currency';
@@ -74,7 +75,11 @@ interface OrderSummaryCardProps {
   step: CheckoutStepId;
 }
 
-export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
+export const OrderSummaryCard: FC<
+  OrderSummaryCardProps & {
+    selectedPaymentMethod?: string;
+  }
+> = ({ step, selectedPaymentMethod }) => {
   const t = useTranslations('checkout.orderSummary');
   const tShipping = useTranslations('shipping');
   const { totals, shipping, guestSessionId, refreshCart } = useCart();
@@ -88,6 +93,9 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
   const [hasMounted, setHasMounted] = useState(false);
   const [isShippingInfoOpen, setIsShippingInfoOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { checkout: tamaraCheckout, isLoading: isTamaraLoading } =
+    useTamaraPayment();
 
   const isVisible = useIntersectionObserver({
     ref: actionBtnRef,
@@ -207,10 +215,26 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     }
 
     if (step === 'payment') {
+      const isTamaraSelected = selectedPaymentMethod === 'tamara';
+
+      const handlePayNow = async () => {
+        if (!isTamaraSelected || isTamaraLoading) return;
+        try {
+          await tamaraCheckout();
+        } catch (e) {
+          const parsedError = e as ParsedAPIError;
+          showError(
+            parsedError.generalError ||
+              'Unable to start Tamara payment right now. Please try again.',
+          );
+        }
+      };
+
       return {
-        label: t('cta.payNow'),
+        label: isTamaraLoading ? t('cta.pleaseWait') : t('cta.payNow'),
         Icon: FiCreditCard,
-        onClick: () => alert('Pay Now clicked (stub)'),
+        onClick: handlePayNow,
+        disabled: !isTamaraSelected || isTamaraLoading,
       };
     }
 
@@ -227,6 +251,9 @@ export const OrderSummaryCard: FC<OrderSummaryCardProps> = ({ step }) => {
     showError,
     t,
     tShipping,
+    selectedPaymentMethod,
+    tamaraCheckout,
+    isTamaraLoading,
   ]);
 
   if (!cta) return null;

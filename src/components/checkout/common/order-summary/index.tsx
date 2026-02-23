@@ -8,15 +8,20 @@ import { PaymentOptions } from './payment-options';
 interface OrderSummarySectionProps {
   step: CheckoutStepId;
   showPaymentPlans?: boolean;
+  selectedPaymentMethod?: string;
 }
 
 export const OrderSummarySection: FC<OrderSummarySectionProps> = ({
   step,
   showPaymentPlans = true,
+  selectedPaymentMethod,
 }) => {
   return (
     <div className="space-y-4">
-      <OrderSummaryCard step={step} />
+      <OrderSummaryCard
+        step={step}
+        selectedPaymentMethod={selectedPaymentMethod}
+      />
       {showPaymentPlans && <PaymentOptions />}
     </div>
   );

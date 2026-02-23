@@ -423,7 +423,8 @@
         "proceedToShipping": "المتابعة إلى الشحن",
         "saving": "جاري الحفظ...",
         "proceedToPayment": "المتابعة إلى الدفع",
-        "payNow": "ادفع الآن"
+        "payNow": "ادفع الآن",
+        "pleaseWait": "يرجى الانتظار..."
       },
       "shippingFees": {
         "title": "رسوم الشحن",

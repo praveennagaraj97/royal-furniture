@@ -207,7 +207,11 @@ export const PaymentPageContent: FC = () => {
 
         <div className="space-y-6 lg:self-start z-30 lg:sticky lg:top-28">
           <StaggerItem type="slideUp" distance={30}>
-            <OrderSummarySection step="payment" showPaymentPlans={true} />
+            <OrderSummarySection
+              step="payment"
+              showPaymentPlans={true}
+              selectedPaymentMethod={selected}
+            />
           </StaggerItem>
 
           {/* Pay Now is provided inside OrderSummaryCard for the payment step */}

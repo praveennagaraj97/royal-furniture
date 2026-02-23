@@ -377,7 +377,8 @@
         "proceedToShipping": "Proceed to Shipping",
         "saving": "Saving...",
         "proceedToPayment": "Proceed to Payment",
-        "payNow": "Pay Now"
+        "payNow": "Pay Now",
+        "pleaseWait": "Please wait..."
       },
       "shippingFees": {
         "title": "Shipping Fees",

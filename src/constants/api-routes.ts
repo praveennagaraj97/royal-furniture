@@ -68,5 +68,6 @@ export const API_ROUTES = {
     REFUND_REQUEST: '/order/refund/request/',
     DELIVERY_SLOTS: '/order/delivery/slots/',
     DELIVERY_PREFERENCES: '/order/delivery/preferences/',
+    CHECKOUT: '/order/checkout/',
   },
 } as const;
