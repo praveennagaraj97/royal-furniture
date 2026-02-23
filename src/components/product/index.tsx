@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import ProductListing from '@/components/shared/ui/product-listing';
 import { useProductDetail } from '@/hooks/use-product-detail';
 import type { ProductDetailData } from '@/types/response';
 import type { FC } from 'react';
@@ -12,6 +13,7 @@ import { ProductActions } from './product-actions';
 import { ProductAdditionalInfo } from './product-additional-info';
 import { ProductHeader } from './product-header';
 import { ProductOptions } from './product-options';
+import { UserReviews } from './user-reviews';
 
 export interface ProductDetailProps {
   data: ProductDetailData;
@@ -221,6 +223,46 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           </ViewOnce>
         </div>
       </div>
+
+      {/* Product-related sections below the main detail */}
+      {(product.frequently_bought_together.length > 0 ||
+        product.similar_products.length > 0 ||
+        product.you_may_also_like.length > 0) && (
+        <div className="py-6 space-y-6 section-container">
+          {product.frequently_bought_together.length > 0 && (
+            <ProductListing
+              title="Complete the Collection"
+              products={product.frequently_bought_together || []}
+            />
+          )}
+
+          {/* Reviews must come right after frequently bought items */}
+          <UserReviews
+            productSlug={product.product_info.slug}
+            canReview={product.reviews_summary?.can_review ?? false}
+            productName={product.product_info.name}
+            productImage={
+              product.product_info.responsive_images?.web?.url ||
+              product.product_info.thumbnail_image
+            }
+          />
+          <br />
+
+          {product.similar_products.length > 0 && (
+            <ProductListing
+              title="Similar Products"
+              products={product.similar_products || []}
+            />
+          )}
+
+          {product.you_may_also_like.length > 0 && (
+            <ProductListing
+              title="You May Also Like"
+              products={product.you_may_also_like || []}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

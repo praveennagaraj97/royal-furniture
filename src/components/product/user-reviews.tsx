@@ -9,13 +9,22 @@ import Image from 'next/image';
 import type { FC } from 'react';
 import { useMemo, useState } from 'react';
 import { IoIosStar } from 'react-icons/io';
+import { WriteReviewModal } from './write-review-modal';
 
 export interface UserReviewsProps {
   productSlug?: string;
+  canReview?: boolean;
+  productName?: string;
+  productImage?: string;
 }
 
-export const UserReviews: FC<UserReviewsProps> = ({ productSlug }) => {
-  const { data, isLoading } = useGetReviews({
+export const UserReviews: FC<UserReviewsProps> = ({
+  productSlug,
+  canReview = false,
+  productName,
+  productImage,
+}) => {
+  const { data, isLoading, mutate } = useGetReviews({
     productSlug: productSlug ?? null,
     enabled: Boolean(productSlug),
   });
@@ -73,6 +82,7 @@ export const UserReviews: FC<UserReviewsProps> = ({ productSlug }) => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isWriteReviewOpen, setIsWriteReviewOpen] = useState(false);
 
   const openGallery = (images: string[], index = 0) => {
     setGalleryImages(images);
@@ -81,6 +91,7 @@ export const UserReviews: FC<UserReviewsProps> = ({ productSlug }) => {
   };
 
   const closeGallery = () => setIsGalleryOpen(false);
+  const closeWriteReview = () => setIsWriteReviewOpen(false);
 
   return (
     <ViewOnce
@@ -93,9 +104,20 @@ export const UserReviews: FC<UserReviewsProps> = ({ productSlug }) => {
     >
       <div className="space-y-6">
         {/* Header */}
-        <h2 className="text-lg md:text-xl font-semibold text-indigo-slate">
-          User Reviews
-        </h2>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <h2 className="text-lg md:text-xl font-semibold text-indigo-slate">
+            User Reviews
+          </h2>
+          {canReview && productSlug && (
+            <button
+              type="button"
+              onClick={() => setIsWriteReviewOpen(true)}
+              className="text-xs md:text-sm font-medium text-deep-maroon hover:underline"
+            >
+              Write review
+            </button>
+          )}
+        </div>
 
         {isLoading ? (
           <UserReviewsSkeleton />
@@ -247,6 +269,20 @@ export const UserReviews: FC<UserReviewsProps> = ({ productSlug }) => {
           isOpen={isGalleryOpen}
           onClose={closeGallery}
         />
+
+        {productSlug && (
+          <WriteReviewModal
+            isOpen={isWriteReviewOpen}
+            onClose={closeWriteReview}
+            productSlug={productSlug}
+            productName={productName}
+            productImage={productImage}
+            onSubmitted={() => {
+              // Revalidate reviews after a successful submission
+              void mutate();
+            }}
+          />
+        )}
       </div>
     </ViewOnce>
   );

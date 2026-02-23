@@ -287,6 +287,7 @@ export interface ProductDetailData {
     average_rating: number;
     total_reviews: number;
     rating_breakdown: Record<string, number>;
+    can_review?: boolean;
   };
   frequently_bought_together: ProductItem[];
   payment_options: {
