@@ -1,31 +1,47 @@
 'use client';
 
 import { AppLink } from '@/hooks/use-navigation';
-import { FiCheckCircle } from 'react-icons/fi';
+import { useSearchParams } from 'next/navigation';
+import { FiCheck } from 'react-icons/fi';
 
 const OrderCancelledPage = () => {
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get('orderId');
+
+  const trackHref = orderId ? `/user/orders/${orderId}` : '/user/orders';
+
   return (
-    <main className="max-w-3xl mx-auto px-4 py-10 space-y-6">
-      <section className="rounded-lg border border-green-100 bg-[#F3FBF6] px-6 py-8 flex flex-col items-center text-center gap-4">
-        <div className="rounded-full bg-[#E7F7EE] p-3 text-[#00AF3B]">
-          <FiCheckCircle className="w-8 h-8" />
+    <main className="flex min-h-[60vh] items-center justify-center px-4 py-10">
+      <section className="w-full max-w-md flex flex-col items-center text-center gap-6">
+        <div className="flex items-center justify-center">
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#FFECEC]">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#C0392B] bg-white text-[#C0392B]">
+              <FiCheck className="h-8 w-8" />
+            </div>
+          </div>
         </div>
-        <div className="space-y-2">
-          <h1 className="text-xl font-semibold text-gray-900">
-            Your order has been cancelled
+
+        <div className="space-y-1">
+          <h1 className="text-lg font-semibold text-[#FF0000]">
+            Cancelled&nbsp; Successfully
           </h1>
-          <p className="text-sm text-gray-600 max-w-md mx-auto">
-            We&apos;ve received your cancellation request. If payment was
-            already captured, any eligible refunds will be processed as per our
-            refund policy.
+          <p className="text-xs text-gray-600">
+            Your order has been cancelled.
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-3 mt-2">
+
+        <div className="mt-2 w-full space-y-3">
+          <AppLink
+            href={trackHref}
+            className="inline-flex w-full items-center justify-center rounded-md border border-[#C0392B] px-5 py-2.5 text-xs font-medium text-[#C0392B] bg-white hover:bg-[#FFF5F4] transition-colors duration-200"
+          >
+            Track my order
+          </AppLink>
           <AppLink
             href="/user/orders"
-            className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-800 bg-white hover:border-deep-maroon hover:text-deep-maroon transition-colors duration-200"
+            className="inline-flex w-full items-center justify-center rounded-md bg-[#7D0707] px-5 py-2.5 text-xs font-medium text-white hover:bg-[#5c0505] transition-colors duration-200"
           >
-            Back to My Orders
+            View my order
           </AppLink>
         </div>
       </section>

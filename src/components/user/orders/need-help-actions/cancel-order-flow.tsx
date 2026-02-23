@@ -2,6 +2,7 @@
 
 import { useAppRouter } from '@/hooks';
 import { orderService } from '@/services/api/order-service';
+import { ParsedAPIError } from '@/types/error';
 import { FC, useState } from 'react';
 import { FiAlertTriangle, FiRefreshCw } from 'react-icons/fi';
 
@@ -41,9 +42,13 @@ const CancelOrderFlow: FC<CancelOrderFlowProps> = ({ orderId, onClose }) => {
           selectedReason === 'other' ? customReason.trim() : undefined,
       });
       onClose();
-      router.push('/user/orders/cancelled');
+      router.push(`/user/orders/cancelled?orderId=${orderId}`);
     } catch (e) {
-      setError('Unable to cancel this order right now. Please try again.');
+      const parserError = e as ParsedAPIError;
+      setError(
+        parserError.generalError ||
+          'Unable to cancel this order right now. Please try again.',
+      );
     } finally {
       setIsSubmitting(false);
     }

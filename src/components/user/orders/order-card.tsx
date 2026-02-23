@@ -181,6 +181,7 @@ export const OrderCard: FC<OrderCardProps> = ({
           onClose={() => setIsNeedHelpOpen(false)}
           orderUuid={order.id}
           orderCode={order.order_id}
+          canCancel={order.status !== 'cancelled'}
           onContactUs={() => {
             // Placeholder: wire to contact/support page or chat when available
             setIsNeedHelpOpen(false);

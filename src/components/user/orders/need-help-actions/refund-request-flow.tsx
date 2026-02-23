@@ -2,6 +2,7 @@
 
 import { useAppRouter } from '@/hooks';
 import { orderService } from '@/services/api/order-service';
+import { ParsedAPIError } from '@/types';
 import { FC, useState } from 'react';
 import { FiRefreshCw } from 'react-icons/fi';
 
@@ -38,9 +39,13 @@ const RefundRequestFlow: FC<RefundRequestFlowProps> = ({
         custom_reason: customReason || undefined,
       });
       onClose();
-      router.push('/user/orders/refund-requested');
+      router.push(`/user/orders/refund-requested?orderId=${orderId}`);
     } catch (e) {
-      setError('Unable to submit refund request right now. Please try again.');
+      const parserError = e as ParsedAPIError;
+      setError(
+        parserError.generalError ||
+          'Unable to submit refund request right now. Please try again.',
+      );
     } finally {
       setIsSubmitting(false);
     }
