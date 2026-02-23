@@ -47,6 +47,8 @@ const OrderDetailPageContent: FC = () => {
     });
   }, [tracking]);
 
+  const canCancel = tracking?.current_status === 'pending';
+
   if (isLoading || !order) {
     return <OrderDetailSkeleton />;
   }
@@ -77,7 +79,7 @@ const OrderDetailPageContent: FC = () => {
           duration={0.4}
           className="space-y-4"
         >
-          <ExpectedDeliveryCard order={order} />
+          <ExpectedDeliveryCard order={order} canCancel={canCancel} />
           <section className="bg-white rounded-sm border border-gray-200 p-4">
             {canTrack ? (
               <>

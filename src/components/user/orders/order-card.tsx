@@ -4,13 +4,14 @@ import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { useFormatCurrency } from '@/hooks/use-format-currency';
 import type { OrderListItem } from '@/types/response';
 import { formatDateWithOrdinal } from '@/utils/date';
-import { FC, MouseEvent, useMemo } from 'react';
+import { FC, MouseEvent, useMemo, useState } from 'react';
 import {
   FiBox,
   FiCheckCircle,
   FiChevronRight,
   FiXCircle,
 } from 'react-icons/fi';
+import NeedHelpModal from './need-help-actions';
 
 export interface OrderCardProps {
   order: OrderListItem;
@@ -52,6 +53,7 @@ export const OrderCard: FC<OrderCardProps> = ({
   disableNavigation = false,
 }) => {
   const formatCurrency = useFormatCurrency();
+  const [isNeedHelpOpen, setIsNeedHelpOpen] = useState(false);
 
   const {
     icon: StatusIcon,
@@ -84,6 +86,7 @@ export const OrderCard: FC<OrderCardProps> = ({
   const handleHelpClick = (event: MouseEvent<HTMLButtonElement>) => {
     // Prevent triggering card navigation when pressing Need help?
     event.stopPropagation();
+    setIsNeedHelpOpen(true);
   };
 
   return (
@@ -172,6 +175,17 @@ export const OrderCard: FC<OrderCardProps> = ({
             </button>
           )}
         </div>
+
+        <NeedHelpModal
+          isOpen={isNeedHelpOpen}
+          onClose={() => setIsNeedHelpOpen(false)}
+          orderUuid={order.id}
+          orderCode={order.order_id}
+          onContactUs={() => {
+            // Placeholder: wire to contact/support page or chat when available
+            setIsNeedHelpOpen(false);
+          }}
+        />
       </div>
     </article>
   );

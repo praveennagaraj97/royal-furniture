@@ -63,5 +63,7 @@ export const API_ROUTES = {
     LIST: '/order/',
     DETAIL: (id: string) => `/order/detail/${id}/`,
     TRACKING: (id: string) => `/order/tracking/${id}/`,
+    CANCEL: '/order/cancel/',
+    REFUND_REQUEST: '/order/refund/request/',
   },
 } as const;
