@@ -11,9 +11,10 @@ import { ImSpinner2 } from 'react-icons/im';
 
 interface CartItemRowProps {
   item: CartItem;
-  pendingAction?: 'increase' | 'decrease' | 'remove';
+  pendingAction?: 'increase' | 'decrease' | 'remove' | 'save';
   onQuantityChange: (quantity: number) => void;
   onRemove: () => void;
+  onSaveForLater: () => void;
 }
 
 export const CartItemRow: FC<CartItemRowProps> = ({
@@ -21,6 +22,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
   pendingAction,
   onQuantityChange,
   onRemove,
+  onSaveForLater,
 }) => {
   const t = useTranslations('checkout.cart.items');
   const params = useParams<{ country?: string; locale?: string }>();
@@ -33,6 +35,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
   const isDecreaseBusy = pendingAction === 'decrease';
   const isIncreaseBusy = pendingAction === 'increase';
   const isRemoveBusy = pendingAction === 'remove';
+  const isSaveBusy = pendingAction === 'save';
 
   const decreaseDisabled = isBusy || item.quantity <= 1;
   const increaseDisabled =
@@ -142,6 +145,17 @@ export const CartItemRow: FC<CartItemRowProps> = ({
                 )}
                 {t('remove')}
               </button>
+              <button
+                type="button"
+                onClick={onSaveForLater}
+                disabled={isBusy}
+                className="text-xs font-semibold text-gray-600 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSaveBusy ? (
+                  <ImSpinner2 className="w-3 h-3 animate-spin" />
+                ) : null}
+                {!isSaveBusy && t('savedForLater')}
+              </button>
             </div>
           </div>
         </div>
@@ -229,6 +243,17 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               <FiTrash2 className="w-3 h-3" />
             )}
             {t('remove')}
+          </button>
+          <button
+            type="button"
+            onClick={onSaveForLater}
+            disabled={isBusy}
+            className="text-xs font-semibold text-gray-600 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSaveBusy ? (
+              <ImSpinner2 className="w-3 h-3 animate-spin" />
+            ) : null}
+            {!isSaveBusy && t('savedForLater')}
           </button>
         </div>
 

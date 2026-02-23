@@ -357,7 +357,8 @@
           "quantity": "الكمية",
           "total": "السعر الإجمالي"
         },
-        "remove": "إزالة"
+        "remove": "إزالة",
+        "savedForLater": "حفظ لوقت لاحق"
       },
       "empty": {
         "imageAlt": "السلة فارغة",

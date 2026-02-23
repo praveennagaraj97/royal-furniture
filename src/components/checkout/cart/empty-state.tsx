@@ -1,16 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
+import { AppLink } from '@/hooks';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { FC } from 'react';
 
 export const CartEmptyState: FC = () => {
   const params = useParams<{ country?: string; locale?: string }>();
-  const country = params?.country;
-  const locale = params?.locale;
-  const homeHref = ['/', country, locale].filter(Boolean).join('/');
+
   const t = useTranslations('checkout.cart.empty');
 
   return (
@@ -25,12 +23,12 @@ export const CartEmptyState: FC = () => {
         <p className="text-xl font-semibold text-indigo-slate">{t('title')}</p>
         <p className="text-sm text-gray-500">{t('description')}</p>
       </div>
-      <Link
-        href={homeHref || '/'}
+      <AppLink
+        href="/"
         className="inline-flex items-center justify-center rounded-lg bg-deep-maroon px-4 py-2 text-sm font-semibold text-white hover:bg-[#6b0000] transition-colors"
       >
         {t('cta')}
-      </Link>
+      </AppLink>
     </div>
   );
 };

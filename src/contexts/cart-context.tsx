@@ -32,6 +32,7 @@ interface CartContextValue {
   cartId?: string;
   items: CartItem[];
   frequentlyBought: ProductItem[];
+  savedForLater: ProductItem[];
   totals: CartTotals;
   freeShippingThreshold: number;
   amountToFreeShipping: number;
@@ -60,9 +61,10 @@ interface CartContextValue {
   addItem: (sku: string, quantity: number) => Promise<void>;
   removeItem: (cartItemId: string) => Promise<void>;
   updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
+  saveForLater: (cartItemId: string) => Promise<void>;
   clearCart: () => void;
   refreshCart: () => Promise<void>;
-  pendingActions: Record<string, 'increase' | 'decrease' | 'remove'>;
+  pendingActions: Record<string, 'increase' | 'decrease' | 'remove' | 'save'>;
   guestSessionId?: string | null;
 }
 
@@ -92,6 +94,7 @@ const DEFAULT_CART_STATE: CartState = {
   cartId: undefined,
   items: [],
   frequentlyBought: [],
+  savedForLater: [],
   freeShippingThreshold: 0,
   amountToFreeShipping: 0,
   freeShippingProgress: 0,
@@ -181,6 +184,7 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
     cartId: data.id,
     items,
     frequentlyBought: data.frequently_bought_together || [],
+    savedForLater: data.saved_for_later_items || [],
     freeShippingThreshold: data.free_shipping?.threshold || 0,
     amountToFreeShipping: data.free_shipping?.remaining_amount || 0,
     freeShippingProgress: Math.min(
@@ -208,7 +212,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
   const [pendingActions, setPendingActions] = useState<
-    Record<string, 'increase' | 'decrease' | 'remove'>
+    Record<string, 'increase' | 'decrease' | 'remove' | 'save'>
   >({});
   const { showSuccess, showError } = useToast();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
@@ -237,7 +241,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   );
 
   const setPendingAction = useCallback(
-    (key: string, action?: 'increase' | 'decrease' | 'remove') => {
+    (key: string, action?: 'increase' | 'decrease' | 'remove' | 'save') => {
       setPendingActions((prev) => {
         const next = { ...prev };
         if (action) {
@@ -407,6 +411,38 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     ],
   );
 
+  const saveForLater = useCallback(
+    async (cartItemId: string) => {
+      if (!state.cartId) {
+        console.warn('[Cart] Cannot save for later without cart id');
+        return;
+      }
+
+      const sessionToUse = resolveSession();
+      setPendingAction(cartItemId, 'save');
+
+      try {
+        await cartService.saveForLater(cartItemId, sessionToUse);
+        showSuccess('Saved for later');
+        await refreshCart();
+      } catch (err) {
+        console.error('Failed to save cart item for later', err);
+        showError(getErrorMessage(err, 'Failed to save for later'));
+      } finally {
+        setPendingAction(cartItemId);
+      }
+    },
+    [
+      state.cartId,
+      resolveSession,
+      refreshCart,
+      setPendingAction,
+      showSuccess,
+      showError,
+      getErrorMessage,
+    ],
+  );
+
   const clearCart = useCallback(() => {
     console.info('[Cart] clearCart not wired yet');
     // TODO: implement clear cart API once available
@@ -477,6 +513,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       cartId: state.cartId,
       items: state.items,
       frequentlyBought: state.frequentlyBought,
+      savedForLater: state.savedForLater,
       totals: state.totals,
       freeShippingThreshold: state.freeShippingThreshold,
       amountToFreeShipping: state.amountToFreeShipping,
@@ -493,6 +530,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       addItem,
       removeItem,
       updateQuantity,
+      saveForLater,
       clearCart,
       refreshCart,
       pendingActions,
@@ -501,25 +539,27 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.cartId,
       state.items,
       state.frequentlyBought,
+      state.savedForLater,
+      state.totals,
       state.freeShippingThreshold,
       state.amountToFreeShipping,
       state.freeShippingProgress,
       state.freeShippingMessage,
-      state.totals,
       state.header,
       state.shipping,
       isHydrated,
       isLoading,
-      addItem,
-      removeItem,
-      updateQuantity,
-      clearCart,
-      refreshCart,
-      pendingActions,
-      guestSessionId,
       setShippingStep,
       setShippingMethod,
       setShippingSelection,
+      guestSessionId,
+      addItem,
+      removeItem,
+      updateQuantity,
+      saveForLater,
+      clearCart,
+      refreshCart,
+      pendingActions,
     ],
   );
 

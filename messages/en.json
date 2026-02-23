@@ -311,7 +311,8 @@
           "quantity": "Quantity",
           "total": "Total Price"
         },
-        "remove": "Remove"
+        "remove": "Remove",
+        "savedForLater": "Save for later"
       },
       "empty": {
         "imageAlt": "Empty cart",

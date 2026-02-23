@@ -8,8 +8,14 @@ import { CartFreeShippingBanner } from '../free-shipping';
 import { CartItemRow } from './cart-item-row';
 
 export const CartItemsSection: FC = () => {
-  const { items, updateQuantity, removeItem, pendingActions, header } =
-    useCart();
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    saveForLater,
+    pendingActions,
+    header,
+  } = useCart();
   const t = useTranslations('checkout.cart.items');
 
   if (!items.length) {
@@ -50,12 +56,14 @@ export const CartItemsSection: FC = () => {
                   | 'increase'
                   | 'decrease'
                   | 'remove'
+                  | 'save'
                   | undefined
               }
               onQuantityChange={(quantity: number) =>
                 updateQuantity(item.cartItemId, quantity)
               }
               onRemove={() => removeItem(item.cartItemId)}
+              onSaveForLater={() => saveForLater(item.cartItemId)}
             />
           );
         })}

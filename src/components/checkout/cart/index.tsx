@@ -7,6 +7,7 @@ import { FC, Fragment } from 'react';
 import { FrequentlyBoughtSection } from '../common/frequently-bought';
 import { CartInfoSections } from '../common/info-sections';
 import { OrderSummarySection } from '../common/order-summary';
+import { SavedForLaterSection } from '../common/saved-for-later';
 import { CartItemsSection } from './cart-items';
 import CartEmptyState from './empty-state';
 
@@ -42,9 +43,12 @@ const CartPageContent: FC = () => {
         </StaggerContainer>
       </div>
 
-      <StaggerContainer>
+      <StaggerContainer className="mt-6 space-y-6">
         <StaggerItem type="slideUp" distance={30}>
           <FrequentlyBoughtSection />
+        </StaggerItem>
+        <StaggerItem type="slideUp" distance={30}>
+          <SavedForLaterSection />
         </StaggerItem>
       </StaggerContainer>
     </Fragment>

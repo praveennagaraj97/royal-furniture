@@ -94,6 +94,28 @@ export class CartService extends BaseAPIService {
     }
   }
 
+  async saveForLater(
+    cartItemId: string,
+    guestSessionId?: string,
+  ): Promise<unknown> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.post(
+        API_ROUTES.CART.SAVE_FOR_LATER(cartItemId),
+        {},
+        {
+          headers,
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
   async getShippingStep(
     guestSessionId?: string,
   ): Promise<ShippingProceedResponse> {

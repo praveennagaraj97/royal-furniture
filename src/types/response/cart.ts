@@ -85,6 +85,7 @@ export interface CartApiData {
   items: CartApiItem[];
   order_summary?: CartOrderSummary;
   frequently_bought_together: ProductItem[];
+  saved_for_later_items?: ProductItem[];
 }
 
 export type CartApiResponse = BaseAPIResponse<CartApiData> & {
@@ -184,6 +185,7 @@ export interface CartState {
   cartId?: string;
   items: CartItem[];
   frequentlyBought: ProductItem[];
+  savedForLater: ProductItem[];
   freeShippingThreshold: number;
   amountToFreeShipping: number;
   freeShippingProgress: number;
