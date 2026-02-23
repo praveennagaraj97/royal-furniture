@@ -529,6 +529,18 @@ export interface OrderDetailResponse extends BaseAPIResponse<OrderDetailData> {
   };
 }
 
+export interface OrderDeliverySlot {
+  id: number;
+  time_range: string;
+}
+
+export interface OrderDeliverySlotsData {
+  slots: OrderDeliverySlot[];
+}
+
+export type OrderDeliverySlotsResponse =
+  BaseAPIResponse<OrderDeliverySlotsData>;
+
 // Reviews API Types
 export interface ReviewImage {
   id?: number;

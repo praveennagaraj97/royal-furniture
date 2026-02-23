@@ -20,6 +20,8 @@ interface CustomDeliveryModalProps {
   onSaveSelection: () => Promise<boolean>;
   isSavingSelection: boolean;
   customDeliveryCharge?: number | null;
+  title?: string;
+  description?: string;
 }
 
 export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
@@ -35,6 +37,8 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
   onSaveSelection,
   isSavingSelection,
   customDeliveryCharge,
+  title,
+  description,
 }) => {
   const t = useTranslations('shipping');
   const highlightedDateValue = highlightedDate || undefined;
@@ -51,7 +55,7 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-lg font-semibold">
-                {t('delivery.customDelivery')}
+                {title ?? t('delivery.customDelivery')}
               </h2>
               <button
                 type="button"
@@ -65,7 +69,7 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
           </StaggerItem>
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <p className="font-semibold text-gray-900 mb-2">
-              {t('delivery.selectPrompt')}
+              {description ?? t('delivery.selectPrompt')}
             </p>
           </StaggerItem>
           <StaggerItem type="slideUp" distance={20} duration={0.35}>

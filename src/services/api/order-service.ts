@@ -17,6 +17,18 @@ class OrderService extends BaseAPIService {
   }) {
     return this.http.post(API_ROUTES.ORDERS.REFUND_REQUEST, payload);
   }
+
+  getDeliverySlots() {
+    return this.http.get(API_ROUTES.ORDERS.DELIVERY_SLOTS);
+  }
+
+  updateDeliveryPreferences(payload: {
+    order_id: string;
+    delivery_date: string;
+    slot_id: number;
+  }) {
+    return this.http.post(API_ROUTES.ORDERS.DELIVERY_PREFERENCES, payload);
+  }
 }
 
 export const orderService = new OrderService();

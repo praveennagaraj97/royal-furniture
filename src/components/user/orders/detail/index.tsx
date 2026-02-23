@@ -24,7 +24,14 @@ const OrderDetailPageContent: FC = () => {
   const orderIdParam = params?.orderId;
   const id = Array.isArray(orderIdParam) ? orderIdParam[0] : orderIdParam;
 
-  const { order, isLoading } = useGetOrderDetail({ id, enabled: !!id });
+  const {
+    order,
+    isLoading,
+    mutate: mutateOrder,
+  } = useGetOrderDetail({
+    id,
+    enabled: !!id,
+  });
 
   const canTrack = !!order?.delivery_card?.can_track;
   const { tracking, isLoading: isTrackingLoading } = useGetOrderTracking({
@@ -79,7 +86,11 @@ const OrderDetailPageContent: FC = () => {
           duration={0.4}
           className="space-y-4"
         >
-          <ExpectedDeliveryCard order={order} canCancel={canCancel} />
+          <ExpectedDeliveryCard
+            order={order}
+            canCancel={canCancel}
+            onDeliveryUpdated={() => mutateOrder()}
+          />
           <section className="bg-white rounded-sm border border-gray-200 p-4">
             {canTrack ? (
               <>
