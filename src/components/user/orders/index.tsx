@@ -5,65 +5,39 @@ import {
   StaggerItem,
   ViewOnce,
 } from '@/components/shared/animations';
+import { OrdersListSkeleton } from '@/components/skeletons/orders-list-skeleton';
 import { useAppRouter } from '@/hooks';
-import { FC } from 'react';
+import { useGetOrders } from '@/hooks/api';
+import { FC, useMemo, useState } from 'react';
 import { FiBox } from 'react-icons/fi';
 import OrderCard from './order-card';
-import type { OrderListItem } from './types';
 
 const OrdersPageContent: FC = () => {
   const router = useAppRouter();
+  const [page, setPage] = useState(1);
+  const { orders, count, next, previous, isLoading } = useGetOrders({ page });
 
-  // Temporary mocked orders for UI. Integrate real data when API is available.
-  const orders: OrderListItem[] = [
-    {
-      id: '17139847',
-      status: 'expectedDelivery',
-      dateLabel: '25 Mar 2025',
-      timeWindow: '9:00 am - 10:00 am',
-      title: 'Kids Bed',
-      colour: 'Black',
-      quantity: 1,
-      price: 799,
-      originalPrice: 1299,
-      currencySymbol: 'AED',
-    },
-    {
-      id: '17139846',
-      status: 'delivered',
-      dateLabel: '02 Feb 2025',
-      title: 'Kids Bed',
-      colour: 'Black',
-      quantity: 1,
-      price: 799,
-      originalPrice: 1299,
-      currencySymbol: 'AED',
-    },
-    {
-      id: '17139845',
-      status: 'cancelled',
-      dateLabel: '20 Jan 2025',
-      title: 'Kids Bed',
-      colour: 'Black',
-      quantity: 1,
-      price: 799,
-      originalPrice: 1299,
-      currencySymbol: 'AED',
-    },
-    {
-      id: '17139844',
-      status: 'pickup',
-      dateLabel: '20 May 2025',
-      title: 'Kids Bed',
-      colour: 'Black',
-      quantity: 1,
-      price: 799,
-      originalPrice: 1299,
-      currencySymbol: 'AED',
-    },
-  ];
+  const { start, end } = useMemo(() => {
+    if (!orders.length || count === 0) {
+      return { start: 0, end: 0 };
+    }
+    const pageSize = orders.length;
+    const startIndex = (page - 1) * pageSize + 1;
+    const endIndex = startIndex + pageSize - 1;
+    return { start: startIndex, end: Math.min(endIndex, count) };
+  }, [orders.length, count, page]);
 
-  if (!orders.length) {
+  const handleNextPage = () => {
+    if (!next) return;
+    setPage((prev) => prev + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (!previous || page <= 1) return;
+    setPage((prev) => Math.max(1, prev - 1));
+  };
+
+  if (!isLoading && !orders.length) {
     return (
       <ViewOnce
         type="slideUp"
@@ -117,31 +91,70 @@ const OrdersPageContent: FC = () => {
           View and manage all your recent purchases in one place.
         </p>
       </div>
+      {isLoading ? (
+        <OrdersListSkeleton />
+      ) : (
+        <>
+          {/* Orders List */}
+          <StaggerContainer
+            staggerChildren={0.08}
+            delayChildren={0.05}
+            className="space-y-4"
+          >
+            {orders.map((order) => {
+              return (
+                <StaggerItem
+                  key={order.id}
+                  type="slideScale"
+                  direction="up"
+                  distance={20}
+                  initialScale={0.98}
+                  duration={0.35}
+                >
+                  <OrderCard
+                    order={order}
+                    showTrackButton={order.can_track}
+                    onNavigate={() =>
+                      router.push(`/user/orders/${order.order_id}`)
+                    }
+                  />
+                </StaggerItem>
+              );
+            })}
+          </StaggerContainer>
 
-      {/* Orders List */}
-      <StaggerContainer
-        staggerChildren={0.08}
-        delayChildren={0.05}
-        className="space-y-4"
-      >
-        {orders.map((order) => {
-          return (
-            <StaggerItem
-              key={order.id}
-              type="slideScale"
-              direction="up"
-              distance={20}
-              initialScale={0.98}
-              duration={0.35}
-            >
-              <OrderCard
-                order={order}
-                onNavigate={() => router.push(`/user/orders/${order.id}`)}
-              />
-            </StaggerItem>
-          );
-        })}
-      </StaggerContainer>
+          {/* Pagination */}
+          {count > 0 && (
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-600">
+              <div>
+                {start > 0 && end > 0 && (
+                  <span>
+                    Showing {start}–{end} of {count} orders
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handlePreviousPage}
+                  disabled={!previous || page <= 1}
+                  className="px-4 py-2 rounded-lg border text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed border-gray-300 bg-white text-gray-700 hover:border-deep-maroon hover:text-deep-maroon transition-colors"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextPage}
+                  disabled={!next}
+                  className="px-4 py-2 rounded-lg border text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed border-gray-300 bg-white text-gray-700 hover:border-deep-maroon hover:text-deep-maroon transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </ViewOnce>
   );
 };

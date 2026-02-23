@@ -398,6 +398,57 @@ export interface WishlistCollection {
 
 export type WishlistCollectionsResponse = BaseAPIResponse<WishlistCollection[]>;
 
+// Orders API Types
+
+export interface OrderItemColor {
+  id: number;
+  name?: string;
+  name_ar?: string;
+  name_en?: string;
+  hex_code?: string;
+}
+
+export interface OrderLineItem {
+  product_name: string;
+  product_image: string;
+  unit_price: string;
+  quantity: number;
+  color?: OrderItemColor | null;
+  base_price: string;
+  offer_price: string;
+}
+
+export interface OrderListItem {
+  id: string;
+  order_id: string;
+  order_header: {
+    title: string;
+    subtitle: string | null;
+  };
+  status: string;
+  payment_status: string;
+  delivery_method: string;
+  delivery_date: string;
+  item: OrderLineItem[];
+  total_amount: string;
+  can_track: boolean;
+}
+
+export interface OrderListData {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: OrderListItem[];
+}
+
+export interface OrdersListResponse extends BaseAPIResponse<OrderListData> {
+  version?: string;
+  meta?: {
+    type: string;
+    action: string;
+  };
+}
+
 // Reviews API Types
 export interface ReviewImage {
   id?: number;

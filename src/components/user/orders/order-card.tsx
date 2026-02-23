@@ -1,42 +1,45 @@
 'use client';
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
+import { useFormatCurrency } from '@/hooks/use-format-currency';
+import type { OrderListItem } from '@/types/response';
+import { formatDateWithOrdinal } from '@/utils/date';
 import { FC, MouseEvent, useMemo } from 'react';
 import {
   FiBox,
   FiCheckCircle,
   FiChevronRight,
-  FiMapPin,
   FiXCircle,
 } from 'react-icons/fi';
-import type { OrderCardProps, OrderStatus } from './types';
+
+export interface OrderCardProps {
+  order: OrderListItem;
+  onNavigate?: () => void;
+  showTrackButton?: boolean;
+}
+
+type OrderStatus = OrderListItem['status'];
 
 const getStatusConfig = (status: OrderStatus) => {
   switch (status) {
-    case 'expectedDelivery':
-      return {
-        icon: FiBox,
-        textClass: 'text-[#373672]',
-        iconClass: 'text-[#373672]',
-      } as const;
     case 'delivered':
       return {
         icon: FiCheckCircle,
         textClass: 'text-[#00AF3B]',
         iconClass: 'text-[#00AF3B]',
       } as const;
-    case 'cancelled':
+    case 'failed':
       return {
         icon: FiXCircle,
         textClass: 'text-[#FF0909]',
         iconClass: 'text-[#FF0909]',
       } as const;
-    case 'pickup':
+    case 'pending':
     default:
       return {
-        icon: FiMapPin,
-        textClass: 'text-black',
-        iconClass: 'text-deep-maroon',
+        icon: FiBox,
+        textClass: 'text-[#373672]',
+        iconClass: 'text-[#373672]',
       } as const;
   }
 };
@@ -46,29 +49,23 @@ export const OrderCard: FC<OrderCardProps> = ({
   onNavigate,
   showTrackButton = true,
 }) => {
+  const formatCurrency = useFormatCurrency();
+
   const {
     icon: StatusIcon,
     textClass,
     iconClass,
-  } = getStatusConfig(order.status);
+  } = getStatusConfig(order.status as OrderStatus);
+
+  const primaryItem = order.item[0];
 
   const headerTitle = useMemo(() => {
-    const dateShort = order.dateLabel.replace(/\s+\d{4}$/u, '');
+    return order.order_header?.title || '';
+  }, [order.order_header]);
 
-    switch (order.status) {
-      case 'expectedDelivery':
-        return `Expected Delivery by ${dateShort}`;
-      case 'delivered':
-        return 'Order Delivered';
-      case 'cancelled':
-        return 'Order Cancelled';
-      case 'pickup':
-      default:
-        return 'Pickup from store';
-    }
-  }, [order.dateLabel, order.status]);
-
-  const secondaryText = order.timeWindow || order.dateLabel;
+  const secondaryText = useMemo(() => {
+    return formatDateWithOrdinal(order.delivery_date);
+  }, [order.delivery_date]);
 
   const handleCardClick = () => {
     if (!onNavigate) return;
@@ -121,26 +118,29 @@ export const OrderCard: FC<OrderCardProps> = ({
           <div className="flex flex-col justify-between flex-1 min-w-0">
             <div className="space-y-1">
               <span className="inline-flex items-center rounded-md bg-deep-maroon/5 px-3 py-1 text-[11px] font-medium text-indigo-slate">
-                ID #{order.id}
+                # {order.order_id}
               </span>
               <h2 className="text-base font-semibold truncate">
-                {order.title}
+                {primaryItem?.product_name || 'Order item'}
               </h2>
               <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                <span>Colour: {order.colour}</span>
-                <span>Qty: {order.quantity}</span>
+                {primaryItem?.color && (
+                  <span>
+                    Colour{' '}
+                    {primaryItem.color.name_en ||
+                      primaryItem.color.name ||
+                      primaryItem.color.name_ar ||
+                      '—'}
+                  </span>
+                )}
+                {primaryItem && <span>Qty: {primaryItem.quantity}</span>}
               </div>
             </div>
 
             <div className="mt-2 flex items-center gap-2 text-sm">
               <span className="font-semibold text-gray-900">
-                {order.currencySymbol} {order.price}
+                {formatCurrency(order.total_amount)}
               </span>
-              {order.originalPrice && (
-                <span className="text-xs text-gray-400 line-through">
-                  {order.currencySymbol} {order.originalPrice}
-                </span>
-              )}
             </div>
           </div>
         </div>

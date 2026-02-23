@@ -59,4 +59,7 @@ export const API_ROUTES = {
     ROOT: '/users/addresses/',
     DETAIL: (id: number | string) => `/users/addresses/${id}/`,
   },
+  ORDERS: {
+    LIST: '/order/',
+  },
 } as const;
