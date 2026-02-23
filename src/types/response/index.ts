@@ -449,6 +449,78 @@ export interface OrdersListResponse extends BaseAPIResponse<OrderListData> {
   };
 }
 
+// Order Detail API Types
+
+export interface OrderDetailHeaderData {
+  order_id: string;
+  delivery_method: string;
+  total_items: number;
+  total_amount: number;
+  discount_amount: number;
+  delivery_label: string;
+  delivery_date: string;
+  slot: string;
+}
+
+export interface OrderDetailProductItem {
+  id: string;
+  product_name: string;
+  product_image: string;
+  base_price: string;
+  offer_price: string;
+  offer_percentage: number;
+  unit_price: string;
+  quantity: number;
+  color?: OrderItemColor | null;
+  booking_date: string;
+}
+
+export interface OrderDetailSummary {
+  order_number: string;
+  product_price: number;
+  shipping: string | number;
+  discount_applied: number;
+  vat_inclusive: boolean;
+  total_payment: number;
+}
+
+export interface OrderDetailShippingAddress {
+  id: string;
+  name: string;
+  email: string;
+  notes: string;
+  phone: string;
+  street: string;
+  building: string;
+  category: string;
+  town_or_city: string;
+}
+
+export interface OrderDetailDeliveryCard {
+  status: string;
+  title: string;
+  subtitle: string;
+  can_track: boolean;
+}
+
+export interface OrderDetailData {
+  id: string;
+  order_id: string;
+  header: OrderDetailHeaderData;
+  products: OrderDetailProductItem[];
+  order_summary: OrderDetailSummary;
+  shipping_address: OrderDetailShippingAddress;
+  delivery_card: OrderDetailDeliveryCard;
+}
+
+export interface OrderDetailResponse extends BaseAPIResponse<OrderDetailData> {
+  version?: string;
+  meta?: {
+    type: string;
+    action: string;
+  };
+}
+
 // Reviews API Types
 export interface ReviewImage {
   id?: number;

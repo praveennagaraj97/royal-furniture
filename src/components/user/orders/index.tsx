@@ -112,9 +112,7 @@ const OrdersPageContent: FC = () => {
                   <OrderCard
                     order={order}
                     showTrackButton={order.can_track}
-                    onNavigate={() =>
-                      router.push(`/user/orders/${order.order_id}`)
-                    }
+                    onNavigate={() => router.push(`/user/orders/${order.id}`)}
                   />
                 </StaggerItem>
               );

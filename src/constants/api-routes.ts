@@ -61,5 +61,6 @@ export const API_ROUTES = {
   },
   ORDERS: {
     LIST: '/order/',
+    DETAIL: (id: string) => `/order/detail/${id}/`,
   },
 } as const;

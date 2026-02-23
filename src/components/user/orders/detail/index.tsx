@@ -6,29 +6,18 @@ import {
   StaggerItem,
   ViewOnce,
 } from '@/components/shared/animations';
-import { FC } from 'react';
-import type { OrderListItem } from '../types';
-
+import { OrderDetailSkeleton } from '@/components/skeletons/order-detail-skeleton';
+import { useGetOrderDetail } from '@/hooks/api';
+import { useParams } from 'next/navigation';
+import type { FC } from 'react';
 import ExpectedDeliveryCard from './expected-delivery-card';
 import OrderDetailHeader from './order-detail-header';
 import OrderSummaryCard from './order-summary-card';
 import PickupInfoCard from './pickup-info-card';
 import ProductSummaryCard from './product-summary-card';
 import ShippingAddressCard from './shipping-address-card';
-import TrackingTimeline, { type TrackingStep } from './tracking-timeline';
-
-const mockOrder: OrderListItem = {
-  id: '17139847',
-  status: 'expectedDelivery',
-  dateLabel: '25 Mar 2025',
-  timeWindow: '9:00 am - 10:00 am',
-  title: 'Kids Bed',
-  colour: 'Black',
-  quantity: 1,
-  price: 799,
-  originalPrice: 1299,
-  currencySymbol: 'د.إ',
-};
+import type { TrackingStep } from './tracking-timeline';
+import TrackingTimeline from './tracking-timeline';
 
 const trackingSteps: TrackingStep[] = [
   {
@@ -69,7 +58,15 @@ const trackingSteps: TrackingStep[] = [
 ];
 
 const OrderDetailPageContent: FC = () => {
-  const order = mockOrder;
+  const params = useParams();
+  const orderIdParam = params?.orderId;
+  const id = Array.isArray(orderIdParam) ? orderIdParam[0] : orderIdParam;
+
+  const { order, isLoading } = useGetOrderDetail({ id, enabled: !!id });
+
+  if (isLoading || !order) {
+    return <OrderDetailSkeleton />;
+  }
 
   return (
     <ViewOnce
@@ -81,10 +78,10 @@ const OrderDetailPageContent: FC = () => {
       margin="-40px"
       className="space-y-6"
     >
-      <OrderDetailHeader orderId={order.id} />
+      <OrderDetailHeader orderId={order.order_id} />
 
       <SlideIn>
-        <ProductSummaryCard order={order} />
+        <ProductSummaryCard detail={order} />
       </SlideIn>
       <StaggerContainer
         staggerChildren={0.08}
@@ -107,8 +104,8 @@ const OrderDetailPageContent: FC = () => {
           duration={0.4}
           className="space-y-4"
         >
-          <ShippingAddressCard />
-          <OrderSummaryCard currencySymbol={order.currencySymbol} />
+          <ShippingAddressCard address={order.shipping_address} />
+          <OrderSummaryCard summary={order.order_summary} />
           <PickupInfoCard />
         </StaggerItem>
       </StaggerContainer>
