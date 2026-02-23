@@ -1,4 +1,5 @@
 import type { OrderDetailData } from '@/types/response';
+import { formatDateWithOrdinal } from '@/utils/date';
 import { FC } from 'react';
 import { FiBox } from 'react-icons/fi';
 
@@ -8,9 +9,9 @@ interface ExpectedDeliveryCardProps {
 
 const ExpectedDeliveryCard: FC<ExpectedDeliveryCardProps> = ({ order }) => {
   const label = order.delivery_card?.title || order.header.delivery_label;
+  const formattedDate = formatDateWithOrdinal(order.header.delivery_date);
   const subtitle =
-    order.delivery_card?.subtitle ||
-    `Delivery expected on ${order.header.delivery_date}`;
+    order.delivery_card?.subtitle || `Delivery expected on ${formattedDate}`;
 
   return (
     <section className="rounded-sm border border-red-100 bg-[#FFF5F4] px-4 py-3 flex items-center gap-3">

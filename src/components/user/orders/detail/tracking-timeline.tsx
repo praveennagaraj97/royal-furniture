@@ -26,14 +26,29 @@ interface TrackingTimelineProps {
 }
 
 const TrackingTimeline: FC<TrackingTimelineProps> = ({ steps }) => {
-  const currentIndex = steps.findIndex((step) => step.status === 'current');
+  const lastActiveIndex = (() => {
+    for (let i = steps.length - 1; i >= 0; i -= 1) {
+      if (steps[i].status === 'completed' || steps[i].status === 'current') {
+        return i;
+      }
+    }
+    return -1;
+  })();
 
   const progressPercent = (() => {
     const totalSteps = steps.length;
-    if (totalSteps <= 1) return 100;
-    const minimumPercent = 100 / (totalSteps * 2);
-    if (currentIndex <= 0) return minimumPercent;
-    return (currentIndex / (totalSteps - 1)) * 100;
+    if (totalSteps <= 1) {
+      return lastActiveIndex >= 0 ? 40 : 0;
+    }
+
+    if (lastActiveIndex < 0) return 0;
+
+    const raw = (lastActiveIndex / (totalSteps - 1)) * 100;
+
+    // Keep the bar within the first and last step so it
+    // does not overshoot beyond the final icon.
+    const clamped = Math.max(12, Math.min(raw, 92));
+    return clamped;
   })();
 
   return (
@@ -45,11 +60,13 @@ const TrackingTimeline: FC<TrackingTimelineProps> = ({ steps }) => {
         {/* Base vertical track (grey) running behind icons */}
         <div className="pointer-events-none absolute left-4 -translate-x-1/2 top-3 bottom-3 w-1 rounded-full bg-[#d6d7df]" />
 
-        {/* Active progress track (soft pink, matches cart) */}
-        <div
-          className="pointer-events-none absolute left-4 -translate-x-1/2 top-3 w-1 rounded-full bg-[#f8c6c8]"
-          style={{ height: `${progressPercent}%` }}
-        />
+        {/* Active progress track (soft pink) */}
+        {progressPercent > 0 && (
+          <div
+            className="pointer-events-none absolute left-4 -translate-x-1/2 top-3 w-1 rounded-full bg-[#f8c6c8]"
+            style={{ height: `${progressPercent}%` }}
+          />
+        )}
 
         <div className="space-y-5">
           {steps.map((item) => (

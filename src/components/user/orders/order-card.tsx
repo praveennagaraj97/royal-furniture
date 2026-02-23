@@ -16,6 +16,7 @@ export interface OrderCardProps {
   order: OrderListItem;
   onNavigate?: () => void;
   showTrackButton?: boolean;
+  disableNavigation?: boolean;
 }
 
 type OrderStatus = OrderListItem['status'];
@@ -48,6 +49,7 @@ export const OrderCard: FC<OrderCardProps> = ({
   order,
   onNavigate,
   showTrackButton = true,
+  disableNavigation = false,
 }) => {
   const formatCurrency = useFormatCurrency();
 
@@ -68,6 +70,7 @@ export const OrderCard: FC<OrderCardProps> = ({
   }, [order.delivery_date]);
 
   const handleCardClick = () => {
+    if (disableNavigation) return;
     if (!onNavigate) return;
     onNavigate();
   };
@@ -85,7 +88,7 @@ export const OrderCard: FC<OrderCardProps> = ({
 
   return (
     <article
-      className={`bg-white border border-gray-100 rounded-md shadow-sm overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-md hover:border-deep-maroon/60 hover:-translate-y-0.5 group`}
+      className={`bg-white border border-gray-100 rounded-md shadow-sm overflow-hidden cursor-pointer transition-all duration-200 ${!disableNavigation ? 'hover:shadow-md hover:border-deep-maroon/60 hover:-translate-y-0.5' : ''} group`}
       onClick={handleCardClick}
     >
       {/* Header */}
@@ -102,9 +105,11 @@ export const OrderCard: FC<OrderCardProps> = ({
           </div>
         </div>
 
-        <FiChevronRight
-          className={`w-5 h-5 text-deep-maroon shrink-0 transition-transform duration-200 group-hover:translate-x-0.5`}
-        />
+        {!disableNavigation && (
+          <FiChevronRight
+            className={`w-5 h-5 text-deep-maroon shrink-0 transition-transform duration-200 group-hover:translate-x-0.5`}
+          />
+        )}
       </div>
 
       {/* Main Content */}
@@ -112,7 +117,10 @@ export const OrderCard: FC<OrderCardProps> = ({
         {/* Product Info */}
         <div className="flex gap-4 flex-1">
           <div className="w-24 h-24 rounded-lg bg-gray-100 overflow-hidden shrink-0">
-            <ResponsiveImage className="h-full w-full" />
+            <ResponsiveImage
+              images={{ web: { url: order.item?.[0].product_image || '' } }}
+              className="h-full w-full"
+            />
           </div>
 
           <div className="flex flex-col justify-between flex-1 min-w-0">

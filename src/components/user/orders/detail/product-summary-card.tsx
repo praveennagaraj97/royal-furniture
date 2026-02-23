@@ -38,7 +38,13 @@ const ProductSummaryCard: FC<ProductSummaryCardProps> = ({ detail }) => {
     [detail],
   );
 
-  return <OrderCard order={syntheticListItem} showTrackButton={false} />;
+  return (
+    <OrderCard
+      disableNavigation
+      order={syntheticListItem}
+      showTrackButton={false}
+    />
+  );
 };
 
 export default ProductSummaryCard;

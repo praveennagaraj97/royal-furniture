@@ -4,6 +4,7 @@ export * from './use-get-cart-payment-step';
 export * from './use-get-cart-shipping-step';
 export * from './use-get-filters-by-subcategory-id';
 export * from './use-get-order-detail';
+export * from './use-get-order-tracking';
 export * from './use-get-orders';
 export * from './use-get-product-detail';
 export * from './use-get-products';

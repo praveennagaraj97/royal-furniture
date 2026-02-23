@@ -7,11 +7,11 @@ import {
   ViewOnce,
 } from '@/components/shared/animations';
 import { OrderDetailSkeleton } from '@/components/skeletons/order-detail-skeleton';
-import { useGetOrderDetail } from '@/hooks/api';
+import { useGetOrderDetail, useGetOrderTracking } from '@/hooks/api';
 import { useParams } from 'next/navigation';
 import type { FC } from 'react';
+import { useMemo } from 'react';
 import ExpectedDeliveryCard from './expected-delivery-card';
-import OrderDetailHeader from './order-detail-header';
 import OrderSummaryCard from './order-summary-card';
 import PickupInfoCard from './pickup-info-card';
 import ProductSummaryCard from './product-summary-card';
@@ -19,50 +19,33 @@ import ShippingAddressCard from './shipping-address-card';
 import type { TrackingStep } from './tracking-timeline';
 import TrackingTimeline from './tracking-timeline';
 
-const trackingSteps: TrackingStep[] = [
-  {
-    title: 'Order Confirmed',
-    date: '07 Mar 2025 | 8:00 PM',
-    status: 'completed',
-  },
-  {
-    title: 'Order Schedule',
-    date: '08 Mar 2025 | 10:00 PM',
-    status: 'completed',
-  },
-  {
-    title: 'In production',
-    date: '08 Mar 2025 | 11:00 PM',
-    status: 'completed',
-  },
-  {
-    title: 'Production Completed',
-    date: '10 Mar 2025 | 08:00 PM',
-    status: 'completed',
-  },
-  {
-    title: 'Awaiting Delivery',
-    date: '11 Mar 2025 | 09:00 PM',
-    status: 'completed',
-  },
-  {
-    title: 'On the way',
-    date: '12 Mar 2025 | 07:00 PM',
-    status: 'current',
-  },
-  {
-    title: 'Delivered',
-    date: '13 Mar 2025 | 10:00 PM',
-    status: 'upcoming',
-  },
-];
-
 const OrderDetailPageContent: FC = () => {
   const params = useParams();
   const orderIdParam = params?.orderId;
   const id = Array.isArray(orderIdParam) ? orderIdParam[0] : orderIdParam;
 
   const { order, isLoading } = useGetOrderDetail({ id, enabled: !!id });
+
+  const canTrack = !!order?.delivery_card?.can_track;
+  const { tracking, isLoading: isTrackingLoading } = useGetOrderTracking({
+    id,
+    enabled: !!id && canTrack,
+  });
+
+  const trackingSteps: TrackingStep[] = useMemo(() => {
+    const timeline = tracking?.status_timeline || [];
+    if (!timeline.length) return [];
+
+    return timeline.map((item, index) => {
+      const isLast = index === timeline.length - 1;
+      const status: TrackingStep['status'] = isLast ? 'current' : 'completed';
+      return {
+        title: item.status_label,
+        date: item.timestamp,
+        status,
+      };
+    });
+  }, [tracking]);
 
   if (isLoading || !order) {
     return <OrderDetailSkeleton />;
@@ -78,7 +61,7 @@ const OrderDetailPageContent: FC = () => {
       margin="-40px"
       className="space-y-6"
     >
-      <OrderDetailHeader orderId={order.order_id} />
+      {/* <OrderDetailHeader orderId={order.order_id} /> */}
 
       <SlideIn>
         <ProductSummaryCard detail={order} />
@@ -95,7 +78,27 @@ const OrderDetailPageContent: FC = () => {
           className="space-y-4"
         >
           <ExpectedDeliveryCard order={order} />
-          <TrackingTimeline steps={trackingSteps} />
+          <section className="bg-white rounded-sm border border-gray-200 p-4">
+            {canTrack ? (
+              <>
+                {isTrackingLoading && (
+                  <div className="text-xs text-gray-500">Loading tracking…</div>
+                )}
+                {!isTrackingLoading && trackingSteps.length > 0 && (
+                  <TrackingTimeline steps={trackingSteps} />
+                )}
+                {!isTrackingLoading && trackingSteps.length === 0 && (
+                  <p className="text-xs text-gray-500">
+                    No tracking updates are available for this order yet.
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="text-xs text-gray-500">
+                Tracking is not available for this order.
+              </p>
+            )}
+          </section>
         </StaggerItem>
 
         <StaggerItem

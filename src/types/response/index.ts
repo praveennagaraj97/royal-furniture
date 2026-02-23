@@ -569,3 +569,47 @@ export interface CreateCollectionResponseData {
 
 export type CreateCollectionResponse =
   BaseAPIResponse<CreateCollectionResponseData>;
+
+// Order Tracking API Types
+
+export interface OrderTrackingProductItem {
+  id: string;
+  product_id: string;
+  product_name: string;
+  product_image: string;
+  unit_price: string;
+  quantity: number;
+  total_amount: string;
+}
+
+export interface OrderTrackingPriceSummary {
+  subtotal: string;
+  discount: string;
+  total: string;
+  payment_status: string;
+}
+
+export interface OrderTrackingTimelineItem {
+  status: string;
+  status_label: string;
+  timestamp: string;
+  note: string;
+}
+
+export interface OrderTrackingData {
+  order_id: string;
+  delivery_method_label: string;
+  products: OrderTrackingProductItem[];
+  price_summary: OrderTrackingPriceSummary;
+  delivery_method: string;
+  current_status: string;
+  status_timeline: OrderTrackingTimelineItem[];
+}
+
+export interface OrderTrackingResponse extends BaseAPIResponse<OrderTrackingData> {
+  version?: string;
+  meta?: {
+    type: string;
+    action: string;
+  };
+}
