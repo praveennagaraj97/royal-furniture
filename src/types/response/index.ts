@@ -418,6 +418,13 @@ export interface OrderLineItem {
   offer_price: string;
 }
 
+export type DeliveryStatus =
+  | 'pending'
+  | 'delivered'
+  | 'cancelled'
+  | 'returned'
+  | 'failed';
+
 export interface OrderListItem {
   id: string;
   order_id: string;
@@ -425,7 +432,7 @@ export interface OrderListItem {
     title: string;
     subtitle: string | null;
   };
-  status: string;
+  status: DeliveryStatus;
   payment_status: string;
   delivery_method: string;
   delivery_date: string;
@@ -497,7 +504,7 @@ export interface OrderDetailShippingAddress {
 }
 
 export interface OrderDetailDeliveryCard {
-  status: string;
+  status: DeliveryStatus;
   title: string;
   subtitle: string;
   can_track: boolean;
