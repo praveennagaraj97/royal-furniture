@@ -8,36 +8,40 @@ import {
 import { OrdersListSkeleton } from '@/components/skeletons/orders-list-skeleton';
 import { useAppRouter } from '@/hooks';
 import { useGetOrders } from '@/hooks/api';
-import { FC, useMemo, useState } from 'react';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { FC, useEffect, useRef } from 'react';
 import { FiBox } from 'react-icons/fi';
 import OrderCard from './order-card';
 
 const OrdersPageContent: FC = () => {
   const router = useAppRouter();
-  const [page, setPage] = useState(1);
-  const { orders, count, next, previous, isLoading } = useGetOrders({ page });
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const {
+    orders,
+    count,
+    isLoadingInitialData,
+    isLoadingMore,
+    hasMore,
+    loadMore,
+  } = useGetOrders();
 
-  const { start, end } = useMemo(() => {
-    if (!orders.length || count === 0) {
-      return { start: 0, end: 0 };
-    }
-    const pageSize = orders.length;
-    const startIndex = (page - 1) * pageSize + 1;
-    const endIndex = startIndex + pageSize - 1;
-    return { start: startIndex, end: Math.min(endIndex, count) };
-  }, [orders.length, count, page]);
+  const isSentinelVisible = useIntersectionObserver({
+    ref: sentinelRef,
+    options: {
+      threshold: 0,
+      rootMargin: '0px 0px 200px 0px',
+      enabled: hasMore,
+    },
+  });
 
-  const handleNextPage = () => {
-    if (!next) return;
-    setPage((prev) => prev + 1);
-  };
+  useEffect(() => {
+    if (!hasMore || isLoadingMore) return;
+    if (!isSentinelVisible) return;
 
-  const handlePreviousPage = () => {
-    if (!previous || page <= 1) return;
-    setPage((prev) => Math.max(1, prev - 1));
-  };
+    loadMore();
+  }, [hasMore, isLoadingMore, isSentinelVisible, loadMore]);
 
-  if (!isLoading && !orders.length) {
+  if (!isLoadingInitialData && !orders.length) {
     return (
       <ViewOnce
         type="slideUp"
@@ -63,12 +67,6 @@ const OrdersPageContent: FC = () => {
           <p className="text-sm text-gray-500 max-w-sm mb-6">
             Once you place an order, you&apos;ll be able to track it here.
           </p>
-          <button
-            type="button"
-            className="px-6 py-3 bg-deep-maroon text-white rounded-lg font-medium hover:bg-deep-maroon/90 transition-all duration-200 shadow-sm hover:shadow-md"
-          >
-            Start Shopping
-          </button>
         </div>
       </ViewOnce>
     );
@@ -91,7 +89,7 @@ const OrdersPageContent: FC = () => {
           View and manage all your recent purchases in one place.
         </p>
       </div>
-      {isLoading ? (
+      {isLoadingInitialData ? (
         <OrdersListSkeleton />
       ) : (
         <>
@@ -123,33 +121,14 @@ const OrdersPageContent: FC = () => {
             })}
           </StaggerContainer>
 
-          {/* Pagination */}
+          {/* Infinite scroll sentinel + summary */}
           {count > 0 && (
-            <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-600">
-              <div>
-                {start > 0 && end > 0 && (
-                  <span>
-                    Showing {start}–{end} of {count} orders
-                  </span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handlePreviousPage}
-                  disabled={!previous || page <= 1}
-                  className="px-4 py-2 rounded-lg border text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed border-gray-300 bg-white text-gray-700 hover:border-deep-maroon hover:text-deep-maroon transition-colors"
-                >
-                  Previous
-                </button>
-                <button
-                  type="button"
-                  onClick={handleNextPage}
-                  disabled={!next}
-                  className="px-4 py-2 rounded-lg border text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed border-gray-300 bg-white text-gray-700 hover:border-deep-maroon hover:text-deep-maroon transition-colors"
-                >
-                  Next
-                </button>
+            <div className="mt-4 flex flex-col items-center gap-2 text-sm text-gray-600">
+              <div
+                ref={sentinelRef}
+                className="h-8 w-full flex items-center justify-center"
+              >
+                {isLoadingMore && <span>Loading more…</span>}
               </div>
             </div>
           )}
