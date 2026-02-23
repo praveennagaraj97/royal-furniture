@@ -21,6 +21,8 @@ export const useGetOrders = () => {
       params.append('page', String(page));
     }
 
+    params.append('per_page', '3');
+
     const queryString = params.toString();
     return `${API_ROUTES.ORDERS.LIST}${queryString ? `?${queryString}` : ''}`;
   };
