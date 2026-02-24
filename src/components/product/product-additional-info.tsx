@@ -88,7 +88,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
             <button
               type="button"
               onClick={() => setIsFlexiPaymentModalOpen(true)}
-              className=" p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group"
+              className=" p-4 bg-deep-maroon/10 rounded-lg transition-colors duration-200 group w-full"
             >
               <div className="w-full flex items-center justify-between">
                 <div className="flex items-center gap-2">

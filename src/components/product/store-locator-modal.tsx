@@ -180,6 +180,20 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
               </h3>
             </div>
 
+            {/* Mobile Search Box */}
+            <div className="px-3 py-2 md:hidden">
+              <div className="relative">
+                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder={t('searchPlaceholder')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-maroon text-xs sm:text-sm"
+                />
+              </div>
+            </div>
+
             {/* Store List */}
             <div className="flex-1 overflow-y-auto">
               {filteredStores.length === 0 ? (
