@@ -34,7 +34,7 @@ const CustomizeModalView: FC<CustomizeModalViewProps> = ({
           <FiX className="w-3 h-3 text-white" />
         </button>
       </div>
-      <div className="flex-1 min-h-0 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         <div className="grid lg:grid-cols-2 gap-0">
           {/* Image Section */}
           <div className="w-full flex items-center justify-center bg-white">
