@@ -1,6 +1,6 @@
 'use client';
 
-import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { useStickyVisibility } from '@/hooks/use-sticky-visibility';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -34,7 +34,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
   const tActions = useTranslations('product.actions');
   const actionsRef = useRef<HTMLDivElement | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
-  const isVisible = useIntersectionObserver({ ref: actionsRef });
+  const isVisible = useStickyVisibility(actionsRef);
 
   useEffect(() => {
     startTransition(() => {
@@ -95,7 +95,7 @@ export const ProductActions: FC<ProductActionsProps> = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 px-3 sm:px-4 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]"
+            className="fixed inset-x-0 bottom-0 z-40 m-0! bg-white border-t border-gray-200 px-3 sm:px-4 py-2.5 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]"
           >
             <div className="max-w-6xl mx-auto flex items-center gap-2 sm:gap-3">
               <div className="flex-1">
