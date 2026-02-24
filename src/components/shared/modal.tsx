@@ -216,8 +216,8 @@ const Modal: FC<ModalProps> = ({
                     isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`
                   } ${className} flex flex-col overflow-hidden ${
                     isMobile
-                      ? 'rounded-t-2xl max-h-[95vh]'
-                      : 'sm:rounded-lg rounded-t-2xl max-h-[95vh]'
+                      ? 'rounded-t-2xl max-h-[90vh]'
+                      : 'sm:rounded-lg rounded-t-2xl max-h-[90vh]'
                   } ${shouldShake ? 'modal-shake' : ''}`}
                   initial={
                     isMobile
@@ -283,8 +283,8 @@ const Modal: FC<ModalProps> = ({
                     isMobile ? 'w-full' : `w-full ${sizeClassMap[size]}`
                   } ${className} flex flex-col ${
                     isMobile
-                      ? 'rounded-t-2xl max-h-[95vh]'
-                      : 'rounded-lg max-h-[95vh]'
+                      ? 'rounded-t-2xl max-h-[90vh]'
+                      : 'rounded-lg max-h-[90vh]'
                   } ${shouldShake ? 'modal-shake' : ''}`}
                   initial={
                     isMobile
@@ -351,8 +351,8 @@ const Modal: FC<ModalProps> = ({
                   sizeClassMap[size]
                 } ${className} fixed sm:fixed bottom-0 sm:bottom-0 left-0 sm:left-auto right-0 sm:right-0 sm:top-0 ${
                   isMobile
-                    ? 'rounded-t-2xl max-h-[95vh]'
-                    : 'sm:h-screen max-h-[95vh] sm:max-h-none rounded-t-2xl sm:rounded-l-2xl sm:rounded-t-2xl'
+                    ? 'rounded-t-2xl max-h-[90vh]'
+                    : 'sm:h-screen max-h-[90vh] sm:max-h-none rounded-t-2xl sm:rounded-l-2xl sm:rounded-t-2xl'
                 } flex flex-col overflow-hidden ${
                   shouldShake ? 'modal-shake' : ''
                 }`}

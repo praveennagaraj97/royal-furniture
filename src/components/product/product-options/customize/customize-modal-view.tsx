@@ -57,6 +57,9 @@ const CustomizeModalView: FC<CustomizeModalViewProps> = ({
       <div className="shrink-0 p-2 border-t border-gray-100 bg-white">
         <div className="flex justify-end">
           <button
+            onClick={() => {
+              void onClose?.();
+            }}
             type="button"
             className="w-full sm:w-auto bg-[#8B0000] hover:bg-[#6b0000] text-white px-8 py-2.5 rounded-lg font-medium transition-colors duration-200"
           >
