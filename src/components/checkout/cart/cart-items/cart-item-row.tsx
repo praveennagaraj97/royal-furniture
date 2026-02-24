@@ -6,7 +6,7 @@ import { formatCurrency } from '@/utils/format-currency';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { FC, useMemo } from 'react';
-import { FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiBookmark, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { ImSpinner2 } from 'react-icons/im';
 
 interface CartItemRowProps {
@@ -130,32 +130,38 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               </button>
             </div>
 
-            <div className="flex items-center gap-3 text-sm font-semibold text-gray-900">
+            <div className="flex flex-col items-end gap-1 text-sm font-semibold text-gray-900">
               <span>{formattedTotal}</span>
-              <button
-                type="button"
-                onClick={onRemove}
-                disabled={isBusy}
-                className="flex items-center gap-1 text-xs font-semibold text-[#e00000] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isRemoveBusy ? (
-                  <ImSpinner2 className="w-3 h-3 animate-spin" />
-                ) : (
-                  <FiTrash2 className="w-3 h-3" />
-                )}
-                {t('remove')}
-              </button>
-              <button
-                type="button"
-                onClick={onSaveForLater}
-                disabled={isBusy}
-                className="text-xs font-semibold text-gray-600 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSaveBusy ? (
-                  <ImSpinner2 className="w-3 h-3 animate-spin" />
-                ) : null}
-                {!isSaveBusy && t('savedForLater')}
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={onRemove}
+                  disabled={isBusy}
+                  aria-label={t('remove')}
+                  title={t('remove')}
+                  className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-[#e00000] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isRemoveBusy ? (
+                    <ImSpinner2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FiTrash2 className="w-4 h-4" />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={onSaveForLater}
+                  disabled={isBusy}
+                  aria-label={t('savedForLater')}
+                  title={t('savedForLater')}
+                  className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSaveBusy ? (
+                    <ImSpinner2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FiBookmark className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -231,30 +237,36 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               )}
             </button>
           </div>
-          <button
-            type="button"
-            onClick={onRemove}
-            disabled={isBusy}
-            className="flex items-center gap-1 text-xs font-semibold text-[#e00000] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isRemoveBusy ? (
-              <ImSpinner2 className="w-3 h-3 animate-spin" />
-            ) : (
-              <FiTrash2 className="w-3 h-3" />
-            )}
-            {t('remove')}
-          </button>
-          <button
-            type="button"
-            onClick={onSaveForLater}
-            disabled={isBusy}
-            className="text-xs font-semibold text-gray-600 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSaveBusy ? (
-              <ImSpinner2 className="w-3 h-3 animate-spin" />
-            ) : null}
-            {!isSaveBusy && t('savedForLater')}
-          </button>
+          <div className="flex items-center space-x-1">
+            <button
+              type="button"
+              onClick={onRemove}
+              disabled={isBusy}
+              aria-label={t('remove')}
+              title={t('remove')}
+              className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-[#e00000] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRemoveBusy ? (
+                <ImSpinner2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <FiTrash2 className="w-4 h-4" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={onSaveForLater}
+              disabled={isBusy}
+              aria-label={t('savedForLater')}
+              title={t('savedForLater')}
+              className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSaveBusy ? (
+                <ImSpinner2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <FiBookmark className="w-4 h-4" />
+              )}
+            </button>
+          </div>
         </div>
 
         <div className="text-sm font-semibold text-gray-900 text-right">
