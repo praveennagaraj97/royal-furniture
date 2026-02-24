@@ -2,25 +2,27 @@ import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ResponsiveImages } from '@/types/response';
 import { FC } from 'react';
 import { FiX } from 'react-icons/fi';
-import SizeForm from './size-form';
+import FabricCustomizeForm from './fabric-customize-form';
 
 interface CustomizeModalViewProps {
   image?: ResponsiveImages;
   onClose?: () => void;
   productName: string;
+  productSlug: string;
 }
 
 const CustomizeModalView: FC<CustomizeModalViewProps> = ({
   image,
   onClose,
   productName,
+  productSlug,
 }) => {
   return (
-    <div className="w-full h-full flex flex-col bg-white">
+    <div className="w-full h-full flex flex-col bg-white rounded-md overflow-hidden">
       {/* Modal Header */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200 bg-white sticky top-0 z-20">
         <h2 className="text-md sm:text-xl   truncate font-medium">
-          Select Your Size
+          Customize Fabric & Color
         </h2>
 
         <button
@@ -32,36 +34,34 @@ const CustomizeModalView: FC<CustomizeModalViewProps> = ({
           <FiX className="w-3 h-3 text-white" />
         </button>
       </div>
-      <div className="relative">
-        <div className="grid lg:grid-cols-2 max-h-[80vh] overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="grid lg:grid-cols-2 gap-0">
           {/* Image Section */}
-          <div className="w-full">
+          <div className="w-full flex items-center justify-center bg-white">
             <ResponsiveImage
               images={image}
               enableFadeTransition
               objectFit="contain"
-              className="aspect-square"
+              className="max-h-[65vh] w-full"
               alt={productName}
             />
           </div>
 
-          <div className="p-4">
+          <div className="w-full p-4 px-5.5">
             {/* Options Section */}
-            <div className="overflow-y-auto pb-20">
-              <SizeForm />
-            </div>
+            <FabricCustomizeForm productSlug={productSlug} />
           </div>
         </div>
-        {/* Footer Actions - Fixed at bottom of this column */}
-        <div className="p-2 border-t border-gray-100 z-10 w-full absolute bottom-0 inset-x-0 bg-white">
-          <div className="flex justify-end">
-            <button
-              type="button"
-              className="bg-[#8B0000] hover:bg-[#6b0000] text-white px-8 py-2.5 rounded-lg font-medium transition-colors duration-200"
-            >
-              Continue
-            </button>
-          </div>
+      </div>
+      {/* Footer Actions - fixed to bottom of modal */}
+      <div className="shrink-0 p-2 border-t border-gray-100 bg-white">
+        <div className="flex justify-end">
+          <button
+            type="button"
+            className="w-full sm:w-auto bg-[#8B0000] hover:bg-[#6b0000] text-white px-8 py-2.5 rounded-lg font-medium transition-colors duration-200"
+          >
+            Continue
+          </button>
         </div>
       </div>
     </div>

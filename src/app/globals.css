@@ -72,6 +72,16 @@
     @apply border-green-500 focus:ring-green-500;
   }
 
+  /* Hide scrollbars for horizontal swipers where desired */
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

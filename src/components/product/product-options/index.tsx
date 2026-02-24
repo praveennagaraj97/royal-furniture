@@ -109,6 +109,7 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
       {!product.customization_options.is_customizable && (
         <CustomizeSection
           productName={product.product_info.name}
+          productSlug={product.product_info.slug}
           currentImage={
             currentColor?.images?.[0]?.responsive_images ||
             product.product_info.responsive_images

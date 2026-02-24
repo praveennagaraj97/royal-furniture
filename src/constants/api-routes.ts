@@ -31,6 +31,7 @@ export const API_ROUTES = {
     SEARCH_RESULTS: '/products/search/results/',
     LISTING: '/products/listing/',
     VIEW_ALL: '/products/view-all',
+    FABRIC_CONFIG: (slug: string) => `/products/${slug}/fabric-config/`,
   },
   WISHLIST: {
     COLLECTIONS: '/wishlist/wishlist/',

@@ -11,11 +11,13 @@ import CustomizeModalView from './customize-modal-view';
 interface CustomizeSectionProps {
   productName: string;
   currentImage?: ResponsiveImages;
+  productSlug: string;
 }
 
 export const CustomizeSection: FC<CustomizeSectionProps> = ({
   productName,
   currentImage,
+  productSlug,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -60,6 +62,7 @@ export const CustomizeSection: FC<CustomizeSectionProps> = ({
       >
         <CustomizeModalView
           productName={productName}
+          productSlug={productSlug}
           image={currentImage}
           onClose={() => setIsModalOpen(false)}
         />

@@ -238,6 +238,35 @@ export interface ProductVariant {
   fabricsList: ProductFabric[];
 }
 
+// Fabric configuration API (for customization modal)
+
+export interface FabricConfigColor {
+  variant_id: number;
+  variant_sku: string;
+  name: string;
+  hex_code: string;
+  variant_image: string;
+}
+
+export interface FabricConfigFabric {
+  name: string;
+  image: string;
+  colors: FabricConfigColor[];
+}
+
+export interface FabricConfigData {
+  product: string;
+  fabrics: FabricConfigFabric[];
+}
+
+export type FabricConfigResponse = BaseAPIResponse<FabricConfigData> & {
+  version?: string;
+  meta?: {
+    type: string;
+    action: string;
+  };
+};
+
 /**
  * Main Product Detail Data Structure
  */
