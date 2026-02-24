@@ -26,7 +26,7 @@ export const ProductsListSkeleton: FC<ProductsListSkeletonProps> = ({
             className="relative w-full bg-white rounded-lg overflow-hidden"
           >
             {/* Image skeleton */}
-            <div className="aspect-[4/4.5] bg-gray-200 rounded-lg animate-pulse mb-3" />
+            <div className="aspect-4/4.5 bg-gray-200 rounded-lg animate-pulse mb-3" />
 
             {/* Content skeleton */}
             <div className="space-y-2">
