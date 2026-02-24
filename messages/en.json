@@ -266,6 +266,12 @@
       "collectionEmpty": "No items in this collection",
       "itemCount": "{count, plural, one {# Item} other {# Items}}"
     },
+    "savedForLater": {
+      "title": "Saved for later",
+      "subtitle": "View products you have saved to revisit and purchase later.",
+      "emptyTitle": "No items saved for later",
+      "emptyDescription": "Save products from your cart to quickly find them here when you are ready to buy."
+    },
     "orders": {
       "title": "My Orders",
       "subtitle": "View and manage all your recent purchases in one place.",
@@ -469,63 +475,6 @@
       "empty": "No collections found. Create one to get started.",
       "adding": "Adding...",
       "done": "Done"
-    }
-  },
-  "user": {
-    "greeting": "Hello, {name}",
-    "edit": "Edit",
-    "account": {
-      "deleteAccount": "Delete Account",
-      "logout": "Log Out",
-      "logoutSuccess": "Logged out successfully",
-      "logoutConfirmTitle": "Log Out",
-      "logoutConfirmMessage": "Are you sure you want to log out?",
-      "logoutConfirmButton": "Log Out",
-      "logoutCancelButton": "Cancel"
-    },
-    "exclusiveOffers": {
-      "title": "Exclusive Offers for You"
-    },
-    "quickLinks": {
-      "myOrders": "My Orders",
-      "myProfile": "My Profile",
-      "wishlist": "Wishlist",
-      "savedAddresses": "Saved Addresses"
-    },
-    "profile": {
-      "title": "Profile",
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "email": "Email",
-      "phoneNumber": "Phone number",
-      "change": "Change",
-      "updating": "Updating...",
-      "update": "Update",
-      "updateSuccess": "Profile updated successfully"
-    },
-    "settings": {
-      "title": "Settings",
-      "savedForLater": "Saved for Later",
-      "notificationsSettings": "Notification Settings",
-      "selectLanguage": "Select Language"
-    },
-    "feedback": {
-      "title": "Help & Information",
-      "returnPolicy": "Return Policy",
-      "privacyPolicy": "Privacy Policy",
-      "termsConditions": "Terms & Conditions",
-      "contactUs": "Contact Us",
-      "faqs": "FAQs",
-      "aboutUs": "About Us"
-    },
-    "wishlist": {
-      "title": "Wishlist",
-      "createNew": "Create new collection",
-      "emptyTitle": "No collections yet",
-      "emptyDescription": "Start organizing your favorite products by creating your first wishlist collection.",
-      "collectionTitleDefault": "Wishlist Collection",
-      "collectionEmpty": "No items in this collection",
-      "itemCount": "{count, plural, one {# Item} other {# Items}}"
     }
   },
   "products": {

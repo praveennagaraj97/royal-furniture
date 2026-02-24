@@ -18,7 +18,7 @@ const SettingsSection: FC = () => {
     {
       key: 'savedForLater',
       icon: FiBookmark,
-      href: '#',
+      href: '/user/saved-for-later',
     },
     {
       key: 'notificationsSettings',

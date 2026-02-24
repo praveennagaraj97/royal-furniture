@@ -12,6 +12,7 @@ export * from './use-get-products';
 export * from './use-get-products-by-type';
 export * from './use-get-promo-codes';
 export * from './use-get-reviews';
+export * from './use-get-saved-items';
 export * from './use-get-search-results';
 export * from './use-get-search-suggestions';
 export * from './use-get-stores-by-cart';
