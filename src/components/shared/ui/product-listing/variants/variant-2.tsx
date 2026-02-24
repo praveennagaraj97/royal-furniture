@@ -1,11 +1,11 @@
 'use client';
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
-import { FC, MouseEvent, useState } from 'react';
+import { FC, useState } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
 
 import { useCart } from '@/contexts/cart-context';
-import { AppLink } from '@/hooks';
+import { AppLink, useAppRouter } from '@/hooks';
 import { useFormatCurrency } from '@/hooks/use-format-currency';
 import { ProductItem } from '@/types';
 
@@ -21,24 +21,22 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   const formatCurrency = useFormatCurrency();
   const { moveToCart } = useCart();
   const [isMoving, setIsMoving] = useState(false);
+  const { push } = useAppRouter();
 
   const offerPercentage = parseFloat(product.pricing.offer_percentage || '0');
   const hasDiscount = offerPercentage > 0;
 
-  const handleMoveToCart = async (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleMoveToCart = async () => {
     if (!product.cart_item_id || isMoving) return;
 
     try {
       setIsMoving(true);
       await moveToCart(product.cart_item_id);
+      push('/checkout/cart');
     } finally {
       setIsMoving(false);
     }
   };
-
-  console.log('Rendering ProductCardVariant2 for:', product);
 
   return (
     <div
@@ -110,18 +108,6 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
               )}
             </div>
           )}
-
-          {product.cart_item_id && (
-            <button
-              type="button"
-              onClick={handleMoveToCart}
-              disabled={isMoving}
-              className="mt-2 inline-flex items-center justify-center px-3 py-1.5 text-xs sm:text-sm font-medium rounded border border-deep-maroon text-deep-maroon hover:bg-deep-maroon/5 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              {isMoving ? 'Moving...' : 'Move to cart'}
-            </button>
-          )}
-
           {/* View Count - Below Colors */}
           {/* <div className="flex items-center gap-1.5 pt-1">
             <FiEye className="w-4 h-4 text-green-600" />
@@ -129,6 +115,19 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
           </div> */}
         </div>
       </AppLink>
+
+      {product.cart_item_id && (
+        <div className="p-px">
+          <button
+            type="button"
+            onClick={handleMoveToCart}
+            disabled={isMoving}
+            className="mt-2 inline-flex w-full items-center justify-center px-3 py-1.5 text-xs sm:text-sm font-medium rounded border border-deep-maroon text-deep-maroon hover:bg-deep-maroon/5 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            {isMoving ? 'Moving...' : 'Move to cart'}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
