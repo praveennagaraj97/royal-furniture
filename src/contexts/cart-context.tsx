@@ -62,6 +62,7 @@ interface CartContextValue {
   removeItem: (cartItemId: string) => Promise<void>;
   updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
   saveForLater: (cartItemId: string) => Promise<void>;
+  moveToCart: (cartItemId: string) => Promise<void>;
   clearCart: () => void;
   refreshCart: () => Promise<void>;
   pendingActions: Record<string, 'increase' | 'decrease' | 'remove' | 'save'>;
@@ -390,7 +391,11 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPendingAction(cartItemId, action);
 
       try {
-        await cartService.updateItemQuantity(cartItemId, action, sessionToUse);
+        await cartService.updateItemQuantity(
+          cartItemId,
+          quantity,
+          sessionToUse,
+        );
         await refreshCart();
       } catch (err) {
         console.error('Failed to update cart quantity', err);
@@ -441,6 +446,22 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       showError,
       getErrorMessage,
     ],
+  );
+
+  const moveToCart = useCallback(
+    async (cartItemId: string) => {
+      const sessionToUse = resolveSession();
+
+      try {
+        await cartService.moveToCart(cartItemId, sessionToUse);
+        showSuccess('Moved to cart');
+        await refreshCart();
+      } catch (err) {
+        console.error('Failed to move item to cart', err);
+        showError(getErrorMessage(err, 'Failed to move to cart'));
+      }
+    },
+    [resolveSession, refreshCart, showSuccess, showError, getErrorMessage],
   );
 
   const clearCart = useCallback(() => {
@@ -531,6 +552,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       removeItem,
       updateQuantity,
       saveForLater,
+      moveToCart,
       clearCart,
       refreshCart,
       pendingActions,
@@ -557,6 +579,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       removeItem,
       updateQuantity,
       saveForLater,
+      moveToCart,
       clearCart,
       refreshCart,
       pendingActions,

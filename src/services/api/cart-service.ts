@@ -12,8 +12,6 @@ interface AddItemPayload {
   quantity: number;
 }
 
-type QuantityAction = 'increase' | 'decrease';
-
 export class CartService extends BaseAPIService {
   async getCart(guestSessionId?: string): Promise<CartApiResponse> {
     try {
@@ -71,7 +69,7 @@ export class CartService extends BaseAPIService {
 
   async updateItemQuantity(
     cartItemId: string,
-    action: QuantityAction,
+    quantity: number,
     guestSessionId?: string,
   ): Promise<unknown> {
     try {
@@ -81,7 +79,7 @@ export class CartService extends BaseAPIService {
       const response = await this.http.patch(
         API_ROUTES.CART.UPDATE_ITEM(cartItemId),
         {
-          action,
+          quantity,
         },
         {
           headers,
@@ -104,6 +102,28 @@ export class CartService extends BaseAPIService {
 
       const response = await this.http.post(
         API_ROUTES.CART.SAVE_FOR_LATER(cartItemId),
+        {},
+        {
+          headers,
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async moveToCart(
+    cartItemId: string,
+    guestSessionId?: string,
+  ): Promise<unknown> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.post(
+        API_ROUTES.CART.MOVE_TO_CART(cartItemId),
         {},
         {
           headers,

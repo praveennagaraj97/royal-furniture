@@ -143,6 +143,8 @@ export interface ProductItem {
   average_rating: number;
   is_in_wishlist: boolean;
   available_colors?: ProductColor[];
+  // Present for saved-for-later listings where items map to cart lines
+  cart_item_id?: string;
 }
 
 export interface ProductCategory {
