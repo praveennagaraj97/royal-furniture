@@ -28,12 +28,15 @@ export const useGetTryInStore = ({
     typeof window !== 'undefined' ? getOrCreateGuestSession() : null;
 
   const key =
-    enabled && productSlug
+    // Only call API when enabled, productSlug is present and lat/lng are provided.
+    // This prevents unnecessary calls like: /products/{slug}/try-in-store/ when
+    // the client does not have a location (e.g., guest without coords).
+    enabled && productSlug && latitude != null && longitude != null
       ? [
           API_ROUTES.PRODUCTS.TRY_IN_STORE(productSlug),
           search || '',
-          latitude ?? null,
-          longitude ?? null,
+          latitude,
+          longitude,
           guestSessionId || undefined,
         ]
       : null;
