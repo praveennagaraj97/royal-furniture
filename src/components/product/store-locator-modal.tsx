@@ -131,7 +131,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl" variant="center">
-      <div className="w-full max-w-7xl bg-white rounded-lg overflow-hidden max-h-[90vh] min-h-[420px] flex flex-col">
+      <div className="w-full max-w-7xl bg-white rounded-lg overflow-hidden max-h-[90vh] min-h-105 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200">
           <div className="flex items-center gap-2 min-w-0">
