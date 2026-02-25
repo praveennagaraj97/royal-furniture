@@ -17,5 +17,6 @@ export * from './use-get-saved-items';
 export * from './use-get-search-results';
 export * from './use-get-search-suggestions';
 export * from './use-get-stores-by-cart';
+export * from './use-get-try-in-store';
 export * from './use-get-wishlist-collection';
 export * from './use-get-wishlist-collections';

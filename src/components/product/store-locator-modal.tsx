@@ -1,98 +1,137 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
+import TryInStoreSkeleton from '@/components/skeletons/try-in-store-skeleton';
+import { useAuth } from '@/contexts/auth-context';
+import { useDebounce } from '@/hooks';
+import { useGetTryInStore } from '@/hooks/api';
+import { userService } from '@/services/api/user-service';
+import type { TryInStoreStore } from '@/types/response/store';
 import { useTranslations } from 'next-intl';
-import { FC, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import { FiSearch } from 'react-icons/fi';
-import { IoClose, IoLocationSharp } from 'react-icons/io5';
-
-interface Store {
-  id: string;
-  city: string;
-  address: string;
-  stock: number;
-  latitude: number;
-  longitude: number;
-}
+import { IoClose, IoLocationSharp, IoStorefront } from 'react-icons/io5';
 
 interface StoreLocatorModalProps {
   isOpen: boolean;
   onClose: () => void;
+  productSlug: string;
 }
 
-// Dummy store data with Dubai locations
-const STORES: Store[] = [
-  {
-    id: '1',
-    city: 'Dubai',
-    address: 'Ground Floor, Dubai Festival City',
-    stock: 5,
-    latitude: 25.1972,
-    longitude: 55.2744,
-  },
-  {
-    id: '2',
-    city: 'Abu Dhabi',
-    address: 'Ground Fl Sheikh Rashid Bin Saeed St',
-    stock: 5,
-    latitude: 24.4454,
-    longitude: 54.3569,
-  },
-  {
-    id: '3',
-    city: 'Fujairah',
-    address: 'Mohammed Bin Matar Rd -round Floor',
-    stock: 0,
-    latitude: 25.1242,
-    longitude: 56.3556,
-  },
-  {
-    id: '4',
-    city: 'Abu Dhabi',
-    address: 'Ground Fl Sheikh Rashid Bin Saeed St',
-    stock: 1,
-    latitude: 24.4454,
-    longitude: 54.3569,
-  },
-  {
-    id: '5',
-    city: 'Dubai',
-    address: 'Ground Floor, Dubai Festival City',
-    stock: 5,
-    latitude: 25.1972,
-    longitude: 55.2744,
-  },
-];
-
-const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
+const StoreLocatorModal: FC<StoreLocatorModalProps> = ({
+  isOpen,
+  onClose,
+  productSlug,
+}) => {
   const t = useTranslations('product.storeLocator');
   const tCommon = useTranslations('common');
-  const [selectedStore, setSelectedStore] = useState<Store | null>(STORES[0]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const { isAuthenticated } = useAuth();
 
-  const filteredStores = STORES.filter(
-    (store) =>
-      store.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      store.address.toLowerCase().includes(searchQuery.toLowerCase()),
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
+  const [latitude, setLatitude] = useState<number | undefined>(undefined);
+  const [longitude, setLongitude] = useState<number | undefined>(undefined);
+  const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
+  const hasRequestedLocationRef = useRef(false);
+
+  const {
+    stores = [],
+    isLoading,
+    isValidating,
+  } = useGetTryInStore({
+    productSlug,
+    search: debouncedSearch,
+    latitude,
+    longitude,
+    enabled: isOpen && Boolean(productSlug),
+  });
+
+  const [selectedStore, setSelectedStore] = useState<TryInStoreStore | null>(
+    null,
   );
 
-  const getStockStatus = (stock: number) => {
-    if (stock === 0) {
+  useEffect(() => {
+    if (stores.length === 0) return;
+
+    setSelectedStore((prev) => {
+      if (prev && stores.some((s) => s.store_id === prev.store_id)) {
+        return prev;
+      }
+      return stores[0];
+    });
+  }, [stores]);
+
+  useEffect(() => {
+    if (!isOpen || hasRequestedLocationRef.current) return;
+    if (typeof window === 'undefined' || !('geolocation' in navigator)) return;
+
+    hasRequestedLocationRef.current = true;
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      },
+      (error) => {
+        console.error('Failed to get user location:', error);
+      },
+    );
+  }, [isOpen]);
+
+  const bounds = useMemo(() => {
+    if (!stores.length) return null;
+    const lats = stores.map((s) => s.location.lat);
+    const longs = stores.map((s) => s.location.long);
+
+    const minLat = Math.min(...lats);
+    const maxLat = Math.max(...lats);
+    const minLong = Math.min(...longs);
+    const maxLong = Math.max(...longs);
+
+    return { minLat, maxLat, minLong, maxLong };
+  }, [stores]);
+
+  const handleSetLocation = async () => {
+    if (!latitude || !longitude) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      return;
+    }
+
+    try {
+      setIsUpdatingLocation(true);
+      await userService.updateLocation({ latitude, longitude });
+    } catch (error) {
+      console.error('Failed to update user location:', error);
+    } finally {
+      setIsUpdatingLocation(false);
+    }
+  };
+
+  const getStockStatus = (store: TryInStoreStore) => {
+    const stockCount = store.availability.stock_count;
+    const isOutOfStock = store.availability.is_out_of_stock;
+
+    if (isOutOfStock || stockCount === 0) {
       return (
         <span className="text-red-500 font-semibold">{t('stock.out')}</span>
       );
     }
+
     return (
       <span className="text-green-500 font-semibold">
-        {t('stock.onlyLeft', { count: stock })}
+        {t('stock.onlyLeft', { count: stockCount })}
       </span>
     );
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl" variant="center">
-      <div className="w-full max-w-7xl bg-white rounded-lg overflow-hidden max-h-[90vh] flex flex-col">
+      <div className="w-full max-w-7xl bg-white rounded-lg overflow-hidden max-h-[90vh] min-h-[420px] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-3 sm:px-4 py-3 shrink-0 border-b border-gray-200">
           <div className="flex items-center gap-2 min-w-0">
@@ -139,7 +178,13 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
 
               {/* Set Location Button - Bottom Center Overlay */}
               <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10">
-                <button className="bg-deep-maroon hover:bg-[#6b0000] text-white py-2.5 px-6 rounded-lg font-semibold transition-colors text-sm shadow-md">
+                <button
+                  onClick={handleSetLocation}
+                  disabled={isUpdatingLocation}
+                  className={`bg-deep-maroon hover:bg-[#6b0000] text-white py-2.5 px-6 rounded-lg font-semibold transition-colors text-sm shadow-md ${
+                    isUpdatingLocation ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
+                >
                   {t('setLocation')}
                 </button>
               </div>
@@ -147,26 +192,44 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
               {/* Store markers */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="relative w-full h-full">
-                  {STORES.map((store) => (
-                    <button
-                      key={store.id}
-                      onClick={() => setSelectedStore(store)}
-                      className={`absolute w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all transform pointer-events-auto ${
-                        selectedStore?.id === store.id
-                          ? 'bg-deep-maroon scale-125 shadow-lg'
-                          : 'bg-red-500 hover:scale-110 shadow-md'
-                      }`}
-                      style={{
-                        left: `${((store.longitude - 54) / (56 - 54)) * 100}%`,
-                        top: `${
-                          ((25.3 - store.latitude) / (25.3 - 24)) * 100
-                        }%`,
-                      }}
-                      title={store.city}
-                    >
-                      <FaLocationCrosshairs className="w-4 h-4 text-white" />
-                    </button>
-                  ))}
+                  {stores.map((store) => {
+                    const position = (() => {
+                      if (!bounds) {
+                        return { left: '50%', top: '50%' };
+                      }
+
+                      const { minLat, maxLat, minLong, maxLong } = bounds;
+
+                      const longRange = maxLong - minLong || 1;
+                      const latRange = maxLat - minLat || 1;
+
+                      const left =
+                        ((store.location.long - minLong) / longRange) * 100;
+                      const top =
+                        ((maxLat - store.location.lat) / latRange) * 100;
+
+                      return {
+                        left: `${left}%`,
+                        top: `${top}%`,
+                      };
+                    })();
+
+                    return (
+                      <button
+                        key={store.store_id}
+                        onClick={() => setSelectedStore(store)}
+                        className={`absolute w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all transform pointer-events-auto ${
+                          selectedStore?.store_id === store.store_id
+                            ? 'bg-deep-maroon scale-125 shadow-lg'
+                            : 'bg-red-500 hover:scale-110 shadow-md'
+                        }`}
+                        style={position}
+                        title={store.name}
+                      >
+                        <FaLocationCrosshairs className="w-4 h-4 text-white" />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -196,18 +259,25 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
 
             {/* Store List */}
             <div className="flex-1 overflow-y-auto">
-              {filteredStores.length === 0 ? (
-                <div className="p-4 text-center text-gray-500 text-sm">
-                  {t('noStores')}
+              {isLoading || isValidating ? (
+                <TryInStoreSkeleton />
+              ) : stores.length === 0 ? (
+                <div className="flex flex-col items-center justify-center px-4 py-10 text-center text-gray-500 text-sm gap-3">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 text-gray-400">
+                    <IoStorefront className="w-6 h-6" />
+                  </div>
+                  <p className="font-medium text-indigo-slate text-sm">
+                    {t('noStores')}
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-0 divide-y divide-gray-200">
-                  {filteredStores.map((store) => (
+                  {stores.map((store) => (
                     <button
-                      key={store.id}
+                      key={store.store_id}
                       onClick={() => setSelectedStore(store)}
                       className={`w-full px-3 py-3 text-left transition-all border-l-4 ${
-                        selectedStore?.id === store.id
+                        selectedStore?.store_id === store.store_id
                           ? 'bg-blue-50 border-l-deep-maroon'
                           : 'border-l-transparent hover:bg-gray-50'
                       }`}
@@ -221,7 +291,7 @@ const StoreLocatorModal: FC<StoreLocatorModalProps> = ({ isOpen, onClose }) => {
                             {store.address}
                           </p>
                           <div className="mt-1.5 text-xs">
-                            {getStockStatus(store.stock)}
+                            {getStockStatus(store)}
                           </div>
                         </div>
                         <FaLocationCrosshairs className="w-4 h-4 text-deep-maroon shrink-0 mt-0.5" />

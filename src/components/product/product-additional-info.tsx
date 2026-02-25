@@ -111,6 +111,7 @@ export const ProductAdditionalInfo: FC<ProductAdditionalInfoProps> = ({
       <StoreLocatorModal
         isOpen={isStoreLocatorOpen}
         onClose={() => setIsStoreLocatorOpen(false)}
+        productSlug={product.header.product_slug}
       />
 
       {/* Flexi Payment Info Modal */}

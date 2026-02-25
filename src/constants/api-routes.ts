@@ -32,6 +32,7 @@ export const API_ROUTES = {
     LISTING: '/products/listing/',
     VIEW_ALL: '/products/view-all',
     FABRIC_CONFIG: (slug: string) => `/products/${slug}/fabric-config/`,
+    TRY_IN_STORE: (slug: string) => `/products/${slug}/try-in-store/`,
   },
   WISHLIST: {
     COLLECTIONS: '/wishlist/wishlist/',
@@ -57,6 +58,9 @@ export const API_ROUTES = {
   },
   STORES: {
     BY_CART: '/store/by-cart/',
+  },
+  USERS: {
+    LOCATION: '/users/location/',
   },
   ADDRESSES: {
     ROOT: '/users/addresses/',
