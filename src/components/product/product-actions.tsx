@@ -45,22 +45,23 @@ export const ProductActions: FC<ProductActionsProps> = ({
   return (
     <>
       <div ref={actionsRef} className="flex flex-col gap-2 sm:gap-3">
-        {isInCart ? (
-          <button
-            type="button"
-            onClick={onGoToCart}
-            className="whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base bg-emerald-50 text-emerald-700 border border-emerald-200"
-          >
-            <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" />
-            <span className="font-semibold">{tCommon('inCart')}</span>
-          </button>
-        ) : (
-          <AddToCartWrapper
-            product={product}
-            mainVariantImage={mainVariantImage}
-            onOpen={onAddToCart}
-            onGoToCart={onGoToCart}
-          >
+        <AddToCartWrapper
+          product={product}
+          mainVariantImage={mainVariantImage}
+          onOpen={onAddToCart}
+          onGoToCart={onGoToCart}
+          disableOpen={isInCart}
+        >
+          {isInCart ? (
+            <button
+              type="button"
+              onClick={onGoToCart}
+              className="whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base bg-emerald-50 text-emerald-700 border border-emerald-200"
+            >
+              <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" />
+              <span className="font-semibold">{tCommon('inCart')}</span>
+            </button>
+          ) : (
             <button
               type="button"
               className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg`}
@@ -75,8 +76,8 @@ export const ProductActions: FC<ProductActionsProps> = ({
                 {isOutOfStock ? tActions('outOfStock') : tCommon('addToCart')}
               </span>
             </button>
-          </AddToCartWrapper>
-        )}
+          )}
+        </AddToCartWrapper>
         <button
           type="button"
           onClick={onBuyNow}
@@ -104,29 +105,36 @@ export const ProductActions: FC<ProductActionsProps> = ({
                   mainVariantImage={mainVariantImage}
                   onOpen={onAddToCart}
                   onGoToCart={onGoToCart}
+                  disableOpen={isInCart}
                 >
-                  <button
-                    type="button"
-                    className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 ${
-                      isInCart
-                        ? 'bg-white text-deep-maroon border border-deep-maroon hover:bg-[#FFF4F4]'
-                        : 'bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg'
-                    }`}
-                    disabled={isOutOfStock && !isInCart}
-                  >
-                    {isAdding ? (
-                      <ImSpinner2 className="w-4 h-4 animate-spin text-white" />
-                    ) : (
-                      <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-                    )}
-                    <span>
-                      {isOutOfStock
-                        ? tActions('outOfStock')
-                        : isInCart
-                          ? tCommon('inCart')
+                  {isInCart ? (
+                    <button
+                      type="button"
+                      onClick={onGoToCart}
+                      className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 bg-white text-deep-maroon border border-deep-maroon hover:bg-[#FFF4F4]`}
+                      disabled={isOutOfStock}
+                    >
+                      <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700" />
+                      <span className="font-semibold">{tCommon('inCart')}</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className={`whitespace-nowrap flex items-center justify-center w-full gap-2 py-2.5 px-4 rounded-lg font-semibold text-sm sm:text-base transition-colors duration-200 bg-deep-maroon text-white hover:bg-[#6b0000] shadow-md hover:shadow-lg`}
+                      disabled={isOutOfStock}
+                    >
+                      {isAdding ? (
+                        <ImSpinner2 className="w-4 h-4 animate-spin text-white" />
+                      ) : (
+                        <FiShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+                      )}
+                      <span>
+                        {isOutOfStock
+                          ? tActions('outOfStock')
                           : tCommon('addToCart')}
-                    </span>
-                  </button>
+                      </span>
+                    </button>
+                  )}
                 </AddToCartWrapper>
               </div>
               <button

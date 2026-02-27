@@ -326,7 +326,9 @@ export const OrderSummaryCard: FC<
 
           <div className="flex justify-between bg-[#FFF4F4] p-2 rounded-lg font-medium">
             <span>{t('totalAmount')}</span>
-            <span>{formatCurrency(totals.total, countryCode, locale)}</span>
+            <span className="font-semibold">
+              {formatCurrency(totals.total, countryCode, locale)}
+            </span>
           </div>
         </div>
 

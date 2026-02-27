@@ -10,6 +10,7 @@ export interface AddToCartWrapperProps {
   mainVariantImage?: ResponsiveImages;
   onGoToCart?: () => void;
   onOpen?: () => void;
+  disableOpen?: boolean;
 }
 
 const AddToCartWrapper: FC<AddToCartWrapperProps> = ({
@@ -18,6 +19,7 @@ const AddToCartWrapper: FC<AddToCartWrapperProps> = ({
   mainVariantImage,
   onGoToCart,
   onOpen,
+  disableOpen,
 }) => {
   const [isOpen, setOpen] = useState(false);
 
@@ -25,21 +27,25 @@ const AddToCartWrapper: FC<AddToCartWrapperProps> = ({
     <Fragment>
       <div
         onClick={async () => {
+          if (disableOpen) return;
+
+          // Open the modal immediately so the wrapper isn't unmounted
+          // while awaiting any async onOpen action (e.g. addItem).
+          setOpen(true);
+
           if (onOpen) {
             try {
-              // Await if onOpen returns a promise
+              // Call onOpen but do not rely on it to control modal visibility.
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const result = (onOpen as any)();
               if (result && typeof result.then === 'function') {
                 await result;
               }
             } catch (err) {
-              // swallow errors so modal still opens
-
+              // swallow errors to avoid breaking UX
               console.error('[AddToCartWrapper] onOpen failed', err);
             }
           }
-          setOpen(true);
         }}
       >
         {children}

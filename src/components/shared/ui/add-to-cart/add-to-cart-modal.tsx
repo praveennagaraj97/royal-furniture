@@ -3,7 +3,6 @@
 import Modal from '@/components/shared/modal';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { FC } from 'react';
-import { FiX } from 'react-icons/fi';
 import { MainProductPreview } from './main-product-preview';
 import { SimilarProductsSection } from './similar-products-section';
 import { AddToCartSuccessFooter } from './success-footer';
@@ -33,9 +32,9 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
       onClose={onClose}
       className="max-w-5xl w-full"
     >
-      <div className="flex flex-col h-full bg-white max-h-[90vh] overflow-y-auto">
+      <div className="flex flex-col h-full bg-white max-h-[90vh] overflow-y-auto rounded-lg">
         {/* Header */}
-        <div className="flex items-center justify-end px-4 py-2.5">
+        {/* <div className="flex items-center justify-end px-4 py-2.5">
           <button
             type="button"
             onClick={onClose}
@@ -44,7 +43,7 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
           >
             <FiX className="w-3 h-3" />
           </button>
-        </div>
+        </div> */}
 
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
