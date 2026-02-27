@@ -139,7 +139,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
                   disabled={isBusy}
                   aria-label={t('remove')}
                   title={t('remove')}
-                  className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-[#e00000] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-1 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isRemoveBusy ? (
                     <ImSpinner2 className="w-4 h-4 animate-spin" />
@@ -153,7 +153,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
                   disabled={isBusy}
                   aria-label={t('savedForLater')}
                   title={t('savedForLater')}
-                  className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-1 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSaveBusy ? (
                     <ImSpinner2 className="w-4 h-4 animate-spin" />
@@ -210,44 +210,45 @@ export const CartItemRow: FC<CartItemRowProps> = ({
         </div>
 
         <div className="flex flex-col items-start gap-2">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => onQuantityChange(item.quantity - 1)}
-              disabled={decreaseDisabled}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isDecreaseBusy ? (
-                <ImSpinner2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <FiMinus className="w-4 h-4" />
-              )}
-            </button>
-            <span className="w-8 text-center font-semibold">
-              {item.quantity}
-            </span>
-            <button
-              type="button"
-              onClick={() => onQuantityChange(item.quantity + 1)}
-              disabled={increaseDisabled}
-              className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isIncreaseBusy ? (
-                <ImSpinner2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <FiPlus className="w-4 h-4" />
-              )}
-            </button>
-          </div>
-          <div className="">
-            <div className="flex flex-col items-start">
+          <div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => onQuantityChange(item.quantity - 1)}
+                disabled={decreaseDisabled}
+                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isDecreaseBusy ? (
+                  <ImSpinner2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <FiMinus className="w-4 h-4" />
+                )}
+              </button>
+              <span className="w-8 text-center font-semibold">
+                {item.quantity}
+              </span>
+              <button
+                type="button"
+                onClick={() => onQuantityChange(item.quantity + 1)}
+                disabled={increaseDisabled}
+                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isIncreaseBusy ? (
+                  <ImSpinner2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <FiPlus className="w-4 h-4" />
+                )}
+              </button>
+            </div>
+
+            <div className="flex flex-col items-start mt-2">
               <button
                 type="button"
                 onClick={onRemove}
                 disabled={isBusy}
                 aria-label={t('remove')}
                 title={t('remove')}
-                className="w-8 h-8 flex gap-2 items-center justify-center rounded border border-transparent text-[#e00000] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-1 flex gap-2 rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span>
                   {isRemoveBusy ? (
@@ -264,7 +265,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
                 disabled={isBusy}
                 aria-label={t('savedForLater')}
                 title={t('savedForLater')}
-                className="w-8 h-8 flex items-center gap-2 justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-1 flex gap-2 rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span>
                   {isSaveBusy ? (

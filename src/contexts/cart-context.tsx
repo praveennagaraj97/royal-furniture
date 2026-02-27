@@ -14,7 +14,9 @@ import type {
   ShippingSelection,
   ShippingStepState,
 } from '@/types/response/cart';
+import { formatCurrency } from '@/utils/format-currency';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
+import { useParams } from 'next/navigation';
 import {
   createContext,
   useCallback,
@@ -114,7 +116,11 @@ const normalizePrice = (value?: string | number | null): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const mapCartItem = (item: CartApiItem): CartItem => {
+const mapCartItem = (
+  item: CartApiItem,
+  countryCode = 'ae',
+  locale = 'en',
+): CartItem => {
   const { product } = item;
 
   const priceFromProduct = normalizePrice(product.pricing?.offer_price);
@@ -132,8 +138,13 @@ const mapCartItem = (item: CartApiItem): CartItem => {
     : undefined;
 
   const attributes: string[] = [];
-  if (product.category?.name) attributes.push(product.category.name);
-  if (product.sub_category?.name) attributes.push(product.sub_category.name);
+  if (discountSavings) {
+    attributes.push(
+      'Save ' + formatCurrency(discountSavings, countryCode, locale),
+    );
+  }
+  // if (product.category?.name) attributes.push(product.category.name);
+  // if (product.sub_category?.name) attributes.push(product.sub_category.name);
   if (product.colour) attributes.push(product.colour);
 
   return {
@@ -154,10 +165,16 @@ const mapCartItem = (item: CartApiItem): CartItem => {
   };
 };
 
-const mapCartDataToState = (data?: CartApiData): CartState => {
+const mapCartDataToState = (
+  data?: CartApiData,
+  countryCode = 'ae',
+  locale = 'en',
+): CartState => {
   if (!data) return { ...DEFAULT_CART_STATE };
 
-  const items = (data.items || []).map(mapCartItem);
+  const items = (data.items || []).map((it) =>
+    mapCartItem(it, countryCode, locale),
+  );
 
   const subtotal = normalizePrice(data.order_summary?.item_price);
   const discount = normalizePrice(data.order_summary?.discount_applied);
@@ -208,6 +225,9 @@ const mapCartDataToState = (data?: CartApiData): CartState => {
 };
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const params = useParams<{ country?: string; locale?: string }>();
+  const locale = params?.locale ?? 'en';
+  const countryCode = params?.country ?? 'ae';
   const [state, setState] = useState<CartState>(DEFAULT_CART_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

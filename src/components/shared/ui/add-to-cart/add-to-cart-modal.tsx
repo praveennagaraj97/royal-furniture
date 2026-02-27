@@ -48,10 +48,12 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-8 items-start">
-            <MainProductPreview
-              images={mainVariantImage}
-              alt={product.product_info.name}
-            />
+            <div className="sticky top-0">
+              <MainProductPreview
+                images={mainVariantImage}
+                alt={product.product_info.name}
+              />
+            </div>
             <SimilarProductsSection products={similarProducts} />
           </div>
         </div>

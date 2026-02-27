@@ -25,15 +25,17 @@ export const CartItemsSection: FC = () => {
   return (
     <div className="rounded-2xl space-y-6">
       <div className="space-y-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-medium">
-            {t('title', {
-              count:
-                header?.total_items ??
-                items.reduce((sum, item) => sum + item.quantity, 0),
-            })}
-          </h1>
-          <CartFreeShippingBanner />
+        <div className="rounded-2xl border border-gray-200 bg-white p-4">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-2xl font-medium">
+              {t('title', {
+                count:
+                  header?.total_items ??
+                  items.reduce((sum, item) => sum + item.quantity, 0),
+              })}
+            </h1>
+            <CartFreeShippingBanner />
+          </div>
         </div>
       </div>
 
