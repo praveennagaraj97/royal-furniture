@@ -468,7 +468,9 @@
     },
     "actions": {
       "outOfStock": "غير متوفر حالياً",
-      "buyNow": "اشترِ الآن"
+      "buyNow": "اشترِ الآن",
+      "notifyMe": "أعلمني عند التوفر",
+      "notifyConfirmation": "سنتواصل معك فور توفر المنتج مجدداً"
     },
     "paymentDelivery": {
       "tabbyDescription": "4 دفعات بدون فوائد بقيمة",

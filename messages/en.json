@@ -422,7 +422,9 @@
     },
     "actions": {
       "outOfStock": "Out of Stock",
-      "buyNow": "Buy Now"
+      "buyNow": "Buy Now",
+      "notifyMe": "Notify me",
+      "notifyConfirmation": "We'll notify you as soon as this product is back in stock."
     },
     "paymentDelivery": {
       "tabbyDescription": "4 interest-free payments of",
