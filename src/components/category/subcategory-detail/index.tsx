@@ -1,16 +1,19 @@
 'use client';
 
+import MobileSortFilterControls from '@/components/category/subcategory-detail/mobile-sort-filter-controls';
 import ProductsList from '@/components/category/subcategory-detail/products-list';
 import SubcategoryFilters from '@/components/category/subcategory-detail/subcategory-filters';
 import SubcategoryTopBar from '@/components/category/subcategory-detail/subcategory-top-bar';
+import { ProductsListSkeleton } from '@/components/skeletons/products-list-skeleton';
 import { SORT_OPTIONS } from '@/constants/sort-options';
 import { useLayoutData } from '@/contexts/layout-context';
 import { useGetProducts } from '@/hooks/api';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { useResizeWindow } from '@/hooks/use-resize-window';
 import { AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 const SubcategoryDetail: FC = () => {
   const tSort = useTranslations('sort');
@@ -22,6 +25,7 @@ const SubcategoryDetail: FC = () => {
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, { ids: number[]; key: string }>
   >({});
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   // Get subcategory slug and ID from layout context
   const subcategorySlug = useMemo(() => {
@@ -51,13 +55,25 @@ const SubcategoryDetail: FC = () => {
   // Fetch products from API
   const {
     products: apiProducts,
-    isLoading: isLoadingProducts,
     count: productCount,
+    isLoadingInitialData,
+    isLoadingMore,
+    hasMore,
+    loadMore,
   } = useGetProducts({
     sub_category_id: subcategorySlug,
     sort: selectedSort !== 'relevant' ? selectedSort : undefined,
     ...buildFilterParams,
     enabled: true,
+  });
+
+  const isSentinelVisible = useIntersectionObserver({
+    ref: sentinelRef,
+    options: {
+      threshold: 0,
+      rootMargin: '0px 0px 200px 0px',
+      enabled: hasMore,
+    },
   });
 
   // Update filter visibility on window resize
@@ -71,6 +87,16 @@ const SubcategoryDetail: FC = () => {
   const displayProducts = useMemo(() => {
     return apiProducts || [];
   }, [apiProducts]);
+
+  const isInitialProductsLoading =
+    isLoadingInitialData && displayProducts.length === 0;
+
+  useEffect(() => {
+    if (!hasMore || isLoadingMore) return;
+    if (!isSentinelVisible) return;
+
+    loadMore();
+  }, [hasMore, isLoadingMore, isSentinelVisible, loadMore]);
 
   const localizedSortOptions = useMemo(
     () =>
@@ -120,14 +146,38 @@ const SubcategoryDetail: FC = () => {
           )}
         </AnimatePresence>
 
-        {/* Products List */}
-        <ProductsList
-          products={displayProducts}
-          isFilterVisible={isFilterVisible}
-          isLoading={isLoadingProducts}
-          gridColumns={gridColumns}
-        />
+        {/* Products Column */}
+        <div className="flex-1 flex flex-col gap-4">
+          <ProductsList
+            products={displayProducts}
+            isFilterVisible={isFilterVisible}
+            isLoading={isInitialProductsLoading}
+            gridColumns={gridColumns}
+          />
+
+          {displayProducts.length > 0 && (hasMore || isLoadingMore) && (
+            <div>
+              <div ref={sentinelRef} className="h-px w-full" />
+              {isLoadingMore && (
+                <div className="mt-4">
+                  <ProductsListSkeleton
+                    isFilterVisible={isFilterVisible}
+                    gridColumns={gridColumns}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
+      <MobileSortFilterControls
+        sortOptions={localizedSortOptions}
+        selectedSort={selectedSort}
+        onSortChange={setSelectedSort}
+        onToggleFilter={handleToggleFilter}
+        isFilterVisible={isFilterVisible}
+      />
     </div>
   );
 };

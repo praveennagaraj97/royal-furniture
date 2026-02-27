@@ -3,7 +3,7 @@
 import { apiFetcher } from '@/config/axios';
 import { API_ROUTES } from '@/constants/api-routes';
 import type { ProductListingResponse } from '@/types/response';
-import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 interface UseGetProductsProps {
   sub_category_id?: string | null;
@@ -80,28 +80,77 @@ export const useGetProducts = ({
   });
 
   const queryString = params.toString();
-  const url =
-    enabled && (sub_category_id || category_id || q)
-      ? `${API_ROUTES.PRODUCTS.LISTING}?${queryString}`
-      : null;
+  const shouldFetch = enabled && Boolean(sub_category_id || category_id || q);
 
-  const { data, error, isLoading, mutate } = useSWR<ProductListingResponse>(
-    url,
-    apiFetcher<ProductListingResponse>,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateIfStale: true,
-      dedupingInterval: 0,
-    },
-  );
+  const getKey = (
+    pageIndex: number,
+    previousPageData: ProductListingResponse | null,
+  ) => {
+    if (!shouldFetch) {
+      return null;
+    }
+
+    if (previousPageData && !previousPageData.data?.next) {
+      return null;
+    }
+
+    const page = pageIndex + 1;
+    const pageParams = new URLSearchParams(queryString);
+
+    if (page > 1) {
+      pageParams.set('page', String(page));
+    } else {
+      pageParams.delete('page');
+    }
+
+    const pageQuery = pageParams.toString();
+    const baseUrl = API_ROUTES.PRODUCTS.LISTING;
+
+    return `${baseUrl}${pageQuery ? `?${pageQuery}` : ''}`;
+  };
+
+  const { data, error, size, setSize, isValidating, mutate } =
+    useSWRInfinite<ProductListingResponse>(
+      getKey,
+      apiFetcher<ProductListingResponse>,
+      {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        revalidateIfStale: true,
+        dedupingInterval: 0,
+      },
+    );
+
+  const pages = data ?? [];
+  const products = pages.flatMap((page) => page.data?.results ?? []);
+  const firstPage = pages[0];
+  const lastPage = pages[pages.length - 1];
+  const count = firstPage?.data?.count ?? 0;
+  const next = lastPage?.data?.next ?? null;
+  const previous = firstPage?.data?.previous ?? null;
+
+  const isLoadingInitialData = shouldFetch ? !data && !error : false;
+  const isLoadingMore =
+    shouldFetch &&
+    (isLoadingInitialData || (size > 0 && !!data && !data[size - 1]));
+
+  const hasMore = shouldFetch ? Boolean(lastPage?.data?.next) : false;
+
+  const loadMore = () => {
+    if (!hasMore) return;
+    void setSize(size + 1);
+  };
 
   return {
-    products: data?.data?.results || [],
-    count: data?.data?.count || 0,
-    next: data?.data?.next || null,
-    previous: data?.data?.previous || null,
-    isLoading,
+    products,
+    count,
+    next,
+    previous,
+    hasMore,
+    loadMore,
+    isLoadingInitialData,
+    isLoadingMore,
+    isValidating,
     error,
     mutate,
   };

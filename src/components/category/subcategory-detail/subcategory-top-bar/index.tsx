@@ -46,34 +46,40 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
 
   return (
     <ViewOnce type="slideDown" distance={10} duration={0.3} delay={0.1}>
-      <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap mt-3">
-        <motion.button
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -10 }}
-          onClick={onToggleFilter}
-          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 group shrink-0"
-        >
-          <FiFilter className="w-4 h-4 text-deep-maroon shrink-0" />
-          <span className="text-xs sm:text-sm font-semibold text-indigo-slate whitespace-nowrap">
-            {isFilterVisible
-              ? tCategory('hideFilter')
-              : tCategory('showFilter')}
+      <div className="mt-3 flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
+          <span className="text-xs sm:text-sm font-medium text-indigo-slate lg:hidden">
+            {tCommon('productCount', { count: productCount })}
           </span>
-          <FiChevronDown
-            className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-deep-maroon transition-all duration-200 shrink-0 lg:${
-              isFilterVisible ? 'rotate-180' : ''
-            }`}
-          />
-        </motion.button>
 
-        <div className="flex items-center gap-2 sm:gap-4 ml-auto">
-          <div className="hidden lg:flex px-3 py-1.5 bg-gray-100 rounded-lg text-sm font-medium text-indigo-slate space-x-1">
+          <motion.button
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            onClick={onToggleFilter}
+            className="hidden lg:inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 group shrink-0"
+          >
+            <FiFilter className="w-4 h-4 text-deep-maroon shrink-0" />
+            <span className="text-xs sm:text-sm font-semibold text-indigo-slate whitespace-nowrap">
+              {isFilterVisible
+                ? tCategory('hideFilter')
+                : tCategory('showFilter')}
+            </span>
+            <FiChevronDown
+              className={`w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-deep-maroon transition-all duration-200 shrink-0 lg:${
+                isFilterVisible ? 'rotate-180' : ''
+              }`}
+            />
+          </motion.button>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-2 sm:gap-4 ml-auto">
+          <div className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm font-medium text-indigo-slate space-x-1">
             <span>{tCommon('productCount', { count: productCount })}</span>
           </div>
 
           <div
-            className="hidden lg:flex items-center gap-1 bg-gray-100 rounded-lg p-1"
+            className="flex items-center gap-1 bg-gray-100 rounded-lg p-1"
             role="group"
             aria-label={tCategory('gridViewAria')}
           >
@@ -112,11 +118,13 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
             })}
           </div>
 
-          <SortDropdown
-            sortOptions={sortOptions}
-            selectedSort={selectedSort}
-            onSortChange={onSortChange}
-          />
+          <div className="inline-flex">
+            <SortDropdown
+              sortOptions={sortOptions}
+              selectedSort={selectedSort}
+              onSortChange={onSortChange}
+            />
+          </div>
         </div>
       </div>
     </ViewOnce>
