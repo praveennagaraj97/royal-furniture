@@ -11,6 +11,7 @@ import { OrderSummarySection } from '../common/order-summary';
 import { SavedForLaterSection } from '../common/saved-for-later';
 import { CartItemsSection } from './cart-items';
 import CartEmptyState from './empty-state';
+import CartPaymentStrip from './payment-strip';
 
 const CartPageContent: FC = () => {
   const { isHydrated, isLoading, items } = useCart();
@@ -39,6 +40,7 @@ const CartPageContent: FC = () => {
           <StaggerItem type="slideUp" distance={30}>
             <div className="lg:sticky lg:top-28 lg:self-start">
               <OrderSummarySection step="cart" />
+              <CartPaymentStrip />
               <div className="lg:hidden mt-4">
                 <SupportCard />
               </div>
