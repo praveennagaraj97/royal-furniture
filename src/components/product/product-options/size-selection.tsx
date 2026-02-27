@@ -1,6 +1,7 @@
 'use client';
 
 import { ViewOnce } from '@/components/shared/animations';
+import type { ResponsiveImages } from '@/types/response';
 import { FC, useState } from 'react';
 import type { SizeOption } from '../types';
 import { SizeGuideModal } from './customize/size-guide-modal';
@@ -9,12 +10,16 @@ export interface SizeSelectionProps {
   sizes: SizeOption[];
   selectedSize: string;
   onSizeChange: (sizeId: string) => void;
+  productName: string;
+  productImage?: ResponsiveImages;
 }
 
 export const SizeSelection: FC<SizeSelectionProps> = ({
   sizes,
   selectedSize,
   onSizeChange,
+  productName,
+  productImage,
 }) => {
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
@@ -70,6 +75,8 @@ export const SizeSelection: FC<SizeSelectionProps> = ({
         onClose={() => setIsSizeGuideOpen(false)}
         sizeOptions={sizes}
         selectedSizeId={selectedSize}
+        productName={productName}
+        productImage={productImage}
       />
     </>
   );

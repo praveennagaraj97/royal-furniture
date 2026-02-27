@@ -1,10 +1,9 @@
 'use client';
 
-import Swiper from '@/components/shared/swiper';
 import ProductCustomizeSkeleton from '@/components/skeletons/product-customize-skeleton';
 import { useGetFabricConfig } from '@/hooks/api';
 import { motion } from 'framer-motion';
-import { FC, useMemo, useState } from 'react';
+import { FC, KeyboardEvent, useMemo, useState } from 'react';
 
 interface FabricCustomizeFormProps {
   productSlug: string;
@@ -20,13 +19,6 @@ const FabricCustomizeForm: FC<FabricCustomizeFormProps> = ({ productSlug }) => {
     if (!fabrics.length) return null;
     return fabrics[Math.min(selectedFabricIndex, fabrics.length - 1)];
   }, [fabrics, selectedFabricIndex]);
-
-  const selectedColor = useMemo(() => {
-    if (!selectedFabric || !selectedFabric.colors.length) return null;
-    return selectedFabric.colors[
-      Math.min(selectedColorIndex, selectedFabric.colors.length - 1)
-    ];
-  }, [selectedFabric, selectedColorIndex]);
 
   if (isLoading) {
     return <ProductCustomizeSkeleton />;
@@ -55,31 +47,48 @@ const FabricCustomizeForm: FC<FabricCustomizeFormProps> = ({ productSlug }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
     >
-      {/* Fabric selection */}
       <motion.section
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25, ease: 'easeOut', delay: 0.05 }}
       >
-        <h3 className="text-gray-800 text-lg mb-2 font-light">Select Fabric</h3>
-        <Swiper gap={1} hideArrowOnMobile alwaysAlignStart className="pt-1">
-          {fabrics.map((fabric, index) => {
-            const isActive = index === selectedFabricIndex;
+        <h3 className="text-gray-800 text-lg mb-4 font-light">
+          Choose Fabric & Color
+        </h3>
+        <div className="space-y-3">
+          {fabrics.map((fabric, fabricIndex) => {
+            const isActive = fabricIndex === selectedFabricIndex;
+            const colorPreviewIndex = isActive
+              ? Math.min(selectedColorIndex, fabric.colors.length - 1)
+              : 0;
+            const previewColor = fabric.colors[colorPreviewIndex];
+
+            const handleFabricSelect = () => {
+              setSelectedFabricIndex(fabricIndex);
+              setSelectedColorIndex(0);
+            };
+
+            const handleKeySelect = (event: KeyboardEvent<HTMLDivElement>) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleFabricSelect();
+              }
+            };
+
             return (
-              <button
+              <div
                 key={fabric.name}
-                type="button"
-                onClick={() => {
-                  setSelectedFabricIndex(index);
-                  setSelectedColorIndex(0);
-                }}
-                className={`m-1 shrink-0 flex flex-col items-start p-2 rounded-lg border bg-white shadow-sm transition-all duration-150 w-32 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-deep-maroon/40 ${
+                role="button"
+                tabIndex={0}
+                onClick={handleFabricSelect}
+                onKeyDown={handleKeySelect}
+                className={`relative flex gap-3 p-3 sm:p-4 rounded-2xl border bg-white shadow-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-maroon/40 ${
                   isActive
-                    ? 'border-deep-maroon ring-1 ring-deep-maroon/30'
-                    : 'border-gray-200'
+                    ? 'border-deep-maroon ring-1 ring-deep-maroon/20'
+                    : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="w-full h-16 rounded-md overflow-hidden bg-gray-50 mb-1">
+                <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
                   {fabric.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -88,85 +97,73 @@ const FabricCustomizeForm: FC<FabricCustomizeFormProps> = ({ productSlug }) => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gray-100" />
+                    <div className="w-full h-full bg-gray-200" />
                   )}
                 </div>
-                <span className="text-xs font-medium text-gray-800 truncate">
-                  {fabric.name}
-                </span>
-              </button>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {fabric.name}
+                      </p>
+                      {previewColor && (
+                        <p className="text-xs font-mono text-gray-500 mt-1">
+                          {previewColor.hex_code || previewColor.name}
+                        </p>
+                      )}
+                    </div>
+                    <span
+                      className={`mt-1 inline-flex items-center justify-center w-5 h-5 rounded-full border-2 ${
+                        isActive ? 'border-deep-maroon' : 'border-gray-300'
+                      }`}
+                      aria-hidden="true"
+                    >
+                      {isActive && (
+                        <span className="w-2.5 h-2.5 rounded-full bg-deep-maroon" />
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {fabric.colors.length ? (
+                      fabric.colors.map((color, colorIndex) => {
+                        const isColorActive =
+                          isActive && colorIndex === selectedColorIndex;
+                        return (
+                          <button
+                            key={`${color.variant_id}-${color.name}`}
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setSelectedFabricIndex(fabricIndex);
+                              setSelectedColorIndex(colorIndex);
+                            }}
+                            className={`w-7 h-7 rounded-full border-2 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-maroon/40 ${
+                              isColorActive
+                                ? 'border-deep-maroon shadow-[0_0_0_3px_rgba(139,0,0,0.15)]'
+                                : 'border-transparent'
+                            }`}
+                            style={{
+                              backgroundColor: color.hex_code || '#E5E7EB',
+                            }}
+                          >
+                            <span className="sr-only">
+                              {`${color.name} in ${fabric.name}`}
+                            </span>
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <span className="text-xs text-gray-500">
+                        Colors unavailable
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
             );
           })}
-        </Swiper>
+        </div>
       </motion.section>
-
-      {/* Color selection */}
-      {selectedFabric && (
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25, ease: 'easeOut', delay: 0.1 }}
-        >
-          <h3 className="text-gray-800 text-lg mb-2 font-light">
-            Select Color
-          </h3>
-          <Swiper
-            key={selectedFabric?.name ?? 'default'}
-            gap={1}
-            hideArrowOnMobile
-            alwaysAlignStart
-          >
-            {selectedFabric.colors.map((color, index) => {
-              const isActive = index === selectedColorIndex;
-              return (
-                <button
-                  key={`${color.variant_id}-${color.name}`}
-                  type="button"
-                  onClick={() => setSelectedColorIndex(index)}
-                  className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs transition-all duration-150 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-maroon/40 ${
-                    isActive
-                      ? 'border-deep-maroon bg-rose-50/70 text-deep-maroon'
-                      : 'border-gray-200 text-gray-800 bg-white'
-                  }`}
-                >
-                  <span
-                    className="w-6 h-6 rounded-full border border-gray-200 shadow-sm"
-                    style={{ backgroundColor: color.hex_code || '#E5E7EB' }}
-                  />
-                  <span className="font-medium truncate max-w-25">
-                    {color.name}
-                  </span>
-                </button>
-              );
-            })}
-          </Swiper>
-        </motion.section>
-      )}
-
-      {/* Summary */}
-      {selectedFabric && selectedColor && (
-        <motion.section
-          className="mt-2 text-sm text-gray-700 space-y-2"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25, ease: 'easeOut', delay: 0.15 }}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-gray-500">Selected Fabric</span>
-            <span className="font-semibold">{selectedFabric.name}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-gray-500">Selected Color</span>
-            <span className="font-semibold">{selectedColor.name}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-gray-500">Variant SKU</span>
-            <span className="font-mono text-xs font-semibold">
-              {selectedColor.variant_sku}
-            </span>
-          </div>
-        </motion.section>
-      )}
     </motion.div>
   );
 };

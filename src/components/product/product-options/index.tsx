@@ -84,6 +84,11 @@ export const ProductOptions: FC<ProductOptionsProps> = ({
             }
           }
         }}
+        productName={product.product_info.name}
+        productImage={
+          currentColor?.images?.[0]?.responsive_images ||
+          product.product_info.responsive_images
+        }
       />
       {currentVariant && currentVariant.fabricsList.length > 1 && (
         <FabricSelection
