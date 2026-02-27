@@ -113,6 +113,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 isInCart={cart.status.isInCart}
                 onGoToCart={cart.actions.handleGoToCart}
                 isAdding={cart.status.isAdding}
+                isOutOfStock={isOutOfStock}
               />
 
               <ProductHelpCard />
