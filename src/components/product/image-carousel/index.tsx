@@ -6,8 +6,9 @@ import Swiper from '@/components/shared/swiper';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import type { ProductDetailData, ResponsiveImages } from '@/types/response';
 import { startTransition, useEffect, useMemo, useState, type FC } from 'react';
-import { FiBox, FiShare2 } from 'react-icons/fi';
-import AddToWishList from '../add-to-wishlist';
+import { FiBox } from 'react-icons/fi';
+// import { FiBox, FiShare2 } from 'react-icons/fi';
+// import AddToWishList from '../add-to-wishlist';
 import ImageCarouselModalView from './modal-view';
 
 interface ImageCardProps {
@@ -18,12 +19,6 @@ interface ImageCardProps {
   alt: string;
   discount?: number;
   showView3D?: boolean;
-  onWishlistClick?: () => void;
-  onShareClick?: () => void;
-  isWishlisted?: boolean;
-  variantId?: number | null;
-  isVariantWishlisted?: (variantId?: number | null) => boolean;
-  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
 const ImageCard: FC<ImageCardProps> = ({
@@ -32,11 +27,7 @@ const ImageCard: FC<ImageCardProps> = ({
   alt,
   discount,
   showView3D,
-  onShareClick,
   idx,
-  variantId,
-  isVariantWishlisted,
-  updateVariantWishlist,
 }) => {
   return (
     <div
@@ -62,24 +53,27 @@ const ImageCard: FC<ImageCardProps> = ({
         </div>
       ) : null}
 
-      <div className="absolute top-4 right-4 flex gap-2 z-10">
-        <AddToWishList
-          variantId={variantId}
-          isVariantWishlisted={isVariantWishlisted}
-          updateVariantWishlist={updateVariantWishlist}
-        />
-
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onShareClick?.();
-          }}
-          className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md"
-        >
-          <FiShare2 className="w-5 h-5 text-gray-700" />
-        </button>
-      </div>
+      {/* Legacy wishlist/share controls (moved next to product name) */}
+      {/**
+       * <div className="absolute top-4 right-4 flex gap-2 z-10">
+       *   <AddToWishList
+       *     variantId={variantId}
+       *     isVariantWishlisted={isVariantWishlisted}
+       *     updateVariantWishlist={updateVariantWishlist}
+       *   />
+       *
+       *   <button
+       *     type="button"
+       *     onClick={(e) => {
+       *       e.stopPropagation();
+       *       onShareClick?.();
+       *     }}
+       *     className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md"
+       *   >
+       *     <FiShare2 className="w-5 h-5 text-gray-700" />
+       *   </button>
+       * </div>
+       */}
 
       {showView3D && (
         <div className="absolute bottom-4 left-4 z-10">
@@ -102,12 +96,7 @@ export interface ImageCarouselProps {
   alt?: string;
   discount?: number;
   showView3D?: boolean;
-  onShareClick?: () => void;
-  isWishlisted?: boolean;
-  isVariantWishlisted?: (variantId?: number | null) => boolean;
   productName: string;
-  variantId?: number | null;
-  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
 export const ImageCarousel: FC<ImageCarouselProps> = ({
@@ -115,12 +104,7 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
   alt = 'Product image',
   discount,
   showView3D = true,
-  onShareClick,
-  isWishlisted = false,
-  isVariantWishlisted,
-  updateVariantWishlist,
   productName,
-  variantId = null,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -167,11 +151,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
               alt={alt}
               discount={discount}
               showView3D={showView3D}
-              onShareClick={onShareClick}
-              isWishlisted={isWishlisted}
-              isVariantWishlisted={isVariantWishlisted}
-              updateVariantWishlist={updateVariantWishlist}
-              variantId={variantId}
             />
           ))}
         />
@@ -186,11 +165,6 @@ export const ImageCarousel: FC<ImageCarouselProps> = ({
           alt={alt}
           discount={discount}
           showView3D={showView3D}
-          onShareClick={onShareClick}
-          isWishlisted={isWishlisted}
-          isVariantWishlisted={isVariantWishlisted}
-          updateVariantWishlist={updateVariantWishlist}
-          variantId={variantId}
         />
 
         {images.length > 1 && (
@@ -247,10 +221,6 @@ export interface ProductImagesProps {
   selectedVariant: string;
   selectedFabric: string;
   selectedColor: string;
-  onShareClick?: () => void;
-  isWishlisted?: boolean;
-  isVariantWishlisted?: (variantId?: number | null) => boolean;
-  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
 export const ProductImages: FC<ProductImagesProps> = ({
@@ -258,10 +228,6 @@ export const ProductImages: FC<ProductImagesProps> = ({
   selectedVariant,
   selectedFabric,
   selectedColor,
-  onShareClick,
-  isWishlisted = false,
-  isVariantWishlisted,
-  updateVariantWishlist,
 }) => {
   const images = useMemo(() => {
     const variant = product.variants.find((v) => v.name === selectedVariant);
@@ -279,15 +245,6 @@ export const ProductImages: FC<ProductImagesProps> = ({
     return [];
   }, [product, selectedVariant, selectedFabric, selectedColor]);
 
-  const variantId = useMemo(() => {
-    const variant = product.variants.find((v) => v.name === selectedVariant);
-    const fabric = variant?.fabricsList.find((f) => f.name === selectedFabric);
-    const color = fabric?.colorsList.find(
-      (c) => String(c.id) === selectedColor,
-    );
-    return color?.variant_id ?? null;
-  }, [product, selectedVariant, selectedFabric, selectedColor]);
-
   const discount = product.product_info.pricing.offer_percentage
     ? Math.round(parseFloat(product.product_info.pricing.offer_percentage))
     : 0;
@@ -298,12 +255,7 @@ export const ProductImages: FC<ProductImagesProps> = ({
       alt={product.product_info.name}
       discount={discount}
       showView3D
-      onShareClick={onShareClick}
-      isWishlisted={isWishlisted}
-      isVariantWishlisted={isVariantWishlisted}
       productName={product.product_info.name}
-      variantId={variantId}
-      updateVariantWishlist={updateVariantWishlist}
     />
   );
 };

@@ -27,6 +27,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       ? selection.currentColor.stock <= 0
       : false,
   );
+  const currentVariantId = selection.currentColor?.variant_id ?? null;
 
   return (
     <div className="w-full">
@@ -47,10 +48,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 selectedVariant={options.selectedVariant}
                 selectedFabric={options.selectedFabric}
                 selectedColor={options.selectedColor}
-                onShareClick={share.handleShareClick}
-                isWishlisted={wishlist.isWishlisted}
-                isVariantWishlisted={wishlist.isVariantWishlisted}
-                updateVariantWishlist={wishlist.updateVariantWishlist}
               />
             </div>
           </ViewOnce>
@@ -64,7 +61,13 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             margin="-40px"
           >
             <div className="w-full space-y-4 px-3 sm:px-4 py-4">
-              <ProductHeader product={data} />
+              <ProductHeader
+                product={data}
+                onShareClick={share.handleShareClick}
+                variantId={currentVariantId}
+                isVariantWishlisted={wishlist.isVariantWishlisted}
+                updateVariantWishlist={wishlist.updateVariantWishlist}
+              />
 
               <div className="sm:hidden">
                 <PaymentDeliveryInfo
@@ -145,10 +148,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                   selectedVariant={options.selectedVariant}
                   selectedFabric={options.selectedFabric}
                   selectedColor={options.selectedColor}
-                  onShareClick={share.handleShareClick}
-                  isWishlisted={wishlist.isWishlisted}
-                  isVariantWishlisted={wishlist.isVariantWishlisted}
-                  updateVariantWishlist={wishlist.updateVariantWishlist}
                 />
               </div>
             </ViewOnce>
@@ -163,7 +162,13 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             margin="-40px"
           >
             <div className="w-full space-y-4">
-              <ProductHeader product={data} />
+              <ProductHeader
+                product={data}
+                onShareClick={share.handleShareClick}
+                variantId={currentVariantId}
+                isVariantWishlisted={wishlist.isVariantWishlisted}
+                updateVariantWishlist={wishlist.updateVariantWishlist}
+              />
               <ProductOptions
                 product={data}
                 selectedVariant={options.selectedVariant}

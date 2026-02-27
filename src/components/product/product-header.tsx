@@ -6,13 +6,25 @@ import type { ProductDetailData } from '@/types/response';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
 import { FiEye } from 'react-icons/fi';
+import { GoShare } from 'react-icons/go';
 import { IoIosStarOutline } from 'react-icons/io';
+import AddToWishList from './add-to-wishlist';
 
 export interface ProductHeaderProps {
   product: ProductDetailData;
+  onShareClick?: () => void;
+  variantId?: number | null;
+  isVariantWishlisted?: (variantId?: number | null) => boolean;
+  updateVariantWishlist?: (variantId: number, value: boolean) => void;
 }
 
-export const ProductHeader: FC<ProductHeaderProps> = ({ product }) => {
+export const ProductHeader: FC<ProductHeaderProps> = ({
+  product,
+  onShareClick,
+  variantId,
+  isVariantWishlisted,
+  updateVariantWishlist,
+}) => {
   const formatCurrency = useFormatCurrency();
   const t = useTranslations('product.header');
 
@@ -39,9 +51,34 @@ export const ProductHeader: FC<ProductHeaderProps> = ({ product }) => {
           amount={0.01}
           margin="-40px"
         >
-          <h1 className="text-2xl lg:text-3xl font-medium leading-tight">
-            {product.product_info.name}
-          </h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-2xl lg:text-3xl font-medium leading-tight">
+              {product.product_info.name}
+            </h1>
+
+            {(variantId !== null && variantId !== undefined) || onShareClick ? (
+              <div className="flex items-center gap-2 text-deep-maroon sm:mt-2 mt-1">
+                {variantId !== null && variantId !== undefined && (
+                  <AddToWishList
+                    variantId={variantId}
+                    isVariantWishlisted={isVariantWishlisted}
+                    updateVariantWishlist={updateVariantWishlist}
+                    variant="minimal"
+                  />
+                )}
+                {onShareClick && (
+                  <button
+                    type="button"
+                    aria-label="Share product"
+                    className="p-0 text-deep-maroon hover:text-deep-maroon/80 transition-colors"
+                    onClick={onShareClick}
+                  >
+                    <GoShare className="w-6 h-6" />
+                  </button>
+                )}
+              </div>
+            ) : null}
+          </div>
         </ViewOnce>
       </div>
 
