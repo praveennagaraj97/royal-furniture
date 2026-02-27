@@ -6,6 +6,7 @@ import { useCart } from '@/contexts/cart-context';
 import { FC, Fragment } from 'react';
 import { FrequentlyBoughtSection } from '../common/frequently-bought';
 import { CartInfoSections } from '../common/info-sections';
+import { SupportCard } from '../common/info-sections/support-card';
 import { OrderSummarySection } from '../common/order-summary';
 import { SavedForLaterSection } from '../common/saved-for-later';
 import { CartItemsSection } from './cart-items';
@@ -38,12 +39,15 @@ const CartPageContent: FC = () => {
           <StaggerItem type="slideUp" distance={30}>
             <div className="lg:sticky lg:top-28 lg:self-start">
               <OrderSummarySection step="cart" />
+              <div className="lg:hidden mt-4">
+                <SupportCard />
+              </div>
             </div>
           </StaggerItem>
         </StaggerContainer>
       </div>
 
-      <StaggerContainer className="mt-6 space-y-6">
+      <StaggerContainer className="mt-10 space-y-6">
         <StaggerItem type="slideUp" distance={30}>
           <FrequentlyBoughtSection />
         </StaggerItem>

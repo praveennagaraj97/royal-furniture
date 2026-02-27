@@ -9,10 +9,12 @@ export const CartInfoSections: FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="space-y-4">
+    <div className="sm:space-y-4">
       {/* <DeliveryInfoCard /> */}
       {isAuthenticated ? <PromosCard /> : null}
-      <SupportCard />
+      <div className="hidden lg:block">
+        <SupportCard />
+      </div>
     </div>
   );
 };
