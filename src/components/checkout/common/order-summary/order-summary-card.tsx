@@ -103,6 +103,9 @@ export const OrderSummaryCard: FC<
   const params = useParams<{ country?: string; locale?: string }>();
   const locale = params?.locale ?? 'en';
   const countryCode = params?.country ?? 'ae';
+  const totalSavings = totals.discount + totals.coupon;
+  const savingsDisplay =
+    totalSavings > 0 ? formatCurrency(totalSavings, countryCode, locale) : null;
 
   const actionBtnRef = useRef<HTMLButtonElement | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
@@ -323,16 +326,11 @@ export const OrderSummaryCard: FC<
             </div>
           ))}
 
-          {totals.discount + totals.coupon > 0 && (
-            <div className="bg-[#91E809] rounded-md px-2 py-2 text-center font-medium">
-              {t('youSavedPrefix')}{' '}
-              <span className="font-semibold">
-                {formatCurrency(
-                  totals.discount + totals.coupon,
-                  countryCode,
-                  locale,
-                )}
-              </span>
+          {totalSavings > 0 && savingsDisplay && (
+            <div className="relative overflow-hidden rounded-xl  bg-[#F6FFF3] p-3 text-center text-xs font-medium text-[#1F7A3B] shadow-sm">
+              <p className="relative z-10">
+                {t('savingsMessage', { amount: savingsDisplay })}
+              </p>
             </div>
           )}
 

@@ -376,7 +376,7 @@
       "couponApplied": "Coupon Applied",
       "deliveryCharges": "Delivery Charges",
       "free": "Free",
-      "youSavedPrefix": "You Saved",
+      "savingsMessage": "Congratulations! You've just saved {amount} on your order.",
       "totalAmount": "Total Amount",
       "notAvailable": "N/A",
       "cta": {

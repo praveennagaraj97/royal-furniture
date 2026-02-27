@@ -422,7 +422,7 @@
       "couponApplied": "الكوبون المطبق",
       "deliveryCharges": "رسوم التوصيل",
       "free": "مجاني",
-      "youSavedPrefix": "لقد وفرت",
+      "savingsMessage": "تهانينا! لقد وفرت {amount} على طلبك.",
       "totalAmount": "المبلغ الإجمالي",
       "notAvailable": "غير متوفر",
       "cta": {
