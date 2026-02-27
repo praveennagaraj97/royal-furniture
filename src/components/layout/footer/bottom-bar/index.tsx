@@ -15,6 +15,10 @@ const BottomBar: FC = () => {
   const router = useAppRouter();
   const pathname = usePathname();
 
+  const otherLocale = locale === 'ar' ? 'en' : 'ar';
+  const otherLabel =
+    otherLocale === 'en' ? tCommon('english') : tCommon('arabic');
+
   const handleLanguageChange = (newLocale: string) => {
     const segments = pathname.split('/').filter(Boolean);
     // segments[0] is country, segments[1] is locale
@@ -41,10 +45,13 @@ const BottomBar: FC = () => {
           <div className="flex items-center gap-1">
             <FiGlobe className="w-4 h-4 text-gray-700" />
             <div className="relative">
+              <span className="text-gray-700 text-sm pr-6 pl-2 py-1 block">
+                {otherLabel}
+              </span>
               <select
                 value={locale}
                 onChange={(e) => handleLanguageChange(e.target.value)}
-                className="text-gray-700 text-sm bg-transparent border-none outline-none cursor-pointer hover:text-deep-maroon transition-colors duration-200 appearance-none pr-6 pl-2 py-1"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 aria-label="Select language"
               >
                 <option value="en">{tCommon('english')}</option>
