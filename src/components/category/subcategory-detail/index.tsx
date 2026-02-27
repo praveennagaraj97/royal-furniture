@@ -132,7 +132,7 @@ const SubcategoryDetail: FC = () => {
       />
 
       {/* Main Content */}
-      <div className="flex gap-6 lg:mt-6 lg:border-t border-gray-200 lg:pt-6 mt-3">
+      <div className="flex gap-6 lg:border-t border-gray-200 lg:pt-6 mt-3">
         {/* Filter Sidebar - Only on lg+ screens */}
         <AnimatePresence mode="wait">
           {isFilterVisible && (

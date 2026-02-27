@@ -1,6 +1,6 @@
 'use client';
 
-import { ViewOnce } from '@/components/shared/animations';
+import { SlideIn, ViewOnce } from '@/components/shared/animations';
 import SortDropdown, { SortOption } from '@/components/shared/sort-dropdown';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -52,10 +52,14 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
       duration={0.3}
       delay={0.1}
     >
-      <div className="mt-3 flex flex-col gap-2">
-        <p className="text-xs sm:text-sm font-medium text-indigo-slate lg:hidden">
-          {tCommon('productCount', { count: productCount })}
-        </p>
+      <div className="flex flex-col gap-2">
+        {productCount > 0 && (
+          <SlideIn>
+            <p className="text-xs sm:text-sm font-medium text-indigo-slate lg:hidden">
+              {tCommon('productCount', { count: productCount })}
+            </p>
+          </SlideIn>
+        )}
 
         <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
           <motion.button
