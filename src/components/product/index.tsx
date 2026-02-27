@@ -233,7 +233,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       {(product.frequently_bought_together.length > 0 ||
         product.similar_products.length > 0 ||
         product.you_may_also_like.length > 0) && (
-        <div className="py-6 space-y-6 section-container">
+        <div className="py-6 space-y-6">
           {product.frequently_bought_together.length > 0 && (
             <ProductListing
               title="Complete the Collection"
@@ -242,15 +242,17 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
           )}
 
           {/* Reviews must come right after frequently bought items */}
-          <UserReviews
-            productSlug={product.product_info.slug}
-            canReview={product.reviews_summary?.can_review ?? false}
-            productName={product.product_info.name}
-            productImage={
-              product.product_info.responsive_images?.web?.url ||
-              product.product_info.thumbnail_image
-            }
-          />
+          <div className="section-container">
+            <UserReviews
+              productSlug={product.product_info.slug}
+              canReview={product.reviews_summary?.can_review ?? false}
+              productName={product.product_info.name}
+              productImage={
+                product.product_info.responsive_images?.web?.url ||
+                product.product_info.thumbnail_image
+              }
+            />
+          </div>
           <br />
 
           {product.similar_products.length > 0 && (
