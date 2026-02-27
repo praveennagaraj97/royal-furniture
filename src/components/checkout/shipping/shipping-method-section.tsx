@@ -29,7 +29,7 @@ export const ShippingMethodSection: FC<ShippingMethodSectionProps> = ({
       <h2 className="text-base sm:text-lg font-medium text-gray-900">
         {t('titles.shippingMethod')}
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         <button
           type="button"
           onClick={() => setShippingMethod('home')}

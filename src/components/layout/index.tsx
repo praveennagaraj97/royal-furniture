@@ -2,6 +2,7 @@
 
 import { useLayoutData } from '@/contexts/layout-context';
 import { useStickyHeader } from '@/hooks/use-sticky-header';
+import { usePathname } from 'next/navigation';
 import { FC, ReactNode } from 'react';
 import Categories from './categories';
 import Footer from './footer';
@@ -15,6 +16,12 @@ interface AppLayoutProps {
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {
   const { isSticky, headerHeight, headerRef, categoryRef } = useStickyHeader();
   const { categories } = useLayoutData();
+  const pathname = usePathname();
+  const shouldHideFooter = [
+    '/checkout/cart',
+    '/checkout/shipping',
+    '/checkout/payment',
+  ].some((segment) => pathname?.includes(segment));
 
   return (
     <>
@@ -31,7 +38,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
         <Categories ref={categoryRef} categories={categories} />
       )}
       <main>{children}</main>
-      <Footer />
+      {!shouldHideFooter && <Footer />}
     </>
   );
 };

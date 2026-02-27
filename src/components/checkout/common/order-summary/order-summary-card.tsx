@@ -327,10 +327,8 @@ export const OrderSummaryCard: FC<
           ))}
 
           {totalSavings > 0 && savingsDisplay && (
-            <div className="relative overflow-hidden rounded-xl  bg-[#F6FFF3] p-3 text-center text-xs font-medium text-[#1F7A3B] shadow-sm">
-              <p className="relative z-10">
-                {t('savingsMessage', { amount: savingsDisplay })}
-              </p>
+            <div className="relative overflow-hidden rounded-xl  bg-[#F6FFF3] p-2 text-center text-xs font-medium text-[#1F7A3B] shadow-sm tracking-tighter">
+              {t('savingsMessage', { amount: savingsDisplay })}
             </div>
           )}
 
