@@ -2,10 +2,18 @@ import { type FC } from 'react';
 
 interface ProductsListSkeletonProps {
   isFilterVisible?: boolean;
+  gridColumns?: 3 | 4 | 5;
 }
+
+const GRID_COLUMN_CLASS: Record<3 | 4 | 5, string> = {
+  3: 'lg:grid-cols-3',
+  4: 'lg:grid-cols-4',
+  5: 'lg:grid-cols-5',
+};
 
 export const ProductsListSkeleton: FC<ProductsListSkeletonProps> = ({
   isFilterVisible = false,
+  gridColumns = 4,
 }) => {
   return (
     <div
@@ -14,11 +22,7 @@ export const ProductsListSkeleton: FC<ProductsListSkeletonProps> = ({
       }`}
     >
       <div
-        className={`grid gap-x-3 gap-y-6 transition-all duration-300 ${
-          isFilterVisible
-            ? 'grid-cols-2 lg:grid-cols-3'
-            : 'grid-cols-2 lg:grid-cols-4'
-        }`}
+        className={`grid gap-x-3 gap-y-6 transition-all duration-300 grid-cols-2 ${GRID_COLUMN_CLASS[gridColumns]}`}
       >
         {Array.from({ length: 12 }).map((_, index) => (
           <div

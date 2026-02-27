@@ -12,15 +12,28 @@ interface ProductsListProps {
   products: ProductItem[];
   isFilterVisible: boolean;
   isLoading?: boolean;
+  gridColumns: 3 | 4 | 5;
 }
+
+const GRID_COLUMN_CLASS: Record<3 | 4 | 5, string> = {
+  3: 'lg:grid-cols-3',
+  4: 'lg:grid-cols-4',
+  5: 'lg:grid-cols-5',
+};
 
 const ProductsList: FC<ProductsListProps> = ({
   products,
   isFilterVisible,
   isLoading = false,
+  gridColumns,
 }) => {
   if (isLoading) {
-    return <ProductsListSkeleton isFilterVisible={isFilterVisible} />;
+    return (
+      <ProductsListSkeleton
+        isFilterVisible={isFilterVisible}
+        gridColumns={gridColumns}
+      />
+    );
   }
 
   if (!products || products.length === 0) {
@@ -49,13 +62,7 @@ const ProductsList: FC<ProductsListProps> = ({
       <StaggerContainer
         staggerChildren={0.05}
         delayChildren={0.1}
-        className={`grid gap-x-3 gap-y-6 transition-all duration-300 ${
-          // On mobile/tablet, always use 2 columns when filter is visible, 2 columns when hidden
-          // On lg+, use 3 columns when filter visible, 4 columns when hidden
-          isFilterVisible
-            ? 'grid-cols-2 lg:grid-cols-3'
-            : 'grid-cols-2 lg:grid-cols-4'
-        }`}
+        className={`grid gap-x-3 gap-y-6 transition-all duration-300 grid-cols-2 ${GRID_COLUMN_CLASS[gridColumns]}`}
       >
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

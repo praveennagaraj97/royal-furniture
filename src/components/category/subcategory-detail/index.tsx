@@ -18,6 +18,7 @@ const SubcategoryDetail: FC = () => {
   const { categories } = useLayoutData();
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [selectedSort, setSelectedSort] = useState('relevant');
+  const [gridColumns, setGridColumns] = useState<3 | 4 | 5>(4);
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, { ids: number[]; key: string }>
   >({});
@@ -100,6 +101,8 @@ const SubcategoryDetail: FC = () => {
         sortOptions={localizedSortOptions}
         selectedSort={selectedSort}
         onSortChange={setSelectedSort}
+        gridColumns={gridColumns}
+        onGridColumnsChange={setGridColumns}
       />
 
       {/* Main Content */}
@@ -122,6 +125,7 @@ const SubcategoryDetail: FC = () => {
           products={displayProducts}
           isFilterVisible={isFilterVisible}
           isLoading={isLoadingProducts}
+          gridColumns={gridColumns}
         />
       </div>
     </div>

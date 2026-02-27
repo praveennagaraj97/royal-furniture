@@ -5,7 +5,7 @@ import SortDropdown, { SortOption } from '@/components/shared/sort-dropdown';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { FC } from 'react';
-import { FiChevronDown, FiFilter, FiGrid } from 'react-icons/fi';
+import { FiChevronDown, FiFilter } from 'react-icons/fi';
 
 interface SubcategoryTopBarProps {
   productCount: number;
@@ -14,6 +14,8 @@ interface SubcategoryTopBarProps {
   sortOptions: SortOption[];
   selectedSort: string;
   onSortChange: (sortId: string) => void;
+  gridColumns: 3 | 4 | 5;
+  onGridColumnsChange: (columns: 3 | 4 | 5) => void;
 }
 
 const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
@@ -23,14 +25,28 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
   sortOptions,
   selectedSort,
   onSortChange,
+  gridColumns,
+  onGridColumnsChange,
 }) => {
   const tCommon = useTranslations('common');
   const tCategory = useTranslations('categories.subcategory.topBar');
+  const viewOptions: Array<3 | 4 | 5> = [3, 4, 5];
+
+  const renderViewIcon = (columns: number) => (
+    <span className="flex items-center gap-0.5">
+      {Array.from({ length: columns }).map((_, index) => (
+        <span
+          key={index}
+          className="w-0.5 h-4 rounded-full bg-current"
+          style={{ opacity: 0.55 + index * 0.12 }}
+        />
+      ))}
+    </span>
+  );
 
   return (
     <ViewOnce type="slideDown" distance={10} duration={0.3} delay={0.1}>
       <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap mt-3">
-        {/* Left Side - Toggle Filter Button */}
         <motion.button
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
@@ -51,22 +67,51 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
           />
         </motion.button>
 
-        {/* Right Side - Product Count, Grid Icon, Sort Dropdown */}
         <div className="flex items-center gap-2 sm:gap-4 ml-auto">
-          {/* Product Count - Desktop only */}
           <div className="hidden lg:flex px-3 py-1.5 bg-gray-100 rounded-lg text-sm font-medium text-indigo-slate space-x-1">
             <span>{tCommon('productCount', { count: productCount })}</span>
           </div>
 
-          {/* Grid View Icon - Desktop only */}
-          <button
-            className="hidden lg:flex p-2 text-deep-maroon hover:bg-gray-100 rounded-lg transition-colors duration-200"
+          <div
+            className="hidden lg:flex items-center gap-1 bg-gray-100 rounded-lg p-1"
+            role="group"
             aria-label={tCategory('gridViewAria')}
           >
-            <FiGrid className="w-5 h-5" />
-          </button>
+            {viewOptions.map((columns) => {
+              const isActive = gridColumns === columns;
+              return (
+                <button
+                  key={columns}
+                  type="button"
+                  onClick={() => onGridColumnsChange(columns)}
+                  className={`relative flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-colors duration-200 ${
+                    isActive
+                      ? 'text-deep-maroon'
+                      : 'text-gray-600 hover:text-deep-maroon'
+                  }`}
+                  aria-pressed={isActive}
+                  aria-label={`${tCategory('gridViewAria')} ${columns}`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="grid-view-selector"
+                      className="absolute inset-0 rounded-md bg-white shadow-sm"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 450,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-2">
+                    {renderViewIcon(columns)}
+                    <span>{columns}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-          {/* Sort Dropdown */}
           <SortDropdown
             sortOptions={sortOptions}
             selectedSort={selectedSort}
