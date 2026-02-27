@@ -135,7 +135,7 @@ const FabricCustomizeForm: FC<FabricCustomizeFormProps> = ({ productSlug }) => {
                             className={`w-7 h-7 rounded-full border-2 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-maroon/40 ${
                               isColorActive
                                 ? 'border-deep-maroon shadow-[0_0_0_3px_rgba(139,0,0,0.15)]'
-                                : 'border-transparent'
+                                : 'border-gray-300'
                             }`}
                             style={{
                               backgroundColor: color.hex_code || '#E5E7EB',
