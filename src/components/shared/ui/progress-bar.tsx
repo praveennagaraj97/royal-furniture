@@ -1,8 +1,8 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
 import NProgress from 'nprogress';
+import { useEffect, useRef } from 'react';
 
 // Configure NProgress for faster response
 NProgress.configure({
@@ -23,8 +23,10 @@ export default function ProgressBar() {
     // Track if this is the initial mount
     const isInitialMount = pathnameRef.current === pathname;
 
-    if (!isInitialMount && isNavigatingRef.current) {
-      // Pathname changed - navigation completed
+    // On any pathname change after the initial mount, ensure the progress
+    // bar is completed. This covers programmatic navigations that may
+    // start NProgress without setting the local isNavigating flag.
+    if (!isInitialMount) {
       // Clear any existing timer
       if (completionTimerRef.current) {
         clearTimeout(completionTimerRef.current);
