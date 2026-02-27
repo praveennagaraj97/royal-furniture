@@ -33,6 +33,7 @@ interface StickyCtaProps {
   onClick: () => void;
   id?: string;
   disabled?: boolean;
+  price?: string;
 }
 
 const StickyCta: FC<StickyCtaProps> = ({
@@ -42,7 +43,9 @@ const StickyCta: FC<StickyCtaProps> = ({
   onClick,
   id,
   disabled,
+  price,
 }) => {
+  const t = useTranslations('checkout.orderSummary');
   return (
     <Portal>
       <AnimatePresence>
@@ -55,16 +58,27 @@ const StickyCta: FC<StickyCtaProps> = ({
             transition={{ duration: 0.25, ease: 'easeOut' }}
             className="sm:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-gray-200 px-4 py-2.5 shadow-sm pb-safe rounded-t-lg"
           >
-            <button
-              type="button"
-              onClick={onClick}
-              aria-label={label}
-              disabled={disabled}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-deep-maroon text-white py-3 text-sm font-medium hover:bg-[#6b0000] transition-colors shadow-md"
-            >
-              {Icon && <Icon className="w-4 h-4" />}
-              <span>{label}</span>
-            </button>
+            <div className="w-full space-y-2">
+              {price ? (
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-sm text-gray-700 font-medium">
+                    {t('totalAmount')}
+                  </span>
+                  <span className="text-sm font-semibold">{price}</span>
+                </div>
+              ) : null}
+
+              <button
+                type="button"
+                onClick={onClick}
+                aria-label={label}
+                disabled={disabled}
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-deep-maroon text-white py-3 text-sm font-medium hover:bg-[#6b0000] transition-colors shadow-md"
+              >
+                {Icon && <Icon className="w-4 h-4" />}
+                <span>{label}</span>
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -349,6 +363,7 @@ export const OrderSummaryCard: FC<
         Icon={cta.Icon}
         onClick={cta.onClick}
         disabled={cta.disabled}
+        price={formatCurrency(totals.total, countryCode, locale)}
       />
 
       <Modal
@@ -368,6 +383,7 @@ export const OrderSummaryCard: FC<
           onClick={cta.onClick}
           disabled={cta.disabled}
           id={`cta-${step}`}
+          price={formatCurrency(totals.total, countryCode, locale)}
         />
       )}
     </Fragment>

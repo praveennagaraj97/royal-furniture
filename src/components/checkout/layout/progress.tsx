@@ -91,9 +91,9 @@ export const CheckoutProgress: FC<CheckoutProgressProps> = ({
   return (
     <div className="w-full">
       <div className="relative flex items-center justify-between">
-        <div className="absolute left-0 top-[40%] h-1 sm:h-1.5 w-full -translate-y-1/2 rounded-full bg-[#d6d7df]" />
+        <div className="absolute left-0 top-[40%] h-0.5 sm:h-1.5 w-full -translate-y-1/2 rounded-full bg-[#d6d7df]" />
         <motion.div
-          className="absolute left-0 top-[40%] h-1 sm:h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8]"
+          className="absolute left-0 top-[40%] h-0.5 sm:h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8]"
           initial={{ width: 0 }}
           animate={{ width: `${progressPercent}%` }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
