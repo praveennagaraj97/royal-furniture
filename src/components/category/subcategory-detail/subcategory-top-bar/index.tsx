@@ -45,13 +45,19 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
   );
 
   return (
-    <ViewOnce type="slideDown" distance={10} duration={0.3} delay={0.1}>
-      <div className="mt-3 flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
-          <span className="text-xs sm:text-sm font-medium text-indigo-slate lg:hidden">
-            {tCommon('productCount', { count: productCount })}
-          </span>
+    <ViewOnce
+      className="hidden lg:block"
+      type="slideDown"
+      distance={10}
+      duration={0.3}
+      delay={0.1}
+    >
+      <div className="mt-3 flex flex-col gap-2">
+        <p className="text-xs sm:text-sm font-medium text-indigo-slate lg:hidden">
+          {tCommon('productCount', { count: productCount })}
+        </p>
 
+        <div className="flex items-center justify-between gap-2 sm:gap-4 flex-wrap">
           <motion.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -71,59 +77,59 @@ const SubcategoryTopBar: FC<SubcategoryTopBarProps> = ({
               }`}
             />
           </motion.button>
-        </div>
 
-        <div className="hidden lg:flex items-center gap-2 sm:gap-4 ml-auto">
-          <div className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm font-medium text-indigo-slate space-x-1">
-            <span>{tCommon('productCount', { count: productCount })}</span>
-          </div>
+          <div className="hidden lg:flex items-center gap-2 sm:gap-4 ml-auto">
+            <div className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm font-medium text-indigo-slate">
+              <span>{tCommon('productCount', { count: productCount })}</span>
+            </div>
 
-          <div
-            className="flex items-center gap-1 bg-gray-100 rounded-lg p-1"
-            role="group"
-            aria-label={tCategory('gridViewAria')}
-          >
-            {viewOptions.map((columns) => {
-              const isActive = gridColumns === columns;
-              return (
-                <button
-                  key={columns}
-                  type="button"
-                  onClick={() => onGridColumnsChange(columns)}
-                  className={`relative flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-colors duration-200 ${
-                    isActive
-                      ? 'text-deep-maroon'
-                      : 'text-gray-600 hover:text-deep-maroon'
-                  }`}
-                  aria-pressed={isActive}
-                  aria-label={`${tCategory('gridViewAria')} ${columns}`}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="grid-view-selector"
-                      className="absolute inset-0 rounded-md bg-white shadow-sm"
-                      transition={{
-                        type: 'spring',
-                        stiffness: 450,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                  <span className="relative z-10 flex items-center gap-2">
-                    {renderViewIcon(columns)}
-                    <span>{columns}</span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+            <div
+              className="flex items-center gap-1 bg-gray-100 rounded-lg p-1"
+              role="group"
+              aria-label={tCategory('gridViewAria')}
+            >
+              {viewOptions.map((columns) => {
+                const isActive = gridColumns === columns;
+                return (
+                  <button
+                    key={columns}
+                    type="button"
+                    onClick={() => onGridColumnsChange(columns)}
+                    className={`relative flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-colors duration-200 ${
+                      isActive
+                        ? 'text-deep-maroon'
+                        : 'text-gray-600 hover:text-deep-maroon'
+                    }`}
+                    aria-pressed={isActive}
+                    aria-label={`${tCategory('gridViewAria')} ${columns}`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="grid-view-selector"
+                        className="absolute inset-0 rounded-md bg-white shadow-sm"
+                        transition={{
+                          type: 'spring',
+                          stiffness: 450,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                    <span className="relative z-10 flex items-center gap-2">
+                      {renderViewIcon(columns)}
+                      <span>{columns}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
 
-          <div className="inline-flex">
-            <SortDropdown
-              sortOptions={sortOptions}
-              selectedSort={selectedSort}
-              onSortChange={onSortChange}
-            />
+            <div className="inline-flex">
+              <SortDropdown
+                sortOptions={sortOptions}
+                selectedSort={selectedSort}
+                onSortChange={onSortChange}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { SubcategoryFiltersSkeleton } from '@/components/skeletons/subcategory-f
 import { useGetFiltersBySubCategoryId } from '@/hooks/api';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { FiX } from 'react-icons/fi';
 import { FiltersEmptyState } from './empty-state';
 
@@ -14,6 +14,7 @@ interface SubcategoryFiltersProps {
   isVisible: boolean;
   onHide: () => void;
   subcategoryId: number | null;
+  selectedFilters: Record<string, { ids: number[]; key: string }>;
   onFiltersChange: (
     filters: Record<string, { ids: number[]; key: string }>,
   ) => void;
@@ -23,16 +24,13 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
   isVisible,
   onHide,
   subcategoryId,
+  selectedFilters,
   onFiltersChange,
 }) => {
   const tFilters = useTranslations('categories.filters');
   const { filters, isLoading } = useGetFiltersBySubCategoryId({
     subcategoryId,
   });
-
-  const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, { ids: number[]; key: string }>
-  >({});
 
   const handleFilterChange = useCallback(
     (
@@ -41,23 +39,28 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
       filterKey: string,
       isChecked: boolean,
     ) => {
-      const updatedFilters = { ...selectedFilters };
-      if (!updatedFilters[sectionId]) {
-        updatedFilters[sectionId] = { ids: [], key: filterKey };
+      const nextIds = selectedFilters[sectionId]
+        ? [...selectedFilters[sectionId].ids]
+        : [];
+
+      const existingIndex = nextIds.indexOf(optionId);
+
+      if (isChecked && existingIndex === -1) {
+        nextIds.push(optionId);
       }
 
-      if (isChecked) {
-        updatedFilters[sectionId].ids = [
-          ...updatedFilters[sectionId].ids,
-          optionId,
-        ];
-      } else {
-        updatedFilters[sectionId].ids = updatedFilters[sectionId].ids.filter(
-          (id) => id !== optionId,
-        );
+      if (!isChecked && existingIndex !== -1) {
+        nextIds.splice(existingIndex, 1);
       }
 
-      setSelectedFilters(updatedFilters);
+      const updatedFilters = {
+        ...selectedFilters,
+        [sectionId]: {
+          ids: nextIds,
+          key: filterKey,
+        },
+      };
+
       onFiltersChange(updatedFilters);
     },
     [selectedFilters, onFiltersChange],
@@ -70,12 +73,14 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
       filterKey: string,
       isSelectingAll: boolean,
     ) => {
-      const updatedFilters = { ...selectedFilters };
-      updatedFilters[sectionId] = {
-        ids: isSelectingAll ? allIds : [],
-        key: filterKey,
+      const updatedFilters = {
+        ...selectedFilters,
+        [sectionId]: {
+          ids: isSelectingAll ? [...allIds] : [],
+          key: filterKey,
+        },
       };
-      setSelectedFilters(updatedFilters);
+
       onFiltersChange(updatedFilters);
     },
     [selectedFilters, onFiltersChange],
@@ -188,22 +193,24 @@ const SubcategoryFilters: FC<SubcategoryFiltersProps> = ({
     handleSelectAll,
   ]);
 
-  if (!isVisible) return null;
-
   return (
     <>
       {/* Desktop Sidebar (lg+) */}
-      <motion.aside
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: -20, opacity: 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="hidden lg:block w-1/4 pr-4"
-      >
-        <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
-          {filterContent}
-        </div>
-      </motion.aside>
+      <AnimatePresence mode="wait">
+        {isVisible && (
+          <motion.aside
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -20, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="hidden lg:block w-1/4 pr-4"
+          >
+            <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden">
+              {filterContent}
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
 
       {/* Mobile/Tablet Bottom Sheet */}
       <Portal>
