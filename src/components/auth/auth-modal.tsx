@@ -108,7 +108,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
         preventClose={hasFormValues}
         onCloseAttempt={handleCloseAttempt}
       >
-        <div className="flex flex-col md:flex-row h-full md:h-162 max-h-[90vh]">
+        <div className="flex flex-col md:flex-row h-full md:h-290 max-h-[90vh]">
           {/* Left Side - Image & Banner */}
           <div className="hidden md:flex relative w-1/2 flex-col bg-gray-50 overflow-hidden">
             <div className="absolute inset-0">
@@ -175,7 +175,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
           {/* Right Side - Form */}
           <div className="flex-1 flex flex-col h-full overflow-y-auto pb-safe custom-scrollbar">
             {/* Logo */}
-            <div className="flex justify-center pt-8 md:px-6 px-3 pb-2">
+            <div className="flex justify-center pt-2 md:px-6 px-3 pb-2">
               <Image
                 src={verticalLogo}
                 alt="Royal Furniture"
@@ -188,7 +188,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
             {/* Tabs */}
             {activeTab !== 'forgot-password' && (
-              <div className="md:px-6 px-3 pt-6">
+              <div className="md:px-6 px-3 pt-3">
                 <div className="flex bg-gray-100 rounded-lg p-1">
                   <button
                     type="button"
@@ -217,7 +217,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
             )}
 
             {/* Form Content */}
-            <div className="flex-1 md:px-6 px-3 pt-6 pb-6">
+            <div className="flex-1 md:px-6 px-3 pt-3 pb-8">
               {activeTab === 'forgot-password' ? (
                 <ForgotPasswordForm
                   onFormStateChange={setHasFormValues}
