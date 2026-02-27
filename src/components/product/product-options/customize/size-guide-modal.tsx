@@ -11,7 +11,6 @@ interface SizeGuideModalProps {
   onClose: () => void;
   sizeOptions?: SizeOption[];
   selectedSizeId?: string;
-  onSizeChange?: (sizeId: string) => void;
 }
 
 export const SizeGuideModal: FC<SizeGuideModalProps> = ({
@@ -19,7 +18,6 @@ export const SizeGuideModal: FC<SizeGuideModalProps> = ({
   onClose,
   sizeOptions,
   selectedSizeId,
-  onSizeChange,
 }) => {
   return (
     <Modal
@@ -44,11 +42,7 @@ export const SizeGuideModal: FC<SizeGuideModalProps> = ({
           </button>
         </div>
         <div className="flex-1 min-h-0 overflow-y-auto p-5">
-          <SizeForm
-            sizeOptions={sizeOptions}
-            selectedSizeId={selectedSizeId}
-            onSizeChange={onSizeChange}
-          />
+          <SizeForm sizeOptions={sizeOptions} selectedSizeId={selectedSizeId} />
         </div>
       </div>
     </Modal>

@@ -70,7 +70,6 @@ export const SizeSelection: FC<SizeSelectionProps> = ({
         onClose={() => setIsSizeGuideOpen(false)}
         sizeOptions={sizes}
         selectedSizeId={selectedSize}
-        onSizeChange={onSizeChange}
       />
     </>
   );
