@@ -168,7 +168,7 @@ export const CartItemRow: FC<CartItemRowProps> = ({
       </div>
 
       {/* Desktop / tablet layout */}
-      <div className="hidden sm:grid sm:grid-cols-[0.9fr_1.6fr_1fr_1fr_1fr] sm:items-center sm:gap-4">
+      <div className="hidden sm:grid sm:grid-cols-[0.9fr_1.6fr_1fr_1fr_1fr] sm:items-start sm:gap-4">
         <div className="flex justify-center sm:justify-start">
           <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-100">
             <ResponsiveImage
@@ -200,11 +200,13 @@ export const CartItemRow: FC<CartItemRowProps> = ({
 
         <div className="flex flex-col gap-1 text-sm">
           {hasSavings && formattedBasePrice && (
-            <span className="text-xs text-gray-400 line-through">
+            <span className="text-md text-gray-400 font-semibold line-through">
               {formattedBasePrice}
             </span>
           )}
-          <span className="text-[#e00000] font-semibold">{formattedPrice}</span>
+          <span className="text-[#e00000] text-2xl font-bold">
+            {formattedPrice}
+          </span>
         </div>
 
         <div className="flex flex-col items-start gap-2">
@@ -237,39 +239,47 @@ export const CartItemRow: FC<CartItemRowProps> = ({
               )}
             </button>
           </div>
-          <div className="flex items-center space-x-1">
-            <button
-              type="button"
-              onClick={onRemove}
-              disabled={isBusy}
-              aria-label={t('remove')}
-              title={t('remove')}
-              className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-[#e00000] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isRemoveBusy ? (
-                <ImSpinner2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <FiTrash2 className="w-4 h-4" />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={onSaveForLater}
-              disabled={isBusy}
-              aria-label={t('savedForLater')}
-              title={t('savedForLater')}
-              className="w-8 h-8 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSaveBusy ? (
-                <ImSpinner2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <FiBookmark className="w-4 h-4" />
-              )}
-            </button>
+          <div className="">
+            <div className="flex flex-col items-start">
+              <button
+                type="button"
+                onClick={onRemove}
+                disabled={isBusy}
+                aria-label={t('remove')}
+                title={t('remove')}
+                className="w-8 h-8 flex gap-2 items-center justify-center rounded border border-transparent text-[#e00000] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span>
+                  {isRemoveBusy ? (
+                    <ImSpinner2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FiTrash2 className="w-4 h-4" />
+                  )}
+                </span>
+                <span className="text-xs">Remove</span>
+              </button>
+              <button
+                type="button"
+                onClick={onSaveForLater}
+                disabled={isBusy}
+                aria-label={t('savedForLater')}
+                title={t('savedForLater')}
+                className="w-8 h-8 flex items-center gap-2 justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span>
+                  {isSaveBusy ? (
+                    <ImSpinner2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FiBookmark className="w-4 h-4" />
+                  )}
+                </span>
+                <span className="text-xs whitespace-nowrap">Save Later</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="text-sm font-semibold text-gray-900 text-right">
+        <div className="text-2xl font-semibold text-[#757575] text-right">
           {formattedTotal}
         </div>
       </div>
