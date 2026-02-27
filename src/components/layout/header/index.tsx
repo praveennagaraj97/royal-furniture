@@ -94,7 +94,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                     alt="..."
                     priority
                     quality={100}
-                    className="h-8 w-auto sm:h-10 object-contain"
+                    className="h-7 w-auto sm:h-9 object-contain"
                   />
                 </AppLink>
               </SlideIn>

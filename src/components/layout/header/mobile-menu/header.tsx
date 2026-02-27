@@ -56,7 +56,7 @@ export const MobileMenuHeader: FC<MobileMenuHeaderProps> = ({ onClose }) => {
           alt="Logo"
           priority
           quality={100}
-          className="h-8 w-auto object-contain"
+          className="h-7 w-auto object-contain"
         />
       </AppLink>
 
