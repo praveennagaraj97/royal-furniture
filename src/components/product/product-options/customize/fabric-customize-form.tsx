@@ -3,7 +3,7 @@
 import ProductCustomizeSkeleton from '@/components/skeletons/product-customize-skeleton';
 import { useGetFabricConfig } from '@/hooks/api';
 import { motion } from 'framer-motion';
-import { FC, KeyboardEvent, useMemo, useState } from 'react';
+import { FC, KeyboardEvent, useState } from 'react';
 
 interface FabricCustomizeFormProps {
   productSlug: string;
@@ -14,11 +14,6 @@ const FabricCustomizeForm: FC<FabricCustomizeFormProps> = ({ productSlug }) => {
 
   const [selectedFabricIndex, setSelectedFabricIndex] = useState(0);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-
-  const selectedFabric = useMemo(() => {
-    if (!fabrics.length) return null;
-    return fabrics[Math.min(selectedFabricIndex, fabrics.length - 1)];
-  }, [fabrics, selectedFabricIndex]);
 
   if (isLoading) {
     return <ProductCustomizeSkeleton />;
