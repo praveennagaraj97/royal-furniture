@@ -91,9 +91,9 @@ export const CheckoutProgress: FC<CheckoutProgressProps> = ({
   return (
     <div className="w-full">
       <div className="relative flex items-center justify-between">
-        <div className="absolute left-0 top-[40%] h-1.5 w-full -translate-y-1/2 rounded-full bg-[#d6d7df]" />
+        <div className="absolute left-0 top-[40%] h-1 sm:h-1.5 w-full -translate-y-1/2 rounded-full bg-[#d6d7df]" />
         <motion.div
-          className="absolute left-0 top-[40%] h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8]"
+          className="absolute left-0 top-[40%] h-1 sm:h-1.5 -translate-y-1/2 rounded-full bg-[#f8c6c8]"
           initial={{ width: 0 }}
           animate={{ width: `${progressPercent}%` }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
@@ -116,17 +116,17 @@ export const CheckoutProgress: FC<CheckoutProgressProps> = ({
               onClick={handleClick}
               disabled={!isClickable}
               aria-current={step.status === 'current' ? 'step' : undefined}
-              className={`relative z-10 flex flex-1 flex-col items-center gap-2 focus-visible:outline-none ${
+              className={`relative z-10 flex flex-1 flex-col items-center gap-1 sm:gap-2 focus-visible:outline-none ${
                 isClickable ? 'cursor-pointer' : 'cursor-default'
               }`}
             >
               <div
-                className={`relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 ${indicatorStyles[step.status]}`}
+                className={`relative flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full transition-all duration-300 ${indicatorStyles[step.status]}`}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 {showCheck && (
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-white text-deep-maroon">
-                    <FiCheck className="h-3 w-3" />
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full border border-white bg-white text-deep-maroon">
+                    <FiCheck className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                   </span>
                 )}
               </div>

@@ -27,7 +27,7 @@ export const CartItemsSection: FC = () => {
       <div className="space-y-4">
         <div className="rounded-2xl border border-gray-200 bg-white p-4">
           <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-medium">
+            <h1 className="lg:text-2xl md:text-xl sm:text-lg font-medium">
               {t('title', {
                 count:
                   header?.total_items ??

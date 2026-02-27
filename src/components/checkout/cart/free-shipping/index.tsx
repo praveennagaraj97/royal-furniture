@@ -53,7 +53,7 @@ export const CartFreeShippingBanner: FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2 text-sm sm:text-base font-medium">
+      <div className="flex items-center gap-2 text-xs sm:text-base font-medium">
         <FaTruckFast className="h-5 w-5 text-deep-maroon" />
         <span>{bannerText}</span>
       </div>
