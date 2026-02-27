@@ -38,9 +38,9 @@ export const Breadcrumb: FC<BreadcrumbProps> = ({ items, onBackClick }) => {
       distance={10}
       duration={0.4}
       margin="-50px"
-      className="section-container py-6 "
+      className="section-container py-2 sm:py-6"
     >
-      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pr-3">
+      <div className="sm:flex hidden items-center gap-2 overflow-x-auto no-scrollbar pr-3">
         {/* Back Arrow */}
         <button
           type="button"
