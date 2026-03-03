@@ -3,8 +3,10 @@
 import { ViewOnce } from '@/components/shared/animations';
 import { Accordion } from '@/components/shared/ui/accordion';
 import type { ProductInfoSection } from '@/types/response';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import type { FC } from 'react';
+import { type FC, useState } from 'react';
+import { FiChevronDown } from 'react-icons/fi';
 
 export interface GeneralInformationProps {
   description?: string;
@@ -16,6 +18,9 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
   infoSection,
 }) => {
   const t = useTranslations('product.info');
+  const normalizedDescription = description?.trim() ?? '';
+  const [isGeneralInfoOpen, setIsGeneralInfoOpen] = useState(false);
+
   // Helper to render data rows
   const renderDataRows = (data: Array<{ label: string; value: string }>) => (
     <div>
@@ -45,12 +50,12 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
           children: renderDataRows(
             value as Array<{ label: string; value: string }>,
           ),
-          defaultOpen: idx === 0,
+          defaultOpen: !normalizedDescription && idx === 0,
         }))
     : [];
 
   // If no sections and no description, render nothing
-  if ((!dynamicAccordionItems.length && !description) || !infoSection) {
+  if (!normalizedDescription && !dynamicAccordionItems.length) {
     return null;
   }
 
@@ -64,12 +69,42 @@ export const GeneralInformation: FC<GeneralInformationProps> = ({
       margin="-40px"
     >
       <div className="space-y-3">
-        <div>
-          <h2 className="text-base md:text-xl font-medium text-indigo-slate mb-2">
-            {t('title')}
-          </h2>
-          <p className="leading-relaxed">{description}</p>
-        </div>
+        {!!normalizedDescription && (
+          <div className="border-b border-gray-200">
+            <button
+              type="button"
+              onClick={() => setIsGeneralInfoOpen((prev) => !prev)}
+              className="flex items-center justify-between w-full py-2 text-left"
+              aria-expanded={isGeneralInfoOpen}
+            >
+              <h2 className="text-base md:text-xl font-medium text-indigo-slate">
+                {t('title')}
+              </h2>
+              <FiChevronDown
+                className={`h-4 w-4 text-gray-700 transition-transform duration-200 ${
+                  isGeneralInfoOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+
+            <AnimatePresence initial={false}>
+              {isGeneralInfoOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                  className="overflow-hidden"
+                >
+                  <p className="leading-relaxed pb-3">
+                    {normalizedDescription}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
         {!!dynamicAccordionItems.length && (
           <Accordion items={dynamicAccordionItems} allowMultiple={true} />
         )}
