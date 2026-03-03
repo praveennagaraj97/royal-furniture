@@ -16,7 +16,6 @@ import type {
 } from '@/types/response/cart';
 import { formatCurrency } from '@/utils/format-currency';
 import { getOrCreateGuestSession } from '@/utils/guest-session';
-import { useParams } from 'next/navigation';
 import {
   createContext,
   useCallback,
@@ -152,6 +151,8 @@ const mapCartItem = (
     cartItemId: item.id,
     name: product.name,
     slug: product.slug,
+    categorySlug: product.category?.slug ?? undefined,
+    subcategorySlug: product.sub_category?.slug ?? undefined,
     description: product.description,
     color: product.colour,
     image: product.responsive_images || {},
@@ -159,6 +160,7 @@ const mapCartItem = (
     price: unitPrice,
     quantity: item.quantity,
     stock: product.stock_count,
+    viewCount: product.view_count,
     attributes,
     totalPrice,
     discountSavings,
@@ -225,9 +227,6 @@ const mapCartDataToState = (
 };
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const params = useParams<{ country?: string; locale?: string }>();
-  const locale = params?.locale ?? 'en';
-  const countryCode = params?.country ?? 'ae';
   const [state, setState] = useState<CartState>(DEFAULT_CART_STATE);
   const [isHydrated, setIsHydrated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

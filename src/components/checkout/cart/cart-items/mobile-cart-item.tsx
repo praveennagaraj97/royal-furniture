@@ -1,11 +1,12 @@
 'use client';
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
+import { AppLink } from '@/hooks';
 import type { CartItem } from '@/types/response/cart';
 import { formatCurrency } from '@/utils/format-currency';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import { FC, useMemo } from 'react';
+import { CSSProperties, FC, useMemo } from 'react';
 import { FiBookmark, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { ImSpinner2 } from 'react-icons/im';
 
@@ -30,7 +31,6 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
   const countryCode = params?.country ?? 'ae';
 
   const hasSavings = item.basePrice && item.basePrice > item.price;
-  const itemTotal = item.totalPrice ?? item.price * item.quantity;
   const desktopAttributes = useMemo(
     () =>
       item.attributes?.filter((attribute) => Boolean(attribute?.trim())) ?? [],
@@ -76,11 +76,18 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
         : null,
     [savingsAmount, countryCode, locale],
   );
+  const productHref = useMemo(() => {
+    if (!item.categorySlug || !item.subcategorySlug || !item.slug) {
+      return null;
+    }
 
-  const formattedTotal = useMemo(
-    () => formatCurrency(itemTotal, countryCode, locale),
-    [itemTotal, countryCode, locale],
-  );
+    return `/${item.categorySlug}/${item.subcategorySlug}/${item.slug}`;
+  }, [item.categorySlug, item.subcategorySlug, item.slug]);
+
+  // const formattedTotal = useMemo(
+  //   () => formatCurrency(itemTotal, countryCode, locale),
+  //   [itemTotal, countryCode, locale],
+  // );
 
   const infoMessages = useMemo(() => {
     const messages: string[] = [];
@@ -96,23 +103,49 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
     return messages;
   }, [formattedSavings, item.stock]);
 
+  const viewsTickerMessage = useMemo(() => {
+    if (typeof item.viewCount !== 'number' || item.viewCount <= 0) {
+      return null;
+    }
+
+    return `${item.viewCount} Customer Viewed this product`;
+  }, [item.viewCount]);
+
   const tickerMessages = useMemo(() => {
-    const combined = [...desktopAttributes.slice(1), ...infoMessages].filter(
-      (message) => Boolean(message?.trim()),
-    );
+    const combined = [
+      viewsTickerMessage,
+      ...desktopAttributes.slice(1),
+      ...infoMessages,
+    ].filter((message) => Boolean(message?.trim())) as string[];
 
     const unique = Array.from(new Set(combined));
 
     if (!unique.length && desktopAttributes[0]) {
-      return [desktopAttributes[0], desktopAttributes[0]];
+      return [desktopAttributes[0]];
     }
 
-    if (unique.length === 1) {
-      return [unique[0], unique[0]];
+    return unique;
+  }, [desktopAttributes, infoMessages, viewsTickerMessage]);
+
+  const tickerTrackMessages = useMemo(
+    () =>
+      tickerMessages.length > 1
+        ? [...tickerMessages, tickerMessages[0]]
+        : tickerMessages,
+    [tickerMessages],
+  );
+
+  const tickerStyle = useMemo(() => {
+    if (tickerMessages.length <= 1) {
+      return undefined;
     }
 
-    return unique.slice(0, 2);
-  }, [desktopAttributes, infoMessages]);
+    return {
+      '--ticker-items': tickerMessages.length,
+      '--ticker-item-height': '1.75rem',
+      '--ticker-duration': `${Math.max(tickerMessages.length * 2, 6)}s`,
+    } as CSSProperties;
+  }, [tickerMessages]);
 
   const headlinePromo =
     desktopAttributes[0] ??
@@ -121,6 +154,8 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
       : item.stock
         ? `Only ${item.stock} left in stock`
         : null);
+
+  console.log(productHref);
 
   return (
     <div className="sm:hidden rounded-xl border border-gray-200 bg-white p-3 shadow-sm space-y-3">
@@ -135,9 +170,18 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
         </div>
 
         <div className="min-w-0 flex-1 space-y-1">
-          <p className="text-sm leading-5 font-semibold text-gray-900 line-clamp-2">
-            {item.name}
-          </p>
+          {productHref ? (
+            <AppLink
+              href={productHref}
+              className="block text-sm leading-5 font-semibold text-gray-900 line-clamp-2"
+            >
+              {item.name}
+            </AppLink>
+          ) : (
+            <p className="text-sm leading-5 font-semibold text-gray-900 line-clamp-2">
+              {item.name}
+            </p>
+          )}
 
           {headlinePromo && (
             <p className="text-xs font-semibold text-deep-maroon line-clamp-1">
@@ -163,12 +207,12 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
               )}
             </div>
 
-            <div className="text-xl font-bold">{formattedTotal}</div>
+            {/* <div className="text-xl font-bold">{formattedTotal}</div> */}
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+      <div className="flex items-center justify-between">
         <div className="flex h-8 w-24 items-center justify-between rounded-md border border-gray-300 px-2">
           <button
             type="button"
@@ -237,18 +281,27 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
       </div>
 
       {tickerMessages.length > 0 && (
-        <div className="border-t border-dashed border-gray-300 pt-2">
-          <div className="h-7 overflow-hidden rounded bg-gray-100 px-2.5">
-            <div className="mobile-cart-promo-track">
-              {tickerMessages.map((message, index) => (
+        <div className="border-t border-gray-300 pt-2">
+          <div className="h-7 overflow-hidden">
+            <div
+              className={
+                tickerMessages.length > 1
+                  ? 'mobile-cart-promo-track'
+                  : undefined
+              }
+              style={tickerStyle}
+            >
+              {tickerTrackMessages.map((message, index) => (
                 <p
                   key={`${message}-${index}`}
                   className={`h-7 text-xs leading-7 font-medium line-clamp-1 ${
                     /save/i.test(message)
                       ? 'text-green-700'
-                      : index % 2 === 0
-                        ? 'text-gray-600'
-                        : 'text-deep-maroon'
+                      : /viewed this product/i.test(message)
+                        ? 'text-sky-700'
+                        : index % 2 === 0
+                          ? 'text-gray-600'
+                          : 'text-deep-maroon'
                   }`}
                 >
                   {message}

@@ -11,6 +11,8 @@ export interface CartItem {
   cartItemId: string; // server-side cart line id
   name: string;
   slug: string;
+  categorySlug?: string;
+  subcategorySlug?: string;
   description?: string;
   color?: string;
   image: ResponsiveImages;
@@ -18,6 +20,7 @@ export interface CartItem {
   basePrice?: number;
   quantity: number;
   stock?: number;
+  viewCount?: number;
   attributes?: string[];
   totalPrice?: number;
   discountSavings?: number;
@@ -72,6 +75,7 @@ export interface CartApiItem {
     pricing?: ProductPricing;
     responsive_images?: ResponsiveImages;
     stock_count?: number;
+    view_count?: number;
   };
   quantity: number;
   discount_savings?: string;

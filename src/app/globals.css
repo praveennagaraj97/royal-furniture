@@ -150,21 +150,20 @@
   }
 
   @keyframes mobile-cart-promo-cycle {
-    0%,
-    40% {
+    from {
       transform: translateY(0);
     }
-    50%,
-    90% {
-      transform: translateY(-2rem);
-    }
-    100% {
-      transform: translateY(0);
+    to {
+      transform: translateY(
+        calc(-1 * var(--ticker-item-height, 1.75rem) * var(--ticker-items, 1))
+      );
     }
   }
 
   .mobile-cart-promo-track {
-    animation: mobile-cart-promo-cycle 4s ease-in-out infinite;
+    animation: mobile-cart-promo-cycle var(--ticker-duration, 8s) linear
+      infinite;
+    will-change: transform;
   }
 }
 
