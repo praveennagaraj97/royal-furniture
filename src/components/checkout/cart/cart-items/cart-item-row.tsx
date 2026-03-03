@@ -1,6 +1,7 @@
 'use client';
 
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
+import { AppLink } from '@/hooks';
 import type { CartItem } from '@/types/response/cart';
 import { formatCurrency } from '@/utils/format-currency';
 import { useTranslations } from 'next-intl';
@@ -57,6 +58,13 @@ export const CartItemRow: FC<CartItemRowProps> = ({
     () => formatCurrency(itemTotal, countryCode, locale),
     [itemTotal, countryCode, locale],
   );
+  const productHref = useMemo(() => {
+    if (!item.categorySlug || !item.subcategorySlug || !item.slug) {
+      return null;
+    }
+
+    return `/${item.categorySlug}/${item.subcategorySlug}/${item.slug}`;
+  }, [item.categorySlug, item.subcategorySlug, item.slug]);
 
   return (
     <div className="border-b border-gray-200 pb-4 last:border-none last:pb-0">
@@ -82,9 +90,18 @@ export const CartItemRow: FC<CartItemRowProps> = ({
         </div>
 
         <div className="flex flex-col gap-1 text-sm text-gray-700">
-          <span className="text-base font-medium line-clamp-1 text-gray-900">
-            {item.name}
-          </span>
+          {productHref ? (
+            <AppLink
+              href={productHref}
+              className="text-base font-medium line-clamp-1 text-gray-900"
+            >
+              {item.name}
+            </AppLink>
+          ) : (
+            <span className="text-base font-medium line-clamp-1 text-gray-900">
+              {item.name}
+            </span>
+          )}
           {item.attributes?.map((attribute, index) => (
             <span
               key={`${item.id}-${attribute}`}

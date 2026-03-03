@@ -106,7 +106,7 @@ export const ProductHeader: FC<ProductHeaderProps> = ({
           )}
 
           {discount ? (
-            <div className="sm:hidden block bg-deep-maroon text-white text-xs md:text-sm font-bold px-2 py-1 rounded-md">
+            <div className="bg-deep-maroon text-white text-xs md:text-sm font-bold px-2 py-1 rounded-md">
               {discount}% OFF
             </div>
           ) : null}

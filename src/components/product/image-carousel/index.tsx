@@ -47,11 +47,11 @@ const ImageCard: FC<ImageCardProps> = ({
         key={`${idx}-${img.web?.url || img.mobile?.url || img.ipad?.url || 'default'}`}
       />
 
-      {discount ? (
+      {/* {discount ? (
         <div className="sm:block hidden absolute top-4 left-4 bg-deep-maroon text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-md z-10">
           {discount}% OFF
         </div>
-      ) : null}
+      ) : null} */}
 
       {/* Legacy wishlist/share controls (moved next to product name) */}
       {/**
