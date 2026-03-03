@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { FC, useMemo } from 'react';
 import { FiBookmark, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { ImSpinner2 } from 'react-icons/im';
+import { MobileCartItem } from './mobile-cart-item';
 
 interface CartItemRowProps {
   item: CartItem;
@@ -59,113 +60,13 @@ export const CartItemRow: FC<CartItemRowProps> = ({
 
   return (
     <div className="border-b border-gray-200 pb-4 last:border-none last:pb-0">
-      {/* Mobile layout */}
-      <div className="flex gap-3 sm:hidden">
-        <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-          <ResponsiveImage
-            images={item.image}
-            alt={item.name}
-            className="h-full w-full object-cover"
-            shouldFill
-          />
-        </div>
-
-        <div className="flex-1 flex items-stretch gap-3 text-sm text-gray-700">
-          <div className="flex-1 space-y-1">
-            <span className="text-base font-medium text-gray-900">
-              {item.name}
-            </span>
-            {item.attributes?.map((attribute, index) => (
-              <span
-                key={`${item.id}-${attribute}`}
-                className={
-                  index === 0 || attribute.toLowerCase().startsWith('save')
-                    ? 'block text-xs font-semibold text-[#007B35]'
-                    : 'block text-xs text-gray-500'
-                }
-              >
-                {attribute}
-              </span>
-            ))}
-            <div className="flex items-center gap-2">
-              {hasSavings && formattedBasePrice && (
-                <span className="text-xs text-gray-400 line-through">
-                  {formattedBasePrice}
-                </span>
-              )}
-              <span className="text-[#e00000] font-semibold">
-                {formattedPrice}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => onQuantityChange(item.quantity - 1)}
-                disabled={decreaseDisabled}
-                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isDecreaseBusy ? (
-                  <ImSpinner2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <FiMinus className="w-4 h-4" />
-                )}
-              </button>
-              <span className="w-8 text-center font-semibold">
-                {item.quantity}
-              </span>
-              <button
-                type="button"
-                onClick={() => onQuantityChange(item.quantity + 1)}
-                disabled={increaseDisabled}
-                className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isIncreaseBusy ? (
-                  <ImSpinner2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <FiPlus className="w-4 h-4" />
-                )}
-              </button>
-            </div>
-
-            <div className="flex flex-col items-end gap-1 text-sm font-semibold text-gray-900">
-              <span>{formattedTotal}</span>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={onRemove}
-                  disabled={isBusy}
-                  aria-label={t('remove')}
-                  title={t('remove')}
-                  className="p-1 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isRemoveBusy ? (
-                    <ImSpinner2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <FiTrash2 className="w-4 h-4" />
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={onSaveForLater}
-                  disabled={isBusy}
-                  aria-label={t('savedForLater')}
-                  title={t('savedForLater')}
-                  className="p-1 flex items-center justify-center rounded border border-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSaveBusy ? (
-                    <ImSpinner2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <FiBookmark className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <MobileCartItem
+        item={item}
+        pendingAction={pendingAction}
+        onQuantityChange={onQuantityChange}
+        onRemove={onRemove}
+        onSaveForLater={onSaveForLater}
+      />
 
       {/* Desktop / tablet layout */}
       <div className="hidden sm:grid sm:grid-cols-[0.9fr_1.6fr_1fr_1fr_1fr] sm:items-start sm:gap-4">

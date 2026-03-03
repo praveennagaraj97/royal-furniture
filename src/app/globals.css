@@ -148,6 +148,24 @@
   .modal-shake {
     animation: shake 0.4s ease-in-out;
   }
+
+  @keyframes mobile-cart-promo-cycle {
+    0%,
+    40% {
+      transform: translateY(0);
+    }
+    50%,
+    90% {
+      transform: translateY(-2rem);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-cart-promo-track {
+    animation: mobile-cart-promo-cycle 4s ease-in-out infinite;
+  }
 }
 
 /* NProgress Styles - Deep Maroon */
