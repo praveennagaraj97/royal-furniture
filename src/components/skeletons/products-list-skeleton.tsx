@@ -12,15 +12,10 @@ const GRID_COLUMN_CLASS: Record<3 | 4 | 5, string> = {
 };
 
 export const ProductsListSkeleton: FC<ProductsListSkeletonProps> = ({
-  isFilterVisible = false,
   gridColumns = 4,
 }) => {
   return (
-    <div
-      className={`flex-1 transition-all duration-300 ${
-        isFilterVisible ? 'lg:w-3/4' : 'w-full'
-      }`}
-    >
+    <div className="flex-1 min-w-0 w-full transition-all duration-300">
       <div
         className={`grid gap-x-3 gap-y-6 transition-all duration-300 grid-cols-2 ${GRID_COLUMN_CLASS[gridColumns]}`}
       >

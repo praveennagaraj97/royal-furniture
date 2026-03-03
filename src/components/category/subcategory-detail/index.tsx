@@ -148,7 +148,7 @@ const SubcategoryDetail: FC = () => {
         </AnimatePresence>
 
         {/* Products Column */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex-1 min-w-0 flex flex-col gap-4">
           <ProductsList
             products={displayProducts}
             isFilterVisible={isFilterVisible}

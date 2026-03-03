@@ -38,11 +38,7 @@ const ProductsList: FC<ProductsListProps> = ({
 
   if (!products || products.length === 0) {
     return (
-      <div
-        className={`flex-1 transition-all duration-300 ${
-          isFilterVisible ? 'lg:w-3/4' : 'w-full'
-        }`}
-      >
+      <div className="flex-1 min-w-0 w-full transition-all duration-300">
         <ProductsEmptyState />
       </div>
     );
@@ -55,9 +51,7 @@ const ProductsList: FC<ProductsListProps> = ({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
-      className={`flex-1 transition-all duration-300 ${
-        isFilterVisible ? 'lg:w-3/4' : 'w-full'
-      }`}
+      className="flex-1 min-w-0 w-full transition-all duration-300"
     >
       <StaggerContainer
         staggerChildren={0.05}
