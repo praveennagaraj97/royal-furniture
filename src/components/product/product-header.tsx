@@ -39,6 +39,10 @@ export const ProductHeader: FC<ProductHeaderProps> = ({
     ? parseFloat(product.product_info.pricing.amount_saved)
     : savings;
 
+  const discount = product.product_info.pricing.offer_percentage
+    ? Math.round(parseFloat(product.product_info.pricing.offer_percentage))
+    : 0;
+
   return (
     <div className="space-y-3">
       <div>
@@ -100,6 +104,12 @@ export const ProductHeader: FC<ProductHeaderProps> = ({
               {formatCurrency(basePrice)}
             </span>
           )}
+
+          {discount ? (
+            <div className="sm:hidden block bg-deep-maroon text-white text-xs md:text-sm font-bold px-2 py-1 rounded-md">
+              {discount}% OFF
+            </div>
+          ) : null}
         </div>
       </ViewOnce>
 

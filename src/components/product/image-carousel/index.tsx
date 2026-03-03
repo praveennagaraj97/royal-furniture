@@ -48,7 +48,7 @@ const ImageCard: FC<ImageCardProps> = ({
       />
 
       {discount ? (
-        <div className="absolute top-4 left-4 bg-deep-maroon text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-md z-10">
+        <div className="sm:block hidden absolute top-4 left-4 bg-deep-maroon text-white text-xs md:text-sm font-bold px-3 py-1.5 rounded-md z-10">
           {discount}% OFF
         </div>
       ) : null}
