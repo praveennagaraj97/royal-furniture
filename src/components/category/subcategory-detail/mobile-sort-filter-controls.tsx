@@ -3,7 +3,7 @@
 import Dropdown from '@/components/shared/dropdown';
 import { SortOption } from '@/components/shared/sort-dropdown';
 import { useTranslations } from 'next-intl';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { FiFilter } from 'react-icons/fi';
 
@@ -20,18 +20,18 @@ const MobileSortFilterControls: FC<MobileSortFilterControlsProps> = ({
   selectedSort,
   onSortChange,
   onToggleFilter,
-  isFilterVisible,
+  // isFilterVisible,
 }) => {
   const tSort = useTranslations('sort');
   const tCategory = useTranslations('categories.subcategory.topBar');
 
-  const selectedSortLabel = useMemo(() => {
-    return (
-      sortOptions.find((option) => option.id === selectedSort)?.label ||
-      sortOptions[0]?.label ||
-      tSort('recommended')
-    );
-  }, [selectedSort, sortOptions, tSort]);
+  // const selectedSortLabel = useMemo(() => {
+  //   return (
+  //     sortOptions.find((option) => option.id === selectedSort)?.label ||
+  //     sortOptions[0]?.label ||
+  //     tSort('recommended')
+  //   );
+  // }, [selectedSort, sortOptions, tSort]);
 
   return (
     <div className="fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pointer-events-none lg:hidden">
@@ -39,13 +39,13 @@ const MobileSortFilterControls: FC<MobileSortFilterControlsProps> = ({
         <Dropdown
           align="left"
           trigger={
-            <div className="flex items-center gap-2 px-5 py-3 text-sm font-semibold">
-              <BiSortAlt2 className="h-5 w-5 text-white" />
+            <div className="flex items-center gap-2 px-3 py-2 text-sm font-semibold">
+              <BiSortAlt2 className="h-3 w-3 text-white" />
               <div className="flex flex-col text-left leading-tight">
                 <span className="tracking-wide">{tSort('sortBy')}</span>
-                <span className="text-xs font-normal text-white/70">
+                {/* <span className="text-xs font-normal text-white/70">
                   {selectedSortLabel}
-                </span>
+                </span> */}
               </div>
             </div>
           }
@@ -72,14 +72,10 @@ const MobileSortFilterControls: FC<MobileSortFilterControlsProps> = ({
         <button
           type="button"
           onClick={onToggleFilter}
-          className="flex items-center gap-2 px-5 py-3 text-sm font-semibold"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-semibold"
         >
-          <FiFilter className="h-5 w-5" />
-          <span>
-            {isFilterVisible
-              ? tCategory('hideFilter')
-              : tCategory('showFilter')}
-          </span>
+          <FiFilter className="h-3 w-3" />
+          <span>{tCategory('filter')}</span>
         </button>
       </div>
     </div>

@@ -555,6 +555,7 @@
       "topBar": {
         "showFilter": "عرض الفلاتر",
         "hideFilter": "إخفاء الفلاتر",
+        "filter": "تصفية",
         "gridViewAria": "عرض الشبكة"
       },
       "empty": {

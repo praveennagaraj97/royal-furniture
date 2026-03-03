@@ -509,6 +509,7 @@
       "topBar": {
         "showFilter": "Show Filter",
         "hideFilter": "Hide Filter",
+        "filter": "Filter",
         "gridViewAria": "Grid view"
       },
       "empty": {
