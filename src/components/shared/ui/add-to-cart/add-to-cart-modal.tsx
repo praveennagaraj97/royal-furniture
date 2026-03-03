@@ -32,7 +32,7 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
       onClose={onClose}
       className="max-w-5xl w-full"
     >
-      <div className="flex flex-col h-full bg-white max-h-[90vh] overflow-y-auto rounded-lg">
+      <div className="flex flex-col h-full bg-white max-h-[90vh] overflow-hidden rounded-lg">
         {/* Header */}
         {/* <div className="flex items-center justify-end px-4 py-2.5">
           <button
@@ -46,9 +46,9 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
         </div> */}
 
         {/* Main Content */}
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-8 items-start">
-            <div className="sticky top-0">
+            <div className="w-full lg:sticky lg:top-0 lg:self-start">
               <MainProductPreview
                 images={mainVariantImage}
                 alt={product.product_info.name}
