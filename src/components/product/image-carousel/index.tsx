@@ -25,7 +25,6 @@ const ImageCard: FC<ImageCardProps> = ({
   img,
   onClick,
   alt,
-  discount,
   showView3D,
   idx,
 }) => {

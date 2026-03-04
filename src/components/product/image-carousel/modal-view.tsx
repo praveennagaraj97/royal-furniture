@@ -106,13 +106,13 @@ const ImageCarouselModalView: FC<ImageCarouselModalViewProps> = ({
 
         {/* Thumbnails: right on desktop, bottom on mobile */}
         {images.length > 1 ? (
-          <div className="lg:grid lg:grid-cols-3 flex lg:overscroll-x-none overflow-x-auto lg:flex-wrap gap-2 bg-white/80">
+          <div className="flex overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto lg:flex-wrap lg:content-start gap-2 bg-white/80">
             {images.map((img, idx) => {
               return (
                 <button
                   key={idx}
                   onClick={() => setSelectedIndex(idx)}
-                  className={`border-2 rounded-lg overflow-hidden transition-all duration-200 focus:outline-none h-fit lg:w-full w-20 shrink-0 ${
+                  className={`border-2 rounded-lg overflow-hidden transition-all duration-200 focus:outline-none h-fit w-20 shrink-0 lg:w-[calc((100%-1rem)/3)] ${
                     selectedIndex === idx
                       ? 'border-deep-maroon ring-2 ring-deep-maroon/20'
                       : 'border-gray-200 hover:border-gray-300'
