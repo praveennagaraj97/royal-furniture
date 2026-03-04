@@ -3,7 +3,7 @@
 import AddToCartWrapper from '@/components/shared/ui/add-to-cart';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { FC, useState } from 'react';
-import { FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart } from 'react-icons/fi';
 
 import { useCart } from '@/contexts/cart-context';
 import { AppLink, useAppRouter } from '@/hooks';
@@ -24,6 +24,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
 }) => {
   const formatCurrency = useFormatCurrency();
   const tCommon = useTranslations('common');
+  const tActions = useTranslations('product.actions');
   const { addItem, items, moveToCart } = useCart();
   const [isMoving, setIsMoving] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -32,7 +33,11 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
 
   const offerPercentage = parseFloat(product.pricing.offer_percentage || '0');
   const hasDiscount = offerPercentage > 0;
-  const productSku = product.sku?.trim();
+  const productSku = product.product_sku?.trim();
+  const isOutOfStock =
+    product.is_out_of_stock ||
+    product.stock_status?.status === 'out_of_stock' ||
+    (typeof product.stock_count === 'number' && product.stock_count <= 0);
   const isInCart = items.some(
     (item) =>
       String(item.id) === String(productSku) ||
@@ -62,6 +67,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
 
   const handleAddToCart = async () => {
     if (isAdding || isInCart) return false;
+    if (isOutOfStock) return false;
     if (!productSku) return false;
 
     try {
@@ -158,71 +164,84 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
       </AppLink>
 
       {enableAddToCart && !product.cart_item_id ? (
-        <div className="px-2 pb-2 pt-1 sm:px-0 sm:pb-0">
-          <div className="flex items-center gap-2 mb-3">
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                handleQuantityChange(-1);
-              }}
-              disabled={quantity <= 1 || isAdding || isInCart}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              aria-label="Decrease quantity"
-            >
-              <FiMinus className="w-3 h-3" />
-            </button>
-            <span className="font-bold text-xl min-w-6 text-center">
-              {quantity}
-            </span>
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                handleQuantityChange(1);
-              }}
-              disabled={isAdding || isInCart}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              aria-label="Increase quantity"
-            >
-              <FiPlus className="w-3 h-3" />
-            </button>
-          </div>
-
-          <AddToCartWrapper
-            product={modalProduct}
-            mainVariantImage={product.responsive_images}
-            onOpen={handleAddToCart}
-            onGoToCart={handleGoToCart}
-            disableOpen={isInCart}
-          >
-            {isInCart ? (
+        <div className="mt-2">
+          {/* {!isInCart && !isOutOfStock ? (
+            <div className="flex items-center gap-2 mb-3">
               <button
                 type="button"
                 onClick={(event) => {
                   event.stopPropagation();
-                  handleGoToCart();
+                  handleQuantityChange(-1);
                 }}
-                className="w-full flex items-center justify-center gap-2 border border-emerald-200 text-emerald-700 bg-emerald-50 py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium"
+                disabled={quantity <= 1 || isAdding}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                aria-label="Decrease quantity"
               >
-                <FiShoppingCart className="text-lg sm:text-xl" />
-                <span>{tCommon('inCart')}</span>
+                <FiMinus className="w-3 h-3" />
               </button>
-            ) : (
+              <span className="font-bold text-xl min-w-6 text-center">
+                {quantity}
+              </span>
               <button
                 type="button"
-                disabled={isAdding || !productSku}
-                className="w-full flex items-center justify-center gap-2 border border-deep-maroon py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleQuantityChange(1);
+                }}
+                disabled={isAdding}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                aria-label="Increase quantity"
               >
-                <FiShoppingCart className="text-lg sm:text-xl" />
-                <span>
-                  {isAdding
-                    ? `${tCommon('addToCart')}...`
-                    : tCommon('addToCart')}
-                </span>
+                <FiPlus className="w-3 h-3" />
               </button>
-            )}
-          </AddToCartWrapper>
+            </div>
+          ) : null} */}
+
+          {isOutOfStock ? (
+            <button
+              type="button"
+              disabled
+              className="w-full flex items-center justify-center gap-2 border border-amber-200 text-amber-900 bg-amber-50 py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium opacity-90 cursor-not-allowed"
+            >
+              <FiShoppingCart className="text-lg sm:text-xl" />
+              <span>{tActions('outOfStock')}</span>
+            </button>
+          ) : (
+            <AddToCartWrapper
+              product={modalProduct}
+              mainVariantImage={product.responsive_images}
+              onOpen={handleAddToCart}
+              onGoToCart={handleGoToCart}
+              disableOpen={isInCart}
+            >
+              {isInCart ? (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleGoToCart();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 border border-emerald-200 text-emerald-700 bg-emerald-50 py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium"
+                >
+                  <FiShoppingCart className="text-lg sm:text-xl" />
+                  <span>{tCommon('inCart')}</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled={isAdding || !productSku}
+                  className="w-full flex items-center justify-center gap-2 border border-deep-maroon py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
+                >
+                  <FiShoppingCart className="text-lg sm:text-xl" />
+                  <span>
+                    {isAdding
+                      ? `${tCommon('addToCart')}...`
+                      : tCommon('addToCart')}
+                  </span>
+                </button>
+              )}
+            </AddToCartWrapper>
+          )}
         </div>
       ) : null}
 
