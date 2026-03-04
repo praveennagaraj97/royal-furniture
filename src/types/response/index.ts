@@ -131,9 +131,7 @@ export interface ProductColor {
 export interface ProductItem {
   id: number;
   product_sku?: string;
-  stock_count?: number;
-  is_out_of_stock?: boolean;
-  stock_status?: StockStatus;
+  stock: number;
   name: string;
   slug: string;
   description: string;

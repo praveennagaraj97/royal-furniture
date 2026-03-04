@@ -34,10 +34,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   const offerPercentage = parseFloat(product.pricing.offer_percentage || '0');
   const hasDiscount = offerPercentage > 0;
   const productSku = product.product_sku?.trim();
-  const isOutOfStock =
-    product.is_out_of_stock ||
-    product.stock_status?.status === 'out_of_stock' ||
-    (typeof product.stock_count === 'number' && product.stock_count <= 0);
+  const isOutOfStock = typeof product.stock === 'number' && product.stock <= 0;
   const isInCart = items.some(
     (item) =>
       String(item.id) === String(productSku) ||
@@ -165,38 +162,6 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
 
       {enableAddToCart && !product.cart_item_id ? (
         <div className="mt-2">
-          {/* {!isInCart && !isOutOfStock ? (
-            <div className="flex items-center gap-2 mb-3">
-              <button
-                type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleQuantityChange(-1);
-                }}
-                disabled={quantity <= 1 || isAdding}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                aria-label="Decrease quantity"
-              >
-                <FiMinus className="w-3 h-3" />
-              </button>
-              <span className="font-bold text-xl min-w-6 text-center">
-                {quantity}
-              </span>
-              <button
-                type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleQuantityChange(1);
-                }}
-                disabled={isAdding}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-                aria-label="Increase quantity"
-              >
-                <FiPlus className="w-3 h-3" />
-              </button>
-            </div>
-          ) : null} */}
-
           {isOutOfStock ? (
             <button
               type="button"
