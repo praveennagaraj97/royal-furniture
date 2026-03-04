@@ -122,7 +122,7 @@ export const FormInput: FC<FormInputProps> = ({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-e-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
           >
             {showPassword ? (
               <FiEyeOff className="w-5 h-5" />
@@ -132,11 +132,7 @@ export const FormInput: FC<FormInputProps> = ({
           </button>
         )}
         {rightElement && !isPasswordType && (
-          <div
-            className={`absolute top-1/2 -translate-y-1/2 ${
-              isNumericType ? 'right-3' : 'inset-e-3'
-            }`}
-          >
+          <div className={`absolute top-1/2 -translate-y-1/2 right-3`}>
             {rightElement}
           </div>
         )}
