@@ -27,7 +27,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   const tActions = useTranslations('product.actions');
   const { addItem, items, moveToCart } = useCart();
   const [isMoving, setIsMoving] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  // const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const { push } = useAppRouter();
 
@@ -61,9 +61,9 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
     }
   };
 
-  const handleQuantityChange = (delta: number) => {
-    setQuantity((prev) => Math.max(1, prev + delta));
-  };
+  // const handleQuantityChange = (delta: number) => {
+  //   setQuantity((prev) => Math.max(1, prev + delta));
+  // };
 
   const handleAddToCart = async () => {
     if (isAdding || isInCart) return false;
@@ -72,7 +72,7 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
 
     try {
       setIsAdding(true);
-      await addItem(productSku, quantity);
+      await addItem(productSku, 1);
       return true;
     } catch {
       return false;
