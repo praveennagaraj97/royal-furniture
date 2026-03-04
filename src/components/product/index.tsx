@@ -126,6 +126,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 paymentOptions={data.payment_options}
                 freeAssembly={data.free_assembly}
                 expressDeliveryTimer={data.express_delivery_timer}
+                hideWaysOfPayment
               />
             </div>
           </ViewOnce>
@@ -133,7 +134,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:block section-container">
+      <div className="hidden lg:block section-container mb-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_0.5fr] gap-4 items-start">
           <div className="lg:sticky top-20">
             <ViewOnce
@@ -225,6 +226,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 paymentOptions={data.payment_options}
                 freeAssembly={data.free_assembly}
                 expressDeliveryTimer={data.express_delivery_timer}
+                hideWaysOfPayment
               />
             </div>
           </ViewOnce>

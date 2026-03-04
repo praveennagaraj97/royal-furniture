@@ -36,13 +36,17 @@ const formatCountdown = (totalSeconds: number): string => {
 };
 
 export const PaymentDeliveryInfo: FC<
-  PaymentDeliveryInfoProps & { showOnlyPlanCards?: boolean }
+  PaymentDeliveryInfoProps & {
+    showOnlyPlanCards?: boolean;
+    hideWaysOfPayment?: boolean;
+  }
 > = ({
   productPrice = 4485,
   deliveryInfo,
   freeAssembly,
   expressDeliveryTimer,
   showOnlyPlanCards = false,
+  hideWaysOfPayment = false,
 }) => {
   const formatCurrency = useFormatCurrency();
   const t = useTranslations('product.paymentDelivery');
@@ -145,58 +149,60 @@ export const PaymentDeliveryInfo: FC<
       {/* Ways of Payment Section */}
       {!showOnlyPlanCards && (
         <Fragment>
-          <ViewOnce
-            type="slideUp"
-            distance={15}
-            duration={0.4}
-            delay={0.25}
-            amount={0.01}
-            margin="-40px"
-          >
-            <div className="space-y-3">
-              <h3 className="font-medium text-sm md:text-base text-indigo-slate">
-                {t('waysOfPayment')}
-              </h3>
-              <div className="flex flex-wrap items-center gap-3">
-                <Image
-                  src={tamaraIcon}
-                  alt="Tamara"
-                  width={80}
-                  height={40}
-                  className="h-6 w-auto object-contain"
-                />
-                <Image
-                  src={tabbyIcon}
-                  alt="Tabby"
-                  width={80}
-                  height={40}
-                  className="h-6 w-auto object-contain"
-                />
+          {hideWaysOfPayment ? null : (
+            <ViewOnce
+              type="slideUp"
+              distance={15}
+              duration={0.4}
+              delay={0.25}
+              amount={0.01}
+              margin="-40px"
+            >
+              <div className="space-y-3">
+                <h3 className="font-medium text-sm md:text-base text-indigo-slate">
+                  {t('waysOfPayment')}
+                </h3>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Image
+                    src={tamaraIcon}
+                    alt="Tamara"
+                    width={80}
+                    height={40}
+                    className="h-6 w-auto object-contain"
+                  />
+                  <Image
+                    src={tabbyIcon}
+                    alt="Tabby"
+                    width={80}
+                    height={40}
+                    className="h-6 w-auto object-contain"
+                  />
 
-                <Image
-                  src={samsungPayIcon}
-                  alt="Samsung Pay"
-                  width={80}
-                  height={40}
-                  className="h-6 w-auto object-contain"
-                />
-                <Image
-                  src={applePayIcon}
-                  alt="Apple Pay"
-                  width={80}
-                  height={40}
-                  className="h-6 w-auto object-contain"
-                />
-                <Image
-                  src={paypalIcon}
-                  alt="PayPal"
-                  width={80}
-                  height={40}
-                  className="h-6 w-auto object-contain"
-                />
+                  <Image
+                    src={samsungPayIcon}
+                    alt="Samsung Pay"
+                    width={80}
+                    height={40}
+                    className="h-6 w-auto object-contain"
+                  />
+                  <Image
+                    src={applePayIcon}
+                    alt="Apple Pay"
+                    width={80}
+                    height={40}
+                    className="h-6 w-auto object-contain"
+                  />
+                  <Image
+                    src={paypalIcon}
+                    alt="PayPal"
+                    width={80}
+                    height={40}
+                    className="h-6 w-auto object-contain"
+                  />
+                </div>
               </div>
-            </div>
-          </ViewOnce>
+            </ViewOnce>
+          )}
           {/* Free Assembly Available Card */}
           {freeAssembly?.is_assemble && (
             <ViewOnce
