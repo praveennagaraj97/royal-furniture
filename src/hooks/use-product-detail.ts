@@ -115,20 +115,24 @@ export const useProductDetail = (data: ProductDetailData) => {
 
   const handleAddToCart = async () => {
     const sku = selection.sku;
-    if (!sku) return;
+    if (!sku) return false;
     setIsAdding(true);
     try {
       await addItem(String(sku), quantity);
+      return true;
     } catch {
       // swallow, already logged
+      return false;
     } finally {
       setIsAdding(false);
     }
   };
 
   const handleBuyNow = async () => {
-    await handleAddToCart();
-    push('/checkout/cart');
+    const isAdded = await handleAddToCart();
+    if (isAdded) {
+      push('/checkout/cart');
+    }
   };
 
   const handleGoToCart = () => {

@@ -11,16 +11,24 @@ export interface ProductCardProps {
   product: ProductItem;
   variant?: ProductCardVariant;
   className?: string;
+  enableAddToCart?: boolean;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
   product,
   variant = 'variant-2',
   className,
+  enableAddToCart = false,
 }) => {
   switch (variant) {
     case 'variant-2':
-      return <ProductCardVariant2 product={product} className={className} />;
+      return (
+        <ProductCardVariant2
+          product={product}
+          className={className}
+          enableAddToCart={enableAddToCart}
+        />
+      );
     case 'variant-1':
     default:
       return <ProductCardVariant1 product={product} className={className} />;

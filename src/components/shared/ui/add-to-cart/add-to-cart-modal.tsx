@@ -1,8 +1,9 @@
 'use client';
 
 import Modal from '@/components/shared/modal';
-import type { ProductDetailData, ResponsiveImages } from '@/types/response';
+import type { ResponsiveImages } from '@/types/response';
 import { FC } from 'react';
+import type { AddToCartModalProduct } from './index';
 import { MainProductPreview } from './main-product-preview';
 import { SimilarProductsSection } from './similar-products-section';
 import { AddToCartSuccessFooter } from './success-footer';
@@ -10,7 +11,7 @@ import { AddToCartSuccessFooter } from './success-footer';
 export interface AddToCartModalProps {
   isOpen: boolean;
   onClose: () => void;
-  product: ProductDetailData;
+  product: AddToCartModalProduct;
   mainVariantImage?: ResponsiveImages;
   onGoToCart?: () => void;
 }

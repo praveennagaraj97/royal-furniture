@@ -155,8 +155,6 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
         ? `Only ${item.stock} left in stock`
         : null);
 
-  console.log(productHref);
-
   return (
     <div className="sm:hidden rounded-xl border border-gray-200 bg-white p-3 shadow-sm space-y-3">
       <div className="flex gap-3">

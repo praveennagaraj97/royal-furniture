@@ -130,6 +130,7 @@ export interface ProductColor {
 
 export interface ProductItem {
   id: number;
+  sku?: string;
   name: string;
   slug: string;
   description: string;
@@ -334,8 +335,8 @@ export interface ProductDetailData {
     available: boolean;
   };
   browse_more: {
-    category: Pick<ProductCategory, 'id' | 'name'>;
-    sub_category: Pick<SubCategoryItem, 'id' | 'name'>[];
+    category: Pick<ProductCategory, 'id' | 'name' | 'slug'>;
+    sub_category: Pick<SubCategoryItem, 'id' | 'name' | 'slug'>[];
   };
   similar_products: ProductItem[];
   you_may_also_like: ProductItem[];

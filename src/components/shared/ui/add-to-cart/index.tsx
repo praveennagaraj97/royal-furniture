@@ -1,15 +1,22 @@
 'use client';
 
-import type { ProductDetailData, ResponsiveImages } from '@/types/response';
+import type { ProductItem, ResponsiveImages } from '@/types/response';
 import { FC, Fragment, ReactNode, useState } from 'react';
 import { AddToCartModal } from './add-to-cart-modal';
 
+export interface AddToCartModalProduct {
+  product_info: {
+    name: string;
+  };
+  similar_products: ProductItem[];
+}
+
 export interface AddToCartWrapperProps {
   children: ReactNode;
-  product: ProductDetailData;
+  product: AddToCartModalProduct;
   mainVariantImage?: ResponsiveImages;
   onGoToCart?: () => void;
-  onOpen?: () => void;
+  onOpen?: () => void | boolean | Promise<void | boolean>;
   disableOpen?: boolean;
 }
 
@@ -28,23 +35,21 @@ const AddToCartWrapper: FC<AddToCartWrapperProps> = ({
       <div
         onClick={async () => {
           if (disableOpen) return;
-
-          // Open the modal immediately so the wrapper isn't unmounted
-          // while awaiting any async onOpen action (e.g. addItem).
-          setOpen(true);
-
-          if (onOpen) {
-            try {
-              // Call onOpen but do not rely on it to control modal visibility.
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const result = (onOpen as any)();
-              if (result && typeof result.then === 'function') {
-                await result;
+          try {
+            let shouldOpen = true;
+            if (onOpen) {
+              const result = await onOpen();
+              if (result === false) {
+                shouldOpen = false;
               }
-            } catch (err) {
-              // swallow errors to avoid breaking UX
-              console.error('[AddToCartWrapper] onOpen failed', err);
             }
+
+            if (shouldOpen) {
+              setOpen(true);
+            }
+          } catch (err) {
+            // do not open success modal on failure
+            console.error('[AddToCartWrapper] onOpen failed', err);
           }
         }}
       >

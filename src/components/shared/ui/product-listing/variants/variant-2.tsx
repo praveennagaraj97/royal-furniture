@@ -1,30 +1,48 @@
 'use client';
 
+import AddToCartWrapper from '@/components/shared/ui/add-to-cart';
 import ResponsiveImage from '@/components/shared/ui/responsive-image';
 import { FC, useState } from 'react';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiMinus, FiPlus, FiShoppingCart } from 'react-icons/fi';
 
 import { useCart } from '@/contexts/cart-context';
 import { AppLink, useAppRouter } from '@/hooks';
 import { useFormatCurrency } from '@/hooks/use-format-currency';
 import { ProductItem } from '@/types';
+import { useTranslations } from 'next-intl';
 
 export interface ProductCardVariant2Props {
   product: ProductItem;
   className?: string;
+  enableAddToCart?: boolean;
 }
 
 export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
   product,
   className,
+  enableAddToCart = false,
 }) => {
   const formatCurrency = useFormatCurrency();
-  const { moveToCart } = useCart();
+  const tCommon = useTranslations('common');
+  const { addItem, items, moveToCart } = useCart();
   const [isMoving, setIsMoving] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [isAdding, setIsAdding] = useState(false);
   const { push } = useAppRouter();
 
   const offerPercentage = parseFloat(product.pricing.offer_percentage || '0');
   const hasDiscount = offerPercentage > 0;
+  const productSku = product.sku?.trim();
+  const isInCart = items.some(
+    (item) =>
+      String(item.id) === String(productSku) ||
+      String(item.id) === String(product.id),
+  );
+
+  const modalProduct = {
+    product_info: { name: product.name },
+    similar_products: [],
+  };
 
   const handleMoveToCart = async () => {
     if (!product.cart_item_id || isMoving) return;
@@ -36,6 +54,29 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
     } finally {
       setIsMoving(false);
     }
+  };
+
+  const handleQuantityChange = (delta: number) => {
+    setQuantity((prev) => Math.max(1, prev + delta));
+  };
+
+  const handleAddToCart = async () => {
+    if (isAdding || isInCart) return false;
+    if (!productSku) return false;
+
+    try {
+      setIsAdding(true);
+      await addItem(productSku, quantity);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const handleGoToCart = () => {
+    push('/checkout/cart');
   };
 
   return (
@@ -115,6 +156,75 @@ export const ProductCardVariant2: FC<ProductCardVariant2Props> = ({
           </div> */}
         </div>
       </AppLink>
+
+      {enableAddToCart && !product.cart_item_id ? (
+        <div className="px-2 pb-2 pt-1 sm:px-0 sm:pb-0">
+          <div className="flex items-center gap-2 mb-3">
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                handleQuantityChange(-1);
+              }}
+              disabled={quantity <= 1 || isAdding || isInCart}
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              aria-label="Decrease quantity"
+            >
+              <FiMinus className="w-3 h-3" />
+            </button>
+            <span className="font-bold text-xl min-w-6 text-center">
+              {quantity}
+            </span>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                handleQuantityChange(1);
+              }}
+              disabled={isAdding || isInCart}
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-deep-maroon flex items-center justify-center text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              aria-label="Increase quantity"
+            >
+              <FiPlus className="w-3 h-3" />
+            </button>
+          </div>
+
+          <AddToCartWrapper
+            product={modalProduct}
+            mainVariantImage={product.responsive_images}
+            onOpen={handleAddToCart}
+            onGoToCart={handleGoToCart}
+            disableOpen={isInCart}
+          >
+            {isInCart ? (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleGoToCart();
+                }}
+                className="w-full flex items-center justify-center gap-2 border border-emerald-200 text-emerald-700 bg-emerald-50 py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium"
+              >
+                <FiShoppingCart className="text-lg sm:text-xl" />
+                <span>{tCommon('inCart')}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={isAdding || !productSku}
+                className="w-full flex items-center justify-center gap-2 border border-deep-maroon py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg font-medium text-deep-maroon hover:bg-deep-maroon/10 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
+              >
+                <FiShoppingCart className="text-lg sm:text-xl" />
+                <span>
+                  {isAdding
+                    ? `${tCommon('addToCart')}...`
+                    : tCommon('addToCart')}
+                </span>
+              </button>
+            )}
+          </AddToCartWrapper>
+        </div>
+      ) : null}
 
       {product.cart_item_id && (
         <div className="p-px">

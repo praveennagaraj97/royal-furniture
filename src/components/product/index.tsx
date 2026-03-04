@@ -5,6 +5,7 @@ import ProductListing from '@/components/shared/ui/product-listing';
 import { useProductDetail } from '@/hooks/use-product-detail';
 import type { ProductDetailData } from '@/types/response';
 import type { FC } from 'react';
+import { BrowseMoreCollection } from './browse-more-collection';
 import { GeneralInformation } from './general-information';
 import { ProductHelpCard, ProductNoteCard } from './help-cards';
 import { ProductImages } from './image-carousel';
@@ -28,6 +29,10 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
       : false,
   );
   const currentVariantId = selection.currentColor?.variant_id ?? null;
+
+  console.log('ProductDetail render', {
+    product,
+  });
 
   return (
     <div className="w-full">
@@ -239,6 +244,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
             <ProductListing
               title="Complete the Collection"
               products={product.frequently_bought_together || []}
+              enableAddToCart
             />
           )}
 
@@ -253,6 +259,7 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
                 product.product_info.thumbnail_image
               }
             />
+            <BrowseMoreCollection browseMore={product.browse_more} />
           </div>
           <br />
 

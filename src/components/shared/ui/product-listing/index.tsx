@@ -14,12 +14,14 @@ export interface ProductListingProps {
   title: ReactNode;
   seeAllHref?: string;
   products: ProductItem[];
+  enableAddToCart?: boolean;
 }
 
 const ProductListing: FC<ProductListingProps> = ({
   title,
   seeAllHref,
   products,
+  enableAddToCart = false,
 }) => {
   const t = useTranslations();
 
@@ -55,7 +57,7 @@ const ProductListing: FC<ProductListingProps> = ({
       <Swiper gap={4} showNavigation hideArrowOnMobile alwaysAlignStart>
         {products.map((product) => (
           <div key={product.id} className="shrink-0 w-44 sm:w-64 md:w-80">
-            <ProductCard product={product} />
+            <ProductCard product={product} enableAddToCart={enableAddToCart} />
           </div>
         ))}
       </Swiper>

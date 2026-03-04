@@ -23,8 +23,6 @@ export const SizeSelection: FC<SizeSelectionProps> = ({
 }) => {
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
-  console.log('SizeSelection rendered with selectedSize:', selectedSize, sizes);
-
   return (
     <>
       <ViewOnce
