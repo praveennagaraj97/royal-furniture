@@ -30,10 +30,6 @@ export const ProductDetail: FC<ProductDetailProps> = ({ data }) => {
   );
   const currentVariantId = selection.currentColor?.variant_id ?? null;
 
-  console.log('ProductDetail render', {
-    product,
-  });
-
   return (
     <div className="w-full">
       {/* Mobile/Tablet Layout - Single Column */}
