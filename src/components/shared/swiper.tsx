@@ -188,7 +188,9 @@ const Swiper: FC<SwiperProps> = ({
   }, [checkScrollPosition]);
 
   return (
-    <div className={`relative group w-full overflow-visible ${className} `}>
+    <div
+      className={`relative group w-full max-w-[calc(100vw-7rem)] overflow-visible ${className} `}
+    >
       {/* Scrollable Container */}
       <div
         ref={containerRef}
