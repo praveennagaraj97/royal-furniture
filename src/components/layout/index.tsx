@@ -38,7 +38,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
         <Categories ref={categoryRef} categories={categories} />
       )}
       <main>{children}</main>
-      {!shouldHideFooter && <Footer />}
+      {shouldHideFooter ? <div className="py-6" /> : <Footer />}
     </>
   );
 };
