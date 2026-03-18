@@ -90,6 +90,13 @@ export interface CartApiData {
   order_summary?: CartOrderSummary;
   frequently_bought_together: ProductItem[];
   saved_for_later_items?: ProductItem[];
+  flexi_pay_option: {
+    available: boolean;
+    first_payment: string;
+    is_selected: boolean;
+    percentage: number;
+    remaining_payment: string;
+  };
 }
 
 export type CartApiResponse = BaseAPIResponse<CartApiData> & {
