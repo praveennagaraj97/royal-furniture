@@ -132,6 +132,7 @@ export const AddressList: FC<AddressListProps> = ({
         staggerChildren={0.08}
         delayChildren={0.05}
         className="space-y-4"
+        key={addresses.length}
       >
         {addresses.map((address) => (
           <StaggerItem

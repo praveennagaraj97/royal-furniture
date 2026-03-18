@@ -53,7 +53,11 @@ export function PhoneField({
             inputMode="tel"
             placeholder={placeholder}
             value={value}
-            onChange={onChange}
+            onChange={(e) => {
+              if (/^\d*$/.test(e.target.value)) {
+                onChange(e);
+              }
+            }}
             onBlur={onBlur}
             validator={validator}
             error={error}

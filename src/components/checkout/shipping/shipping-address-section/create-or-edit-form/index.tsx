@@ -113,6 +113,37 @@ const CreateOrEditAddressForm: FC<Props> = ({
     [tValidation],
   );
 
+  const updateFieldError = (field: keyof AddressFormErrors, error?: string) => {
+    dispatch({
+      type: 'SET_ERRORS',
+      errors: { ...state.errors, [field]: error },
+    });
+  };
+
+  const validateField = (
+    field: keyof AddressFormErrors,
+    value: string,
+  ): string | undefined => {
+    switch (field) {
+      case 'name':
+        return addressFormValidators.name(value);
+      case 'phone':
+        return addressFormValidators.phone(value, countryCode);
+      case 'email':
+        return addressFormValidators.email(value);
+      case 'streetAddress':
+        return addressFormValidators.streetAddress(value);
+      case 'building':
+        return addressFormValidators.building(value);
+      case 'emirateId':
+        return addressFormValidators.emirateId(value);
+      case 'regionId':
+        return addressFormValidators.regionId(value);
+      default:
+        return undefined;
+    }
+  };
+
   const emirateOptions = useMemo(
     () =>
       emirateListResponse?.data.map((emirate) => ({
@@ -154,18 +185,11 @@ const CreateOrEditAddressForm: FC<Props> = ({
   const handleInputChange =
     (field: keyof AddressFormData) =>
     (event: ChangeEvent<HTMLInputElement>) => {
-      dispatch({ type: 'SET_FIELD_VALUE', field, value: event.target.value });
-      // Validate on change for phone
-      if (field === 'phone') {
-        const error = addressFormValidators.phone(
-          event.target.value,
-          countryCode,
-        );
-        dispatch({
-          type: 'SET_ERRORS',
-          errors: { ...state.errors, phone: error },
-        });
-      }
+      const value = event.target.value;
+      dispatch({ type: 'SET_FIELD_VALUE', field, value });
+
+      const fieldName = field as keyof AddressFormErrors;
+      updateFieldError(fieldName, validateField(fieldName, value));
     };
 
   const handleTextareaChange =
@@ -176,37 +200,8 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
   const handleBlur = (field: keyof AddressFormErrors) => () => {
     dispatch({ type: 'SET_TOUCHED', field });
-    // Validate the field on blur and update error state for that field
-    let error: string | undefined = undefined;
-    switch (field) {
-      case 'name':
-        error = addressFormValidators.name(state.formData.name);
-        break;
-      case 'phone':
-        error = addressFormValidators.phone(state.formData.phone, countryCode);
-        break;
-      case 'email':
-        error = addressFormValidators.email(state.formData.email);
-        break;
-      case 'streetAddress':
-        error = addressFormValidators.streetAddress(
-          state.formData.streetAddress,
-        );
-        break;
-      case 'building':
-        error = addressFormValidators.building(state.formData.building);
-        break;
-      case 'emirateId':
-        error = addressFormValidators.emirateId(state.formData.emirateId);
-        break;
-      case 'regionId':
-        error = addressFormValidators.regionId(state.formData.regionId);
-        break;
-    }
-    dispatch({
-      type: 'SET_ERRORS',
-      errors: { ...state.errors, [field]: error },
-    });
+    const currentValue = state.formData[field] ?? '';
+    updateFieldError(field, validateField(field, currentValue));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -311,10 +306,13 @@ const CreateOrEditAddressForm: FC<Props> = ({
     });
     dispatch({ type: 'SET_FIELD_VALUE', field: 'regionId', value: '' });
     dispatch({ type: 'SET_TOUCHED', field: 'emirateId' });
-    // Clear any existing validation errors for emirate and region
     dispatch({
       type: 'SET_ERRORS',
-      errors: { ...state.errors, emirateId: undefined, regionId: undefined },
+      errors: {
+        ...state.errors,
+        emirateId: validateField('emirateId', val),
+        regionId: undefined,
+      },
     });
   };
 
@@ -326,11 +324,15 @@ const CreateOrEditAddressForm: FC<Props> = ({
       value: val,
     });
     dispatch({ type: 'SET_TOUCHED', field: 'regionId' });
-    // Clear any existing validation error for region
-    dispatch({
-      type: 'SET_ERRORS',
-      errors: { ...state.errors, regionId: undefined },
-    });
+    updateFieldError('regionId', validateField('regionId', val));
+  };
+
+  const handleCountryCodeChange = (code: string) => {
+    setCountryCode(code);
+    updateFieldError(
+      'phone',
+      addressFormValidators.phone(state.formData.phone, code),
+    );
   };
 
   return (
@@ -406,7 +408,7 @@ const CreateOrEditAddressForm: FC<Props> = ({
               required
               value={state.formData.phone}
               countryCode={countryCode}
-              onCountryCodeChange={setCountryCode}
+              onCountryCodeChange={handleCountryCodeChange}
               onChange={handleInputChange('phone')}
               onBlur={handleBlur('phone')}
               validator={(value) =>
