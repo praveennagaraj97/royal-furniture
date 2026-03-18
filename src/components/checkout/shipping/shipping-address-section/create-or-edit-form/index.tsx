@@ -151,11 +151,6 @@ const CreateOrEditAddressForm: FC<Props> = ({
     }
   }, [selectedEmirate, state.formData.regionId]);
 
-  const hasErrors = useMemo(
-    () => Object.keys(state.errors).length > 0,
-    [state.errors],
-  );
-
   const handleInputChange =
     (field: keyof AddressFormData) =>
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -308,22 +303,34 @@ const CreateOrEditAddressForm: FC<Props> = ({
   };
 
   const handleEmirateChange = (value: string | number) => {
+    const val = String(value);
     dispatch({
       type: 'SET_FIELD_VALUE',
       field: 'emirateId',
-      value: String(value),
+      value: val,
     });
     dispatch({ type: 'SET_FIELD_VALUE', field: 'regionId', value: '' });
     dispatch({ type: 'SET_TOUCHED', field: 'emirateId' });
+    // Clear any existing validation errors for emirate and region
+    dispatch({
+      type: 'SET_ERRORS',
+      errors: { ...state.errors, emirateId: undefined, regionId: undefined },
+    });
   };
 
   const handleRegionChange = (value: string | number) => {
+    const val = String(value);
     dispatch({
       type: 'SET_FIELD_VALUE',
       field: 'regionId',
-      value: String(value),
+      value: val,
     });
     dispatch({ type: 'SET_TOUCHED', field: 'regionId' });
+    // Clear any existing validation error for region
+    dispatch({
+      type: 'SET_ERRORS',
+      errors: { ...state.errors, regionId: undefined },
+    });
   };
 
   return (
@@ -526,12 +533,6 @@ const CreateOrEditAddressForm: FC<Props> = ({
               <FiArrowRight className="h-4 w-4" />
             </button>
           </StaggerItem>
-
-          {hasErrors && state.isSubmitted && (
-            <StaggerItem type="slideUp" distance={20} duration={0.35}>
-              <p className="text-xs text-red-500">{t('form.requiredHint')}</p>
-            </StaggerItem>
-          )}
         </form>
       </StaggerContainer>
     </section>
