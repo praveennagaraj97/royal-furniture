@@ -54,7 +54,7 @@ const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
           slotId: data.selected_delivery_slot.slot_id,
         }
       : undefined,
-  } satisfies ShippingStepState;
+  } as ShippingStepState;
 };
 
 const ShippingPageContent: FC = () => {
@@ -103,10 +103,10 @@ const ShippingPageContent: FC = () => {
   );
 
   useEffect(() => {
-    startTransition(() => {
-      const shippingData = shippingResponse?.data;
-      if (!shippingData) return;
+    const shippingData = shippingResponse?.data;
+    if (!shippingData) return;
 
+    startTransition(() => {
       const mappedStep = mapShippingProceedToState(shippingData);
       setShippingStep(mappedStep);
 
@@ -114,34 +114,37 @@ const ShippingPageContent: FC = () => {
       const parsedSelectedDate = parseDateInput(
         shippingData.selected_delivery_slot?.date,
       );
+
       const slotId =
         shippingData.selected_delivery_slot?.slot_id ??
-        mappedStep?.deliverySlots.find((slot) => slot.timeRange === slotLabel)
-          ?.id ??
+        mappedStep?.deliverySlots.find((s) => s.timeRange === slotLabel)?.id ??
         null;
 
-      const availableMethods = mappedStep?.deliveryMethods || [
+      const availableMethods = mappedStep?.deliveryMethods ?? [
         'home',
         'pickup',
       ];
+
       setShippingMethod((prev) =>
         availableMethods.includes(prev) ? prev : availableMethods[0] || 'home',
       );
 
-      setShippingSelection((prev) => ({
-        ...prev,
-        addressId: shippingData.shipping_address?.id ?? prev.addressId ?? null,
-        deliveryType: availableMethods.includes(prev.deliveryType)
+      setShippingSelection((prev) => {
+        const deliveryType = availableMethods.includes(prev.deliveryType)
           ? prev.deliveryType
-          : availableMethods[0] || 'home',
-        date: parsedSelectedDate ? buildIso(parsedSelectedDate) : null,
-        slotId: slotId ?? null,
-        slotLabel,
-        isCustomDelivery: Boolean(parsedSelectedDate && slotId),
-        pickupDate: prev.pickupDate,
-        pickupSlotId: prev.pickupSlotId,
-        pickupSlotLabel: prev.pickupSlotLabel,
-      }));
+          : availableMethods[0] || 'home';
+
+        return {
+          ...prev,
+          addressId:
+            shippingData.shipping_address?.id ?? prev.addressId ?? null,
+          deliveryType,
+          date: parsedSelectedDate ? buildIso(parsedSelectedDate) : null,
+          slotId: slotId ?? null,
+          slotLabel,
+          isCustomDelivery: Boolean(parsedSelectedDate && slotId),
+        };
+      });
     });
   }, [
     shippingResponse,
@@ -151,29 +154,28 @@ const ShippingPageContent: FC = () => {
   ]);
 
   useEffect(() => {
+    // Reset selection fields that are not relevant to the active shipping method
     startTransition(() => {
-      setShippingSelection((prev) => {
-        if (shippingMethod === 'home') {
-          return {
-            ...prev,
-            deliveryType: 'home',
-            isCustomDelivery: false,
-            storeId: null,
-            pickupDate: null,
-            pickupSlotId: null,
-            pickupSlotLabel: null,
-          };
-        }
-
-        return {
-          ...prev,
-          deliveryType: 'pickup',
-          isCustomDelivery: false,
-          date: null,
-          slotId: null,
-          slotLabel: null,
-        };
-      });
+      setShippingSelection((prev) =>
+        shippingMethod === 'home'
+          ? {
+              ...prev,
+              deliveryType: 'home',
+              isCustomDelivery: false,
+              storeId: null,
+              pickupDate: null,
+              pickupSlotId: null,
+              pickupSlotLabel: null,
+            }
+          : {
+              ...prev,
+              deliveryType: 'pickup',
+              isCustomDelivery: false,
+              date: null,
+              slotId: null,
+              slotLabel: null,
+            },
+      );
     });
   }, [shippingMethod, setShippingSelection]);
 
