@@ -112,23 +112,22 @@ const CreateOrEditAddressForm: FC<Props> = ({
     () => createAddressFormValidators(tValidation),
     [tValidation],
   );
-  const emirates = emirateListResponse?.data ?? [];
 
   const emirateOptions = useMemo(
     () =>
-      emirates.map((emirate) => ({
+      emirateListResponse?.data.map((emirate) => ({
         label: emirate.name,
         value: String(emirate.id),
-      })),
-    [emirates],
+      })) ?? [],
+    [emirateListResponse?.data],
   );
 
   const selectedEmirate = useMemo(
     () =>
-      emirates.find(
+      emirateListResponse?.data.find(
         (emirate) => String(emirate.id) === state.formData.emirateId,
       ),
-    [emirates, state.formData.emirateId],
+    [emirateListResponse?.data, state.formData.emirateId],
   );
 
   const regionOptions = useMemo(
