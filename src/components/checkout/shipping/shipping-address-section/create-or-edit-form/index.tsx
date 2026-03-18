@@ -108,6 +108,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
   const { data: emirateListResponse, isLoading: isLoadingEmirates } =
     useGetEmirateList();
   const [countryCode, setCountryCode] = useState(initialCode);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(
+    Boolean(isGuest && editMode && initialPhone),
+  );
   const tValidation = useTranslations('auth.validation');
   const addressFormValidators = useMemo(
     () => createAddressFormValidators(tValidation),
@@ -218,6 +221,17 @@ const CreateOrEditAddressForm: FC<Props> = ({
     dispatch({ type: 'SET_ERRORS', errors });
 
     if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    if (isGuest && !isPhoneVerified) {
+      dispatch({
+        type: 'SET_ERRORS',
+        errors: {
+          ...errors,
+          phone: 'Please verify your phone number to continue.',
+        },
+      });
       return;
     }
 
@@ -452,6 +466,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
                 !!state.errors.phone &&
                 (!!state.touched.phone || state.isSubmitted)
               }
+              isGuest={isGuest}
+              initiallyVerified={Boolean(isGuest && editMode && initialPhone)}
+              onVerificationStatusChange={setIsPhoneVerified}
             />
           </StaggerItem>
 

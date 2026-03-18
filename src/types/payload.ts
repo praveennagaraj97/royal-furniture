@@ -70,3 +70,14 @@ export interface ForgotPasswordResetPasswordSMSPayload {
   new_password: string;
   confirm_password: string;
 }
+
+export interface GuestSendOTPPayload {
+  mobile_number: string;
+  otp_type: 'guest_verify';
+}
+
+export interface GuestVerifyOTPPayload {
+  mobile_number: string;
+  otp: string;
+  otp_type: 'guest_verify';
+}
