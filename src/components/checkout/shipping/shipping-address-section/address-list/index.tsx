@@ -29,6 +29,7 @@ interface AddressListProps {
   onEdit: (address: Address) => void;
   onSelect: (address: Address) => void;
   isGuest?: boolean;
+  showEditAction?: boolean;
   onDeleteAddress?: (address: Address) => Promise<void> | void;
   mutateAddresses?: KeyedMutator<AddressesListResponse>;
 }
@@ -44,6 +45,7 @@ export const AddressList: FC<AddressListProps> = ({
   onEdit,
   onSelect,
   isGuest = false,
+  showEditAction = true,
   onDeleteAddress,
   mutateAddresses,
 }) => {
@@ -171,16 +173,18 @@ export const AddressList: FC<AddressListProps> = ({
                 <span className="font-semibold text-base text-black">
                   {typeLabel[address.category]}
                 </span>
-                <button
-                  type="button"
-                  className="ml-2 text-xs text-deep-maroon hover:underline flex items-center gap-1"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onEdit(address);
-                  }}
-                >
-                  <FiEdit2 className="h-4 w-4" />
-                </button>
+                {showEditAction ? (
+                  <button
+                    type="button"
+                    className="ml-2 text-xs text-deep-maroon hover:underline flex items-center gap-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(address);
+                    }}
+                  >
+                    <FiEdit2 className="h-4 w-4" />
+                  </button>
+                ) : null}
               </div>
               <div className="text-sm text-gray-900 font-semibold">
                 {address.name}

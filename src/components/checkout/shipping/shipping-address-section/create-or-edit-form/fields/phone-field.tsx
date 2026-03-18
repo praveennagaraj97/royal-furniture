@@ -306,12 +306,6 @@ export function PhoneField({
               </div>
             </div>
           ) : null}
-
-          {isGuest && !isVerified && !isOtpSent && canVerify ? (
-            <p className="mt-2 text-xs text-amber-700">
-              Verify your phone number before saving this address.
-            </p>
-          ) : null}
         </div>
       </div>
     </div>

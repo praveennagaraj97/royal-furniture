@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/auth-context';
 import { useCart } from '@/contexts/cart-context';
 import { useGetAddresses } from '@/hooks/api';
 import type { AddressCategory, UserAddress } from '@/types/response/address';
+import { guestAddressStorage } from '@/utils/guest-address-storage';
 import { useTranslations } from 'next-intl';
 import {
   FC,
@@ -37,6 +38,7 @@ export const ShippingAddressSection: FC<Props> = ({
   const t = useTranslations('shipping');
   const { isAuthenticated } = useAuth();
   const { shipping, setShippingSelection } = useCart();
+  const [guestAddresses, setGuestAddresses] = useState<Address[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editAddress, setEditAddress] = useState<Address | null>(null);
@@ -51,15 +53,23 @@ export const ShippingAddressSection: FC<Props> = ({
   });
 
   const parsedAddresses = useMemo(() => {
-    if (!addressesResponse?.data) return [] as Address[];
-    return addressesResponse.data.flatMap((group) => group.addresses || []);
-  }, [addressesResponse]);
+    if (isAuthenticated) {
+      if (!addressesResponse?.data) return [] as Address[];
+      return addressesResponse.data.flatMap((group) => group.addresses || []);
+    }
+
+    return guestAddresses;
+  }, [isAuthenticated, addressesResponse, guestAddresses]);
 
   useEffect(() => {
     if (!isAuthenticated) {
-      return;
+      startTransition(() => {
+        setGuestAddresses(guestAddressStorage.getAll());
+      });
     }
+  }, [isAuthenticated]);
 
+  useEffect(() => {
     startTransition(() => {
       if (!parsedAddresses.length) {
         setAddresses([]);
@@ -101,7 +111,6 @@ export const ShippingAddressSection: FC<Props> = ({
     });
   }, [
     parsedAddresses,
-    isAuthenticated,
     shippingAddress?.id,
     shipping.selection.addressId,
     setShippingSelection,
@@ -120,12 +129,6 @@ export const ShippingAddressSection: FC<Props> = ({
   };
 
   const handleAddressSaved = (address: UserAddress, wasCreated: boolean) => {
-    if (!isAuthenticated) {
-      setShippingSelection({ addressId: address.id });
-      void onShippingRevalidate?.();
-      return;
-    }
-
     selectedAddressIdRef.current = String(address.id);
     setAddresses((prev) =>
       (wasCreated
@@ -143,8 +146,33 @@ export const ShippingAddressSection: FC<Props> = ({
         selected: String(entry.id) === String(address.id),
       })),
     );
+    if (!isAuthenticated) {
+      setGuestAddresses(guestAddressStorage.getAll());
+    }
     setShippingSelection({ addressId: address.id });
     void onShippingRevalidate?.();
+  };
+
+  const handleDeleteAddress = (address: Address) => {
+    if (isAuthenticated) {
+      return;
+    }
+
+    const wasSelected = String(address.id) === selectedAddressIdRef.current;
+    guestAddressStorage.remove(Number(address.id));
+
+    const nextGuestAddresses = guestAddressStorage.getAll();
+    setGuestAddresses(nextGuestAddresses);
+
+    if (!wasSelected) {
+      return;
+    }
+
+    const nextSelected = nextGuestAddresses[0] ?? null;
+    selectedAddressIdRef.current = nextSelected
+      ? String(nextSelected.id)
+      : null;
+    setShippingSelection({ addressId: nextSelected?.id ?? null });
   };
 
   const handleEdit = (address: Address) => {
@@ -157,59 +185,35 @@ export const ShippingAddressSection: FC<Props> = ({
     setEditAddress(null);
   };
 
-  const guestInitialAddress = shippingAddress ?? null;
-  const guestInitialData: AddressFormData | undefined = guestInitialAddress
-    ? {
-        name: guestInitialAddress.name,
-        phone: guestInitialAddress.phone,
-        email: guestInitialAddress.email || '',
-        streetAddress: guestInitialAddress.area ?? guestInitialAddress.street,
-        building: guestInitialAddress.building || '',
-        emirateId: String(guestInitialAddress.emirate_id ?? ''),
-        regionId: String(guestInitialAddress.region_id ?? ''),
-        notes: guestInitialAddress.notes || '',
-        addressType: addressCategoryToFormType(guestInitialAddress.category),
-      }
-    : undefined;
-
   const shouldShowSkeleton = isAuthenticated && isLoading && !addresses.length;
   const shouldShowEmptyState = !shouldShowSkeleton && !addresses.length;
+  const canAddAddress = isAuthenticated || addresses.length === 0;
 
   return (
     <section className="space-y-3">
-      {isAuthenticated && (
-        <div className="flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-medium text-gray-900">
-            {t('titles.shippingAddress')}
-          </h2>
-          {!isEditing && (
-            <button
-              type="button"
-              onClick={() => {
-                setIsEditing(true);
-                setEditAddress(null);
-              }}
-              className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
-            >
-              {t('actions.addNew')}
-            </button>
-          )}
-        </div>
-      )}
+      <div className="flex items-center justify-between">
+        <h2 className="text-base sm:text-lg font-medium text-gray-900">
+          {t('titles.shippingAddress')}
+        </h2>
+        {!isEditing && canAddAddress && (
+          <button
+            type="button"
+            onClick={() => {
+              setIsEditing(true);
+              setEditAddress(null);
+            }}
+            className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
+          >
+            {t('actions.addNew')}
+          </button>
+        )}
+      </div>
 
-      {!isAuthenticated ? (
-        <CreateOrEditAddressForm
-          onSaved={handleAddressSaved}
-          isGuest
-          hideCancel
-          initialData={guestInitialData}
-          editMode={Boolean(guestInitialAddress?.id)}
-          editingAddressId={guestInitialAddress?.id}
-        />
-      ) : isEditing ? (
+      {isEditing ? (
         <CreateOrEditAddressForm
           onCancel={handleCancel}
           onSaved={handleAddressSaved}
+          isGuest={!isAuthenticated}
           initialData={
             editAddress
               ? {
@@ -238,8 +242,15 @@ export const ShippingAddressSection: FC<Props> = ({
           ) : (
             <AddressList
               addresses={addresses}
-              onEdit={handleEdit}
+              onEdit={(address) => {
+                if (isAuthenticated) {
+                  handleEdit(address);
+                }
+              }}
               onSelect={handleSelectAddress}
+              isGuest={!isAuthenticated}
+              showEditAction={isAuthenticated}
+              onDeleteAddress={handleDeleteAddress}
               mutateAddresses={mutate}
             />
           )}

@@ -35,7 +35,6 @@ const mapShippingProceedToState = (data?: ShippingProceedApiData) => {
     step: data.step,
     deliveryMethods: (data.delivery_method || []) as ('home' | 'pickup')[],
     shippingAddress: data.shipping_address || undefined,
-    guestUserAddress: data.guest_user_address || undefined,
     defaultDeliveryDate: data.default_delivery_date ?? null,
     deliverySlots: (data.delivery_slots || []).map((slot) => ({
       id: slot.id,
@@ -138,10 +137,7 @@ const ShippingPageContent: FC = () => {
         return {
           ...prev,
           addressId:
-            shippingData.shipping_address?.id ??
-            shippingData.guest_user_address?.id ??
-            prev.addressId ??
-            null,
+            shippingData.shipping_address?.id ?? prev.addressId ?? null,
           deliveryType,
           date: parsedSelectedDate ? buildIso(parsedSelectedDate) : null,
           slotId: slotId ?? null,
@@ -212,13 +208,7 @@ const ShippingPageContent: FC = () => {
                 />
               ) : (
                 <ShippingAddressSection
-                  shippingAddress={
-                    isAuthenticated
-                      ? (shippingStep?.shippingAddress ?? null)
-                      : (shippingStep?.guestUserAddress ??
-                        shippingStep?.shippingAddress ??
-                        null)
-                  }
+                  shippingAddress={shippingStep?.shippingAddress ?? null}
                   onShippingRevalidate={async () => {
                     await mutateShipping();
                   }}

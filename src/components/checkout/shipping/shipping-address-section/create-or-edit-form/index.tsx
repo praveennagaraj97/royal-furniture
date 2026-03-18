@@ -2,7 +2,6 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { TextAreaFormInput } from '@/components/shared/inputs/text-area-input';
-import { useCart } from '@/contexts/cart-context';
 import { useToast } from '@/contexts/toast-context';
 import { useGetEmirateList } from '@/hooks/api';
 import { addressService } from '@/services/api/address-service';
@@ -11,6 +10,7 @@ import type {
   AddressesListResponse,
   UserAddress,
 } from '@/types/response/address';
+import { guestAddressStorage } from '@/utils/guest-address-storage';
 import {
   createAddressFormValidators,
   validateAddressForm,
@@ -55,7 +55,6 @@ interface CreateOrEditAddressFormProps {
   initialData?: AddressFormData;
   editMode?: boolean;
   isGuest?: boolean;
-  hideCancel?: boolean;
   mutateAddresses?: KeyedMutator<AddressesListResponse>;
   editingAddressId?: string | number | null;
 }
@@ -74,11 +73,9 @@ const CreateOrEditAddressForm: FC<Props> = ({
   initialData,
   editMode,
   isGuest = false,
-  hideCancel = false,
   mutateAddresses,
   editingAddressId,
 }) => {
-  const { guestSessionId } = useCart();
   const { showError, showSuccess } = useToast();
   const t = useTranslations('shipping');
   const parsePhone = (phone?: string) => {
@@ -261,31 +258,54 @@ const CreateOrEditAddressForm: FC<Props> = ({
     } satisfies Partial<UserAddress>;
 
     try {
-      if (
-        editMode &&
-        editingAddressId !== undefined &&
-        editingAddressId !== null
-      ) {
-        const response = await addressService.updateAddress(
-          editingAddressId,
-          payload,
-          isGuest ? guestSessionId || undefined : undefined,
-        );
-        onSaved?.(response.data, false);
-        showSuccess(t('toasts.addressUpdated'));
+      if (isGuest) {
+        const guestAddressPayload = {
+          ...(payload as Omit<UserAddress, 'id'>),
+          area: payload.area ?? payload.street,
+        };
+
+        if (
+          editMode &&
+          editingAddressId !== undefined &&
+          editingAddressId !== null
+        ) {
+          const updated = guestAddressStorage.update(
+            Number(editingAddressId),
+            guestAddressPayload,
+          );
+
+          if (!updated) {
+            throw new Error('Guest address not found');
+          }
+
+          onSaved?.(updated, false);
+          showSuccess(t('toasts.addressUpdated'));
+        } else {
+          const created = guestAddressStorage.add(guestAddressPayload);
+          onSaved?.(created, true);
+          showSuccess(t('toasts.addressAdded'));
+        }
       } else {
-        const response = await addressService.createAddress(
-          payload,
-          isGuest ? guestSessionId || undefined : undefined,
-        );
-        onSaved?.(response.data, true);
-        showSuccess(t('toasts.addressAdded'));
+        if (
+          editMode &&
+          editingAddressId !== undefined &&
+          editingAddressId !== null
+        ) {
+          const response = await addressService.updateAddress(
+            editingAddressId,
+            payload,
+          );
+          onSaved?.(response.data, false);
+          showSuccess(t('toasts.addressUpdated'));
+        } else {
+          const response = await addressService.createAddress(payload);
+          onSaved?.(response.data, true);
+          showSuccess(t('toasts.addressAdded'));
+        }
       }
 
-      if (!isGuest) {
-        await mutateAddresses?.();
-        onCancel?.();
-      }
+      await mutateAddresses?.();
+      onCancel?.();
     } catch (error) {
       const message =
         (error as ParsedAPIError)?.generalError ||
@@ -375,15 +395,13 @@ const CreateOrEditAddressForm: FC<Props> = ({
             <h2 className="text-base sm:text-lg font-medium text-gray-900">
               {editMode ? t('actions.editAddress') : t('actions.addNewAddress')}
             </h2>
-            {!hideCancel && (
-              <button
-                type="button"
-                onClick={onCancel}
-                className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
-              >
-                {t('actions.cancel')}
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={onCancel}
+              className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
+            >
+              {t('actions.cancel')}
+            </button>
           </div>
         </StaggerItem>
 
