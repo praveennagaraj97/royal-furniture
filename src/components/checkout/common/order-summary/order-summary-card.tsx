@@ -12,10 +12,7 @@ import { cartService } from '@/services/api/cart-service';
 import { ParsedAPIError } from '@/types';
 import type { ProceedToPaymentPayload } from '@/types/response/cart';
 import { formatCurrency } from '@/utils/format-currency';
-import {
-  guestAddressStorage,
-  mapUserAddressToCheckoutAddressPayload,
-} from '@/utils/guest-address-storage';
+import { mapUserAddressToCheckoutAddressPayload } from '@/utils/guest-address-storage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
@@ -187,11 +184,8 @@ export const OrderSummaryCard: FC<
               is_custom_delivery: shipping.selection.isCustomDelivery,
             };
           } else {
-            const selectedGuestAddress = shipping.selection.addressId
-              ? guestAddressStorage.findById(
-                  Number(shipping.selection.addressId),
-                )
-              : undefined;
+            const selectedGuestAddress =
+              shipping.step?.guestUserAddress ?? shipping.step?.shippingAddress;
 
             if (!selectedGuestAddress) {
               throw new Error('Guest address is missing');
@@ -256,7 +250,11 @@ export const OrderSummaryCard: FC<
 
       const isHomeIncomplete =
         shipping.method === 'home' &&
-        (!shipping.selection.addressId ||
+        ((isAuthenticated
+          ? !shipping.selection.addressId
+          : !(
+              shipping.step?.guestUserAddress ?? shipping.step?.shippingAddress
+            )) ||
           (shipping.selection.isCustomDelivery &&
             (!shipping.selection.date || !shipping.selection.slotId)));
 

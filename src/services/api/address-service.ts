@@ -8,10 +8,14 @@ import type {
 import { BaseAPIService } from './api-base-service';
 
 export class AddressService extends BaseAPIService {
-  async getAddresses(): Promise<AddressesListResponse> {
+  async getAddresses(guestSessionId?: string): Promise<AddressesListResponse> {
     try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
       const response = await this.http.get<AddressesListResponse>(
         API_ROUTES.ADDRESSES.ROOT,
+        { headers },
       );
       return response.data;
     } catch (error) {
@@ -30,11 +34,18 @@ export class AddressService extends BaseAPIService {
     }
   }
 
-  async createAddress(payload: AddressPayload): Promise<AddressResponse> {
+  async createAddress(
+    payload: AddressPayload,
+    guestSessionId?: string,
+  ): Promise<AddressResponse> {
     try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
       const response = await this.http.post<AddressResponse>(
         API_ROUTES.ADDRESSES.ROOT,
         payload,
+        { headers },
       );
       return response.data;
     } catch (error) {
@@ -45,11 +56,16 @@ export class AddressService extends BaseAPIService {
   async updateAddress(
     id: number | string,
     payload: AddressPayload,
+    guestSessionId?: string,
   ): Promise<AddressResponse> {
     try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
       const response = await this.http.patch<AddressResponse>(
         API_ROUTES.ADDRESSES.DETAIL(id),
         payload,
+        { headers },
       );
       return response.data;
     } catch (error) {
@@ -57,9 +73,15 @@ export class AddressService extends BaseAPIService {
     }
   }
 
-  async deleteAddress(id: number | string): Promise<void> {
+  async deleteAddress(
+    id: number | string,
+    guestSessionId?: string,
+  ): Promise<void> {
     try {
-      await this.http.delete(API_ROUTES.ADDRESSES.DETAIL(id));
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      await this.http.delete(API_ROUTES.ADDRESSES.DETAIL(id), { headers });
     } catch (error) {
       throw this.parseError(error);
     }
