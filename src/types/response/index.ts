@@ -531,10 +531,13 @@ export interface OrderDetailShippingAddress {
   email: string;
   notes: string;
   phone: string;
+  area?: string;
   street: string;
   building: string;
   category: string;
   town_or_city: string;
+  emirate_id?: number;
+  region_id?: number;
 }
 
 export interface OrderDetailDeliveryCard {

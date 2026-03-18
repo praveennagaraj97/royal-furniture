@@ -22,9 +22,10 @@ export const createAddressFormValidators = (
       validatePhoneNumber(value, countryCode || '+971', 'Mobile number'),
     email: validateEmail,
     streetAddress: (value: string) =>
-      validateRequired(value, t('streetAddressRequired')),
+      validateRequired(value, t('areaRequired')),
     building: (value: string) => validateRequired(value, t('buildingRequired')),
-    city: (value: string) => validateRequired(value, t('cityRequired')),
+    emirateId: (value: string) => validateRequired(value, t('emirateRequired')),
+    regionId: (value: string) => validateRequired(value, t('regionRequired')),
   };
 };
 
@@ -47,8 +48,10 @@ export const validateAddressForm = (
       errors.streetAddress = validators.streetAddress(formData.streetAddress);
     if (validators.building(formData.building))
       errors.building = validators.building(formData.building);
-    if (validators.city(formData.city))
-      errors.city = validators.city(formData.city);
+    if (validators.emirateId(formData.emirateId))
+      errors.emirateId = validators.emirateId(formData.emirateId);
+    if (validators.regionId(formData.regionId))
+      errors.regionId = validators.regionId(formData.regionId);
   } else {
     if (!formData.name.trim()) errors.name = 'This field is required';
     if (!formData.phone.trim()) errors.phone = 'This field is required';
@@ -56,7 +59,8 @@ export const validateAddressForm = (
     if (!formData.streetAddress.trim())
       errors.streetAddress = 'This field is required';
     if (!formData.building.trim()) errors.building = 'This field is required';
-    if (!formData.city.trim()) errors.city = 'This field is required';
+    if (!formData.emirateId.trim()) errors.emirateId = 'This field is required';
+    if (!formData.regionId.trim()) errors.regionId = 'This field is required';
   }
   return errors;
 };

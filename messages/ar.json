@@ -192,8 +192,11 @@
       "mobileNumberInvalid": "يرجى إدخال رقم جوال صحيح",
       "nameRequired": "الاسم مطلوب",
       "streetAddressRequired": "عنوان الشارع مطلوب",
+      "areaRequired": "المنطقة مطلوبة",
       "buildingRequired": "اسم المبنى/رقم الفيلا مطلوب",
       "cityRequired": "المدينة مطلوبة",
+      "emirateRequired": "الإمارة مطلوبة",
+      "regionRequired": "المنطقة مطلوبة",
       "fieldRequired": "مطلوب",
       "reEnterPasswordRequired": "يرجى إعادة إدخال كلمة المرور",
       "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
@@ -617,10 +620,14 @@
       "emailPlaceholder": "البريد الإلكتروني",
       "streetLabel": "عنوان الشارع",
       "streetPlaceholder": "رقم المنزل واسم الشارع",
+      "areaLabel": "المنطقة",
+      "areaPlaceholder": "تفاصيل المنطقة أو الشقة أو الفيلا",
       "buildingLabel": "اسم المبنى/رقم الفيلا",
       "buildingPlaceholder": "مثال: برج باي سنترال الغربي",
-      "cityLabel": "المدينة / البلدة",
-      "cityPlaceholder": "المدينة أو البلدة"
+      "emirateLabel": "الإمارة",
+      "emiratePlaceholder": "اختر الإمارة",
+      "regionLabel": "المنطقة",
+      "regionPlaceholder": "اختر المنطقة"
     },
     "addressList": {
       "savedAddresses": "{count} عناوين محفوظة",

@@ -3,6 +3,7 @@
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import { TextAreaFormInput } from '@/components/shared/inputs/text-area-input';
 import { useToast } from '@/contexts/toast-context';
+import { useGetEmirateList } from '@/hooks/api';
 import { addressService } from '@/services/api/address-service';
 import type { ParsedAPIError } from '@/types/error';
 import type {
@@ -17,6 +18,7 @@ import { useTranslations } from 'next-intl';
 import {
   FC,
   FormEvent,
+  useEffect,
   useMemo,
   useReducer,
   useState,
@@ -32,10 +34,11 @@ import {
 } from 'react-icons/fi';
 import type { KeyedMutator } from 'swr';
 import { BuildingField } from './fields/building-field';
-import { CityField } from './fields/city-field';
 import { EmailField } from './fields/email-field';
+import { EmirateField } from './fields/emirate-field';
 import { NameField } from './fields/name-field';
 import { PhoneField } from './fields/phone-field';
+import { RegionField } from './fields/region-field';
 import { StreetField } from './fields/street-field';
 import {
   AddressFormErrors,
@@ -101,12 +104,53 @@ const CreateOrEditAddressForm: FC<Props> = ({
         }
       : initialAddressFormState,
   );
+  const { data: emirateListResponse, isLoading: isLoadingEmirates } =
+    useGetEmirateList();
   const [countryCode, setCountryCode] = useState(initialCode);
   const tValidation = useTranslations('auth.validation');
   const addressFormValidators = useMemo(
     () => createAddressFormValidators(tValidation),
     [tValidation],
   );
+  const emirates = emirateListResponse?.data ?? [];
+
+  const emirateOptions = useMemo(
+    () =>
+      emirates.map((emirate) => ({
+        label: emirate.name,
+        value: String(emirate.id),
+      })),
+    [emirates],
+  );
+
+  const selectedEmirate = useMemo(
+    () =>
+      emirates.find(
+        (emirate) => String(emirate.id) === state.formData.emirateId,
+      ),
+    [emirates, state.formData.emirateId],
+  );
+
+  const regionOptions = useMemo(
+    () =>
+      selectedEmirate?.regions.map((region) => ({
+        label: region.name,
+        value: String(region.id),
+      })) ?? [],
+    [selectedEmirate],
+  );
+
+  useEffect(() => {
+    if (!state.formData.regionId) return;
+
+    const isValidRegion = selectedEmirate?.regions.some(
+      (region) => String(region.id) === state.formData.regionId,
+    );
+
+    if (!isValidRegion) {
+      dispatch({ type: 'SET_FIELD_VALUE', field: 'regionId', value: '' });
+    }
+  }, [selectedEmirate, state.formData.regionId]);
 
   const hasErrors = useMemo(
     () => Object.keys(state.errors).length > 0,
@@ -158,8 +202,11 @@ const CreateOrEditAddressForm: FC<Props> = ({
       case 'building':
         error = addressFormValidators.building(state.formData.building);
         break;
-      case 'city':
-        error = addressFormValidators.city(state.formData.city);
+      case 'emirateId':
+        error = addressFormValidators.emirateId(state.formData.emirateId);
+        break;
+      case 'regionId':
+        error = addressFormValidators.regionId(state.formData.regionId);
         break;
     }
     dispatch({
@@ -199,9 +246,10 @@ const CreateOrEditAddressForm: FC<Props> = ({
       name: state.formData.name,
       phone: phoneWithCode,
       email: state.formData.email,
-      street: state.formData.streetAddress,
+      area: state.formData.streetAddress,
       building: state.formData.building,
-      town_or_city: state.formData.city,
+      emirate_id: Number(state.formData.emirateId),
+      region_id: Number(state.formData.regionId),
       notes: state.formData.notes,
       category: toFormCategory(state.formData.addressType),
       is_default: isDefault,
@@ -258,6 +306,25 @@ const CreateOrEditAddressForm: FC<Props> = ({
     home: t('addressTypes.home'),
     office: t('addressTypes.office'),
     other: t('addressTypes.other'),
+  };
+
+  const handleEmirateChange = (value: string | number) => {
+    dispatch({
+      type: 'SET_FIELD_VALUE',
+      field: 'emirateId',
+      value: String(value),
+    });
+    dispatch({ type: 'SET_FIELD_VALUE', field: 'regionId', value: '' });
+    dispatch({ type: 'SET_TOUCHED', field: 'emirateId' });
+  };
+
+  const handleRegionChange = (value: string | number) => {
+    dispatch({
+      type: 'SET_FIELD_VALUE',
+      field: 'regionId',
+      value: String(value),
+    });
+    dispatch({ type: 'SET_TOUCHED', field: 'regionId' });
   };
 
   return (
@@ -376,8 +443,8 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <StreetField
-              label={t('fields.streetLabel')}
-              placeholder={t('fields.streetPlaceholder')}
+              label={t('fields.areaLabel')}
+              placeholder={t('fields.areaPlaceholder')}
               required
               value={state.formData.streetAddress}
               onChange={handleInputChange('streetAddress')}
@@ -400,18 +467,35 @@ const CreateOrEditAddressForm: FC<Props> = ({
             />
           </StaggerItem>
 
-          <StaggerItem type="slideUp" distance={20} duration={0.35}>
-            <CityField
-              label={t('fields.cityLabel')}
-              placeholder={t('fields.cityPlaceholder')}
-              required
-              value={state.formData.city}
-              onChange={handleInputChange('city')}
-              onBlur={handleBlur('city')}
-              error={state.errors.city}
-              showError={showFieldError('city')}
-            />
-          </StaggerItem>
+          <div className="grid lg:grid-cols-2 gap-4">
+            <StaggerItem type="slideUp" distance={20} duration={0.35}>
+              <EmirateField
+                label={t('fields.emirateLabel')}
+                placeholder={t('fields.emiratePlaceholder')}
+                value={state.formData.emirateId}
+                options={emirateOptions}
+                onChange={handleEmirateChange}
+                error={state.errors.emirateId}
+                showError={showFieldError('emirateId')}
+                disabled={isLoadingEmirates || emirateOptions.length === 0}
+              />
+            </StaggerItem>
+
+            <StaggerItem type="slideUp" distance={20} duration={0.35}>
+              <RegionField
+                label={t('fields.regionLabel')}
+                placeholder={t('fields.regionPlaceholder')}
+                value={state.formData.regionId}
+                options={regionOptions}
+                onChange={handleRegionChange}
+                error={state.errors.regionId}
+                showError={showFieldError('regionId')}
+                disabled={
+                  !state.formData.emirateId || regionOptions.length === 0
+                }
+              />
+            </StaggerItem>
+          </div>
 
           <StaggerItem type="slideUp" distance={20} duration={0.35}>
             <div className="space-y-1">

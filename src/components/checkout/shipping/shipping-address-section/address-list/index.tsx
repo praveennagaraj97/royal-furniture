@@ -170,13 +170,12 @@ export const AddressList: FC<AddressListProps> = ({
               <div className="text-sm text-gray-900 font-semibold">
                 {address.name}
               </div>
-              <div className="text-sm text-gray-700">{address.street}</div>
+              <div className="text-sm text-gray-700">
+                {address.area ?? address.street}
+              </div>
               {address.building ? (
                 <div className="text-sm text-gray-700">{address.building}</div>
               ) : null}
-              <div className="text-sm text-gray-700">
-                {address.town_or_city}
-              </div>
               {address.phone ? (
                 <div className="text-sm text-gray-700">
                   {t('addressList.phone')}: {address.phone}

@@ -146,8 +146,11 @@
       "mobileNumberInvalid": "Please enter a valid mobile number",
       "nameRequired": "Name is required",
       "streetAddressRequired": "Street address is required",
+      "areaRequired": "Area is required",
       "buildingRequired": "Building name or villa number is required",
       "cityRequired": "City is required",
+      "emirateRequired": "Emirate is required",
+      "regionRequired": "Region is required",
       "fieldRequired": "is required",
       "reEnterPasswordRequired": "Please re-enter your password",
       "passwordsDoNotMatch": "Passwords do not match",
@@ -571,10 +574,14 @@
       "emailPlaceholder": "Email Address",
       "streetLabel": "Street Address",
       "streetPlaceholder": "House number and Street name",
+      "areaLabel": "Area",
+      "areaPlaceholder": "Area, apartment, or villa details",
       "buildingLabel": "Building Name/Villa No",
       "buildingPlaceholder": "e.g bay central west tower",
-      "cityLabel": "Town / City",
-      "cityPlaceholder": "Town or City"
+      "emirateLabel": "Emirate",
+      "emiratePlaceholder": "Select emirate",
+      "regionLabel": "Region",
+      "regionPlaceholder": "Select region"
     },
     "addressList": {
       "savedAddresses": "{count} Saved addresses",

@@ -6,7 +6,8 @@ export interface AddressFormData {
   email: string;
   streetAddress: string;
   building: string;
-  city: string;
+  emirateId: string;
+  regionId: string;
   notes: string;
   addressType: AddressType;
 }
@@ -17,7 +18,8 @@ export interface AddressFormErrors {
   email?: string;
   streetAddress?: string;
   building?: string;
-  city?: string;
+  emirateId?: string;
+  regionId?: string;
   notes?: string;
 }
 
@@ -27,7 +29,8 @@ export interface AddressFormTouched {
   email?: boolean;
   streetAddress?: boolean;
   building?: boolean;
-  city?: boolean;
+  emirateId?: boolean;
+  regionId?: boolean;
   notes?: boolean;
 }
 
@@ -47,7 +50,8 @@ export const initialAddressFormState: AddressFormState = {
     email: '',
     streetAddress: '',
     building: '',
-    city: '',
+    emirateId: '',
+    regionId: '',
     notes: '',
     addressType: 'home',
   },

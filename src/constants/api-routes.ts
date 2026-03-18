@@ -61,6 +61,7 @@ export const API_ROUTES = {
   },
   USERS: {
     LOCATION: '/users/location/',
+    EMIRATE_LIST: '/users/emirate-list/',
   },
   ADDRESSES: {
     ROOT: '/users/addresses/',

@@ -3,6 +3,7 @@ import type {
   AddressPayload,
   AddressResponse,
   AddressesListResponse,
+  EmirateListResponse,
 } from '@/types/response/address';
 import { BaseAPIService } from './api-base-service';
 
@@ -11,6 +12,17 @@ export class AddressService extends BaseAPIService {
     try {
       const response = await this.http.get<AddressesListResponse>(
         API_ROUTES.ADDRESSES.ROOT,
+      );
+      return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async getEmirateList(): Promise<EmirateListResponse> {
+    try {
+      const response = await this.http.get<EmirateListResponse>(
+        API_ROUTES.USERS.EMIRATE_LIST,
       );
       return response.data;
     } catch (error) {

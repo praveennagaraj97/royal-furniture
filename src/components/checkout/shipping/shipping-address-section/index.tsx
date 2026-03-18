@@ -138,9 +138,10 @@ export const ShippingAddressSection: FC<Props> = ({
                   name: editAddress.name,
                   phone: editAddress.phone,
                   email: editAddress.email || '',
-                  streetAddress: editAddress.street,
+                  streetAddress: editAddress.area ?? editAddress.street,
                   building: editAddress.building || '',
-                  city: editAddress.town_or_city,
+                  emirateId: String(editAddress.emirate_id ?? ''),
+                  regionId: String(editAddress.region_id ?? ''),
                   notes: editAddress.notes || '',
                   addressType: addressCategoryToFormType(editAddress.category),
                 }

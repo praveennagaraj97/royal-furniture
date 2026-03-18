@@ -7,7 +7,7 @@ interface ShippingAddressCardProps {
 
 const ShippingAddressCard: FC<ShippingAddressCardProps> = ({ address }) => {
   const lines = [
-    address.street,
+    address.area ?? address.street,
     address.building,
     address.town_or_city,
     address.category,
