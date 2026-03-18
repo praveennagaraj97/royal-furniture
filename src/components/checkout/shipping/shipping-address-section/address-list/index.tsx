@@ -27,8 +27,8 @@ export type Address = UserAddress & { selected?: boolean };
 interface AddressListProps {
   addresses: Address[];
   onEdit: (address: Address) => void;
+  onSelect: (address: Address) => void;
   mutateAddresses: KeyedMutator<AddressesListResponse>;
-  onShippingRevalidate?: () => Promise<void> | void;
 }
 
 const typeIcon = {
@@ -40,8 +40,8 @@ const typeIcon = {
 export const AddressList: FC<AddressListProps> = ({
   addresses,
   onEdit,
+  onSelect,
   mutateAddresses,
-  onShippingRevalidate,
 }) => {
   const t = useTranslations('shipping');
   const { showError, showSuccess } = useToast();
@@ -55,9 +55,7 @@ export const AddressList: FC<AddressListProps> = ({
 
   useEffect(() => {
     if (selectingId === null) {
-      const selected = addresses.find(
-        (addr) => addr.selected || addr.is_default,
-      );
+      const selected = addresses.find((addr) => addr.selected);
       setOptimisticSelectedId(selected ? String(selected.id) : null);
     }
   }, [addresses, selectingId]);
@@ -100,10 +98,13 @@ export const AddressList: FC<AddressListProps> = ({
     setOptimisticSelectedId(String(id));
     NProgress.start();
     try {
-      await addressService.setDefaultAddress(Number(id));
-      await mutateAddresses();
+      const selectedAddress = addresses.find(
+        (address) => String(address.id) === String(id),
+      );
+      if (selectedAddress) {
+        onSelect(selectedAddress);
+      }
       showSuccess(t('addressList.selected'));
-      await onShippingRevalidate?.();
     } catch (error) {
       const message =
         (error as ParsedAPIError)?.generalError ||
@@ -119,7 +120,7 @@ export const AddressList: FC<AddressListProps> = ({
     if (optimisticSelectedId) {
       return String(address.id) === optimisticSelectedId;
     }
-    return address.selected || address.is_default;
+    return Boolean(address.selected);
   };
 
   return (

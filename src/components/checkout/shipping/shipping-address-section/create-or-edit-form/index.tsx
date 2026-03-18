@@ -50,12 +50,11 @@ import {
 
 interface CreateOrEditAddressFormProps {
   onCancel?: () => void;
+  onSaved?: (address: UserAddress, wasCreated: boolean) => void;
   initialData?: AddressFormData;
   editMode?: boolean;
   mutateAddresses?: KeyedMutator<AddressesListResponse>;
   editingAddressId?: string | number | null;
-  isDefaultSelection?: boolean;
-  shouldSetDefaultOnCreate?: boolean;
 }
 
 const addressTypeIcon: Record<AddressType, ReactElement> = {
@@ -68,12 +67,11 @@ type Props = CreateOrEditAddressFormProps;
 
 const CreateOrEditAddressForm: FC<Props> = ({
   onCancel,
+  onSaved,
   initialData,
   editMode,
   mutateAddresses,
   editingAddressId,
-  isDefaultSelection = false,
-  shouldSetDefaultOnCreate = false,
 }) => {
   const { showError, showSuccess } = useToast();
   const t = useTranslations('shipping');
@@ -222,10 +220,6 @@ const CreateOrEditAddressForm: FC<Props> = ({
 
     dispatch({ type: 'SET_IS_SUBMITTING', value: true });
 
-    const isDefault = editMode
-      ? Boolean(isDefaultSelection)
-      : Boolean(shouldSetDefaultOnCreate);
-
     const trimmedPhone = state.formData.phone.trim();
     const phoneWithCode = trimmedPhone.startsWith('+')
       ? trimmedPhone
@@ -241,7 +235,6 @@ const CreateOrEditAddressForm: FC<Props> = ({
       region_id: Number(state.formData.regionId),
       notes: state.formData.notes,
       category: toFormCategory(state.formData.addressType),
-      is_default: isDefault,
     } satisfies Partial<UserAddress>;
 
     try {
@@ -250,10 +243,15 @@ const CreateOrEditAddressForm: FC<Props> = ({
         editingAddressId !== undefined &&
         editingAddressId !== null
       ) {
-        await addressService.updateAddress(editingAddressId, payload);
+        const response = await addressService.updateAddress(
+          editingAddressId,
+          payload,
+        );
+        onSaved?.(response.data, false);
         showSuccess(t('toasts.addressUpdated'));
       } else {
-        await addressService.createAddress(payload);
+        const response = await addressService.createAddress(payload);
+        onSaved?.(response.data, true);
         showSuccess(t('toasts.addressAdded'));
       }
 

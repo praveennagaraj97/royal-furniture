@@ -130,6 +130,7 @@ const ShippingPageContent: FC = () => {
 
       setShippingSelection((prev) => ({
         ...prev,
+        addressId: shippingData.shipping_address?.id ?? prev.addressId ?? null,
         deliveryType: availableMethods.includes(prev.deliveryType)
           ? prev.deliveryType
           : availableMethods[0] || 'home',

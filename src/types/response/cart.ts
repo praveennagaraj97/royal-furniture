@@ -112,7 +112,11 @@ export interface ShippingProceedApiData {
   is_guest: boolean;
   step: string;
   delivery_method: string[];
+  selected_delivery_method?: string | null;
+  is_custom_delivery?: boolean;
   shipping_address: UserAddress | null;
+  guest_user_address?: UserAddress | null;
+  selected_store_id?: number | null;
   default_delivery_date?: string | null;
   delivery_slots: ShippingDeliverySlot[];
   cart_summary: CartApiData;
@@ -156,7 +160,11 @@ export interface ShippingStepState {
   isGuest: boolean;
   step?: string;
   deliveryMethods: ('home' | 'pickup')[];
+  selectedDeliveryMethod?: 'home' | 'pickup' | string | null;
+  isCustomDelivery?: boolean;
   shippingAddress?: UserAddress | null;
+  guestUserAddress?: UserAddress | null;
+  selectedStoreId?: number | null;
   defaultDeliveryDate?: string | null;
   deliverySlots: { id: number; timeRange: string }[];
   selectedDeliverySlot?: {
@@ -169,6 +177,7 @@ export interface ShippingStepState {
 
 export type ShippingSelection = {
   deliveryType: 'home' | 'pickup';
+  addressId?: number | null;
   isCustomDelivery: boolean;
   date: string | null;
   slotId: number | null;

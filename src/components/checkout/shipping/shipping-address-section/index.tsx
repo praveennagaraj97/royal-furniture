@@ -2,6 +2,7 @@
 
 import ShippingAddressSkeleton from '@/components/skeletons/shipping-address-skeleton';
 import { useAuth } from '@/contexts/auth-context';
+import { useCart } from '@/contexts/cart-context';
 import { useGetAddresses } from '@/hooks/api';
 import type { AddressCategory, UserAddress } from '@/types/response/address';
 import { useTranslations } from 'next-intl';
@@ -35,6 +36,7 @@ export const ShippingAddressSection: FC<Props> = ({
 }) => {
   const t = useTranslations('shipping');
   const { isAuthenticated } = useAuth();
+  const { shipping, setShippingSelection } = useCart();
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editAddress, setEditAddress] = useState<Address | null>(null);
@@ -59,17 +61,17 @@ export const ShippingAddressSection: FC<Props> = ({
       if (!parsedAddresses.length) {
         setAddresses([]);
         selectedAddressIdRef.current = null;
+        if (shipping.selection.addressId !== null) {
+          setShippingSelection({ addressId: null });
+        }
         return;
       }
       const previouslySelected = selectedAddressIdRef.current;
-      const defaultSelected = parsedAddresses.find(
-        (addr) => addr.is_default,
-      )?.id;
 
       // If parent provided a selected shipping address from the shipping step, prefer that
-      const selectedFromShipping = shippingAddress?.id
-        ? String(shippingAddress.id)
-        : null;
+      const selectedFromShipping =
+        shipping.selection.addressId?.toString() ||
+        (shippingAddress?.id ? String(shippingAddress.id) : null);
 
       const selectedIdRaw =
         selectedFromShipping &&
@@ -78,7 +80,7 @@ export const ShippingAddressSection: FC<Props> = ({
           : previouslySelected &&
               parsedAddresses.some((a) => String(a.id) === previouslySelected)
             ? previouslySelected
-            : String(defaultSelected ?? parsedAddresses[0].id);
+            : String(parsedAddresses[0].id);
 
       const selectedId = String(selectedIdRaw);
 
@@ -89,8 +91,45 @@ export const ShippingAddressSection: FC<Props> = ({
         })),
       );
       selectedAddressIdRef.current = selectedId;
+      const nextAddressId = Number(selectedId);
+      if (shipping.selection.addressId !== nextAddressId) {
+        setShippingSelection({ addressId: nextAddressId });
+      }
     });
-  }, [parsedAddresses, shippingAddress?.id]);
+  }, [
+    parsedAddresses,
+    shippingAddress?.id,
+    shipping.selection.addressId,
+    setShippingSelection,
+  ]);
+
+  const handleSelectAddress = (address: Address) => {
+    const selectedId = String(address.id);
+    selectedAddressIdRef.current = selectedId;
+    setAddresses((prev) =>
+      prev.map((entry) => ({
+        ...entry,
+        selected: String(entry.id) === selectedId,
+      })),
+    );
+    setShippingSelection({ addressId: address.id });
+  };
+
+  const handleAddressSaved = (address: UserAddress, wasCreated: boolean) => {
+    if (!wasCreated) {
+      return;
+    }
+
+    selectedAddressIdRef.current = String(address.id);
+    setAddresses((prev) =>
+      prev.map((entry) => ({
+        ...entry,
+        selected: String(entry.id) === String(address.id),
+      })),
+    );
+    setShippingSelection({ addressId: address.id });
+    void onShippingRevalidate?.();
+  };
 
   const handleEdit = (address: Address) => {
     setEditAddress(address);
@@ -132,6 +171,7 @@ export const ShippingAddressSection: FC<Props> = ({
       {isEditing ? (
         <CreateOrEditAddressForm
           onCancel={handleCancel}
+          onSaved={handleAddressSaved}
           initialData={
             editAddress
               ? {
@@ -150,8 +190,6 @@ export const ShippingAddressSection: FC<Props> = ({
           editMode={!!editAddress}
           mutateAddresses={mutate}
           editingAddressId={editAddress?.id}
-          isDefaultSelection={!!editAddress?.selected}
-          shouldSetDefaultOnCreate={!editAddress && !addresses.length}
         />
       ) : (
         <>
@@ -163,8 +201,8 @@ export const ShippingAddressSection: FC<Props> = ({
             <AddressList
               addresses={addresses}
               onEdit={handleEdit}
+              onSelect={handleSelectAddress}
               mutateAddresses={mutate}
-              onShippingRevalidate={onShippingRevalidate}
             />
           )}
         </>

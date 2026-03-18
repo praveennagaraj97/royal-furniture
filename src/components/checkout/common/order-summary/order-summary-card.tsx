@@ -175,6 +175,7 @@ export const OrderSummaryCard: FC<
         };
 
         if (shipping.method === 'home') {
+          payload.address_id = shipping.selection.addressId;
           payload.is_custom_delivery = shipping.selection.isCustomDelivery;
           if (shipping.selection.isCustomDelivery) {
             payload.date = shipping.selection.date;
@@ -221,8 +222,9 @@ export const OrderSummaryCard: FC<
 
       const isHomeIncomplete =
         shipping.method === 'home' &&
-        shipping.selection.isCustomDelivery &&
-        (!shipping.selection.date || !shipping.selection.slotId);
+        (!shipping.selection.addressId ||
+          (shipping.selection.isCustomDelivery &&
+            (!shipping.selection.date || !shipping.selection.slotId)));
 
       const isDisabled = isSubmitting || isPickupIncomplete || isHomeIncomplete;
 

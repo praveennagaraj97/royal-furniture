@@ -82,6 +82,7 @@ const EMPTY_TOTALS: CartTotals = {
 
 const DEFAULT_SHIPPING_SELECTION: ShippingSelection = {
   deliveryType: 'home',
+  addressId: null,
   isCustomDelivery: false,
   date: null,
   slotId: null,
