@@ -4,7 +4,7 @@ import type {
   ProductPricing,
   ResponsiveImages,
 } from '@/types/response';
-import { UserAddress } from './address';
+import type { AddressPayload, UserAddress } from './address';
 
 export interface CartItem {
   id: string; // product SKU or identifier
@@ -199,6 +199,15 @@ export interface CartShippingState {
   step?: ShippingStepState;
   method: 'home' | 'pickup';
   selection: ShippingSelection;
+}
+
+export interface ProceedToPaymentPayload extends Partial<AddressPayload> {
+  delivery_type: 'home' | 'pickup';
+  address_id?: number | null;
+  is_custom_delivery?: boolean;
+  date?: string | null;
+  slot_id?: number | null;
+  store_id?: number | null;
 }
 
 export interface CartState {

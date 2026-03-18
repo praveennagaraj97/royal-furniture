@@ -28,7 +28,9 @@ interface AddressListProps {
   addresses: Address[];
   onEdit: (address: Address) => void;
   onSelect: (address: Address) => void;
-  mutateAddresses: KeyedMutator<AddressesListResponse>;
+  isGuest?: boolean;
+  onDeleteAddress?: (address: Address) => Promise<void> | void;
+  mutateAddresses?: KeyedMutator<AddressesListResponse>;
 }
 
 const typeIcon = {
@@ -41,6 +43,8 @@ export const AddressList: FC<AddressListProps> = ({
   addresses,
   onEdit,
   onSelect,
+  isGuest = false,
+  onDeleteAddress,
   mutateAddresses,
 }) => {
   const t = useTranslations('shipping');
@@ -75,8 +79,17 @@ export const AddressList: FC<AddressListProps> = ({
     if (!deletingId) return;
     setIsDeleting(true);
     try {
-      await addressService.deleteAddress(Number(deletingId));
-      await mutateAddresses();
+      const deletingAddress = addresses.find(
+        (address) => String(address.id) === String(deletingId),
+      );
+
+      if (isGuest && deletingAddress && onDeleteAddress) {
+        await onDeleteAddress(deletingAddress);
+      } else {
+        await addressService.deleteAddress(Number(deletingId));
+        await mutateAddresses?.();
+      }
+
       showSuccess(t('addressList.deleted'));
     } catch (err) {
       const parsedError = err as ParsedAPIError;

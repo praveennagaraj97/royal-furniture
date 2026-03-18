@@ -2,6 +2,7 @@ import { API_ROUTES } from '@/constants/api-routes';
 import type {
   CartApiResponse,
   PaymentProceedResponse,
+  ProceedToPaymentPayload,
   ShippingProceedResponse,
 } from '@/types/response/cart';
 import type { PromoCodesResponse } from '@/types/response/payment';
@@ -173,7 +174,7 @@ export class CartService extends BaseAPIService {
   }
 
   async proceedToPayment(
-    payload: Record<string, unknown>,
+    payload: ProceedToPaymentPayload,
     guestSessionId?: string,
   ): Promise<unknown> {
     try {

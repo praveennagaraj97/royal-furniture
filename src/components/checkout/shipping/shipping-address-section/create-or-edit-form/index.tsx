@@ -10,6 +10,7 @@ import type {
   AddressesListResponse,
   UserAddress,
 } from '@/types/response/address';
+import { guestAddressStorage } from '@/utils/guest-address-storage';
 import {
   createAddressFormValidators,
   validateAddressForm,
@@ -53,6 +54,7 @@ interface CreateOrEditAddressFormProps {
   onSaved?: (address: UserAddress, wasCreated: boolean) => void;
   initialData?: AddressFormData;
   editMode?: boolean;
+  isGuest?: boolean;
   mutateAddresses?: KeyedMutator<AddressesListResponse>;
   editingAddressId?: string | number | null;
 }
@@ -70,6 +72,7 @@ const CreateOrEditAddressForm: FC<Props> = ({
   onSaved,
   initialData,
   editMode,
+  isGuest = false,
   mutateAddresses,
   editingAddressId,
 }) => {
@@ -230,29 +233,61 @@ const CreateOrEditAddressForm: FC<Props> = ({
       phone: phoneWithCode,
       email: state.formData.email,
       area: state.formData.streetAddress,
+      street: state.formData.streetAddress,
       building: state.formData.building,
+      town_or_city: '',
       emirate_id: Number(state.formData.emirateId),
       region_id: Number(state.formData.regionId),
       notes: state.formData.notes,
+      is_default: false,
       category: toFormCategory(state.formData.addressType),
     } satisfies Partial<UserAddress>;
 
     try {
-      if (
-        editMode &&
-        editingAddressId !== undefined &&
-        editingAddressId !== null
-      ) {
-        const response = await addressService.updateAddress(
-          editingAddressId,
-          payload,
-        );
-        onSaved?.(response.data, false);
-        showSuccess(t('toasts.addressUpdated'));
+      if (isGuest) {
+        const guestAddressPayload = {
+          ...(payload as Omit<UserAddress, 'id'>),
+          area: payload.area ?? payload.street,
+        };
+
+        if (
+          editMode &&
+          editingAddressId !== undefined &&
+          editingAddressId !== null
+        ) {
+          const updated = guestAddressStorage.update(
+            Number(editingAddressId),
+            guestAddressPayload,
+          );
+
+          if (!updated) {
+            throw new Error('Guest address not found');
+          }
+
+          onSaved?.(updated, false);
+          showSuccess(t('toasts.addressUpdated'));
+        } else {
+          const created = guestAddressStorage.add(guestAddressPayload);
+          onSaved?.(created, true);
+          showSuccess(t('toasts.addressAdded'));
+        }
       } else {
-        const response = await addressService.createAddress(payload);
-        onSaved?.(response.data, true);
-        showSuccess(t('toasts.addressAdded'));
+        if (
+          editMode &&
+          editingAddressId !== undefined &&
+          editingAddressId !== null
+        ) {
+          const response = await addressService.updateAddress(
+            editingAddressId,
+            payload,
+          );
+          onSaved?.(response.data, false);
+          showSuccess(t('toasts.addressUpdated'));
+        } else {
+          const response = await addressService.createAddress(payload);
+          onSaved?.(response.data, true);
+          showSuccess(t('toasts.addressAdded'));
+        }
       }
 
       await mutateAddresses?.();

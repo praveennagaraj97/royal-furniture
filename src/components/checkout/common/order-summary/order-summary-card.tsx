@@ -2,6 +2,7 @@
 
 import Modal from '@/components/shared/modal';
 import Portal from '@/components/shared/portal';
+import { useAuth } from '@/contexts/auth-context';
 import { useCart } from '@/contexts/cart-context';
 import { useToast } from '@/contexts/toast-context';
 import { useIntersectionObserver } from '@/hooks';
@@ -9,7 +10,12 @@ import { useTabbyPayment } from '@/hooks/payment-gateway/use-tabby-payment';
 import { useTamaraPayment } from '@/hooks/payment-gateway/use-tamara-payment';
 import { cartService } from '@/services/api/cart-service';
 import { ParsedAPIError } from '@/types';
+import type { ProceedToPaymentPayload } from '@/types/response/cart';
 import { formatCurrency } from '@/utils/format-currency';
+import {
+  guestAddressStorage,
+  mapUserAddressToCheckoutAddressPayload,
+} from '@/utils/guest-address-storage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter } from 'next/navigation';
@@ -97,6 +103,7 @@ export const OrderSummaryCard: FC<
 > = ({ step, selectedPaymentMethod }) => {
   const t = useTranslations('checkout.orderSummary');
   const tShipping = useTranslations('shipping');
+  const { isAuthenticated } = useAuth();
   const { totals, shipping, guestSessionId, refreshCart } = useCart();
   const { showError } = useToast();
   const router = useRouter();
@@ -170,21 +177,48 @@ export const OrderSummaryCard: FC<
     const handleProceedToPayment = async () => {
       setIsSubmitting(true);
       try {
-        const payload: Record<string, unknown> = {
-          delivery_type: shipping.method,
-        };
+        let payload: ProceedToPaymentPayload;
 
         if (shipping.method === 'home') {
-          payload.address_id = shipping.selection.addressId;
-          payload.is_custom_delivery = shipping.selection.isCustomDelivery;
+          if (isAuthenticated) {
+            payload = {
+              delivery_type: 'home',
+              address_id: shipping.selection.addressId,
+              is_custom_delivery: shipping.selection.isCustomDelivery,
+            };
+          } else {
+            const selectedGuestAddress = shipping.selection.addressId
+              ? guestAddressStorage.findById(
+                  Number(shipping.selection.addressId),
+                )
+              : undefined;
+
+            if (!selectedGuestAddress) {
+              throw new Error('Guest address is missing');
+            }
+
+            payload = {
+              delivery_type: 'home',
+              ...mapUserAddressToCheckoutAddressPayload(selectedGuestAddress),
+              is_custom_delivery: shipping.selection.isCustomDelivery,
+            };
+          }
+
           if (shipping.selection.isCustomDelivery) {
             payload.date = shipping.selection.date;
             payload.slot_id = shipping.selection.slotId;
           }
         } else if (shipping.method === 'pickup') {
-          payload.store_id = shipping.selection.storeId;
-          payload.date = shipping.selection.pickupDate;
-          payload.slot_id = shipping.selection.pickupSlotId;
+          payload = {
+            delivery_type: 'pickup',
+            store_id: shipping.selection.storeId,
+            date: shipping.selection.pickupDate,
+            slot_id: shipping.selection.pickupSlotId,
+          };
+        } else {
+          payload = {
+            delivery_type: shipping.method,
+          };
         }
 
         await cartService.proceedToPayment(
@@ -283,6 +317,7 @@ export const OrderSummaryCard: FC<
     router,
     isSubmitting,
     shipping,
+    isAuthenticated,
     guestSessionId,
     refreshCart,
     showError,
