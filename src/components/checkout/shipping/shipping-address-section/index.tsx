@@ -17,7 +17,7 @@ import {
 import { Address, AddressList } from './address-list';
 import CreateOrEditAddressForm from './create-or-edit-form';
 import type { AddressFormData } from './create-or-edit-form/reducer';
-import { AuthRequiredState, EmptyAddressesState } from './states';
+import { EmptyAddressesState } from './states';
 
 const addressCategoryToFormType = (
   category: AddressCategory,
@@ -140,10 +140,6 @@ export const ShippingAddressSection: FC<Props> = ({
     setIsEditing(false);
     setEditAddress(null);
   };
-
-  if (!isAuthenticated) {
-    return <AuthRequiredState />;
-  }
 
   const shouldShowSkeleton = isLoading && !addresses.length;
   const shouldShowEmptyState = !isLoading && !addresses.length;
