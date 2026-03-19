@@ -275,24 +275,25 @@ export const OrderSummaryCard: FC<
 
     return null;
   }, [
-    step,
     params?.country,
     params?.locale,
-    router,
-    isSubmitting,
+    step,
     shippingData,
     shippingMethod,
     shippingSelection,
     guestSessionId,
+    revalidateShipping,
     refreshCart,
+    router,
     showError,
-    t,
     tShipping,
+    t,
+    isSubmitting,
     selectedPaymentMethod,
-    tamaraCheckout,
     isTamaraLoading,
-    tabbyCheckout,
     isTabbyLoading,
+    tamaraCheckout,
+    tabbyCheckout,
   ]);
 
   if (!cta) return null;
