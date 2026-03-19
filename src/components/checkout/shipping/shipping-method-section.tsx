@@ -1,28 +1,27 @@
 'use client';
 
-import type { ShippingStepState } from '@/types/response/cart';
+import { useCheckoutShipping } from '@/contexts/shipping-context';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
 import { FiHome, FiMapPin } from 'react-icons/fi';
 
-interface ShippingMethodSectionProps {
-  shippingStep?: ShippingStepState;
-  isShippingLoading: boolean;
-  shippingMethod: 'home' | 'pickup';
-  setShippingMethod: (method: 'home' | 'pickup') => void;
-}
-
-export const ShippingMethodSection: FC<ShippingMethodSectionProps> = ({
-  shippingStep,
-  isShippingLoading,
-  shippingMethod,
-  setShippingMethod,
-}) => {
+export const ShippingMethodSection: FC = () => {
   const t = useTranslations('shipping');
-  const availableMethods = useMemo<('home' | 'pickup')[]>(
-    () => shippingStep?.deliveryMethods || ['home', 'pickup'],
-    [shippingStep?.deliveryMethods],
-  );
+  const {
+    shippingData,
+    isShippingFetching: isShippingLoading,
+    shippingMethod,
+    setShippingMethod,
+  } = useCheckoutShipping();
+
+  const availableMethods = useMemo<('home' | 'pickup')[]>(() => {
+    const methods = (shippingData?.delivery_method || []).filter(
+      (method): method is 'home' | 'pickup' =>
+        method === 'home' || method === 'pickup',
+    );
+
+    return methods.length ? methods : ['home', 'pickup'];
+  }, [shippingData?.delivery_method]);
 
   return (
     <section className="space-y-3">

@@ -2,31 +2,22 @@
 
 import { SlideIn } from '@/components/shared/animations';
 import DatePicker from '@/components/shared/inputs/date-picker';
-import type {
-  ShippingSelection,
-  ShippingStepState,
-} from '@/types/response/cart';
+import { useCheckoutShipping } from '@/contexts/shipping-context';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
 
-interface PickupOptionsSectionProps {
-  shippingStep?: ShippingStepState;
-  isShippingLoading: boolean;
-  shippingSelection: ShippingSelection;
-  setShippingSelection: (update: Partial<ShippingSelection>) => void;
-}
-
-const PickupOptionsSection: FC<PickupOptionsSectionProps> = ({
-  shippingStep,
-  isShippingLoading,
-  shippingSelection,
-  setShippingSelection,
-}) => {
+const PickupOptionsSection: FC = () => {
   const t = useTranslations('shipping');
+  const {
+    shippingData,
+    isShippingFetching: isShippingLoading,
+    shippingSelection,
+    setShippingSelection,
+  } = useCheckoutShipping();
 
   const timeSlots = useMemo(
-    () => shippingStep?.deliverySlots?.map((slot) => slot.timeRange) || [],
-    [shippingStep?.deliverySlots],
+    () => (shippingData?.delivery_slots || []).map((slot) => slot.time_range),
+    [shippingData?.delivery_slots],
   );
 
   const selectedDate = shippingSelection.pickupDate;
@@ -39,8 +30,8 @@ const PickupOptionsSection: FC<PickupOptionsSectionProps> = ({
   };
 
   const handleTimeChange = (slot: string | null) => {
-    const slotId = shippingStep?.deliverySlots.find(
-      (s) => s.timeRange === slot,
+    const slotId = shippingData?.delivery_slots.find(
+      (s) => s.time_range === slot,
     )?.id;
 
     setShippingSelection({

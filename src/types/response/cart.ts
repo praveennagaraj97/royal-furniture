@@ -163,25 +163,6 @@ export type PaymentProceedResponse = BaseAPIResponse<PaymentProceedApiData> & {
   message?: string;
 };
 
-export interface ShippingStepState {
-  isGuest: boolean;
-  step?: string;
-  deliveryMethods: ('home' | 'pickup')[];
-  selectedDeliveryMethod?: 'home' | 'pickup' | string | null;
-  isCustomDelivery?: boolean;
-  shippingAddress?: UserAddress | null;
-  guestUserAddress?: UserAddress | null;
-  selectedStoreId?: number | null;
-  defaultDeliveryDate?: string | null;
-  deliverySlots: { id: number; timeRange: string }[];
-  selectedDeliverySlot?: {
-    date: string | null;
-    slot: string | null;
-    slotId: number | null;
-  };
-  customDeliveryCharge?: number | null;
-}
-
 export type ShippingSelection = {
   deliveryType: 'home' | 'pickup';
   addressId?: number | null;
@@ -194,12 +175,6 @@ export type ShippingSelection = {
   pickupSlotId: number | null;
   pickupSlotLabel: string | null;
 };
-
-export interface CartShippingState {
-  step?: ShippingStepState;
-  method: 'home' | 'pickup';
-  selection: ShippingSelection;
-}
 
 export interface ProceedToPaymentPayload extends Partial<AddressPayload> {
   delivery_type: 'home' | 'pickup';
@@ -221,5 +196,4 @@ export interface CartState {
   freeShippingMessage?: string;
   totals: CartTotals;
   header?: CartHeader;
-  shipping: CartShippingState;
 }

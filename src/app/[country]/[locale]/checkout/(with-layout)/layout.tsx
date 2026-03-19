@@ -1,4 +1,5 @@
 import CheckoutLayoutShell from '@/components/checkout/layout';
+import { CheckoutShippingProvider } from '@/contexts/shipping-context';
 import type { ReactNode } from 'react';
 
 interface CheckoutLayoutProps {
@@ -6,5 +7,9 @@ interface CheckoutLayoutProps {
 }
 
 export default function CheckoutLayout({ children }: CheckoutLayoutProps) {
-  return <CheckoutLayoutShell>{children}</CheckoutLayoutShell>;
+  return (
+    <CheckoutShippingProvider>
+      <CheckoutLayoutShell>{children}</CheckoutLayoutShell>
+    </CheckoutShippingProvider>
+  );
 }

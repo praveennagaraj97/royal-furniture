@@ -2,8 +2,9 @@
 
 import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
 import PickupStoresSkeleton from '@/components/skeletons/pickup-stores-skeleton';
+import { useCart } from '@/contexts/cart-context';
+import { useCheckoutShipping } from '@/contexts/shipping-context';
 import { useGetStoresByCart } from '@/hooks/api';
-import { ShippingSelection } from '@/types';
 import type { StoreLocation } from '@/types/response/store';
 import { useTranslations } from 'next-intl';
 import { FC, startTransition, useEffect, useState } from 'react';
@@ -16,22 +17,11 @@ const renderStoreAddress = (store: StoreLocation) => {
   return parts;
 };
 
-interface PickupStoresSectionProps {
-  cartId?: string;
-  shippingMethod: 'home' | 'pickup';
-  shippingSelection: ShippingSelection;
-  setShippingSelection: (update: Partial<ShippingSelection>) => void;
-  guestSessionId?: string | null;
-}
-
-export const PickupStoresSection: FC<PickupStoresSectionProps> = ({
-  cartId,
-  shippingMethod,
-  shippingSelection,
-  setShippingSelection,
-  guestSessionId,
-}) => {
+export const PickupStoresSection: FC = () => {
   const t = useTranslations('shipping');
+  const { cartId, guestSessionId } = useCart();
+  const { shippingMethod, shippingSelection, setShippingSelection } =
+    useCheckoutShipping();
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
 
   const { stores, isLoading } = useGetStoresByCart({

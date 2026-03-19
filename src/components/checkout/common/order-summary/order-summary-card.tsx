@@ -3,6 +3,7 @@
 import Modal from '@/components/shared/modal';
 import Portal from '@/components/shared/portal';
 import { useCart } from '@/contexts/cart-context';
+import { useCheckoutShipping } from '@/contexts/shipping-context';
 import { useToast } from '@/contexts/toast-context';
 import { useIntersectionObserver } from '@/hooks';
 import { useTabbyPayment } from '@/hooks/payment-gateway/use-tabby-payment';
@@ -98,7 +99,8 @@ export const OrderSummaryCard: FC<
 > = ({ step, selectedPaymentMethod }) => {
   const t = useTranslations('checkout.orderSummary');
   const tShipping = useTranslations('shipping');
-  const { totals, shipping, guestSessionId, refreshCart } = useCart();
+  const { totals, guestSessionId, refreshCart } = useCart();
+  const { shippingMethod, shippingSelection } = useCheckoutShipping();
   const { showError } = useToast();
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
@@ -172,20 +174,20 @@ export const OrderSummaryCard: FC<
       setIsSubmitting(true);
       try {
         const payload: ProceedToPaymentPayload = {
-          delivery_type: shipping.method,
+          delivery_type: shippingMethod,
         };
 
-        if (shipping.method === 'home') {
-          payload.address_id = shipping.selection.addressId;
-          payload.is_custom_delivery = shipping.selection.isCustomDelivery;
-          if (shipping.selection.isCustomDelivery) {
-            payload.date = shipping.selection.date;
-            payload.slot_id = shipping.selection.slotId;
+        if (shippingMethod === 'home') {
+          payload.address_id = shippingSelection.addressId;
+          payload.is_custom_delivery = shippingSelection.isCustomDelivery;
+          if (shippingSelection.isCustomDelivery) {
+            payload.date = shippingSelection.date;
+            payload.slot_id = shippingSelection.slotId;
           }
-        } else if (shipping.method === 'pickup') {
-          payload.store_id = shipping.selection.storeId;
-          payload.date = shipping.selection.pickupDate;
-          payload.slot_id = shipping.selection.pickupSlotId;
+        } else if (shippingMethod === 'pickup') {
+          payload.store_id = shippingSelection.storeId;
+          payload.date = shippingSelection.pickupDate;
+          payload.slot_id = shippingSelection.pickupSlotId;
         }
 
         await cartService.proceedToPayment(
@@ -216,16 +218,16 @@ export const OrderSummaryCard: FC<
 
     if (step === 'shipping') {
       const isPickupIncomplete =
-        shipping.method === 'pickup' &&
-        (!shipping.selection.storeId ||
-          !shipping.selection.pickupDate ||
-          !shipping.selection.pickupSlotId);
+        shippingMethod === 'pickup' &&
+        (!shippingSelection.storeId ||
+          !shippingSelection.pickupDate ||
+          !shippingSelection.pickupSlotId);
 
       const isHomeIncomplete =
-        shipping.method === 'home' &&
-        (!shipping.selection.addressId ||
-          (shipping.selection.isCustomDelivery &&
-            (!shipping.selection.date || !shipping.selection.slotId)));
+        shippingMethod === 'home' &&
+        (!shippingSelection.addressId ||
+          (shippingSelection.isCustomDelivery &&
+            (!shippingSelection.date || !shippingSelection.slotId)));
 
       const isDisabled = isSubmitting || isPickupIncomplete || isHomeIncomplete;
 
@@ -283,7 +285,8 @@ export const OrderSummaryCard: FC<
     params?.locale,
     router,
     isSubmitting,
-    shipping,
+    shippingMethod,
+    shippingSelection,
     guestSessionId,
     refreshCart,
     showError,

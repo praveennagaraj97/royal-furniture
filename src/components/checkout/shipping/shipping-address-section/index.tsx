@@ -2,7 +2,7 @@
 
 import ShippingAddressSkeleton from '@/components/skeletons/shipping-address-skeleton';
 import { useAuth } from '@/contexts/auth-context';
-import { useCart } from '@/contexts/cart-context';
+import { useCheckoutShipping } from '@/contexts/shipping-context';
 import { useGetAddresses } from '@/hooks/api';
 import type { AddressCategory, UserAddress } from '@/types/response/address';
 import { guestAddressStorage } from '@/utils/guest-address-storage';
@@ -26,18 +26,15 @@ const addressCategoryToFormType = (
   return category;
 };
 
-type Props = {
-  shippingAddress?: UserAddress | null;
-  onShippingRevalidate?: () => Promise<void> | void;
-};
-
-export const ShippingAddressSection: FC<Props> = ({
-  shippingAddress,
-  onShippingRevalidate,
-}) => {
+export const ShippingAddressSection: FC = () => {
   const t = useTranslations('shipping');
   const { isAuthenticated } = useAuth();
-  const { shipping, setShippingSelection } = useCart();
+  const {
+    shippingData,
+    shippingSelection,
+    setShippingSelection,
+    revalidateShipping,
+  } = useCheckoutShipping();
   const [guestAddresses, setGuestAddresses] = useState<Address[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -74,17 +71,19 @@ export const ShippingAddressSection: FC<Props> = ({
       if (!parsedAddresses.length) {
         setAddresses([]);
         selectedAddressIdRef.current = null;
-        if (shipping.selection.addressId !== null) {
+        if (shippingSelection.addressId !== null) {
           setShippingSelection({ addressId: null });
         }
         return;
       }
       const previouslySelected = selectedAddressIdRef.current;
 
-      // If parent provided a selected shipping address from the shipping step, prefer that
+      // If shipping API already has a selected address, prefer it.
       const selectedFromShipping =
-        shipping.selection.addressId?.toString() ||
-        (shippingAddress?.id ? String(shippingAddress.id) : null);
+        shippingSelection.addressId?.toString() ||
+        (shippingData?.shipping_address?.id
+          ? String(shippingData.shipping_address.id)
+          : null);
 
       const selectedIdRaw =
         selectedFromShipping &&
@@ -105,14 +104,14 @@ export const ShippingAddressSection: FC<Props> = ({
       );
       selectedAddressIdRef.current = selectedId;
       const nextAddressId = Number(selectedId);
-      if (shipping.selection.addressId !== nextAddressId) {
+      if (shippingSelection.addressId !== nextAddressId) {
         setShippingSelection({ addressId: nextAddressId });
       }
     });
   }, [
     parsedAddresses,
-    shippingAddress?.id,
-    shipping.selection.addressId,
+    shippingData?.shipping_address?.id,
+    shippingSelection.addressId,
     setShippingSelection,
   ]);
 
@@ -150,7 +149,7 @@ export const ShippingAddressSection: FC<Props> = ({
       setGuestAddresses(guestAddressStorage.getAll());
     }
     setShippingSelection({ addressId: address.id });
-    void onShippingRevalidate?.();
+    void revalidateShipping();
   };
 
   const handleDeleteAddress = (address: Address) => {
