@@ -7,6 +7,7 @@ import type { ProductItem } from '@/types/response';
 import type {
   CartApiData,
   CartApiItem,
+  CartFlexiPayOption,
   CartItem,
   CartState,
   CartTotals,
@@ -31,6 +32,7 @@ interface CartContextValue {
   items: CartItem[];
   frequentlyBought: ProductItem[];
   savedForLater: ProductItem[];
+  flexiPayOption?: CartFlexiPayOption;
   totals: CartTotals;
   freeShippingThreshold: number;
   amountToFreeShipping: number;
@@ -65,6 +67,7 @@ const DEFAULT_CART_STATE: CartState = {
   items: [],
   frequentlyBought: [],
   savedForLater: [],
+  flexiPayOption: undefined,
   freeShippingThreshold: 0,
   amountToFreeShipping: 0,
   freeShippingProgress: 0,
@@ -169,6 +172,7 @@ const mapCartDataToState = (
     items,
     frequentlyBought: data.frequently_bought_together || [],
     savedForLater: data.saved_for_later_items || [],
+    flexiPayOption: data.flexi_pay_option,
     freeShippingThreshold: data.free_shipping?.threshold || 0,
     amountToFreeShipping: data.free_shipping?.remaining_amount || 0,
     freeShippingProgress: Math.min(
@@ -454,6 +458,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       items: state.items,
       frequentlyBought: state.frequentlyBought,
       savedForLater: state.savedForLater,
+      flexiPayOption: state.flexiPayOption,
       totals: state.totals,
       freeShippingThreshold: state.freeShippingThreshold,
       amountToFreeShipping: state.amountToFreeShipping,
@@ -477,6 +482,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
       state.items,
       state.frequentlyBought,
       state.savedForLater,
+      state.flexiPayOption,
       state.totals,
       state.freeShippingThreshold,
       state.amountToFreeShipping,

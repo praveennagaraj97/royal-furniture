@@ -382,6 +382,30 @@
       "savingsMessage": "Congratulations! You've just saved {amount} on your order.",
       "totalAmount": "Total Amount",
       "notAvailable": "N/A",
+      "flexiPay": {
+        "title": "Flexi Pay",
+        "available": "Available",
+        "enabled": "Enabled",
+        "updating": "Updating...",
+        "enabledToast": "Flexi Pay enabled for your cart.",
+        "disabledToast": "Flexi Pay disabled for your cart.",
+        "error": "Unable to update Flexi Pay right now.",
+        "cardCopy": "Pay {firstPayment} now and {remainingPayment} later.",
+        "cancelAction": "Cancel",
+        "enableAction": "Enable Flexi Pay",
+        "disableAction": "Disable Flexi Pay",
+        "modal": {
+          "title": "Flexi Pay details",
+          "subtitle": "Review how the payment split works for this cart.",
+          "closeAria": "Close Flexi Pay details",
+          "description": "This cart is split into a {percentage}% upfront payment of {firstPayment} and a remaining balance of {remainingPayment} before delivery.",
+          "firstPaymentLabel": "First payment",
+          "remainingLabel": "Remaining payment",
+          "percentageLabel": "Upfront percentage",
+          "percentageValue": "{percentage}% of the order total",
+          "totalLabel": "Order total"
+        }
+      },
       "cta": {
         "proceedToShipping": "Proceed to Shipping",
         "saving": "Saving...",

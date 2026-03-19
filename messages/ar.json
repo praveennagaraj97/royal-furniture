@@ -428,6 +428,30 @@
       "savingsMessage": "تهانينا! لقد وفرت {amount} على طلبك.",
       "totalAmount": "المبلغ الإجمالي",
       "notAvailable": "غير متوفر",
+      "flexiPay": {
+        "title": "الدفع المرن",
+        "available": "متاح",
+        "enabled": "مفعّل",
+        "updating": "جارٍ التحديث...",
+        "enabledToast": "تم تفعيل الدفع المرن لسلتك.",
+        "disabledToast": "تم إلغاء الدفع المرن لسلتك.",
+        "error": "تعذر تحديث الدفع المرن الآن.",
+        "cardCopy": "ادفع {firstPayment} الآن و {remainingPayment} لاحقاً.",
+        "cancelAction": "إلغاء",
+        "enableAction": "تفعيل الدفع المرن",
+        "disableAction": "إلغاء تفعيل الدفع المرن",
+        "modal": {
+          "title": "تفاصيل الدفع المرن",
+          "subtitle": "راجع طريقة تقسيم الدفعات لهذه السلة.",
+          "closeAria": "إغلاق تفاصيل الدفع المرن",
+          "description": "هذه السلة مقسمة إلى دفعة مقدمة بنسبة {percentage}% بقيمة {firstPayment} ورصيد متبقٍ بقيمة {remainingPayment} قبل التوصيل.",
+          "firstPaymentLabel": "الدفعة الأولى",
+          "remainingLabel": "المبلغ المتبقي",
+          "percentageLabel": "نسبة الدفعة المقدمة",
+          "percentageValue": "{percentage}% من إجمالي الطلب",
+          "totalLabel": "إجمالي الطلب"
+        }
+      },
       "cta": {
         "proceedToShipping": "المتابعة إلى الشحن",
         "saving": "جاري الحفظ...",

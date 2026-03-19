@@ -2,6 +2,7 @@
 
 import type { CheckoutStepId } from '@/components/checkout/layout/progress';
 import { FC } from 'react';
+import { FlexiPay } from './flexi-pay';
 import { OrderSummaryCard } from './order-summary-card';
 import { PaymentOptions } from './payment-options';
 
@@ -22,6 +23,7 @@ export const OrderSummarySection: FC<OrderSummarySectionProps> = ({
         step={step}
         selectedPaymentMethod={selectedPaymentMethod}
       />
+      <FlexiPay />
       {showPaymentPlans && <PaymentOptions />}
     </div>
   );

@@ -14,6 +14,14 @@ interface AddItemPayload {
   quantity: number;
 }
 
+interface FlexiPayPayload {
+  flexi_pay: boolean;
+}
+
+interface FlexiPayResponseData {
+  flexi_pay: boolean;
+}
+
 const flattenShippingSubmitPayload = (
   payload: ShippingSubmitPayload,
 ): ShippingSubmitRequestPayload => {
@@ -79,6 +87,27 @@ export class CartService extends BaseAPIService {
         headers,
       });
       return response.data;
+    } catch (error) {
+      throw this.parseError(error);
+    }
+  }
+
+  async updateFlexiPay(
+    payload: FlexiPayPayload,
+    guestSessionId?: string,
+  ): Promise<FlexiPayResponseData> {
+    try {
+      const headers: Record<string, string> = {};
+      if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
+
+      const response = await this.http.post<{
+        message: string;
+        data: FlexiPayResponseData;
+      }>(API_ROUTES.CART.FLEXI, payload, {
+        headers,
+      });
+
+      return response.data.data;
     } catch (error) {
       throw this.parseError(error);
     }

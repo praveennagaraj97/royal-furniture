@@ -48,6 +48,7 @@ export const API_ROUTES = {
     UPDATE_ITEM: (cartId: string) => `/cart/${cartId}/update/`,
     SAVE_FOR_LATER: (cartItemId: string) => `/cart/${cartItemId}/save/`,
     MOVE_TO_CART: (cartItemId: string) => `/cart/${cartItemId}/move/`,
+    FLEXI: '/cart/flexi/',
     SHIPPING_PROCEED: '/cart/shipping/proceed/',
     PAYMENT_PROCEED: '/cart/payments/proceed/',
   },

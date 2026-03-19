@@ -60,6 +60,14 @@ export interface CartOrderSummary {
   total_amount: string;
 }
 
+export interface CartFlexiPayOption {
+  available: boolean;
+  first_payment: string;
+  is_selected: boolean;
+  percentage: number;
+  remaining_payment: string;
+}
+
 export interface CartFreeShipping {
   threshold: number;
   remaining_amount: number;
@@ -90,13 +98,7 @@ export interface CartApiData {
   order_summary?: CartOrderSummary;
   frequently_bought_together: ProductItem[];
   saved_for_later_items?: ProductItem[];
-  flexi_pay_option: {
-    available: boolean;
-    first_payment: string;
-    is_selected: boolean;
-    percentage: number;
-    remaining_payment: string;
-  };
+  flexi_pay_option?: CartFlexiPayOption;
 }
 
 export type CartApiResponse = BaseAPIResponse<CartApiData> & {
@@ -216,6 +218,7 @@ export interface CartState {
   items: CartItem[];
   frequentlyBought: ProductItem[];
   savedForLater: ProductItem[];
+  flexiPayOption?: CartFlexiPayOption;
   freeShippingThreshold: number;
   amountToFreeShipping: number;
   freeShippingProgress: number;
