@@ -15,8 +15,20 @@ import { ShippingMethodSection } from './shipping-method-section';
 
 const ShippingPageContent: FC = () => {
   const { isHydrated } = useCart();
-  const { shippingData, shippingMethod, isShippingFetching } =
-    useCheckoutShipping();
+  const {
+    shippingData,
+    shippingMethod,
+    isShippingFetching,
+    // revalidateShipping,
+  } = useCheckoutShipping();
+
+  // useEffect(() => {
+  //   if (!isHydrated) {
+  //     return;
+  //   }
+
+  //   void revalidateShipping();
+  // }, [isHydrated, revalidateShipping]);
 
   if (!isHydrated || (isShippingFetching && !shippingData)) {
     return <ShippingPageSkeleton />;
