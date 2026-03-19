@@ -28,7 +28,7 @@ const QuickLinksGrid: FC = () => {
     {
       key: 'savedAddresses',
       icon: FiMapPin,
-      href: '#',
+      href: '/user/address',
     },
   ];
 
