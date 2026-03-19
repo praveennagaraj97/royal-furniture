@@ -110,6 +110,7 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
     if (!shippingData) return;
 
     startTransition(() => {
+      const selectedMethod = shippingData.selected_delivery_method;
       const availableMethods = (shippingData.delivery_method || []).filter(
         isShippingMethod,
       );
@@ -117,6 +118,10 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
         ? availableMethods
         : ['home', 'pickup'];
       const fallbackMethod: ShippingMethod = nextMethods[0] ?? 'home';
+      const resolvedMethod: ShippingMethod =
+        selectedMethod && isShippingMethod(selectedMethod)
+          ? selectedMethod
+          : fallbackMethod;
 
       const slotLabel = shippingData.selected_delivery_slot?.slot ?? null;
       const parsedSelectedDate = parseDateInput(
@@ -129,8 +134,8 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
           ?.id ??
         null;
 
-      if (!nextMethods.includes(shippingMethod)) {
-        setShippingMethod(fallbackMethod);
+      if (shippingMethod !== resolvedMethod) {
+        setShippingMethod(resolvedMethod);
       }
 
       setShippingSelection((prev) => {
@@ -138,7 +143,7 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
           prev.deliveryType,
         )
           ? prev.deliveryType
-          : fallbackMethod;
+          : resolvedMethod;
 
         return {
           addressId:
@@ -148,6 +153,10 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
           slotId: slotId ?? null,
           slotLabel,
           isCustomDelivery: Boolean(parsedSelectedDate && slotId),
+          storeId:
+            selectedMethod === 'pickup'
+              ? (shippingData.selected_store_id ?? prev.storeId ?? null)
+              : null,
         };
       });
     });

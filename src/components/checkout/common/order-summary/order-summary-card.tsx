@@ -106,8 +106,12 @@ export const OrderSummaryCard: FC<
   const t = useTranslations('checkout.orderSummary');
   const tShipping = useTranslations('shipping');
   const { totals, guestSessionId, refreshCart } = useCart();
-  const { shippingData, shippingMethod, shippingSelection } =
-    useCheckoutShipping();
+  const {
+    shippingData,
+    shippingMethod,
+    shippingSelection,
+    revalidateShipping,
+  } = useCheckoutShipping();
   const { showError } = useToast();
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
@@ -187,6 +191,7 @@ export const OrderSummaryCard: FC<
         });
 
         await cartService.submitShipping(payload, guestSessionId || undefined);
+        await revalidateShipping();
         await refreshCart();
         router.push(buildPath(country, locale, 'checkout', 'payment'));
       } catch (error) {
