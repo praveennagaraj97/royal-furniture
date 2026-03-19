@@ -126,7 +126,6 @@ export const FlexiPay: FC = () => {
                 >
                   {t('cardCopy', {
                     firstPayment: paymentSummary.firstPayment,
-                    remainingPayment: paymentSummary.remainingPayment,
                   })}
                 </p>
               </div>
@@ -173,7 +172,6 @@ export const FlexiPay: FC = () => {
                 {t('modal.description', {
                   percentage: paymentSummary.percentage,
                   firstPayment: paymentSummary.firstPayment,
-                  remainingPayment: paymentSummary.remainingPayment,
                 })}
               </p>
             </div>
