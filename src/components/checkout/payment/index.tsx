@@ -178,7 +178,7 @@ export const PaymentPageContent: FC = () => {
                         <Image
                           src={m.icon_url}
                           alt={m.display_name}
-                          className="object-contain h-6 w-auto"
+                          className="object-contain "
                           width={80}
                           height={24}
                         />
