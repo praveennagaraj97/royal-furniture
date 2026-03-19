@@ -84,11 +84,6 @@ export const MobileCartItem: FC<MobileCartItemProps> = ({
     return `/${item.categorySlug}/${item.subcategorySlug}/${item.slug}`;
   }, [item.categorySlug, item.subcategorySlug, item.slug]);
 
-  // const formattedTotal = useMemo(
-  //   () => formatCurrency(itemTotal, countryCode, locale),
-  //   [itemTotal, countryCode, locale],
-  // );
-
   const infoMessages = useMemo(() => {
     const messages: string[] = [];
 
