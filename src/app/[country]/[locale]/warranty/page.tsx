@@ -1,12 +1,16 @@
-import WarrantyPage from '@/components/legal-pages/warranty';
-import type { Metadata } from 'next';
+import Accordion from '@/components/legal-pages/warranty/accordian';
+import CTA from '@/components/legal-pages/warranty/cta';
+import Hero from '@/components/legal-pages/warranty/hero';
+import { NextPage } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Warranty | Royal Manor',
-  description:
-    'Review the Royal Manor warranty coverage, claim process, and exclusions.',
+const WarrantyPage: NextPage = () => {
+  return (
+    <>
+      <Hero />
+      <Accordion />
+      <CTA />
+    </>
+  );
 };
 
-export default function Page() {
-  return <WarrantyPage />;
-}
+export default WarrantyPage;

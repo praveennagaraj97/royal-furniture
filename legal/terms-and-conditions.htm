@@ -1,0 +1,369 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'tertiary-container': '#1a1c1d',
+              error: '#ba1a1a',
+              'surface-tint': '#525f71',
+              'on-tertiary': '#ffffff',
+              surface: '#faf9f8',
+              'on-primary': '#ffffff',
+              'on-primary-container': '#778598',
+              'surface-dim': '#dadad9',
+              'error-container': '#ffdad6',
+              'surface-bright': '#faf9f8',
+              'on-tertiary-fixed-variant': '#464748',
+              'on-error': '#ffffff',
+              'inverse-on-surface': '#f1f0f0',
+              'surface-container-lowest': '#ffffff',
+              'on-tertiary-container': '#838485',
+              secondary: '#775a19',
+              'on-secondary': '#ffffff',
+              'surface-container-highest': '#e3e2e1',
+              'surface-container-high': '#e9e8e7',
+              'primary-fixed-dim': '#bac8dc',
+              'on-surface': '#1a1c1c',
+              outline: '#74777d',
+              'primary-fixed': '#d6e4f9',
+              'surface-container': '#eeeeed',
+              'on-error-container': '#93000a',
+              'tertiary-fixed-dim': '#c6c6c7',
+              'outline-variant': '#c4c6cc',
+              'on-secondary-fixed-variant': '#5d4201',
+              'tertiary-fixed': '#e3e2e3',
+              'on-secondary-fixed': '#261900',
+              'surface-container-low': '#f4f3f2',
+              'inverse-surface': '#2f3130',
+              'on-primary-fixed-variant': '#3a4859',
+              'on-secondary-container': '#785a1a',
+              'on-primary-fixed': '#0f1c2c',
+              background: '#faf9f8',
+              'inverse-primary': '#bac8dc',
+              'secondary-fixed-dim': '#e9c176',
+              'primary-container': '#0f1c2c',
+              'surface-variant': '#e3e2e1',
+              'on-background': '#1a1c1c',
+              primary: '#000000',
+              'on-tertiary-fixed': '#1a1c1d',
+              'secondary-container': '#fed488',
+              'on-surface-variant': '#44474c',
+              'secondary-fixed': '#ffdea5',
+              tertiary: '#000000',
+            },
+            fontFamily: {
+              headline: ['Noto Serif'],
+              body: ['Manrope'],
+              label: ['Manrope'],
+            },
+            borderRadius: {
+              DEFAULT: '0.125rem',
+              lg: '0.25rem',
+              xl: '0.5rem',
+              full: '0.75rem',
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 300,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      .bg-glass {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container"
+  >
+    <main class="min-h-screen">
+      <!-- Hero Section -->
+      <section
+        class="relative h-[409px] flex items-center justify-center overflow-hidden bg-primary-container"
+      >
+        <div class="absolute inset-0 opacity-40">
+          <img
+            alt="Luxury interior background"
+            class="w-full h-full object-cover grayscale"
+            data-alt="Blurred luxury minimalist room interior background"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOszT3YwVljYReVGeQKFM3k36BzezmHtH1PrZm37ex2oQplYbUfEnleZBSBDNPLQrM7G9HH4dIHqNnCO5brOIszExKxWpMXwbCAlbcMJQ-JV7t05h4C-Lv5pe6QDknYLJPHa5L2it85PBW2f-hMH7VcgBFtPDLETCNWAGx3HmWBPtSgyDWTUvy67ONZRuh4A-LN89lUWWfnzeAX3PJ17cJLHzZFZgNwePu65eu4s9vUUxFbXZnVcWCUbEgfdA3UGYGCkwnDJlFmNw"
+          />
+        </div>
+        <div class="relative z-10 text-center px-6">
+          <span
+            class="text-secondary font-label uppercase tracking-[0.3em] text-xs mb-4 block"
+            >Legal Framework</span
+          >
+          <h1
+            class="text-white font-headline text-5xl md:text-7xl tracking-tight leading-none mb-4"
+          >
+            Terms &amp; Conditions
+          </h1>
+          <p
+            class="text-surface-container-highest font-body text-sm max-w-md mx-auto opacity-80"
+          >
+            Refining the standard of trust and transparency for the Royal Manor
+            community.
+          </p>
+        </div>
+      </section>
+      <!-- Main Content (Accordion) -->
+      <section class="max-w-4xl mx-auto px-6 py-24">
+        <div class="mb-16">
+          <h2 class="font-headline text-3xl text-on-surface mb-6">
+            Master Service Agreement
+          </h2>
+          <p
+            class="text-on-surface-variant font-body leading-relaxed max-w-2xl"
+          >
+            By accessing and using the Royal Manor website, you acknowledge that
+            you have read, understood, and agree to be bound by the following
+            terms. These conditions govern the acquisition of our curated
+            furniture pieces and bespoke services.
+          </p>
+          <div class="mt-8 flex items-center gap-4">
+            <div class="h-px bg-secondary w-12"></div>
+            <span
+              class="text-secondary font-label text-[10px] tracking-widest uppercase"
+              >Effective January 2024</span
+            >
+          </div>
+        </div>
+        <div class="space-y-4">
+          <!-- Use of Site -->
+          <details
+            class="group bg-surface-container-low transition-all duration-300 open:bg-surface-container"
+          >
+            <summary
+              class="flex items-center justify-between p-8 cursor-pointer list-none"
+            >
+              <span
+                class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors"
+                >01. Use of Site</span
+              >
+              <span
+                class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180"
+                >expand_more</span
+              >
+            </summary>
+            <div class="px-8 pb-8 pt-0 border-t border-outline-variant/10">
+              <div
+                class="prose prose-sm font-body text-on-surface-variant max-w-none leading-loose"
+              >
+                <p>
+                  The content of this website is for your general information
+                  and use only. It is subject to change without notice. Royal
+                  Manor grants you a limited, non-transferable license to access
+                  the site for personal acquisition purposes. Unauthorized use
+                  of this website may give rise to a claim for damages and/or be
+                  a criminal offense.
+                </p>
+                <ul class="mt-4 space-y-2 list-disc list-inside">
+                  <li>The site must not be used for fraudulent activities.</li>
+                  <li>
+                    Reproduction of website design elements is strictly
+                    prohibited.
+                  </li>
+                  <li>
+                    We reserve the right to restrict access to certain portions
+                    of the site at our discretion.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </details>
+          <!-- Account Responsibilities -->
+          <details
+            class="group bg-surface-container-low transition-all duration-300 open:bg-surface-container"
+          >
+            <summary
+              class="flex items-center justify-between p-8 cursor-pointer list-none"
+            >
+              <span
+                class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors"
+                >02. Account Responsibilities</span
+              >
+              <span
+                class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180"
+                >expand_more</span
+              >
+            </summary>
+            <div class="px-8 pb-8 pt-0 border-t border-outline-variant/10">
+              <div
+                class="prose prose-sm font-body text-on-surface-variant max-w-none leading-loose"
+              >
+                <p>
+                  When creating a Royal Manor account, you are responsible for
+                  maintaining the confidentiality of your account credentials.
+                  You agree to accept responsibility for all activities that
+                  occur under your account.
+                </p>
+                <p class="mt-4 italic border-l-2 border-secondary pl-4">
+                  Royal Manor reserves the right to refuse service, terminate
+                  accounts, or cancel orders at its sole discretion.
+                </p>
+              </div>
+            </div>
+          </details>
+          <!-- Pricing -->
+          <details
+            class="group bg-surface-container-low transition-all duration-300 open:bg-surface-container"
+            open=""
+          >
+            <summary
+              class="flex items-center justify-between p-8 cursor-pointer list-none"
+            >
+              <span
+                class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors"
+                >03. Pricing &amp; Payments</span
+              >
+              <span
+                class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180"
+                >expand_more</span
+              >
+            </summary>
+            <div class="px-8 pb-8 pt-0 border-t border-outline-variant/10">
+              <div
+                class="prose prose-sm font-body text-on-surface-variant max-w-none leading-loose"
+              >
+                <p>
+                  All prices listed on the Royal Manor site are in USD unless
+                  otherwise specified. While we strive for accuracy, errors in
+                  pricing may occur. If we discover an error in the price of any
+                  goods which you have ordered, we will inform you of this as
+                  soon as possible and give you the option of reconfirming your
+                  order at the correct price or cancelling it.
+                </p>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div class="p-6 bg-surface-container-highest">
+                    <h4 class="font-headline text-sm mb-2 text-on-surface">
+                      Curated Collections
+                    </h4>
+                    <p class="text-xs">
+                      Prices for ready-to-ship items are fixed and inclusive of
+                      artisanal inspection.
+                    </p>
+                  </div>
+                  <div class="p-6 bg-surface-container-highest">
+                    <h4 class="font-headline text-sm mb-2 text-on-surface">
+                      Bespoke Commissions
+                    </h4>
+                    <p class="text-xs">
+                      Custom furniture requires a 50% non-refundable deposit
+                      before production begins.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+          <!-- Intellectual Property -->
+          <details
+            class="group bg-surface-container-low transition-all duration-300 open:bg-surface-container"
+          >
+            <summary
+              class="flex items-center justify-between p-8 cursor-pointer list-none"
+            >
+              <span
+                class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors"
+                >04. Intellectual Property</span
+              >
+              <span
+                class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180"
+                >expand_more</span
+              >
+            </summary>
+            <div class="px-8 pb-8 pt-0 border-t border-outline-variant/10">
+              <div
+                class="prose prose-sm font-body text-on-surface-variant max-w-none leading-loose"
+              >
+                <p>
+                  This website contains material which is owned by or licensed
+                  to Royal Manor. This material includes, but is not limited to,
+                  the design, layout, look, appearance, furniture blueprints,
+                  and photography. Reproduction is prohibited other than in
+                  accordance with the copyright notice, which forms part of
+                  these terms and conditions.
+                </p>
+              </div>
+            </div>
+          </details>
+          <!-- Governing Law -->
+          <details
+            class="group bg-surface-container-low transition-all duration-300 open:bg-surface-container"
+          >
+            <summary
+              class="flex items-center justify-between p-8 cursor-pointer list-none"
+            >
+              <span
+                class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors"
+                >05. Governing Law</span
+              >
+              <span
+                class="material-symbols-outlined transition-transform duration-300 group-open:rotate-180"
+                >expand_more</span
+              >
+            </summary>
+            <div class="px-8 pb-8 pt-0 border-t border-outline-variant/10">
+              <div
+                class="prose prose-sm font-body text-on-surface-variant max-w-none leading-loose"
+              >
+                <p>
+                  Your use of this website and any dispute arising out of such
+                  use of the website is subject to the laws of the United
+                  Kingdom. Any legal action or proceeding related to your access
+                  to, or use of, the site or content shall be instituted in a
+                  state or federal court in London.
+                </p>
+              </div>
+            </div>
+          </details>
+        </div>
+        <!-- Contact Section -->
+        <div
+          class="mt-24 p-12 bg-primary-container text-white flex flex-col md:flex-row items-center justify-between gap-8"
+        >
+          <div>
+            <h3 class="font-headline text-2xl mb-2">Legal Consultation</h3>
+            <p class="text-surface-container-highest opacity-70 text-sm">
+              Should you require clarification on these terms, our concierge is
+              available.
+            </p>
+          </div>
+          <a
+            class="px-8 py-4 bg-secondary text-white font-label uppercase tracking-widest text-xs hover:bg-secondary/90 transition-all"
+            href="#"
+            >Contact Boutique</a
+          >
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
