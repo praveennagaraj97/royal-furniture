@@ -197,7 +197,7 @@ export const ShippingAddressSection: FC = () => {
         <h2 className="text-base sm:text-lg font-medium text-gray-900">
           {t('titles.shippingAddress')}
         </h2>
-        {!isEditing && canAddAddress && (
+        {!isEditing && canAddAddress ? (
           <button
             type="button"
             onClick={() => {
@@ -208,7 +208,15 @@ export const ShippingAddressSection: FC = () => {
           >
             {t('actions.addNew')}
           </button>
-        )}
+        ) : isEditing ? (
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="text-xs sm:text-sm font-semibold text-indigo-slate hover:underline"
+          >
+            {t('actions.cancel')}
+          </button>
+        ) : null}
       </div>
 
       {isEditing ? (

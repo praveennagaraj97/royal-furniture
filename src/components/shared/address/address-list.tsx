@@ -146,7 +146,7 @@ export const AddressList: FC<AddressListProps> = ({
         {t('addressList.savedAddresses', { count: addresses.length })}
       </div>
       <StaggerContainer
-        mode="whileInView"
+        mode="animate"
         staggerChildren={0.08}
         delayChildren={0.05}
         className="space-y-4"
