@@ -6,8 +6,7 @@ import { useCart } from '@/contexts/cart-context';
 import { useCheckoutShipping } from '@/contexts/shipping-context';
 import { useToast } from '@/contexts/toast-context';
 import { useIntersectionObserver } from '@/hooks';
-import { useTabbyPayment } from '@/hooks/payment-gateway/use-tabby-payment';
-import { useTamaraPayment } from '@/hooks/payment-gateway/use-tamara-payment';
+import { useCheckoutPayment } from '@/hooks/payment-gateway/use-checkout-payment';
 import { cartService } from '@/services/api/cart-service';
 import { ParsedAPIError } from '@/types';
 import { formatCurrency } from '@/utils/format-currency';
@@ -27,10 +26,10 @@ import { FiCreditCard, FiInfo, FiTruck } from 'react-icons/fi';
 import type { CheckoutStepId } from '../../layout/progress';
 import {
   buildShippingSubmitPayload,
+  isApplePaySelected,
   isHomeShippingSelectionIncomplete,
   isPickupShippingSelectionIncomplete,
-  isTabbySelected,
-  isTamaraSelected,
+  isSamsungPaySelected,
 } from './helpers';
 import ShippingFeesInfo from './shipping-fees-info';
 
@@ -126,10 +125,8 @@ export const OrderSummaryCard: FC<
   const [isShippingInfoOpen, setIsShippingInfoOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { checkout: tamaraCheckout, isLoading: isTamaraLoading } =
-    useTamaraPayment();
-  const { checkout: tabbyCheckout, isLoading: isTabbyLoading } =
-    useTabbyPayment();
+  const { checkout: checkoutPayment, isLoading: isCheckoutPaymentLoading } =
+    useCheckoutPayment({ guestSessionId: guestSessionId || undefined });
 
   const isVisible = useIntersectionObserver({
     ref: actionBtnRef,
@@ -234,23 +231,24 @@ export const OrderSummaryCard: FC<
     }
 
     if (step === 'payment') {
-      const isTamaraPaymentSelected = isTamaraSelected(selectedPaymentMethod);
-      const isTabbyPaymentSelected = isTabbySelected(selectedPaymentMethod);
+      const isApplePaymentSelected = isApplePaySelected(selectedPaymentMethod);
+      const isSamsungPaymentSelected = isSamsungPaySelected(
+        selectedPaymentMethod,
+      );
 
       const handlePayNow = async () => {
         if (
-          (!isTamaraPaymentSelected && !isTabbyPaymentSelected) ||
-          isTamaraLoading ||
-          isTabbyLoading
+          (!isApplePaymentSelected && !isSamsungPaymentSelected) ||
+          isCheckoutPaymentLoading
         ) {
           return;
         }
 
         try {
-          if (isTamaraPaymentSelected) {
-            await tamaraCheckout();
-          } else if (isTabbyPaymentSelected) {
-            await tabbyCheckout();
+          if (isApplePaymentSelected) {
+            await checkoutPayment('apple_pay');
+          } else if (isSamsungPaymentSelected) {
+            await checkoutPayment('samsung_pay');
           }
         } catch (e) {
           const parsedError = e as ParsedAPIError;
@@ -261,9 +259,9 @@ export const OrderSummaryCard: FC<
         }
       };
 
-      const isLoading = isTamaraLoading || isTabbyLoading;
+      const isLoading = isCheckoutPaymentLoading;
       const isDisabled =
-        (!isTamaraPaymentSelected && !isTabbyPaymentSelected) || isLoading;
+        (!isApplePaymentSelected && !isSamsungPaymentSelected) || isLoading;
 
       return {
         label: isLoading ? t('cta.pleaseWait') : t('cta.payNow'),
@@ -290,10 +288,8 @@ export const OrderSummaryCard: FC<
     t,
     isSubmitting,
     selectedPaymentMethod,
-    isTamaraLoading,
-    isTabbyLoading,
-    tamaraCheckout,
-    tabbyCheckout,
+    isCheckoutPaymentLoading,
+    checkoutPayment,
   ]);
 
   if (!cta) return null;
