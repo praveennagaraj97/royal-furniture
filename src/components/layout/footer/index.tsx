@@ -47,8 +47,8 @@ const Footer: FC = () => {
 
   const footerCategories: FooterCategory[] = [
     {
-      id: 'contact',
-      title: tSections('contactUs'),
+      id: 'quicklinks',
+      title: tSections('quickLinks'),
       links: contactLinks,
     },
     {
@@ -96,7 +96,7 @@ const Footer: FC = () => {
           {/* Desktop View - Grid */}
           <div className="hidden lg:grid lg:grid-cols-4 gap-6">
             <SupportLinks />
-            <LinkColumn title={tSections('contactUs')} links={contactLinks} />
+            <LinkColumn title={tSections('quickLinks')} links={contactLinks} />
             <LinkColumn title={tSections('help')} links={helpLinks} />
             <LinkColumn title={tSections('aboutUs')} links={aboutLinks} />
           </div>

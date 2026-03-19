@@ -47,7 +47,8 @@
     "sections": {
       "contactUs": "Contact Us",
       "help": "Help",
-      "aboutUs": "About Us"
+      "aboutUs": "About Us",
+      "quickLinks": "Quick Links"
     },
     "links": {
       "contact": {
