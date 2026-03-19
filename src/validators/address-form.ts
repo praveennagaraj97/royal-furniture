@@ -1,7 +1,7 @@
 import {
   AddressFormData,
   AddressFormErrors,
-} from '@/components/checkout/shipping/shipping-address-section/create-or-edit-form/reducer';
+} from '@/components/shared/address/form-fields/reducer';
 import { useTranslations } from 'next-intl';
 import {
   createValidateEmail,

@@ -7,6 +7,16 @@ export interface EmirateRegion {
   name: string;
 }
 
+export interface AddressEmirateDetail {
+  id: number;
+  name: string;
+}
+
+export interface AddressRegionDetail {
+  id: number;
+  name: string;
+}
+
 export interface EmirateItem {
   id: number;
   name: string;
@@ -35,6 +45,8 @@ export interface UserAddress {
   town_or_city: string;
   emirate_id?: number;
   region_id?: number;
+  emirate_detail?: AddressEmirateDetail;
+  region_detail?: AddressRegionDetail;
   notes?: string;
   is_default: boolean;
   category: AddressCategory;

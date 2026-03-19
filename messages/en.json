@@ -586,6 +586,7 @@
     "addressList": {
       "savedAddresses": "{count} Saved addresses",
       "phone": "Phone",
+      "default": "Default",
       "deleteTitle": "Delete Address",
       "deleteMessage": "Are you sure you want to delete this address? This action cannot be undone.",
       "deleteConfirm": "Delete",

@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  Address,
+  AddressList,
+  CreateOrEditAddressForm,
+  type AddressFormData,
+} from '@/components/shared/address';
 import ShippingAddressSkeleton from '@/components/skeletons/shipping-address-skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useCheckoutShipping } from '@/contexts/shipping-context';
@@ -15,9 +21,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Address, AddressList } from './address-list';
-import CreateOrEditAddressForm from './create-or-edit-form';
-import type { AddressFormData } from './create-or-edit-form/reducer';
 import { EmptyAddressesState } from './states';
 
 const addressCategoryToFormType = (
@@ -228,6 +231,7 @@ export const ShippingAddressSection: FC = () => {
                 }
               : undefined
           }
+          initialIsDefault={Boolean(editAddress?.is_default)}
           editMode={!!editAddress}
           mutateAddresses={mutate}
           editingAddressId={editAddress?.id}

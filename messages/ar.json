@@ -632,6 +632,7 @@
     "addressList": {
       "savedAddresses": "{count} عناوين محفوظة",
       "phone": "الهاتف",
+      "default": "افتراضي",
       "deleteTitle": "حذف العنوان",
       "deleteMessage": "هل أنت متأكد من حذف هذا العنوان؟ هذا الإجراء لا يمكن التراجع عنه.",
       "deleteConfirm": "حذف",

@@ -1,0 +1,645 @@
+'use client';
+
+import { StaggerContainer, StaggerItem } from '@/components/shared/animations';
+import { TextAreaFormInput } from '@/components/shared/inputs/text-area-input';
+import { useToast } from '@/contexts/toast-context';
+import { useGetEmirateList } from '@/hooks/api';
+import { addressService } from '@/services/api/address-service';
+import type { ParsedAPIError } from '@/types/error';
+import type {
+  AddressesListResponse,
+  UserAddress,
+} from '@/types/response/address';
+import { guestAddressStorage } from '@/utils/guest-address-storage';
+import {
+  createAddressFormValidators,
+  validateAddressForm,
+} from '@/validators/address-form';
+import { useTranslations } from 'next-intl';
+import {
+  FC,
+  FormEvent,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+  type ChangeEvent,
+  type ReactElement,
+} from 'react';
+import {
+  FiArrowRight,
+  FiBriefcase,
+  FiHome,
+  FiMapPin,
+  FiMoreHorizontal,
+} from 'react-icons/fi';
+import type { KeyedMutator } from 'swr';
+import {
+  BuildingField,
+  EmailField,
+  EmirateField,
+  NameField,
+  PhoneField,
+  RegionField,
+  StreetField,
+} from './form-fields/index';
+import {
+  AddressFormErrors,
+  addressFormReducer,
+  initialAddressFormState,
+  type AddressFormData,
+  type AddressType,
+} from './form-fields/reducer';
+
+interface CreateOrEditAddressFormProps {
+  onCancel?: () => void;
+  onSaved?: (address: UserAddress, wasCreated: boolean) => void;
+  initialData?: AddressFormData;
+  initialIsDefault?: boolean;
+  editMode?: boolean;
+  isGuest?: boolean;
+  mutateAddresses?: KeyedMutator<AddressesListResponse>;
+  editingAddressId?: string | number | null;
+  showDefaultToggle?: boolean;
+  onDefaultStatusChange?: (isDefault: boolean) => void;
+  hideSubmitButton?: boolean;
+  formRef?: React.RefObject<HTMLFormElement | null>;
+  onSubmittingChange?: (isSubmitting: boolean) => void;
+}
+
+const addressTypeIcon: Record<AddressType, ReactElement> = {
+  home: <FiHome className="h-4 w-4" />,
+  office: <FiBriefcase className="h-4 w-4" />,
+  other: <FiMoreHorizontal className="h-4 w-4" />,
+};
+
+type Props = CreateOrEditAddressFormProps;
+
+const CreateOrEditAddressForm: FC<Props> = ({
+  onCancel,
+  onSaved,
+  initialData,
+  initialIsDefault = false,
+  editMode,
+  isGuest = false,
+  mutateAddresses,
+  editingAddressId,
+  showDefaultToggle = false,
+  onDefaultStatusChange,
+  hideSubmitButton = false,
+  formRef,
+  onSubmittingChange,
+}) => {
+  const { showError, showSuccess } = useToast();
+  const t = useTranslations('shipping');
+  const [isDefaultAddress, setIsDefaultAddress] = useState(
+    Boolean(showDefaultToggle && initialIsDefault),
+  );
+
+  const parsePhone = (phone?: string) => {
+    const trimmed = phone?.trim();
+    if (!trimmed) return { code: '+971', number: '' };
+    const match = trimmed.match(/^(\+\d{1,3})\s*(.*)$/);
+    if (match) {
+      return { code: match[1], number: match[2] || '' };
+    }
+    return { code: '+971', number: trimmed };
+  };
+
+  const { code: initialCode, number: initialPhone } = parsePhone(
+    initialData?.phone,
+  );
+
+  const [state, dispatch] = useReducer(
+    addressFormReducer,
+    initialData
+      ? {
+          ...initialAddressFormState,
+          formData: {
+            ...initialAddressFormState.formData,
+            ...initialData,
+            phone: initialPhone,
+          },
+        }
+      : initialAddressFormState,
+  );
+  const { data: emirateListResponse, isLoading: isLoadingEmirates } =
+    useGetEmirateList();
+  const [countryCode, setCountryCode] = useState(initialCode);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(
+    Boolean(isGuest && editMode && initialPhone),
+  );
+
+  useEffect(() => {
+    if (isPhoneVerified) {
+      dispatch({
+        type: 'SET_ERRORS',
+        errors: { ...state.errors, phone: undefined },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPhoneVerified]);
+
+  useEffect(() => {
+    setIsDefaultAddress(Boolean(showDefaultToggle && initialIsDefault));
+  }, [initialIsDefault, showDefaultToggle, editMode, editingAddressId]);
+
+  const tValidation = useTranslations('auth.validation');
+  const addressFormValidators = useMemo(
+    () => createAddressFormValidators(tValidation),
+    [tValidation],
+  );
+
+  const updateFieldError = (field: keyof AddressFormErrors, error?: string) => {
+    dispatch({
+      type: 'SET_ERRORS',
+      errors: { ...state.errors, [field]: error },
+    });
+  };
+
+  const validateField = (
+    field: keyof AddressFormErrors,
+    value: string,
+  ): string | undefined => {
+    switch (field) {
+      case 'name':
+        return addressFormValidators.name(value);
+      case 'phone':
+        return addressFormValidators.phone(value, countryCode);
+      case 'email':
+        return addressFormValidators.email(value);
+      case 'streetAddress':
+        return addressFormValidators.streetAddress(value);
+      case 'building':
+        return addressFormValidators.building(value);
+      case 'emirateId':
+        return addressFormValidators.emirateId(value);
+      case 'regionId':
+        return addressFormValidators.regionId(value);
+      default:
+        return undefined;
+    }
+  };
+
+  const emirateOptions = useMemo(
+    () =>
+      emirateListResponse?.data.map((emirate) => ({
+        label: emirate.name,
+        value: String(emirate.id),
+      })) ?? [],
+    [emirateListResponse?.data],
+  );
+
+  const selectedEmirate = useMemo(
+    () =>
+      emirateListResponse?.data.find(
+        (emirate) => String(emirate.id) === state.formData.emirateId,
+      ),
+    [emirateListResponse?.data, state.formData.emirateId],
+  );
+
+  const regionOptions = useMemo(
+    () =>
+      selectedEmirate?.regions.map((region) => ({
+        label: region.name,
+        value: String(region.id),
+      })) ?? [],
+    [selectedEmirate],
+  );
+
+  useEffect(() => {
+    if (!state.formData.regionId || isLoadingEmirates) return;
+
+    const isValidRegion = selectedEmirate?.regions.some(
+      (region) => String(region.id) === state.formData.regionId,
+    );
+
+    if (selectedEmirate && !isValidRegion) {
+      dispatch({ type: 'SET_FIELD_VALUE', field: 'regionId', value: '' });
+    }
+  }, [selectedEmirate, state.formData.regionId, isLoadingEmirates]);
+
+  const handleInputChange =
+    (field: keyof AddressFormData) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      dispatch({ type: 'SET_FIELD_VALUE', field, value });
+
+      const fieldName = field as keyof AddressFormErrors;
+      updateFieldError(fieldName, validateField(fieldName, value));
+    };
+
+  const handleTextareaChange =
+    (field: keyof AddressFormData) =>
+    (event: ChangeEvent<HTMLTextAreaElement>) => {
+      dispatch({ type: 'SET_FIELD_VALUE', field, value: event.target.value });
+    };
+
+  const handleBlur = (field: keyof AddressFormErrors) => () => {
+    dispatch({ type: 'SET_TOUCHED', field });
+    const currentValue = state.formData[field] ?? '';
+    updateFieldError(field, validateField(field, currentValue));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    dispatch({ type: 'SET_IS_SUBMITTED', value: true });
+    dispatch({ type: 'SET_ALL_TOUCHED' });
+
+    const errors = validateAddressForm(
+      state.formData,
+      countryCode,
+      tValidation,
+    );
+    dispatch({ type: 'SET_ERRORS', errors });
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    if (isGuest && !isPhoneVerified) {
+      dispatch({
+        type: 'SET_ERRORS',
+        errors: {
+          ...errors,
+          phone: 'Please verify your phone number to continue.',
+        },
+      });
+      return;
+    }
+
+    dispatch({ type: 'SET_IS_SUBMITTING', value: true });
+    onSubmittingChange?.(true);
+
+    const trimmedPhone = state.formData.phone.trim();
+    const phoneWithCode = trimmedPhone.startsWith('+')
+      ? trimmedPhone
+      : `${countryCode} ${trimmedPhone}`.trim();
+
+    const payload = {
+      name: state.formData.name,
+      phone: phoneWithCode,
+      email: state.formData.email,
+      area: state.formData.streetAddress,
+      street: state.formData.streetAddress,
+      building: state.formData.building,
+      town_or_city: '',
+      emirate_id: Number(state.formData.emirateId),
+      region_id: Number(state.formData.regionId),
+      notes: state.formData.notes,
+      is_default: showDefaultToggle ? isDefaultAddress : false,
+      category: toFormCategory(state.formData.addressType),
+    } satisfies Partial<UserAddress>;
+
+    try {
+      if (isGuest) {
+        const guestAddressPayload = {
+          ...(payload as Omit<UserAddress, 'id'>),
+          area: payload.area ?? payload.street,
+        };
+
+        if (
+          editMode &&
+          editingAddressId !== undefined &&
+          editingAddressId !== null
+        ) {
+          const updated = guestAddressStorage.update(
+            Number(editingAddressId),
+            guestAddressPayload,
+          );
+
+          if (!updated) {
+            throw new Error('Guest address not found');
+          }
+
+          onSaved?.(updated, false);
+          showSuccess(t('toasts.addressUpdated'));
+        } else {
+          const created = guestAddressStorage.add(guestAddressPayload);
+          onSaved?.(created, true);
+          showSuccess(t('toasts.addressAdded'));
+        }
+      } else {
+        if (
+          editMode &&
+          editingAddressId !== undefined &&
+          editingAddressId !== null
+        ) {
+          const response = await addressService.updateAddress(
+            editingAddressId,
+            payload,
+          );
+          onSaved?.(response.data, false);
+          showSuccess(t('toasts.addressUpdated'));
+        } else {
+          const response = await addressService.createAddress(payload);
+          onSaved?.(response.data, true);
+          showSuccess(t('toasts.addressAdded'));
+        }
+      }
+
+      await mutateAddresses?.();
+      onCancel?.();
+    } catch (error) {
+      const message =
+        (error as ParsedAPIError)?.generalError ||
+        t('toasts.addressSavedError');
+      showError(message);
+    } finally {
+      dispatch({ type: 'SET_IS_SUBMITTING', value: false });
+      onSubmittingChange?.(false);
+    }
+  };
+
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      return;
+    }
+
+    dispatch({ type: 'SET_IS_USING_LOCATION', value: true });
+
+    navigator.geolocation.getCurrentPosition(
+      () => {
+        dispatch({ type: 'SET_IS_USING_LOCATION', value: false });
+      },
+      () => {
+        dispatch({ type: 'SET_IS_USING_LOCATION', value: false });
+      },
+    );
+  };
+
+  const showFieldError = (field: keyof AddressFormErrors) =>
+    !!state.errors[field] && (!!state.touched[field] || state.isSubmitted);
+
+  const addressTypeLabel: Record<AddressType, string> = {
+    home: t('addressTypes.home'),
+    office: t('addressTypes.office'),
+    other: t('addressTypes.other'),
+  };
+
+  const handleEmirateChange = (value: string | number) => {
+    const val = String(value);
+    dispatch({
+      type: 'SET_FIELD_VALUE',
+      field: 'emirateId',
+      value: val,
+    });
+    dispatch({ type: 'SET_FIELD_VALUE', field: 'regionId', value: '' });
+    dispatch({ type: 'SET_TOUCHED', field: 'emirateId' });
+    dispatch({
+      type: 'SET_ERRORS',
+      errors: {
+        ...state.errors,
+        emirateId: validateField('emirateId', val),
+        regionId: undefined,
+      },
+    });
+  };
+
+  const handleRegionChange = (value: string | number) => {
+    const val = String(value);
+    dispatch({
+      type: 'SET_FIELD_VALUE',
+      field: 'regionId',
+      value: val,
+    });
+    dispatch({ type: 'SET_TOUCHED', field: 'regionId' });
+    updateFieldError('regionId', validateField('regionId', val));
+  };
+
+  const handleCountryCodeChange = (code: string) => {
+    setCountryCode(code);
+    updateFieldError(
+      'phone',
+      addressFormValidators.phone(state.formData.phone, code),
+    );
+  };
+
+  const handleDefaultToggle = (checked: boolean) => {
+    setIsDefaultAddress(checked);
+    onDefaultStatusChange?.(checked);
+  };
+
+  return (
+    <section className="flex flex-col gap-4">
+      <StaggerContainer
+        mode="animate"
+        staggerChildren={0.08}
+        delayChildren={0.05}
+        className="flex flex-col gap-4"
+      >
+        <StaggerItem type="slideUp" distance={20} duration={0.35}>
+          <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
+            {(['home', 'office', 'other'] as AddressType[]).map((type) => {
+              const isActive = state.formData.addressType === type;
+              return (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() =>
+                    dispatch({ type: 'SET_ADDRESS_TYPE', value: type })
+                  }
+                  className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-medium transition-colors ${
+                    isActive
+                      ? 'border-deep-maroon text-deep-maroon'
+                      : 'border-gray-200 text-gray-700 hover:border-deep-maroon hover:text-deep-maroon'
+                  }`}
+                >
+                  <span
+                    className={isActive ? 'text-deep-maroon' : 'text-gray-500'}
+                  >
+                    {addressTypeIcon[type]}
+                  </span>
+                  <span>{addressTypeLabel[type]}</span>
+                </button>
+              );
+            })}
+          </div>
+        </StaggerItem>
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4"
+          ref={formRef}
+        >
+          <StaggerItem type="slideUp" distance={20} duration={0.35}>
+            <NameField
+              label={t('fields.nameLabel')}
+              placeholder={t('fields.namePlaceholder')}
+              required
+              value={state.formData.name}
+              onChange={handleInputChange('name')}
+              onBlur={handleBlur('name')}
+              error={state.errors.name}
+              showError={showFieldError('name')}
+            />
+          </StaggerItem>
+
+          <StaggerItem type="slideUp" distance={20} duration={0.35}>
+            <PhoneField
+              label={t('fields.phoneLabel')}
+              placeholder={t('fields.phonePlaceholder')}
+              required
+              value={state.formData.phone}
+              countryCode={countryCode}
+              onCountryCodeChange={handleCountryCodeChange}
+              onChange={handleInputChange('phone')}
+              onBlur={handleBlur('phone')}
+              validator={(value: string) =>
+                addressFormValidators.phone(value, countryCode)
+              }
+              error={state.errors.phone}
+              showError={
+                !!state.errors.phone &&
+                (!!state.touched.phone || state.isSubmitted)
+              }
+              isGuest={isGuest}
+              initiallyVerified={Boolean(isGuest && editMode && initialPhone)}
+              onVerificationStatusChange={setIsPhoneVerified}
+            />
+          </StaggerItem>
+
+          <StaggerItem type="slideUp" distance={20} duration={0.35}>
+            <EmailField
+              label={t('fields.emailLabel')}
+              placeholder={t('fields.emailPlaceholder')}
+              required
+              value={state.formData.email}
+              onChange={handleInputChange('email')}
+              onBlur={handleBlur('email')}
+              error={state.errors.email}
+              showError={showFieldError('email')}
+            />
+          </StaggerItem>
+
+          <div className="my-2 w-full">
+            <button
+              type="button"
+              onClick={handleUseMyLocation}
+              className="w-full flex items-center justify-center gap-2 rounded-lg border border-deep-maroon px-4 h-12 text-xs sm:text-sm font-semibold text-deep-maroon hover:bg-deep-maroon hover:text-white transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              disabled={state.isUsingLocation}
+            >
+              <FiMapPin className="h-4 w-4" />
+              {state.isUsingLocation
+                ? t('actions.detectingLocation')
+                : t('actions.useMyLocation')}
+            </button>
+          </div>
+
+          <StaggerItem type="slideUp" distance={20} duration={0.35}>
+            <StreetField
+              label={t('fields.areaLabel')}
+              placeholder={t('fields.areaPlaceholder')}
+              required
+              value={state.formData.streetAddress}
+              onChange={handleInputChange('streetAddress')}
+              onBlur={handleBlur('streetAddress')}
+              error={state.errors.streetAddress}
+              showError={showFieldError('streetAddress')}
+            />
+          </StaggerItem>
+
+          <StaggerItem type="slideUp" distance={20} duration={0.35}>
+            <BuildingField
+              label={t('fields.buildingLabel')}
+              placeholder={t('fields.buildingPlaceholder')}
+              required
+              value={state.formData.building}
+              onChange={handleInputChange('building')}
+              onBlur={handleBlur('building')}
+              error={state.errors.building}
+              showError={showFieldError('building')}
+            />
+          </StaggerItem>
+
+          <div className="grid lg:grid-cols-2 gap-4">
+            <StaggerItem type="slideUp" distance={20} duration={0.35}>
+              <EmirateField
+                label={t('fields.emirateLabel')}
+                placeholder={t('fields.emiratePlaceholder')}
+                value={state.formData.emirateId}
+                options={emirateOptions}
+                onChange={handleEmirateChange}
+                error={state.errors.emirateId}
+                showError={showFieldError('emirateId')}
+                disabled={isLoadingEmirates || emirateOptions.length === 0}
+              />
+            </StaggerItem>
+
+            <StaggerItem type="slideUp" distance={20} duration={0.35}>
+              <RegionField
+                label={t('fields.regionLabel')}
+                placeholder={t('fields.regionPlaceholder')}
+                value={state.formData.regionId}
+                options={regionOptions}
+                onChange={handleRegionChange}
+                error={state.errors.regionId}
+                showError={showFieldError('regionId')}
+                disabled={
+                  !state.formData.emirateId || regionOptions.length === 0
+                }
+              />
+            </StaggerItem>
+          </div>
+
+          <StaggerItem type="slideUp" distance={20} duration={0.35}>
+            <div className="space-y-1">
+              <TextAreaFormInput
+                label={
+                  <label htmlFor="address-notes" className="form-input-label">
+                    {t('form.orderNotesLabel')}
+                  </label>
+                }
+                id="address-notes"
+                placeholder={t('form.orderNotesPlaceholder')}
+                value={state.formData.notes}
+                onChange={handleTextareaChange('notes')}
+              />
+            </div>
+          </StaggerItem>
+
+          {showDefaultToggle && (
+            <StaggerItem type="slideUp" distance={20} duration={0.35}>
+              <div className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-gray-50">
+                <input
+                  type="checkbox"
+                  id="default-address"
+                  checked={isDefaultAddress}
+                  onChange={(e) => handleDefaultToggle(e.target.checked)}
+                  className="w-4 h-4 text-deep-maroon rounded cursor-pointer"
+                />
+                <label
+                  htmlFor="default-address"
+                  className="flex-1 text-sm font-medium text-gray-900 cursor-pointer"
+                >
+                  Set as default address
+                </label>
+              </div>
+            </StaggerItem>
+          )}
+
+          {!hideSubmitButton && (
+            <StaggerItem type="slideUp" distance={20} duration={0.35}>
+              <button
+                type="submit"
+                disabled={state.isSubmitting}
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-deep-maroon px-4 py-2.5 text-sm sm:text-base font-semibold text-white hover:bg-[#6b0000] disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
+              >
+                {state.isSubmitting
+                  ? t('actions.savingAddress')
+                  : editMode
+                    ? t('actions.saveAddress')
+                    : t('actions.addAddress')}
+                <FiArrowRight className="h-4 w-4" />
+              </button>
+            </StaggerItem>
+          )}
+        </form>
+      </StaggerContainer>
+    </section>
+  );
+};
+
+export default CreateOrEditAddressForm;
+
+const toFormCategory = (type: AddressType) => type;
