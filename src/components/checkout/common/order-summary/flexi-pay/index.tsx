@@ -87,10 +87,10 @@ export const FlexiPay: FC = () => {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className={`group w-full rounded-lg border p-4 text-left shadow-sm transition-colors duration-200 ${
+          className={`group w-full rounded-lg p-4 text-left shadow-sm transition-colors duration-200 ${
             isSelected
-              ? 'border-[#bfe3cc] bg-[#f1fbf5] hover:border-[#97d0ae]'
-              : 'border-[#f0d5d5] bg-[#FFF4F4] hover:border-[#e3bcbc]'
+              ? ' bg-[#f1fbf5] hover:border-[#97d0ae]'
+              : ' bg-[#FFF4F4] hover:border-[#e3bcbc]'
           }`}
         >
           <div className="flex items-center justify-between gap-3">

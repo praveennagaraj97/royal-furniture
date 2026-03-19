@@ -79,12 +79,12 @@ const PromosModal: FC<PromosModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} variant="bottom" size="md">
       <div className="sticky top-0 z-10 bg-white backdrop-blur-sm border-b border-gray-100 flex items-center justify-between px-4 py-3">
-        <h3 className="text-base font-medium">{t('modalTitle')}</h3>
+        <h3 className="text-lg font-medium">{t('modalTitle')}</h3>
         <button
           onClick={onClose}
           className="p-1 rounded-full bg-deep-maroon flex items-center justify-center"
         >
-          <FiX className="w-4 h-4 text-white" />
+          <FiX className="text-lg text-white" />
         </button>
       </div>
 
