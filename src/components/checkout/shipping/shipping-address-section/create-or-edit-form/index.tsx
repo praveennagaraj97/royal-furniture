@@ -111,6 +111,17 @@ const CreateOrEditAddressForm: FC<Props> = ({
   const [isPhoneVerified, setIsPhoneVerified] = useState(
     Boolean(isGuest && editMode && initialPhone),
   );
+
+  useEffect(() => {
+    if (isPhoneVerified) {
+      dispatch({
+        type: 'SET_ERRORS',
+        errors: { ...state.errors, phone: undefined },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPhoneVerified]);
+
   const tValidation = useTranslations('auth.validation');
   const addressFormValidators = useMemo(
     () => createAddressFormValidators(tValidation),
