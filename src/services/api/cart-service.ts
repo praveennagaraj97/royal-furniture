@@ -2,8 +2,9 @@ import { API_ROUTES } from '@/constants/api-routes';
 import type {
   CartApiResponse,
   PaymentProceedResponse,
-  ProceedToPaymentPayload,
   ShippingProceedResponse,
+  ShippingSubmitPayload,
+  ShippingSubmitRequestPayload,
 } from '@/types/response/cart';
 import type { PromoCodesResponse } from '@/types/response/payment';
 import { BaseAPIService } from './api-base-service';
@@ -12,6 +13,42 @@ interface AddItemPayload {
   product_sku: string;
   quantity: number;
 }
+
+const flattenShippingSubmitPayload = (
+  payload: ShippingSubmitPayload,
+): ShippingSubmitRequestPayload => {
+  const flattened: ShippingSubmitRequestPayload = {
+    delivery_method: payload.delivery_method,
+  };
+
+  if (payload.address_id !== undefined) {
+    flattened.address_id = payload.address_id;
+  }
+
+  if (payload.store_id !== undefined) {
+    flattened.store_id = payload.store_id;
+  }
+
+  if (payload.guest_address) {
+    Object.assign(flattened, payload.guest_address);
+  }
+
+  if (payload.custom_delivery) {
+    if (payload.custom_delivery.is_custom_delivery !== undefined) {
+      flattened.is_custom_delivery = payload.custom_delivery.is_custom_delivery;
+    }
+
+    if (payload.custom_delivery.slot_id !== undefined) {
+      flattened.slot_id = payload.custom_delivery.slot_id;
+    }
+
+    if (payload.custom_delivery.delivery_date !== undefined) {
+      flattened.delivery_date = payload.custom_delivery.delivery_date;
+    }
+  }
+
+  return flattened;
+};
 
 export class CartService extends BaseAPIService {
   async getCart(guestSessionId?: string): Promise<CartApiResponse> {
@@ -173,17 +210,17 @@ export class CartService extends BaseAPIService {
     }
   }
 
-  async proceedToPayment(
-    payload: ProceedToPaymentPayload,
+  async submitShipping(
+    payload: ShippingSubmitPayload,
     guestSessionId?: string,
   ): Promise<unknown> {
     try {
       const headers: Record<string, string> = {};
       if (guestSessionId) headers['X-Guest-Session'] = guestSessionId;
 
-      const response = await this.http.post(
-        API_ROUTES.CART.SHIPPING_PROCEED_TO_PAYMENT,
-        payload,
+      const response = await this.http.patch(
+        API_ROUTES.CART.SHIPPING_PROCEED,
+        flattenShippingSubmitPayload(payload),
         { headers },
       );
 

@@ -176,13 +176,39 @@ export type ShippingSelection = {
   pickupSlotLabel: string | null;
 };
 
-export interface ProceedToPaymentPayload extends Partial<AddressPayload> {
-  delivery_type: 'home' | 'pickup';
+export interface ShippingSubmitGuestAddressPayload {
+  name?: string;
+  email?: string;
+  phone?: string;
+  emirate_id?: number;
+  region_id?: number;
+  area?: string;
+  street?: string;
+  building?: string;
+  town_or_city?: string;
+  category?: AddressPayload['category'];
+  notes?: string;
+}
+
+export interface ShippingSubmitPayload {
+  delivery_method: 'home' | 'pickup';
   address_id?: number | null;
-  is_custom_delivery?: boolean;
-  date?: string | null;
-  slot_id?: number | null;
   store_id?: number | null;
+  guest_address?: ShippingSubmitGuestAddressPayload;
+  custom_delivery?: {
+    is_custom_delivery?: boolean;
+    slot_id?: number | null;
+    delivery_date?: string | null;
+  };
+}
+
+export interface ShippingSubmitRequestPayload extends Partial<ShippingSubmitGuestAddressPayload> {
+  delivery_method: 'home' | 'pickup';
+  address_id?: number | null;
+  store_id?: number | null;
+  is_custom_delivery?: boolean;
+  slot_id?: number | null;
+  delivery_date?: string | null;
 }
 
 export interface CartState {

@@ -10,7 +10,6 @@ import { useTabbyPayment } from '@/hooks/payment-gateway/use-tabby-payment';
 import { useTamaraPayment } from '@/hooks/payment-gateway/use-tamara-payment';
 import { cartService } from '@/services/api/cart-service';
 import { ParsedAPIError } from '@/types';
-import type { ProceedToPaymentPayload } from '@/types/response/cart';
 import { formatCurrency } from '@/utils/format-currency';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -26,6 +25,13 @@ import {
 } from 'react';
 import { FiCreditCard, FiInfo, FiTruck } from 'react-icons/fi';
 import type { CheckoutStepId } from '../../layout/progress';
+import {
+  buildShippingSubmitPayload,
+  isHomeShippingSelectionIncomplete,
+  isPickupShippingSelectionIncomplete,
+  isTabbySelected,
+  isTamaraSelected,
+} from './helpers';
 import ShippingFeesInfo from './shipping-fees-info';
 
 interface StickyCtaProps {
@@ -100,7 +106,8 @@ export const OrderSummaryCard: FC<
   const t = useTranslations('checkout.orderSummary');
   const tShipping = useTranslations('shipping');
   const { totals, guestSessionId, refreshCart } = useCart();
-  const { shippingMethod, shippingSelection } = useCheckoutShipping();
+  const { shippingData, shippingMethod, shippingSelection } =
+    useCheckoutShipping();
   const { showError } = useToast();
   const router = useRouter();
   const params = useParams<{ country?: string; locale?: string }>();
@@ -173,27 +180,13 @@ export const OrderSummaryCard: FC<
     const handleProceedToPayment = async () => {
       setIsSubmitting(true);
       try {
-        const payload: ProceedToPaymentPayload = {
-          delivery_type: shippingMethod,
-        };
+        const payload = buildShippingSubmitPayload({
+          shippingData,
+          shippingMethod,
+          shippingSelection,
+        });
 
-        if (shippingMethod === 'home') {
-          payload.address_id = shippingSelection.addressId;
-          payload.is_custom_delivery = shippingSelection.isCustomDelivery;
-          if (shippingSelection.isCustomDelivery) {
-            payload.date = shippingSelection.date;
-            payload.slot_id = shippingSelection.slotId;
-          }
-        } else if (shippingMethod === 'pickup') {
-          payload.store_id = shippingSelection.storeId;
-          payload.date = shippingSelection.pickupDate;
-          payload.slot_id = shippingSelection.pickupSlotId;
-        }
-
-        await cartService.proceedToPayment(
-          payload,
-          guestSessionId || undefined,
-        );
+        await cartService.submitShipping(payload, guestSessionId || undefined);
         await refreshCart();
         router.push(buildPath(country, locale, 'checkout', 'payment'));
       } catch (error) {
@@ -219,15 +212,11 @@ export const OrderSummaryCard: FC<
     if (step === 'shipping') {
       const isPickupIncomplete =
         shippingMethod === 'pickup' &&
-        (!shippingSelection.storeId ||
-          !shippingSelection.pickupDate ||
-          !shippingSelection.pickupSlotId);
+        isPickupShippingSelectionIncomplete(shippingSelection);
 
       const isHomeIncomplete =
         shippingMethod === 'home' &&
-        (!shippingSelection.addressId ||
-          (shippingSelection.isCustomDelivery &&
-            (!shippingSelection.date || !shippingSelection.slotId)));
+        isHomeShippingSelectionIncomplete(shippingSelection);
 
       const isDisabled = isSubmitting || isPickupIncomplete || isHomeIncomplete;
 
@@ -240,12 +229,12 @@ export const OrderSummaryCard: FC<
     }
 
     if (step === 'payment') {
-      const isTamaraSelected = selectedPaymentMethod === 'tamara';
-      const isTabbySelected = selectedPaymentMethod === 'tabby';
+      const isTamaraPaymentSelected = isTamaraSelected(selectedPaymentMethod);
+      const isTabbyPaymentSelected = isTabbySelected(selectedPaymentMethod);
 
       const handlePayNow = async () => {
         if (
-          (!isTamaraSelected && !isTabbySelected) ||
+          (!isTamaraPaymentSelected && !isTabbyPaymentSelected) ||
           isTamaraLoading ||
           isTabbyLoading
         ) {
@@ -253,9 +242,9 @@ export const OrderSummaryCard: FC<
         }
 
         try {
-          if (isTamaraSelected) {
+          if (isTamaraPaymentSelected) {
             await tamaraCheckout();
-          } else if (isTabbySelected) {
+          } else if (isTabbyPaymentSelected) {
             await tabbyCheckout();
           }
         } catch (e) {
@@ -268,7 +257,8 @@ export const OrderSummaryCard: FC<
       };
 
       const isLoading = isTamaraLoading || isTabbyLoading;
-      const isDisabled = (!isTamaraSelected && !isTabbySelected) || isLoading;
+      const isDisabled =
+        (!isTamaraPaymentSelected && !isTabbyPaymentSelected) || isLoading;
 
       return {
         label: isLoading ? t('cta.pleaseWait') : t('cta.payNow'),
@@ -285,6 +275,7 @@ export const OrderSummaryCard: FC<
     params?.locale,
     router,
     isSubmitting,
+    shippingData,
     shippingMethod,
     shippingSelection,
     guestSessionId,
