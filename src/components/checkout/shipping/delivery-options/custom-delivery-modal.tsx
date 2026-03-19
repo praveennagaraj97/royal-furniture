@@ -17,6 +17,7 @@ interface CustomDeliveryModalProps {
   timeSlots: string[];
   highlightedDate?: string | null;
   highlightedLabel?: string;
+  minDate?: string;
   onSaveSelection: () => Promise<boolean>;
   isSavingSelection: boolean;
   customDeliveryCharge?: number | null;
@@ -34,6 +35,7 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
   timeSlots,
   highlightedDate,
   highlightedLabel,
+  minDate,
   onSaveSelection,
   isSavingSelection,
   customDeliveryCharge,
@@ -83,6 +85,7 @@ export const CustomDeliveryModal: FC<CustomDeliveryModalProps> = ({
                   onChange={setSelectedDate}
                   className="w-full"
                   placeholder={t('delivery.deliveryDatePlaceholder')}
+                  minDate={minDate}
                   highlightedDates={
                     highlightedDateValue ? [highlightedDateValue] : []
                   }

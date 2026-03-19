@@ -17,6 +17,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -66,6 +67,7 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
 }) => {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const { isHydrated, guestSessionId } = useCart();
+  const hasInitializedShippingMethodRef = useRef(false);
 
   const [shippingMethod, setShippingMethodState] =
     useState<ShippingMethod>('home');
@@ -110,6 +112,7 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
     if (!shippingData) return;
 
     startTransition(() => {
+      const shouldInitializeMethod = !hasInitializedShippingMethodRef.current;
       const selectedMethod = shippingData.selected_delivery_method;
       const availableMethods = (shippingData.delivery_method || []).filter(
         isShippingMethod,
@@ -123,6 +126,11 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
           ? selectedMethod
           : fallbackMethod;
 
+      if (shouldInitializeMethod) {
+        setShippingMethod(resolvedMethod);
+        hasInitializedShippingMethodRef.current = true;
+      }
+
       const slotLabel = shippingData.selected_delivery_slot?.slot ?? null;
       const parsedSelectedDate = parseDateInput(
         shippingData.selected_delivery_slot?.date,
@@ -134,16 +142,27 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
           ?.id ??
         null;
 
-      if (shippingMethod !== resolvedMethod) {
-        setShippingMethod(resolvedMethod);
-      }
-
       setShippingSelection((prev) => {
-        const deliveryType: ShippingMethod = nextMethods.includes(
-          prev.deliveryType,
-        )
-          ? prev.deliveryType
-          : resolvedMethod;
+        const deliveryType: ShippingMethod = shouldInitializeMethod
+          ? resolvedMethod
+          : shippingMethod;
+
+        if (deliveryType === 'pickup') {
+          return {
+            addressId: null,
+            deliveryType,
+            date: null,
+            slotId: null,
+            slotLabel: null,
+            isCustomDelivery: false,
+            storeId: shippingData.selected_store_id ?? prev.storeId ?? null,
+            pickupDate: parsedSelectedDate
+              ? buildIso(parsedSelectedDate)
+              : null,
+            pickupSlotId: slotId ?? null,
+            pickupSlotLabel: slotLabel,
+          };
+        }
 
         return {
           addressId:
@@ -153,10 +172,10 @@ export const CheckoutShippingProvider: FC<{ children: ReactNode }> = ({
           slotId: slotId ?? null,
           slotLabel,
           isCustomDelivery: Boolean(parsedSelectedDate && slotId),
-          storeId:
-            selectedMethod === 'pickup'
-              ? (shippingData.selected_store_id ?? prev.storeId ?? null)
-              : null,
+          storeId: null,
+          pickupDate: null,
+          pickupSlotId: null,
+          pickupSlotLabel: null,
         };
       });
     });

@@ -20,8 +20,12 @@ const renderStoreAddress = (store: StoreLocation) => {
 export const PickupStoresSection: FC = () => {
   const t = useTranslations('shipping');
   const { cartId, guestSessionId } = useCart();
-  const { shippingMethod, shippingSelection, setShippingSelection } =
-    useCheckoutShipping();
+  const {
+    shippingData,
+    shippingMethod,
+    shippingSelection,
+    setShippingSelection,
+  } = useCheckoutShipping();
   const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
 
   const { stores, isLoading } = useGetStoresByCart({
@@ -31,12 +35,21 @@ export const PickupStoresSection: FC = () => {
   });
 
   useEffect(() => {
-    if (stores?.length) {
-      startTransition(() => {
-        setSelectedStoreId((prev) => prev ?? stores[0].id);
-      });
+    if (!stores?.length) {
+      return;
     }
-  }, [stores]);
+
+    const responseSelectedStoreId = shippingData?.selected_store_id;
+    const nextSelectedStoreId =
+      responseSelectedStoreId &&
+      stores.some((store) => store.id === responseSelectedStoreId)
+        ? responseSelectedStoreId
+        : stores[0].id;
+
+    startTransition(() => {
+      setSelectedStoreId((prev) => prev ?? nextSelectedStoreId);
+    });
+  }, [shippingData?.selected_store_id, stores]);
 
   useEffect(() => {
     if (selectedStoreId) {

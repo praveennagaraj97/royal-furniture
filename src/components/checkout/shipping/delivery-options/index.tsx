@@ -123,6 +123,7 @@ const DeliveryOptionsSection: FC = () => {
         highlightedLabel={
           highlightedDefaultDate ? t('delivery.highlightedLabel') : undefined
         }
+        minDate={highlightedDefaultDate ?? undefined}
         onSaveSelection={handleSaveCustomDelivery}
         isSavingSelection={isSaving}
         customDeliveryCharge={

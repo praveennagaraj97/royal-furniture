@@ -3,6 +3,7 @@
 import { SlideIn } from '@/components/shared/animations';
 import DatePicker from '@/components/shared/inputs/date-picker';
 import { useCheckoutShipping } from '@/contexts/shipping-context';
+import { buildIso, parseDateInput } from '@/utils/date';
 import { useTranslations } from 'next-intl';
 import { FC, useMemo } from 'react';
 
@@ -66,6 +67,11 @@ const PickupOptionsSection: FC = () => {
             onChange={handleDateChange}
             className="w-full"
             placeholder={t('pickup.datePlaceholder')}
+            minDate={
+              shippingData?.default_delivery_date
+                ? buildIso(parseDateInput(shippingData.default_delivery_date)!)
+                : undefined
+            }
           />
         </div>
 
